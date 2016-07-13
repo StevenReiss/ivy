@@ -188,6 +188,12 @@ if ( "X$xxx" == X  && -e $BROWN_IVY_IVY/lib/jce.jar) then
    setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/jce.jar"
 endif
 
+set xxx = `echo $CLASSPATH | fgrep junit`
+if ( "X$xxx" == X ) then
+   set junit = $BROWN_IVY_IVY/lib/junit.jar
+   setenv CLASSPATH "${CLASSPATH}:$junit"
+endif
+
 set xxx = `echo $CLASSPATH | fgrep org.eclipse.jdt.debug`
 if ( "X$xxx" == X && $?ECLIPSEROOT == 0 ) then
    set eclipsejar =
