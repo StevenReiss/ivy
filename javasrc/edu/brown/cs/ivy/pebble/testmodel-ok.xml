@@ -1,0 +1,90 @@
+<PEBBLE>
+   <ACTIONS TRANSITIONS="1" STATES="0">
+      <ACTION SYNTAX="VARIABLE OP VALUE">
+	 <USE NAME="VALUE" TYPE="Integer" />
+	 <USE NAME="VARIABLE" TYPE="Word" />
+	 <USE NAME="OP" TYPE="Enum">
+	    <VALUE NAME="SET" OPTION="= :=" />
+	    <VALUE NAME="INCR" OPTION="++ + +=" />
+	    <VALUE NAME="DECR" OPTION="-- - -=" />
+	 </USE>
+      </ACTION>
+      <ACTION SYNTAX="VARIABLE OP">
+	 <USE NAME="VARIABLE" TYPE="Word" />
+	 <USE NAME="OP" TYPE="Enum">
+	    <VALUE NAME="THREAD" />
+	 </USE>
+      </ACTION>
+   </ACTIONS>
+   <CONDITIONS>
+      <CONDITION SYNTAX="VARIABLE OP VALUE">
+	 <USE NAME="VARIABLE" TYPE="Word" />
+	 <USE NAME="VALUE" TYPE="Integer" />
+	 <USE NAME="OP" TYPE="Enum">
+	    <VALUE NAME="EQL" OPTION="== =" />
+	    <VALUE NAME="NEQ" OPTION="!= &lt;&gt;" />
+	 </USE>
+      </CONDITION>
+      <CONDITION SYNTAX="VARIABLE OP">
+	 <USE NAME="VARIABLE" TYPE="Word" />
+	 <USE NAME="OP" TYPE="Enum">
+	    <VALUE NAME="THREAD" />
+	 </USE>
+      </CONDITION>
+   </CONDITIONS>
+
+   <EVENTS>
+      <EVENT NAME="ALLOC">
+	 <PROP NAME="TRIGGER" LABEL="Trigger" TYPE="Boolean" />
+	 <PROP NAME="GLOBAL" LABEL="Global" TYPE="Boolean" />
+	 <PROP NAME="REQUIRED" LABEL="Required" TYPE="Boolean" />
+	 <PROP NAME="LOCK" LABEL="InsideLock" TYPE="Boolean" />
+	 <PROP LABEL="Allocate" TYPE="MATCH" MATCH="OBJECT" />
+      </EVENT>
+      <EVENT NAME="CALL">
+	 <PROP NAME="TRIGGER" LABEL="Trigger" TYPE="Boolean" />
+	 <PROP NAME="GLOBAL" LABEL="Global" TYPE="Boolean" />
+	 <PROP NAME="REQUIRED" LABEL="Required" TYPE="Boolean" />
+	 <PROP NAME="METHOD" LABEL="Method Name" TYPE="String" />
+	 <PROP NAME="CLASS" LABEL="Method" TYPE="Class" />
+	 <PROP NAME="SIGNATURE" LABEL="Signature" TYPE="String" />
+	 <PROP LABEL="Object" TYPE="MATCH" MATCH="OBJECT" />
+	 <PROP LABEL="Return Value" TYPE="MATCH" MATCH="VALUE" />
+	 <PROP LABEL="From" TYPE="MATCH" MATCH="FROM" />
+	 <PROP LABEL="Argument" TYPE="MATCH" MATCH="ARG" />
+      </EVENT>
+   </EVENTS>
+
+   <FORMAT>
+      <CHECKS>
+	 <CHECK META="$Meta Name" NAME="$Name" THREADS="$Threads:Boolean" >
+	    <CLASSES>
+	       <USE ID="*MATCH_ID" CLASS="*MATCH_CLASS" FOREACH="MATCH" />
+	     </CLASSES>
+	     <IGNORE>
+		<CLASS NAME="$Ignore Class:String[]" />
+	     </IGNORE>
+	     <EVENTS>
+		<EVENT ID="*EVENT_NAME" NAME="*EVENT_LABEL" TYPE="*EVENT_TYPE"
+			   X1="*EVENT_PROPERTIES"
+			   FOREACH="EVENT">
+		    <MATCH FOREACH="MATCH" WHAT="*MATCH_NAME" ID="*MATCH_USE" MODE="*MATCH_MODE" />
+		</EVENT>
+	     </EVENTS>
+	     <!-- XXX TRIGGER=NEW is stopgap -->
+	     <AUTOMATON TRIGGER="NEW" START="*START_STATE">
+		<STATE FOREACH="STATE" ID="*STATE_NAME" NAME="*STATE_LABEL"
+			   IGNORE="*STATE_IGNORE" ACCEPT="*STATE_ACCEPT"
+			   ERROR="*STATE_ERROR">
+		    <ON FOREACH="TRANSITION" EVENT="*TRANSITION_EVENT"
+				   GOTO="*TRANSITION_TARGET">
+			<CONDITION FOREACH="CONDITION" />
+			<ACTION FOREACH="ACTION" />
+		    </ON>
+		</STATE>
+	     </AUTOMATON>
+	  </CHECK>
+       </CHECKS>
+    </FORMAT>
+
+</PEBBLE>

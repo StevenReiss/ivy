@@ -1,0 +1,21 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/Make.data,v 1.8 2015/07/02 19:01:35 spr Exp $
+
+#
+# XML -- xml common classes for use with Brown software
+#
+# Copyright 2003 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= xml
+
+
+SFILES= \
+	IvyXml.java \
+	IvyXmlReader.java \
+	IvyXmlReaderThread.java \
+	IvyXmlWriter.java \
+	IvyJsonReader.java \
+
+
+LOCALJAVAFLAGS= $(J6FLAGS)

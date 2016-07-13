@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# If changing jarFile or java definitions: there must not be any space
+# characters either before or after the equals sign.  Important note: you must
+# use *forward* slashes in the pathnames below (for jarFile and java) -- even
+# if you are using win95.
+
+if [ X$BROWN_IVY_IVY = X ]; then
+   BROWN_IVY_IVY=/pro/ivy
+fi
+
+
+# Change the value after the equals sign to the full path of the jar file.
+jarFile=$BROWN_IVY_IVY/lib/jdeps.jar
+
+# Change the value after the equals sign to the full pathname of your java
+# binary, if it is not on your PATH.
+java=java
+
+# For win95, all kinds of weird things happen with make & bash if
+# the directory separator is *not* a double-backslash.
+if [ "$OSTYPE" = win32 ]; then
+    args=`echo "$@" | sed 's,/,\\\\\\\\,g'`
+else
+    args="$@"
+fi
+
+if [ -z ${CLASSPATH:=""} ] ; then
+    CLASSPATH=${jarFile}
+else
+    CLASSPATH=${jarFile}:${CLASSPATH}
+fi
+export CLASSPATH
+
+JDEPSDIR=$BROWN_IVY_IVY/lib
+export JDEPSDIR
+
+exec $java smr.JavaDeps.JavaDeps $args
+
+

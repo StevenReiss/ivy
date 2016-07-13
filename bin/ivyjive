@@ -1,0 +1,9 @@
+#! /bin/tcsh -f
+
+
+
+setenv CLASSPATH $BROWN_IVY_IVY/java:$BROWN_IVY_IVY/lib/jikesbt.jar
+
+set croot = -Dedu.brown.cs.ivy.IVY=$BROWN_IVY_IVY
+
+jive $croot $*

@@ -1,0 +1,26 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/Make.data,v 1.2 2007-08-10 02:10:45 spr Exp $
+
+#
+# JFLOW.IMPL -- implementation for flow analysis JFLOW
+#
+
+PACKAGE= jflow/impl
+SUBDIR= impl
+
+SFILES= \
+	ModelMaster.java \
+	ModelBuilder.java \
+	ModelCondition.java \
+	ModelGenerator.java \
+	ModelMethod.java \
+	ModelMinimizer.java \
+	ModelNumericValue.java \
+	ModelObjectValue.java \
+	ModelSourceSet.java \
+	ModelState.java \
+	ModelSynch.java \
+	ModelThread.java \
+	ModelThreadState.java \
+
+

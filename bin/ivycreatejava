@@ -1,0 +1,46 @@
+#! /bin/tcsh -f
+
+if ($#argv != 1) then
+   echo `ivycreatejava <project>`
+   exit 1
+endif
+
+if ($1:t == "src") then
+   set dir = $1:h
+   set dir = $dir:t
+else
+   set dir = $1:t
+endif
+
+set ar = `ivyarch`
+set cwd = `pwd`
+
+ivysetup
+
+set bp = `ivybasepath`
+
+
+if (! -d $bp/javasrc/edu/brown/cs/ivy/$dir ) then
+   mkdir $bp/javasrc/edu/brown/cs/ivy/$dir
+endif
+
+if (! -d $bp/java/edu/brown/cs/ivy/$dir ) then
+   mkdir $bp/java/edu/brown/cs/ivy/$dir
+endif
+
+if (! -d $bp/$dir) then
+   mkdir $bp/$dir
+endif
+
+rm -rf $bp/$dir/src
+ln -s ../javasrc/edu/brown/cs/ivy/$dir $bp/$dir/src
+rm -rf $bp/$dir/bin.java
+ln -s ../java/edu/brown/cs/ivy/$dir $bp/$dir/bin.java
+
+rm -rf $bp/$dir/src/Makefile
+ln -s $bp/data/Make.pass $bp/$dir/src/Makefile
+touch $bp/$dir/src/Make.data
+
+cd $bp/$dir/src
+gnumake create
+cd $cwd

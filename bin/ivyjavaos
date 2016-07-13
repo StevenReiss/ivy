@@ -1,0 +1,10 @@
+#! /bin/tcsh -f
+
+if ($?BROWN_JAVA_HOME == 0) then
+   set x0 = `ksh -c "whence $0"`
+   set x1 = ${x0:h}
+   set x2 = $x1/ivysetupenv
+   source $x2
+endif
+
+echo $BROWN_JAVA_OS

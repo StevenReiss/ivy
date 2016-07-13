@@ -1,0 +1,20 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/limbo/Make.data,v 1.5 2010-02-26 21:05:18 spr Exp $
+
+#
+# LIMBO -- line number tracking 		
+#
+# Copyright 2007 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= limbo
+
+
+SFILES= \
+	LimboBestLine.java \
+	LimboFactory.java \
+	LimboFile.java \
+	LimboLine.java \
+
+
+

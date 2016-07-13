@@ -1,0 +1,21 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/Make.data,v 1.9 2015/09/23 17:58:59 spr Exp $
+
+#
+# FILE -- common classes for file management with Brown software
+#
+# Copyright 2003 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= file
+
+
+SFILES= \
+	IvyDatabase.java \
+	IvyElapsedTime.java \
+	IvyFile.java \
+	IvyFormat.java \
+
+
+
+

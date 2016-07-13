@@ -1,0 +1,57 @@
+#
+#		Make.pass
+#
+#	This file is the default makefile for source directorys.  It causes
+#	the make to actually be done in the proper binary directory.  Each
+#	source directory should link the name `Makefile` to this file.
+#
+#
+# Copyright 1990 Steven P. Reiss, Brown University - All rights reserved.
+#
+#
+
+
+MAKE=make -w $(MFLAGS)
+PARM=
+SHELL= /bin/sh
+
+SYSROOT= `ivybasepath`
+OURNAME= Make.pass
+BINDIR= `ivybinpath`
+DATAPATH= `ivydatapath | relpath`
+SRCDIR= `pwd`
+PRONAME= `echo ${PWD:t}`
+
+.SUFFIXES:
+
+all .DEFAULT:
+	(cd $(BINDIR); $(MAKE) $(PARM) $@)
+
+create:
+	$(BROWN_IVY_IVY)/bin/ivysetup
+	rm -f Makefile
+	ln -s $(DATAPATH)/$(OURNAME) Makefile
+	rm -f $(BINDIR)/Makefile
+	(cd $(BINDIR); ln -s $(DATAPATH)/Make.template Makefile )
+	(cd $(BINDIR); $(MAKE) fixcreate)
+
+rcssetup:
+	- if [ ! -d RCS ]; then mkdir RCS; else true; fi
+	(cd $(BINDIR); $(MAKE) $(PARM) $@)
+
+.PHONY: all create rcssetup
+
+
+createc++:
+	$(BROWN_IVY_IVY)/bin/ivycreatec++ $(SRCDIR)
+
+
+createjava:
+	$(BROWN_IVY_IVY)/bin/ivycreatejava $(SRCDIR)
+
+
+
+
+
+
+

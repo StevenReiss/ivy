@@ -1,0 +1,17 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/match/Make.data,v 1.4 2013-06-11 23:24:53 spr Exp $
+
+#
+# MINT/MATCH -- MINT pattern matcher implementation
+#
+# Copyright 1998 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= mint/match
+SUBDIR= match
+
+SFILES= MintMatchArguments.java \
+	MintMatchSelector.java
+
+LOCALJAVAFLAGS= $(J6FLAGS)
+

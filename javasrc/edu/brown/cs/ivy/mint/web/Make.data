@@ -1,0 +1,34 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/Make.data,v 1.4 2013/09/24 01:07:00 spr Exp $
+
+#
+# MINT/SERVER -- MINT server implementation
+#
+# Copyright 1998 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= mint/web
+SUBDIR= web
+
+SFILES= MintWebConstants.java \
+	MintWebMessage.java \
+	MintWebServlet.java \
+	MintWebUser.java \
+
+
+LOCALJAVAFLAGS= $(J6FLAGS)
+
+
+war:	all
+	-rm -rf binary
+	mkdir binary
+	mkdir -p binary/WEB-INF/classes/edu/brown/cs/ivy/mint/web
+	mkdir -p binary/WEB-INF/lib
+	cp $(PRO)/ivy/javasrc/edu/brown/cs/ivy/mint/web/web.xml binary/WEB-INF
+	cp $(PRO)/ivy/java/edu/brown/cs/ivy/mint/web/*.class binary/WEB-INF/classes/edu/brown/cs/ivy/mint/web
+	(cd binary; jar cvf $(PRO)/ivy/javasrc/edu/brown/cs/ivy/mint/web/mint.war *)
+	scp mint.war conifer:/vol/mint/servlets/mint.war
+	-scp mint.war conifer:/var/lib/tomcat5/webapps/mint.war
+	rm -rf binary
+
+

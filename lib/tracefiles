@@ -1,0 +1,7 @@
+fred1	/vol/trace/data
+fred	/aux3/trace/data
+localhost /pro/trace/data
+pyrite.local. /pro/trace/data
+pyrite.cs.brown.edu /pro/trace/data
+
+*	/map/aux3fred/trace/data

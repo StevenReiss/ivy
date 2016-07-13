@@ -1,0 +1,84 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/jcomp/src/Make.data,v 1.4 2015/09/23 17:59:24 spr Exp $
+
+#
+# EXEC -- classes for creating additional processed
+#
+# Copyright 2003 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= jcomp
+
+
+SFILES= \
+	JcompAst.java \
+	JcompConstants.java \
+	JcompContext.java \
+	JcompControl.java \
+	JcompExtendedSource.java \
+	JcompFile.java \
+	JcompMessage.java \
+	JcompMessageSeverity.java \
+	JcompProject.java \
+	JcompProjectImpl.java \
+	JcompResolver.java \
+	JcompScope.java \
+	JcompScopeAst.java \
+	JcompScopeFixed.java \
+	JcompScopeLookup.java \
+	JcompSearch.java \
+	JcompSearcher.java \
+	JcompSemantics.java \
+	JcompSource.java \
+	JcompSymbol.java \
+	JcompSymbolKind.java \
+	JcompType.java \
+	JcompTyper.java \
+	JcompTest.java \
+
+
+LOCALJAVAFLAGS=
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,21 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/Make.data,v 1.7 2013-06-11 23:18:43 spr Exp $
+
+#
+# EXEC -- classes for creating additional processed
+#
+# Copyright 2003 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= exec
+
+
+SFILES= \
+	IvyExec.java \
+	IvyExecFiles.java \
+	IvyExecQuery.java \
+	IvySetup.java \
+	IvyTest.java \
+
+LOCALJAVAFLAGS= $(J6FLAGS)
+

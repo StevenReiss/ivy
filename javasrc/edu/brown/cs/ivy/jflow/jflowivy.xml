@@ -1,0 +1,11 @@
+<JFLOW>
+   <METHOD NAME="edu.brown.cs.ivy.xml.IvyXml$XmlParser.parse"
+	   ARETURN="org.w3c.dom.Document"
+	   RETURN="com.sun.org.apache.xerces.internal.dom.DocumentImpl" />
+
+   <PACKAGE NAME="com.ibm.jikesbt." />
+   <CLASS NAME="edu.brown.cs.ivy.mint.MintConstants$HostPort" />
+
+
+</JFLOW>
+

@@ -1,0 +1,215 @@
+package gm.benchmarks.jeeg;
+import org.brics.gm.jeeg.formulae.*;
+import org.brics.gm.jeeg.events.*;
+
+
+public class Extreme20 {
+   
+   boolean empty = false;
+
+	protected SyncManager _sync = null;
+	protected void _registerSyncManager(SyncManager s) {
+		this._sync = s;
+		s.makeStep();
+	}
+
+protected class SyncManager { 
+
+	public SyncManager() {
+	} 
+
+	protected class getProp1 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (true);
+		}
+	}
+	protected class get20Prop2 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop3 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop4 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop5 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop6 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop7 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop8 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop9 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop10 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop11 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop12 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop13 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop14 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop15 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop16 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop17 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop18 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop19 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop20 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop21 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (event.type!=get);
+		}
+	}
+	protected class get20Prop22 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
+		public boolean eval() {
+			return (! empty);
+		}
+	}
+	protected TemporalPropositionalFormula TgetProp1 = new TemporalPropositionalFormula(new getProp1());
+	protected TemporalPropositionalFormula Tget20Prop2 = new TemporalPropositionalFormula(new get20Prop2());
+	protected TemporalPropositionalFormula Tget20Prop3 = new TemporalPropositionalFormula(new get20Prop3());
+	protected TemporalPropositionalFormula Tget20Prop4 = new TemporalPropositionalFormula(new get20Prop4());
+	protected TemporalPropositionalFormula Tget20Prop5 = new TemporalPropositionalFormula(new get20Prop5());
+	protected TemporalPropositionalFormula Tget20Prop6 = new TemporalPropositionalFormula(new get20Prop6());
+	protected TemporalPropositionalFormula Tget20Prop7 = new TemporalPropositionalFormula(new get20Prop7());
+	protected TemporalPropositionalFormula Tget20Prop8 = new TemporalPropositionalFormula(new get20Prop8());
+	protected TemporalPropositionalFormula Tget20Prop9 = new TemporalPropositionalFormula(new get20Prop9());
+	protected TemporalPropositionalFormula Tget20Prop10 = new TemporalPropositionalFormula(new get20Prop10());
+	protected TemporalPropositionalFormula Tget20Prop11 = new TemporalPropositionalFormula(new get20Prop11());
+	protected TemporalPropositionalFormula Tget20Prop12 = new TemporalPropositionalFormula(new get20Prop12());
+	protected TemporalPropositionalFormula Tget20Prop13 = new TemporalPropositionalFormula(new get20Prop13());
+	protected TemporalPropositionalFormula Tget20Prop14 = new TemporalPropositionalFormula(new get20Prop14());
+	protected TemporalPropositionalFormula Tget20Prop15 = new TemporalPropositionalFormula(new get20Prop15());
+	protected TemporalPropositionalFormula Tget20Prop16 = new TemporalPropositionalFormula(new get20Prop16());
+	protected TemporalPropositionalFormula Tget20Prop17 = new TemporalPropositionalFormula(new get20Prop17());
+	protected TemporalPropositionalFormula Tget20Prop18 = new TemporalPropositionalFormula(new get20Prop18());
+	protected TemporalPropositionalFormula Tget20Prop19 = new TemporalPropositionalFormula(new get20Prop19());
+	protected TemporalPropositionalFormula Tget20Prop20 = new TemporalPropositionalFormula(new get20Prop20());
+	protected TemporalPropositionalFormula Tget20Prop21 = new TemporalPropositionalFormula(new get20Prop21());
+	protected TemporalPropositionalFormula Tget20Prop22 = new TemporalPropositionalFormula(new get20Prop22());
+	protected TemporalFormula get20Constr = new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop2), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop3), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop4), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop5), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop6), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop7), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop8), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop9), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop10), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop11), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop12), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop13), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop14), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop15), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop16), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop17), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop18), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop19), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop20), new TemporalPropositionalFormula(new PropositionalAnd(new SPrevious(Tget20Prop21), Tget20Prop22))))))))))))))))))))))))))))))))))))))));
+	protected TemporalFormula getConstr = TgetProp1;
+
+	protected int UNKNOWN = -1;
+	protected int get20 = 1;
+	protected int get = 2;
+	protected Event event = new Event(UNKNOWN);
+
+	public void makeStep() {
+		get20Constr.eval();
+		getConstr.eval();
+	}
+	public boolean get20pre() {
+		return get20Constr.getCurrentValue(); 
+	}
+	public void acquireget20() throws Exception {
+		while (! get20pre()) { 
+			Extreme20.this.wait();
+		}
+		event = new Event(get20, System.currentTimeMillis());
+	} 
+	public void releaseget20() throws Exception {
+		event.setEndTime(System.currentTimeMillis());
+		makeStep();
+		Extreme20.this.notifyAll();
+	}
+	public boolean getpre() {
+		return getConstr.getCurrentValue(); 
+	}
+	public void acquireget() throws Exception {
+		while (! getpre()) { 
+			Extreme20.this.wait();
+		}
+		event = new Event(get, System.currentTimeMillis());
+	} 
+	public void releaseget() throws Exception {
+		event.setEndTime(System.currentTimeMillis());
+		makeStep();
+		Extreme20.this.notifyAll();
+	}
+} //SyncManger
+
+
+	public  Extreme20  (  int max) {
+		this._registerSyncManager(new SyncManager());
+	}
+
+    public synchronized int get() throws Exception {
+        ((SyncManager) _sync).acquireget();
+
+        ((SyncManager) _sync).releaseget();
+
+        return 1;//super.get();
+    }
+    
+    public synchronized int get20() throws Exception {
+        ((SyncManager) _sync).acquireget20();
+
+        ((SyncManager) _sync).releaseget20();
+
+        return 1;//super.get();
+    }
+}

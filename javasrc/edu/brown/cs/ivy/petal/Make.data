@@ -1,0 +1,40 @@
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/Make.data,v 1.4 2010-12-08 22:50:39 spr Exp $
+
+#
+# PETAL -- generic graph editor for Bloom
+#
+
+PACKAGE= petal
+
+
+SFILES= \
+	PetalArc.java \
+	PetalArcDefault.java \
+	PetalArcEnd.java \
+	PetalArcEndDefault.java \
+	PetalArcHelper.java \
+	PetalCircleLayout.java \
+	PetalClipSet.java \
+	PetalConstants.java \
+	PetalEditor.java \
+	PetalEditorCallback.java \
+	PetalHelper.java \
+	PetalLayoutMethod.java \
+	PetalLevelLayout.java \
+	PetalLink.java \
+	PetalLinkDefault.java \
+	PetalModel.java \
+	PetalModelBase.java \
+	PetalModelDefault.java \
+	PetalNode.java \
+	PetalNodeDefault.java \
+	PetalPort.java \
+	PetalRelaxLayout.java \
+	PetalSelectionSet.java \
+	PetalUndoSupport.java \
+	PetalUndoManager.java \
+	PetalTest.java
+
+
+SUBDIRS=
+

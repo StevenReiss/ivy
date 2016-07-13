@@ -1,0 +1,57 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/Make.data,v 1.7 2011-04-16 01:02:41 spr Exp $
+
+#
+# JFLOW -- java flow analysis package
+#
+
+PACKAGE= jflow
+
+SFILES= \
+   JflowConstants.java \
+   JflowControl.java \
+   JflowDefaultMethodData.java \
+   JflowDummy.java \
+   JflowEvent.java \
+   JflowException.java \
+   JflowFactory.java \
+   JflowFlags.java \
+   JflowMaster.java \
+   JflowMethod.java \
+   JflowMethodData.java \
+   JflowModel.java \
+   JflowModelSource.java \
+   JflowSource.java \
+   JflowSourceSet.java \
+   JflowValue.java \
+   JflowTest.java \
+
+
+SUBDIRS= flow model
+
+ALL= jflowdummy.jar
+
+
+jflowdummy.jar: JflowDummy.java
+	(cd $(BROWN_IVY_IVY)/java; jar cvf $(BROWN_IVY_IVY)/lib/jflowdummy.jar \
+		edu/brown/cs/ivy/jflow/JflowDummy.class )
+	touch jflowdummy.jar
+
+SLIBLINKS= jflow.xml jflowivy.xml
+
+
+test1: all
+	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest >/ws/volfred/spr/test1.out 2>&1
+
+test2: all
+	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest x >/ws/volfred/spr/test2.out 2>&1
+
+test3: all
+	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest x x >/ws/volfred/spr/test3.out 2>&1
+
+test4: all
+	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest x x x >/ws/volfred/spr/test4.out 2>&1
+
+test5: all
+	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest x x x x >/ws/volfred/spr/test5.out 2>&1
+

@@ -1,0 +1,63 @@
+#! /bin/tcsh -f
+
+if ($?BROWN_IVY_IVY == 0) then
+   set x0 = `ksh -c "whence $0"`
+   set x1 = ${x0:h}
+   set x2 = $x1/ivysetupenv
+   source $x2
+endif
+
+set path = ( /bin /usr/bin /usr/ucb/bin $BROWN_IVY_IVY/bin )
+set bp = `ivybasepath`
+
+if (! -d $bp/javasrc) then
+   mkdir $bp/javasrc
+endif
+
+if (! -d $bp/javasrc/edu) then
+   mkdir $bp/javasrc/edu
+endif
+
+if (! -d $bp/javasrc/edu/brown) then
+   mkdir $bp/javasrc/edu/brown
+endif
+
+if (! -d $bp/javasrc/edu/brown/cs) then
+   mkdir $bp/javasrc/edu/brown/cs
+endif
+
+if (! -d $bp/javasrc/edu/brown/cs/ivy) then
+   mkdir $bp/javasrc/edu/brown/cs/ivy
+endif
+
+
+
+if (! -d $bp/java) then
+   mkdir $bp/java
+endif
+
+if (! -d $bp/java/edu) then
+   mkdir $bp/java/edu
+endif
+
+if (! -d $bp/java/edu/brown) then
+   mkdir $bp/java/edu/brown
+endif
+
+if (! -d $bp/java/edu/brown/cs) then
+   mkdir $bp/java/edu/brown/cs
+endif
+
+if (! -d $bp/java/edu/brown/cs/ivy) then
+   mkdir $bp/java/edu/brown/cs/ivy
+endif
+
+
+
+if (! -d $bp/lib/registry) then
+   mkdir $bp/lib/registry
+endif
+
+touch $bp/lib/mint.master
+touch $bp/lib/mint.master.lock
+chmod 666 $bp/lib/mint.master $bp/lib/mint.master.lock

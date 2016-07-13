@@ -1,0 +1,19 @@
+#! /bin/csh -f
+
+if ($?BROWN_IVY_ROOT == 0) then
+   set x0 = `zsh -c "whence $0"`
+   set x1 = ${x0:h}
+   set x2 = $x1/ivysetupenv
+   source $x2
+endif
+
+set dbg =
+if ("X$1" == "X-Debug") then
+   shift
+   set dbg = -Dedu.brown.cs.ivy.mint.debug=true
+endif
+
+# unsetenv BROWN_TAIGA_IVY
+
+
+$BROWN_IVY_IVY/bin/ivyjava -Xmx1024m $dbg edu.brown.cs.ivy.mint.server.MintServer $* < /dev/null >>&! ~/.mintlog &

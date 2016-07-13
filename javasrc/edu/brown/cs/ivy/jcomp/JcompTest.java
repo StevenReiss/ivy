@@ -1,0 +1,404 @@
+package edu.brown.cs.ivy.jcomp;
+
+import edu.brown.cs.ivy.file.IvyFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class JcompTest {
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Static definitions							*/
+/*										*/
+/********************************************************************************/
+
+
+private static String test1 = "class Simple {\n" +
+	"static void main() {\n" +
+	"   System.out.println();\n" +
+	"}\n" +
+	"}\n";
+
+
+private static String test2 = "public class A {\n" +
+	"   int x = 3;\n" +
+	"   B b;\n" +
+	"}\n";
+
+
+private static String test3 = "import java.util.*;\n" +
+	"import java.io.*;\n" +
+	"import java.util.PriorityQueue;\n" +
+	"public class Node implements Comparable<Node> {\n" +
+	"    Node left;\n" +
+	"    Node right;\n" +
+	"    Node parent;\n" +
+	"    String text;\n" +
+	"    Float frequency;\n" +
+	"    public Node(String textIn, Float frequencies) {\n" +
+	"        text = textIn;\n" +
+	"        frequency = frequencies;\n" +
+	"    }\n" +
+	"    public Node(Float d) {\n" +
+	"        text = \"\";\n" +
+	"        frequency = d;\n" +
+	"    }\n" +
+	"    public int compareTo(Node n) {\n" +
+	"        if (frequency < n.frequency) {\n" +
+	"            return -1;\n" +
+	"        } else if (frequency > n.frequency) {\n" +
+	"            return 1;\n" +
+	"        }\n" +
+	"        return 0;\n" +
+	"    }\n" +
+	"    public static void buildPath(Node root,String code)\n" +
+	"    {\n" +
+	"        if (root!=null)\n" +
+	"            {\n" +
+	"                if (root.left!=null)\n" +
+	"                    buildPath(root.left, code+\"0\");\n" +
+	"                if (root.right!=null)\n" +
+	"                    buildPath(root.right,code+\"1\");\n" +
+	"                if (root.left==null && root.right==null)\n" +
+	"                    System.out.println(root.text+\": \"+code);\n" +
+	"            }\n" +
+	"    }\n" +
+	"    public static Node makeHuffmanTree(Float[] frequencies, String[] text) {\n" +
+	"        PriorityQueue<Node> queue = new PriorityQueue<Node>();\n" +
+	"        for (int i = 0; i < text.length; i++) {\n" +
+	"            Node n = new Node(text[i], frequencies[i]);\n" +
+	"            queue.add(n);\n" +
+	"        }\n" +
+	"        Node root = null;\n" +
+	"        while (queue.size() > 1) {\n" +
+	"            Node least1 = queue.poll();\n" +
+	"            Node least2 = queue.poll();\n" +
+	"            Node combined = new Node(least1.frequency + least2.frequency);\n" +
+	"            combined.right = least1;\n" +
+	"            combined.left = least2;\n" +
+	"            least1.parent = combined;\n" +
+	"            least2.parent = combined;\n" +
+	"            queue.add(combined);\n" +
+	"            // Keep track until we actually find the root\n" +
+	"            root = combined;\n" +
+	"        }\n" +
+	"        return root;\n" +
+	"    }\n" +
+	"}\n";
+
+
+private static String test4 = "public class Tester {\n" +
+	"   private String the_string;\n" +
+	"   private static enum TEST { A, B, C };\n" +
+	"   Tester(String s) {\n" +
+	"      the_string = s;\n" +
+	"    }\n" +
+	"   Tester() {\n" +
+	"      this(\"Hello World\");\n" +
+	"    }\n" +
+	"   private void method() {\n" +
+	"      Character c = 'c';\n" +
+	"      Character.digit(c,16);\n" +
+	"      char_to_int('c');\n" +
+	"      int x = 0;\n" +
+	"      x += c;\n" +
+	"      TEST.values();\n" +
+	"      TEST.A.ordinal();\n" +
+	"    }\n" +
+	"   private int char_to_int(Character c) { return 0; }\n" +
+	"}\n";
+
+
+
+
+private static String test5 = "public class TwoTypePair<T1, T2>\n" +
+	"{\n" +
+	"   private T1 first;\n" +
+	"   private T2 second;\n" +
+	"   public TwoTypePair()\n" +
+	"      {\n" +
+	"      first = null;\n" +
+	"      second = null;\n" +
+	"    }\n" +
+	"   public TwoTypePair(T1 firstItem, T2 secondItem)\n" +
+	"      {\n" +
+	"      first = firstItem;\n" +
+	"      second = secondItem;\n" +
+	"    }\n" +
+	"   public void setFirst(T1 newFirst)\n" +
+	"      {\n" +
+	"      first = newFirst;\n" +
+	"    }\n" +
+	"   public void setSecond(T2 newSecond)\n" +
+	"      {\n" +
+	"      second = newSecond;\n" +
+	"    }\n" +
+	"   public T1 getFirst()\n" +
+	"      {\n" +
+	"      return first;\n" +
+	"    }\n" +
+	"   public T2 getSecond()\n" +
+	"      {\n" +
+	"      return second;\n" +
+	"    }\n" +
+	"   public boolean equals(Object otherObject)\n" +
+	"      {\n" +
+	"      if (otherObject == null)\n" +
+	" return true;\n" +
+	"      else if (getClass( ) != otherObject.getClass( ))\n" +
+	" return false;\n" +
+	"      else\n" +
+	" {\n" +
+	" TwoTypePair<T1, T2> otherPair =\n" +
+	" (TwoTypePair<T1, T2>)otherObject;\n" +
+	" return (first.equals(otherPair.first)\n" +
+	"    && second.equals(otherPair.second));\n" +
+	"       }\n" +
+	"    }\n" +
+	"}\n";
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Main program								*/
+/*										*/
+/********************************************************************************/
+
+public static void main(String [] args)
+{
+   JcompControl ctrl = new JcompControl();
+
+   StringSource s1 = new StringSource("test1",test1);
+
+   List<JcompSource> srcs = new ArrayList<JcompSource>();
+   srcs.add(s1);
+   JcompProject proj = ctrl.getProject(srcs);
+   showMessages("test1",proj);
+
+   srcs.clear();
+   StringSource s2 = new StringSource("test2",test2);
+   srcs.add(s2);
+   proj = ctrl.getProject("/pro/ivy/jcomp/src/test.jar",srcs);
+   showMessages("test2",proj);
+
+   srcs.clear();
+   StringSource s3 = new StringSource("test3",test3);
+   srcs.add(s3);
+   proj = ctrl.getProject(srcs);
+   showMessages("test3",proj);
+
+   srcs.clear();
+   StringSource s4 = new StringSource("test4",test4);
+   srcs.add(s4);
+   proj = ctrl.getProject(srcs);
+   showMessages("test4",proj);
+
+   srcs.clear();
+   StringSource s5 = new StringSource("test5",test5);
+   srcs.add(s5);
+   proj = ctrl.getProject(srcs);
+   showMessages("test5",proj);
+
+   srcs.clear();
+   try {
+      File f6 = new File("/pro/ivy/jcomp/src/test6");
+      String cnts = IvyFile.loadFile(f6);
+      StringSource s6 = new StringSource("test6",cnts);
+      srcs.add(s6);
+      proj = ctrl.getProject(srcs);
+      showMessages("test6",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test6");
+    }
+
+   srcs.clear();
+   try {
+      File f7 = new File("/pro/ivy/jcomp/src/test7");
+      String cnts = IvyFile.loadFile(f7);
+      StringSource s7 = new StringSource("test7",cnts);
+      srcs.add(s7);
+      String jar = "/pro/ivy/jcomp/src/test7.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test7",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test7");
+    }
+
+   srcs.clear();
+   try {
+      File f8 = new File("/pro/ivy/jcomp/src/test8");
+      String cnts = IvyFile.loadFile(f8);
+      StringSource s8 = new StringSource("test8",cnts);
+      srcs.add(s8);
+      String jar = "/pro/ivy/jcomp/src/test8.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test8",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test8");
+    }
+
+   srcs.clear();
+   try {
+      File f9 = new File("/pro/ivy/jcomp/src/test9");
+      String cnts = IvyFile.loadFile(f9);
+      StringSource s9 = new StringSource("test9",cnts);
+      srcs.add(s9);
+      String jar = "/pro/ivy/jcomp/src/test9.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test9",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test9");
+    }
+
+   srcs.clear();
+   try {
+      File f10 = new File("/pro/ivy/jcomp/src/test10");
+      String cnts = IvyFile.loadFile(f10);
+      StringSource s10 = new StringSource("test10",cnts);
+      srcs.add(s10);
+      String jar = "/pro/ivy/jcomp/src/test10.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test10",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test10");
+    }
+
+   srcs.clear();
+   try {
+      File f11 = new File("/pro/ivy/jcomp/src/test11");
+      String cnts = IvyFile.loadFile(f11);
+      StringSource s11 = new StringSource("test11",cnts);
+      srcs.add(s11);
+      String jar = "/pro/ivy/jcomp/src/test11.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test11",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test11");
+    }
+
+   srcs.clear();
+   try {
+      File f12 = new File("/pro/ivy/jcomp/src/test12");
+      String cnts = IvyFile.loadFile(f12);
+      StringSource s12 = new StringSource("test12",cnts);
+      srcs.add(s12);
+      String jar = "/pro/ivy/jcomp/src/test12.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test12",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test12");
+    }
+
+   srcs.clear();
+   try {
+      File f13 = new File("/pro/ivy/jcomp/src/test13");
+      String cnts = IvyFile.loadFile(f13);
+      StringSource s13 = new StringSource("test13",cnts);
+      srcs.add(s13);
+      String jar = "/pro/ivy/jcomp/src/test13.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test13",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test13");
+    }
+
+   srcs.clear();
+   try {
+      File f14 = new File("/pro/ivy/jcomp/src/test14");
+      String cnts = IvyFile.loadFile(f14);
+      StringSource s14 = new StringSource("test14",cnts);
+      srcs.add(s14);
+      String jar = "/pro/ivy/jcomp/src/test14.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test14",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test14");
+    }
+
+   srcs.clear();
+   try {
+      File f15 = new File("/pro/ivy/jcomp/src/test15");
+      String cnts = IvyFile.loadFile(f15);
+      StringSource s15 = new StringSource("test15",cnts);
+      srcs.add(s15);
+      String jar = "/pro/ivy/jcomp/src/test15.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test15",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test15");
+    }
+
+   srcs.clear();
+   try {
+      File f16 = new File("/pro/ivy/jcomp/src/test16");
+      String cnts = IvyFile.loadFile(f16);
+      StringSource s16 = new StringSource("test16",cnts);
+      srcs.add(s16);
+      String jar = "/pro/ivy/jcomp/src/test16.jar";
+      proj = ctrl.getProject(jar,srcs);
+      showMessages("test16",proj);
+    }
+   catch (IOException e) {
+      System.err.println("Problem loading test16");
+    }
+}
+
+
+
+private static void showMessages(String what,JcompProject proj)
+{
+   System.err.println("FOR TEST " + what);
+   proj.resolve();
+   for (JcompMessage msg : proj.getMessages()) {
+      System.err.println("MSG:" + msg.getSeverity() + " " + msg.getSource() + ":" +
+			    msg.getLineNumber() + " (" +
+			    msg.getStartOffset() + "-" + msg.getEndOffset() + ") " +
+			    msg.getText());
+    }
+}
+
+
+
+
+
+private static class StringSource implements JcompSource {
+
+   private String base_name;
+   private String base_string;
+
+   StringSource(String nm,String s) {
+      base_name = nm;
+      base_string = s;
+    }
+
+   @Override public String getFileContents()		{ return base_string; }
+
+   @Override public String getFileName()		{ return base_name; }
+
+}	// end of inner class String Source
+
+
+
+
+}	// end of class  JcompTest
+
+
+
+
+/* end of JcompTest.java */

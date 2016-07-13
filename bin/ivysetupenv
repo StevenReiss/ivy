@@ -1,0 +1,278 @@
+#! /bin/tcsh -f
+
+if ($?BROWN_IVY_IVY == 1) then
+else
+   unset x0
+   set x0 = ivysetupenv
+
+   set path = ($path .)
+
+   if ($?0 == 0) then
+      set x0 = ivysetupenv
+   endif
+
+   if $?x0 == 0 then
+      if X$0 == X then
+	 set x0 = ivysetupenv
+      else if X$0 == X-csh then
+	 set x0 = ivysetupenv
+      else if X$0 == Xcsh then
+	 set x0 = ivysetupenv
+      else if X$0 == Xconfigure then
+	 set x0 = ivysetupenv
+      else
+	 set x0 = $0
+      endif
+    endif
+
+   unsetenv BROWN_IVY_ARCH
+
+   set x = `zsh -c "whence $x0"`
+   if (X$x == X) then
+      set x = `zsh -c "whence ivysetupenv"`
+   endif
+
+   if (X$x == X) then
+      echo "Can't locate ivysetupenv"
+      exit 1
+    endif
+
+   set y1 = ${x:h}
+   if ($y1 == ".") then
+      set y1 = `pwd`
+    endif
+
+   set y1x = `echo $y1 | grep '^/'`
+
+   if ( X$y1x == X ) then
+      set y1 = `pwd`/$y1
+   endif
+
+   set y2 = ${y1:h}
+   if ($y2 == bin) then
+      set y2 = `pwd`
+   else if (${y2:t} == bin) then
+      set y2 = ${y2:h}
+    endif
+
+   set y3 = ${y2:h}
+   setenv BROWN_IVY_ROOT $y3
+   setenv BROWN_IVY_IVY $y2
+   setenv BROWN_IVY_ARCH `$BROWN_IVY_IVY/bin/ivyarch`
+
+   if ($?LD_LIBRARY_PATH == 0) then
+      setenv LD_LIBRARY_PATH "$BROWN_IVY_IVY/lib/${BROWN_IVY_ARCH}"
+   else
+      setenv LD_LIBRARY_PATH "$BROWN_IVY_IVY/lib/${BROWN_IVY_ARCH}:$LD_LIBRARY_PATH"
+   endif
+   if ($BROWN_IVY_ARCH == ppc) then
+      setenv DYLD_LIBRARY_PATH "$LD_LIBRARY_PATH"
+   endif
+
+   set path = ( $path $BROWN_IVY_IVY/bin )
+
+endif
+
+
+if ($?BROWN_JAVA_HOME) then
+else
+   set tx = /usr/bin/test
+   if (-e /bin/test) set tx = /bin/test
+
+   set PRG = `zsh -c "whence java"`
+   while ( { $tx -h "$PRG" } )
+      set ls = `/bin/ls -ld "${PRG}"`
+      set link = `expr "$ls" : '.*-> \(.*\)$'`
+      set y = `expr "X$link" : 'X/'` >& /dev/null
+      if ($y == 2) then
+	 set PRG = "${link}"
+      else
+	 set PRG = "${PRG:h}/${link}"
+      endif
+    end
+
+   set j1 = "${PRG:h}"
+   set j2 = "${j1:h}"
+
+   if (${j2:t} == jre) set j2 = ${j2:h}
+
+   if ($BROWN_IVY_ARCH == i686 || $BROWN_IVY_ARCH == x86_64) then
+      set javaarch = i386
+      set javaos = linux
+   else if ($BROWN_IVY_ARCH == ppc || $BROWN_IVY_ARCH == i386) then
+      set javaarch = ppc
+      set javaos = darwin
+      set j2 = /System/Library/Frameworks/JavaVM.Framework/Versions/1.5
+   else if ($BROWN_IVY_ARCH == mac64) then
+      set javaarch = mac64
+      set javaos = darwin
+      set j2 = `/usr/libexec/java_home`
+   else if ($BROWN_IVY_ARCH == cygwin) then
+      set javaarch = i686
+      set javaos = Windows
+   else
+      set javaarch = sparc
+      set javaos = solaris
+   endif
+
+   # javaos is used for include files and should be the name of the appropriate
+   #   machine dependent subdirectory of $JAVA_HOME/include
+   # javaarch is the architecture name in $PRO/ivy/lib with native libraries for
+   #   use with java.  Note that java might have a different default architecture
+   #   on a given platform (e.g. be 64 bit where the platform is 32 by default)
+
+   setenv BROWN_JAVA_HOME $j2
+   setenv BROWN_JAVA_ARCH $javaarch
+   setenv BROWN_JAVA_THREADS native_threads
+   setenv BROWN_JAVA_OS $javaos
+
+   set blib = $BROWN_JAVA_HOME/jre/lib
+   if (-e $BROWN_JAVA_HOME/../Classes) then
+      set blib = $BROWN_JAVA_HOME/../Classes
+   endif
+   set bx = ""
+   foreach i ($blib/*.jar)
+      if ($i !~ $blib/alt-* ) then
+	 set bx = ${bx}:$i
+      endif
+    end
+   setenv BROWN_JAVA_BOOT $bx
+
+endif
+
+
+if ($?CLASSPATH) then
+   set xxx = `echo $CLASSPATH | fgrep ivy/java`
+   if ( "X$xxx" == X ) then
+      setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/java:$BROWN_IVY_IVY/javasrc"
+   endif
+else
+   setenv CLASSPATH "$BROWN_IVY_IVY/java:$BROWN_IVY_IVY/javasrc"
+endif
+
+set xxx = `echo $CLASSPATH | fgrep postgresql`
+set yyy = `echo $CLASSPATH | fgrep mysql`
+if ($?BROWN_IVY_DBMS == 0) then
+   if (-e $BROWN_IVY_IVY/lib/postgresqlcopy.jar) then
+      setenv BROWN_IVY_DBMS "$BROWN_IVY_IVY/lib/postgresqlcopy.jar"
+      setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/postgresqlcopy.jar"
+   else if (-e $BROWN_IVY_IVY/lib/postgresql.jar) then
+      setenv BROWN_IVY_DBMS "$BROWN_IVY_IVY/lib/postgresql.jar"
+      setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/postgresql.jar"
+   endif
+   set mys = "`echo $BROWN_IVY_IVY/lib/mysql*.jar`"
+   if (-e "$BROWN_IVY_IVY/lib/mysql.jar") then
+      foreach x ($mys)
+	 setenv CLASSPATH "${CLASSPATH}:$x"
+	 if ($?BROWN_IVY_DBMS == 0) then
+	    setenv BROWN_IVY_DBMS "$x"
+	 else
+	    setenv BROWN_IVY_DBMS "${BROWN_IVY_DBMS}:$x"
+	 endif
+      end
+   endif
+endif
+
+set xxx = `echo $CLASSPATH | fgrep asm4.jar`
+if ( "X$xxx" == X ) then
+   setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/asm4.jar"
+endif
+
+set xxx = `echo $CLASSPATH | fgrep javax.servlet.jar`
+if ( "X$xxx" == X ) then
+   setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/javax.servlet.jar"
+endif
+
+set xxx = `echo $CLASSPATH | fgrep jce.jar`
+if ( "X$xxx" == X  && -e $BROWN_IVY_IVY/lib/jce.jar) then
+   setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/jce.jar"
+endif
+
+set xxx = `echo $CLASSPATH | fgrep org.eclipse.jdt.debug`
+if ( "X$xxx" == X ) then
+   set eclipse = ~spr/eclipse43/eclipse
+   if ( $?ECLIPSEROOT == 1) then
+      set eclipse = $ECLIPSEROOT
+   endif
+   set nonomatch
+   set eclipsejar =
+   set swt = swt.gtk.linux.x86_64
+   if ($BROWN_IVY_ARCH == i386 || $BROWN_IVY_ARCH == ppc) set swt = swt.carbon.macosx
+
+   foreach i (jdt.core core.filebuffers core.resources core.runtime core.jobs \
+		core.contenttype equinox.common equinox.preferences equinox.registry \
+		equinox.app \
+		debug.core debug.ui jdt.debug \
+		text core.runtime.compatibility.auth \
+		core.filesystem search \
+		jface ui.workbench swt $swt \
+		jface.text jdt.ui \
+		osgi osgi.util osgi.services)
+      set f1 = `echo $eclipse/plugins/org.eclipse.${i}_*.jar`
+      set f2 = `echo $eclipse/plugins/org.eclipse.${i}_*/*.jar`
+      if ("$f1" != "$eclipse/plugins/org.eclipse.${i}_*.jar") then
+	 set f = `ls -1 $eclipse/plugins/org.eclipse.${i}_*.jar | tail -1`
+	 set eclipsejar = "${eclipsejar}:$f"
+      else if ("$f2" != "$eclipse/plugins/org.eclipse.${i}_*/*.jar") then
+	 set f = `ls -1d $eclipse/plugins/org.eclipse.${i}_* | tail -1`
+	 foreach j ($f/*.jar)
+	    set eclipsejar = "${eclipsejar}:$j"
+	 end
+      endif
+   end
+
+
+
+   unset nonomatch
+   setenv ECLIPSEPATH "$eclipsejar"
+   setenv CLASSPATH "${CLASSPATH}$ECLIPSEPATH"
+endif
+
+if ($BROWN_IVY_ARCH == ppc) then
+   if ($?LD_LIBRARY_PATH) then
+      set xxx = `echo $LD_LIBRARY_PATH | fgrep /usr/local/lib`
+      if ( "X$xxx" == X) then
+	 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
+      endif
+   else
+      setenv LD_LIBRARY_PATH /usr/local/lib
+   endif
+   if ($BROWN_IVY_ARCH == ppc) then
+      setenv DYLD_LIBRARY_PATH "$LD_LIBRARY_PATH"
+   endif
+endif
+
+if ($?BROWN_IVY_TRACE) then ;
+else
+   setenv BROWN_IVY_TRACE "`$BROWN_IVY_IVY/bin/ivytracepath`"
+endif
+
+
+if ( $?BROWN_JAVA_64 == 0) then
+   java -d64 edu.brown.cs.ivy.exec.IvyTest >&! /dev/null
+   set x = $status
+   if ($x == 0) then
+      setenv BROWN_JAVA_64 1
+   else
+      setenv BROWN_JAVA_64 0
+   endif
+endif
+
+if ($?LD_LIBRARY_PATH == 0) then
+   set xxx =
+else
+   set xxx = `echo $LD_LIBRARY_PATH | fgrep ivy/lib`
+endif
+if ( "X$xxx" == X ) then
+   if ($BROWN_VELD_ARCH == i686 || $BROWN_VELD_ARCH == x86_64) then
+      if ($?LD_LIBRARY_PATH == 0) then
+	 setenv LD_LIBRARY_PATH "$BROWN_IVY_ROOT/lib:$BROWN_IVY_IVY/lib/${BROWN_VELD_ARCH}"
+      else
+	 setenv LD_LIBRARY_PATH "$BROWN_IVY_IVY/lib/${BROWN_VELD_ARCH}:$LD_LIBRARY_PATH"
+      endif
+      if ($BROWN_IVY_ARCH == ppc) then
+	 setenv DYLD_LIBRARY_PATH "$LD_LIBRARY_PATH"
+      endif
+   endif
+endif
+

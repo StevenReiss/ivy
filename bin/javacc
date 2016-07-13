@@ -1,0 +1,5 @@
+#! /bin/csh -f
+
+setenv CLASSPATH $BROWN_IVY_IVY/lib/javacc.jar
+
+exec java javacc $*

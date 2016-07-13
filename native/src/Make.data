@@ -1,0 +1,37 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/native/src/Make.data,v 1.1 2007-05-04 02:01:31 spr Exp $
+
+#
+# Native -- native code for various IVY packages
+#
+# Copyright 2007 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= native
+
+
+BFILES= nativeexec.o
+SFILES= nativeexec.C
+HFILES= native_local.H
+
+ifeq ($(LIBTYPE),$(SHAREDEXT))
+SHLIBLINKS= libnative.$(SHAREDEXT)
+OSHLIBLINKS= libnativeopt.$(SHAREDEXT)
+PSHLIBLINKS= libnativeprof.$(SHAREDEXT)
+else
+LIBBLINKS= libnative.a
+OLIBBLINKS= libnativeopt.a
+PLIBBLINKS= libnativeprof.a
+endif
+
+
+DYNLIB= $(XMLCLIB)
+X64=1
+
+ALL= libnative.$(LIBTYPE)
+	
+opt:	allopt libnativeopt.$(LIBTYPE)
+
+prof:	allprof libnativeprof.$(LIBTYPE)
+
+

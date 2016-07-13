@@ -1,0 +1,41 @@
+#! /bin/tcsh -f
+
+if ($?BROWN_IVY_IVY == 0) then
+   set x0 = `ksh -c "whence $0"`
+   set x1 = ${x0:h}
+   set x2 = $x1/ivysetupenv
+   source $x2
+endif
+
+set path = ( /bin /usr/bin /usr/ucb/bin $BROWN_IVY_IVY/bin )
+
+
+set x0 = `ivypath`
+set x1 = `ivybasepath`/javasrc/$x0
+set x2 = `echo $x0 | sed -e "s@edu/brown/cs/ivy/@@"`
+
+while (1)
+   set x3 = ${x2:h}
+   if ($x2 == $x3) break
+   if ($?x5 == 0) then
+      set x5 = ${x2:t}
+   else
+      set x5 = ${x2:t}/$x5
+   endif
+   set x2 = $x3
+end
+
+set x4 = `ivybasepath`/$x2/src
+if ($?x5 != 0) then
+   set x4 = $x4/$x5
+endif
+
+set y = UNKNOWN
+
+if (-d $x1) then
+   set y = $x1
+else if (-d $x4) then
+   set y = $x4
+endif
+
+echo $y

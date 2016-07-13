@@ -1,0 +1,36 @@
+#! /bin/csh -f
+
+
+#
+# mergejar old new
+#
+
+set tdir = /tmp/mjar$$
+
+set owd = $cwd
+
+set y1 = $1
+set y1x = `echo $y1 | grep '^/'`
+if ( X$y1x == X ) then
+   set y1 = $cwd/$1
+endif
+
+set y2 = $2
+set y2x = `echo $y2 | grep '^/'`
+if ( X$y2x == X ) then
+   set y2 = $cwd/$2
+endif
+
+
+mkdir $tdir
+cd $tdir
+jar xf $y2
+
+if (-e META-INF/MANIFEST.MF) then
+   jar umf META-INF/MANIFEST.MF $y1 .
+else
+   jar uf $y1 .
+endif
+
+cd $owd
+rm -rf $tdir

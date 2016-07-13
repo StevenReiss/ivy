@@ -1,0 +1,700 @@
+#
+#		Make.global
+#
+#	Global makefile for all projects
+#
+#
+# Copyright 1996 Steven P. Reiss, Brown University - All rights reserved.
+#
+#
+#	This file is used by gmake (gnu-make) as the primary makefile
+#	when building any of our binary directorys.  It is included by
+#	Make.template in the project directory to define all the standard
+#	items.
+#
+
+
+#
+#	Compiler definitions
+#
+
+ifdef LOCAL_CC
+CC= $(LOCAL_CC)
+else
+ifndef CC
+CC= $(DEFAULT_CC)
+endif
+endif
+
+ifdef LOCAL_CCPLUS
+CCPLUS = $(LOCAL_CCPLUS)
+else
+CCPLUS= $(DEFAULT_CCPLUS)
+endif
+
+
+#
+#	Java definitions
+#
+
+NO_LIBRARY=1
+
+ifdef LOCAL_JAVAC
+JAVAC= $(LOCAL_JAVAC)
+else
+JAVAC= $(DEFAULT_JAVAC)
+endif
+
+ifdef LOCAL_RMIC
+RMIC= $(LOCAL_RMIC)
+else
+RMIC= $(DEFAULT_RMIC)
+endif
+
+
+ifdef LOCAL_JAVACC
+JAVACC= $(LOCAL_JAVACC)
+else
+JAVACC= $(DEFAULT_JAVACC)
+endif
+
+ifdef LOCAL_JJTREE
+JJTREE= $(LOCAL_JJTREE)
+else
+JJTREE= $(DEFAULT_JJTREE)
+endif
+
+
+
+#
+#	Building definitions
+#
+
+BINARY_FILES= $(BFILES) $(OTHERBFILES) $(OTHERLIB) $(REPFILES)
+
+
+ifdef LOCALINCLUDE
+INCLUDES+= -I$(LOCALINCLUDE)
+endif
+
+JAVAINCLUDE= -I$(JHOME)/$(JINCL) -I$(JHOME)/$(JINCL)/$(JOS)
+INCLUDES+= $(JAVAINCLUDE)
+
+XMLINCLUDE= -I$(BROWN_IVY_IVY)/include/xml
+ifeq ($(X64),1)
+XMLCLIB= -L/pro/lib $(LD_SEARCH)/pro/lib $(XERCESLIB64)
+ifdef X11LIBDIR64
+X11LIBDIR= $(X11LIBDIR64)
+endif
+else
+XMLCLIB= -L/pro/lib $(LD_SEARCH)/pro/lib $(XERCESLIB)
+endif
+INCLUDES+= $(XMLINCLUDE)
+
+
+#
+#	Setup anything that the local Make.data forgot
+#
+
+
+ifndef PACKAGE
+PACKAGE= $(notdir $(SRCDIR))
+endif
+ifndef BARCH
+BARCH:= $(shell ivyarch)
+endif
+
+
+ifndef SFILES
+ifdef SUBFILES
+SFILES= $(patsubst %,$(SUBDIR)/%,$(SUBFILES))
+else
+SFILES= $(wildcard $(VPATH)/*.{C,c,cxx,java,jj,jjt})
+endif
+endif
+ifndef BFILES
+BFILES= $(subst $(VPATH)/,,$(subst .jjt,.class,$(filter %.jjt,$(SFILES)))) \
+	$(subst $(VPATH)/,,$(subst .jj,.class,$(filter %.jj,$(SFILES)))) \
+	$(subst $(VPATH)/,,$(subst .java,.class,$(filter %.java,$(SFILES))))
+endif
+ifndef JFILES
+JFILES1= $(subst $(VPATH)/,,$(filter %.java,$(SFILES))) \
+	$(subst $(VPATH)/,,$(filter %.java,$(LFILES)))
+JFILES2= $(notdir $(JFILES1))
+JFILES3= $(subst .jjt,.java,$(filter %.jjt,$(SFILES))) \
+	$(subst .jj,.java,$(filter %.jj,$(SFILES)))
+JFILES4= $(notdir $(JFILES3))
+JFILES= $(addprefix $(VPATH)/,$(notdir $(JFILES1)))
+endif
+
+
+
+
+ifndef SUBDIR
+MAKEDATA= Make.data
+else
+MAKEDATA= $(SUBDIR)/Make.data
+MAKEDATA= Make.data
+endif
+
+
+ifndef JAVASYSTEM
+JAVASYSTEM= $(SYSTEM)
+endif
+
+
+ifdef DYNLIB
+ifndef DYNLIBOPT
+DYNLIBOPT= $(DYNLIB)
+endif
+ifndef DYNLIBPROF
+DYNLIBPROF= $(DYNLIB)
+endif
+endif
+
+
+#
+#	Handle flags settings
+#
+
+ifeq ($(X64),1)
+CPLUSFLAGS += $(X64FLAGS)
+CFLAGS += $(X64FLAGS)
+ifdef ARCH64FLAGS
+ARCHFLAGS= $(ARCH64FLAGS)
+endif
+else
+CPLUSFLAGS += $(X32FLAGS)
+CFLAGS += $(X32FLAGS)
+endif
+
+
+#
+#	File set definitions for printing, distribution, etc
+#
+
+PFILES= $(MAKEDATA) $(HFILES) $(LOCALHFILES) $(SFILES) $(OTHER)
+ACTIVE= $(MAKEDATA) $(HFILES) $(LOCALHFILES) $(SFILES) $(OTHER) $(OTHERMISC)
+
+
+ifdef REMOTECLASS
+REMOTEALL= remotestubs
+endif
+
+
+#
+#	Basic depenencies and make rules
+#
+
+all:	$(PREALL) javadep $(STAMP) $(REMOTEALL) $(ALL)
+
+$(STAMP): $(BFILES) subdirs		  # javaall
+
+subdirs:
+ifdef SUBDIRS
+	for x in $(SUBDIRS); do \
+	   (cd $(VPATH)/$$x; $(MAKE) all); \
+	   done
+endif
+
+
+$(BFILES) /dev/null: $(HFILES)
+
+lib$(PACKAGE).a: $(BFILES)
+	$(ARCREATE) lib$(PACKAGE).a $(BFILES) $(OTHERBFILES) $(OTHERLIB) $(OTHERLIBS)
+
+lib$(PACKAGE)opt.a: $(BFILES)
+ifdef OPTIMIZE
+	$(ARCREATE) lib$(PACKAGE)opt.a $(BFILES) $(OTHERBFILES) $(OTHERLIB) $(OTHERLIBS)
+else
+	$(MAKE) OPTIMIZE=1 binary COMMAND=lib$(PACKAGE)opt.a
+endif
+
+lib$(PACKAGE)prof.a: $(BFILES)
+ifdef PROFILE
+	$(ARCREATE) lib$(PACKAGE)prof.a $(BFILES) $(OTHERBFILES) $(OTHERLIB) $(OTHERLIBS)
+else
+	$(MAKE) PROFILE=1 binary COMMAND=lib$(PACKAGE)prof.a
+endif
+
+lib$(PACKAGE).$(SHAREDEXT):
+	( cd ../src; $(MAKE) binshare )
+	( cd ../bin.share.$(BARCH); $(CCPLUS) $(CPLUSFLAGS) $(SHARED_LD_OPTION) -o lib$(PACKAGE).$(SHAREDEXT) $(BFILES) $(DYNLIB) )
+
+lib$(PACKAGE)opt.$(SHAREDEXT):
+	( cd ../src; $(MAKE) optshare )
+	( cd ../bin.share.opt.$(BARCH); $(CCPLUS) $(CPLUSFLAGS) $(SHARED_LD_OPTION) -o lib$(PACKAGE)opt.$(SHAREDEXT) $(BFILES) $(DYNLIBOPT) )
+
+lib$(PACKAGE)64.$(SHAREDEXT):
+	$(MAKE) SHAREDLIB=1 binary COMMAND=realclean
+	( cd ../src; $(MAKE) binshare X64=1)
+	( cd ../bin.share.$(BARCH); $(CCPLUS) $(CPLUSFLAGS) $(SHARED_LD_OPTION) $(X64FLAGS) -o lib$(PACKAGE)64.$(SHAREDEXT) $(BFILES) $(DYNLIB) )
+	$(MAKE) SHAREDLIB=1 binary COMMAND=realclean
+
+lib$(PACKAGE)64opt.$(SHAREDEXT):
+	$(MAKE) SHAREDLIB=1 OPTIMIZE=1 binary COMMAND=realclean
+	( cd ../src; $(MAKE) optshare X64=1)
+	( cd ../bin.share.opt.$(BARCH); $(CCPLUS) $(CPLUSFLAGS) $(SHARED_LD_OPTION) $(X64FLAGS) -o lib$(PACKAGE)64opt.$(SHAREDEXT) $(BFILES) $(DYNLIBOPT) )
+	$(MAKE) SHAREDLIB=1 OPTIMIZE=1 binary COMMAND=realclean
+
+lib$(PACKAGE)prof.$(SHAREDEXT):
+	( cd ../src; $(MAKE) profshare )
+	( cd ../bin.share.prof.$(BARCH); $(CCPLUS) -pg $(CPLUSFLAGS) $(SHARED_LD_OPTION) -o lib$(PACKAGE)prof.$(SHAREDEXT) $(BFILES) $(DYNLIBPROF) )
+
+lib$(PACKAGE)64prof.$(SHAREDEXT):
+	$(MAKE) SHAREDLIB=1 PROFILE=1 binary COMMAND=realclean
+	( cd ../src; $(MAKE) profshare X64=1 )
+	( cd ../bin.share.prof.$(BARCH); $(CCPLUS) $(CPLUSFLAGS) $(SHARED_LD_OPTION) $(X64FLAGS) -o lib$(PACKAGE)prof.$(SHAREDEXT) $(BFILES) $(DYNLIBPROF) )
+	$(MAKE) SHAREDLIB=1 PROFILE=1 binary COMMAND=realclean
+
+
+print prps:
+	(cd $(VPATH); enscript -2r -G -p - $(PFILES) | lpr )
+ifdef SUBDIRS
+	for x in $(SUBDIRS); do \
+	   (cd $(VPATH)/$$x; $(MAKE) print PWD=$(VPATH)/$$x); \
+	   done
+endif
+
+printall:
+	(cd $(VPATH); enscript -2r -G -p - $(PFILES) | lpr )
+ifdef SUBDIRS
+	for x in $(SUBDIRS); do \
+	   (cd $(VPATH)/$$x; $(MAKE) print PWD=$(VPATH)/$$x); \
+	   done
+endif
+
+
+cleanall: clean
+	- if [ -d ../bin.opt.$(BARCH) ]; then $(MAKE) OPTIMIZE=1 binary COMMAND=realclean; fi
+	- if [ -d ../bin.prof.$(BARCH) ]; then $(MAKE) PROFILE=1 binary COMMAND=realclean; fi
+	- if [ -d ../bin.share.$(BARCH) ]; then $(MAKE) SHAREDLIB=1 binary COMMAND=realclean; fi
+	- if [ -d ../bin.share.opt.$(BARCH) ]; then $(MAKE) SHAREDLIB=1 OPTIMIZE=1 binary COMMAND=realclean; fi
+	- if [ -d ../bin.share.prof.$(BARCH) ]; then $(MAKE) SHAREDLIB=1 PROFILE=1 binary COMMAND=realclean; fi
+
+
+realclean:
+	$(MAKE) clean
+	rm -rf $(LCLLIB) $(OTHERREALCLEAN) .DUMMY
+
+clean:
+	rm -rf $(BFILES) $(CLEANREPOSITORY) $(PKGLIB) $(OTHERCLEAN) $(STAMP) $(REPFILES) $(MACHCLEAN)
+	rm -rf core bBACKUP bCONTROL vmon.out.* xxx* ir.out comm.trace *.o y.tab.c lex.yy.c *.class *.jj *.java
+	rm -rf .sb/*/$(PACKAGE)* SunWS_cache jfiles javadep
+ifdef SRCCLEAN
+	(cd $(VPATH); rm -rf $(SRCCLEAN))
+endif
+ifdef SUBDIRS
+	- for x in $(SUBDIRS); do \
+	    rm -rf $$x/*.class ; \
+	    rm -rf $$x/*.jj ; \
+	    rm -rf $$x/*.o ; \
+	    rm -rf $$x/*.c ; \
+	    rm -rf $$x/*.C ; \
+	    rm -rf $$x/*.java ; \
+	    rm -rf $$x/jfiles ; \
+	    rm -rf $$x/javadep ; \
+	    done
+endif
+
+transfer:
+	(cd $(VPATH); cp $(ACTIVE) $(SRC))
+	(cd $(SRC); ln -s ../../data/Make.pass Make.pass)
+
+distrib_dir: general_distrib_dir $(OTHERDISTRIB)
+
+general_distrib_dir:
+ifdef SUBDIRS
+	for x in $(SUBDIRS); do \
+	    mkdir $(DISTRIB_DIR)/$(PACKAGE)/src/$$x ; \
+	    ln -s ../../../../../../data/Make.pass $(DISTRIB_DIR)/$(PACKAGE)/src/$$x/Makefile ; \
+	    done
+endif
+	(cd $(VPATH); for x in $(ACTIVE); do \
+	    cp $$x $(DISTRIB_DIR)/$(PACKAGE)/src/$$x; \
+	    done; )
+ifdef SUBDIRS
+	for x in $(SUBDIRS); do \
+	   (cd $(VPATH)/$$x; $(MAKE) distrib_subdir PACKSUP=$(PACKAGE)/src/$$x PWD=$(VPATH)/$$x); \
+	   done
+endif
+
+distrib_subdir:
+	(cd $(VPATH); for x in $(ACTIVE); do \
+	    cp $$x $(DISTRIB_DIR)/$(PACKSUP)/$$x; \
+	    done; )
+ifdef SUBDIRS
+	for x in $(SUBDIRS); do \
+	   mkdir $(DISTRIB_DIR)/$(PACKSUP)/$$x ; \
+	   (cd $(VPATH)/$$x; $(MAKE) distrib_subdir PACKSUP=$(PACKSUB)/$$x PWD=$(VPATH)/$$x); \
+	   done
+endif
+
+
+
+nothing:
+	touch $(STAMP)
+
+rcssetup:
+	(cd $(VPATH); rcssetup $(ACTIVE))
+
+count:
+	@(cd $(VPATH); wc $(ACTIVE))
+ifdef SUBDIRS
+	@for x in $(SUBDIRS); do \
+	   (cd $(VPATH)/$$x; $(MAKE) count PACKSUP=$(PACKAGE) PWD=$(VPATH)/$$x); \
+	   done
+endif
+
+
+#
+#	Rules for generating a list of all java files
+#
+
+javafiles:
+ifdef $(JFILES4)
+	$(MAKE) $(JFILES4)
+endif
+	$(MAKE) javafiles1
+
+javafiles1: $(JFILES2)
+	rm -rf jfiles
+	@echo $(JFILES) > jfiles
+ifdef SUBDIRS
+	for x in $(SUBDIRS); do \
+	   (cd $$x; $(MAKE) SUBDIRS= javafiles; cat jfiles >> ../jfiles ); \
+	   done
+endif
+
+
+javaall: javafiles
+	javac $(JAVAFLAGS) `cat jfiles`
+	touch javaall
+
+
+
+
+#
+#	Rules for remote java stubs
+#
+
+remotestubs:
+	for x in $(REMOTECLASS); do \
+		$(RMIC) $(JAVAFLAGS) $(JAVASYSTEM).$(subst /,.,$(PACKAGE)).$$x; \
+		done
+
+
+#
+#	Link rules
+#
+
+links:	$(OTHERLINKS)
+ifdef INCLINKS
+	for x in $(INCLINKS); do \
+		rm -f ../../include/$$x; \
+		ln -s ../$(PACKAGE)/src/$$x ../../include/$$x; \
+		done
+endif
+ifdef LIBLINKS
+	for x in $(LIBLINKS); do \
+		rm -f ../../lib/$(BARCH)/$$x; \
+		ln -s ../../$(PACKAGE)/src/$$x ../../lib/$(BARCH)/$$x; \
+		done
+endif
+ifdef SLIBLINKS
+	for x in $(SLIBLINKS); do \
+		rm -f $(BROWN_IVY_IVY)/lib/$$x; \
+		ln -s ../$(PACKAGE)/src/$$x $(BROWN_IVY_IVY)/lib/$$x; \
+		done
+endif
+ifdef LIBBLINKS
+	for x in $(LIBBLINKS); do \
+		rm -f ../../lib/$(BARCH)/$$x; \
+		ln -s ../../$(PACKAGE)/bin.$(BARCH)/$$x ../../lib/$(BARCH)/$$x; \
+		done
+endif
+ifdef OLIBBLINKS
+	for x in $(OLIBBLINKS); do \
+		rm -f ../../lib/$(BARCH)/$$x; \
+		ln -s ../../$(PACKAGE)/bin.opt.$(BARCH)/$$x ../../lib/$(BARCH)/$$x; \
+		done
+endif
+ifdef PLIBBLINKS
+	for x in $(PLIBBLINKS); do \
+		rm -f ../../lib/$(BARCH)/$$x; \
+		ln -s ../../$(PACKAGE)/bin.prof.$(BARCH)/$$x ../../lib/$(BARCH)/$$x; \
+		done
+endif
+ifdef SHLIBLINKS
+	for x in $(SHLIBLINKS); do \
+		rm -f ../../lib/$(BARCH)/$$x; \
+		ln -s ../../$(PACKAGE)/bin.share.$(BARCH)/$$x ../../lib/$(BARCH)/$$x; \
+		done
+endif
+ifdef OSHLIBLINKS
+	for x in $(OSHLIBLINKS); do \
+		rm -f ../../lib/$(BARCH)/$$x; \
+		ln -s ../../$(PACKAGE)/bin.share.opt.$(BARCH)/$$x ../../lib/$(BARCH)/$$x; \
+		done
+endif
+ifdef PSHLIBLINKS
+	for x in $(PSHLIBLINKS); do \
+		rm -f ../../lib/$(BARCH)/$$x; \
+		ln -s ../../$(PACKAGE)/bin.share.prof.$(BARCH)/$$x ../../lib/$(BARCH)/$$x; \
+		done
+endif
+ifdef CMDLINKS
+	for x in $(CMDLINKS); do \
+		rm -f ../../bin/$(BARCH)/$$x; \
+		ln -s ../../$(PACKAGE)/bin.$(BARCH)/$$x ../../bin/$(BARCH)/$$x; \
+		done
+endif
+ifdef OCMDLINKS
+	for x in $(OCMDLINKS); do \
+		rm -f ../../bin/$(BARCH)/opt_$$x; \
+		ln -s ../../$(PACKAGE)/bin.opt.$(BARCH)/$$x ../../bin/$(BARCH)/opt_$$x; \
+		done
+endif
+ifdef PCMDLINKS
+	for x in $(PCMDLINKS); do \
+		rm -f ../../bin/$(BARCH)/prof_$$x; \
+		ln -s ../../$(PACKAGE)/bin.prof.$(BARCH)/$$x ../../bin/$(BARCH)/prof_$$x; \
+		done
+endif
+ifdef SCRIPTLINKS
+	for x in $(SCRIPTLINKS); do \
+		rm -f ../../bin/$(BARCH)/$$x; \
+		ln -s ../../$(PACKAGE)/src/$$x ../../bin/$(BARCH)/$$x; \
+		done
+endif
+ifdef RUNLINKS
+	for x in $(RUNLINKS); do \
+		rm -f ../../lib/$(BARCH)/data/$$x; \
+		ln -s ../../../$(PACKAGE)/src/$$x ../../lib/$(BARCH)/data/$$x; \
+		done
+endif
+ifdef RUNBLINKS
+	for x in $(RUNBLINKS); do \
+		rm -f ../../lib/$(BARCH)/data/$$x; \
+		ln -s ../../../$(PACKAGE)/bin.$(BARCH)/$$x ../../lib/$(BARCH)/data/$$x; \
+		done
+endif
+ifdef HELPLINKS
+	for x in $(HELPLINKS); do \
+		rm -f ../../help/$$x; \
+		ln -s ../$(PACKAGE)/src/$$x ../../help/$$x; \
+		done
+endif
+
+
+
+#
+#	RCS-related comands
+#
+
+COMMA:= ,
+RCSFILES= $(wildcard $(VPATH)/RCS/*,v)
+RCSSRC= $(patsubst $(VPATH)/RCS/%$(COMMA)v,%,$(RCSFILES))
+RCSSRC1= $(patsubst $(VPATH)/%,%,$(RCSFILES))
+
+checkin: $(RCSSRC1)
+	- (cd $(VPATH); ci -u $(RCSSRC1))
+
+
+$(RCSSRC) .DUMMY: %: $(VPATH)/RCS/%,v
+	test -f $@ || (echo checkout needed; cd $(VPATH); $(CO) $<)
+
+
+
+#
+#	Automatic dependency generation
+#
+
+ifndef ALLCFILES
+ALLCFILES= $(wildcard $(VPATH)/*.[Cc]) $(wildcard *.[cC]) $(wildcard $(VPATH)/*.cxx) \
+	$(wildcard *.cxx)
+endif
+
+olddep:
+	-(unset cppC; $(CCPLUS) -M $(CFLAGS) $(ALLCFILES) | grep -v '/cs/include' | \
+		grep -v '/usr/include' > dep )
+
+olddep1: $(ALLCFILES)
+	-(unset cppC; $(CCPLUS) -M $(CFLAGS) $(ALLCFILES) | grep -v '/cs/include' | \
+		grep -v '/usr/include' > dep )
+
+DEPDIRS= $(wildcard ../bin.*.$(BARCH))
+
+makedep:
+	rm -rf dep1 dep2
+	touch dep1 ld
+	-makedepend -w 1 -f dep1 $(DEPFLAGS) -- $(CFLAGS) $(ALLCFILES)
+	grep -v '/cs/include' dep1 | grep -v '/usr/include' | grep -v '/opt/SUN' | \
+		grep -v 'SUNWspro' | \
+		grep -v '/usr/lib' | \
+		grep -v '/usr/openwin' | grep -v 'X11/' > dep2
+	sed -e 's@^\.\.\/src/@@' dep2 > dep1
+	sed -e 's@$(BROWN_IVY_IVY)/$(PACKAGE)/src/@@' dep1 > dep
+	rm -rf dep1 ld dep1.bak dep2
+ifneq (X$(DEPDIRS),X)
+	for x in $(DEPDIRS); do \
+	    rm -rf $$x/dep; ln -s ../bin.$(BARCH)/dep $$x/dep; \
+	    done
+endif
+
+-include dep
+
+
+JAVACOMPILE= $(JAVAC) $(JAVAFLAGS)
+
+JBINDIR:= $(shell ivybinpath)
+
+javadepok: $(VPATH)/Make.data
+	rm -rf javadep
+	$(MAKE) xjavadep
+	touch javadepok
+
+
+javadep:
+	touch javadep
+
+
+xjavadep:
+ifneq ($(words $(JFILES)),0)
+	-jdeps -d $(JAVAPATH) $(JFILES) > javadep1
+	sed -e 's^$(JBINDIR)/^^g' < javadep1 > javadep2
+	sed -e 's^$(BROWN_IVY_ROOT)^\$$(BROWN_IVY_ROOT)^g' < javadep2 > javadep
+	rm -f javadep1 javadep2
+else
+	touch javadep
+endif
+ifdef SUBDIRS
+	for x in $(SUBDIRS); do \
+	   (cd $(VPATH)/$$x; $(MAKE) javadep PWD=$(VPATH)/$$x); \
+	   done
+endif
+
+-include javadep
+
+
+#
+#	Copyright notice insertion
+#
+
+
+COPYRIGHTFILES= $(filter %.c,$(ACTIVE)) $(filter %.h,$(ACTIVE)) \
+	$(filter %.y,$(ACTIVE)) $(filter %.l,$(ACTIVE)) 	\
+	$(filter %.C,$(ACTIVE)) $(filter %.H,$(ACTIVE))
+
+copyright:
+	(cd $(VPATH); copyright -F $(BROWN_IVY_IVY)/include/copyright.h $(COPYRIGHTFILES) )
+
+
+
+
+#
+#	Generic setup
+#
+
+fixcreate: dummydep
+ifdef SUBDIRS
+	for x in $(SUBDIRS); do \
+	   (cd $(VPATH)/$$x; rm -rf Makefile; cp ../Makefile .; $(MAKE) create); \
+	   done
+endif
+	rm javadep
+	-$(MAKE) xjavadep
+
+
+dummydep:
+	touch javadep
+
+
+#
+#	Commands for dealing with different versions
+#
+
+binopt:
+	$(MAKE) OPTIMIZE=1 binary COMMAND=binarys
+
+binshare:
+	$(MAKE) SHAREDLIB=1 binary COMMAND=binarys
+
+binprof:
+	$(MAKE) PROFILE=1 binary COMMAND=binarys
+
+
+allopt:
+	$(MAKE) OPTIMIZE=1 binary COMMAND=all
+
+allprof:
+	$(MAKE) PROFILE=1 binary COMMAND=all
+
+optshare:
+	$(MAKE) OPTIMIZE=1 SHAREDLIB=1 binary COMMAND=binarys
+
+profshare:
+	$(MAKE) PROFILE=1 SHAREDLIB=1 binary COMMAND=binarys
+
+BINA=
+BINB=
+ifdef SHAREDLIB
+BINA = .share
+endif
+ifdef OPTIMIZE
+BINB = .opt
+endif
+ifdef PROFILE
+BINB = .prof
+endif
+BINDIR= bin$(BINA)$(BINB).$(BARCH)
+
+binary:
+	(cd ../$(BINDIR); $(MAKE) $(COMMAND) )
+
+binarys: $(BFILES)
+
+
+
+
+SCOREFILES= $(patsubst %.C,%.score,$(SFILES))
+
+%.score: %.C
+	/opt/SUNWlxcp/bin/score -w $<
+
+score: $(SCOREFILES)
+
+
+
+#
+#	Commands to generate and manage javadoc
+#
+
+javadoc:
+	javadoc -d $(SYSROOT)/doc -public -sourcepath $(SYSROOT)/javasrc $(JFILES)
+
+
+opt: allopt
+
+prof: allprof
+
+
+#
+#	Handle alternative architectures
+#
+
+ifdef ALTARCH
+ifneq ($(BARCH),$(ALTARCH))
+ifneq ($(ARCHCMD),altarch)
+all fixcreate clean links .DEFAULT: altarch
+endif
+endif
+endif
+
+altarch:
+	- if [ -e ../src ]; then (cd ../src; BROWN_IVY_ARCH=$(ALTARCH) BARCH=$(ALTARCH) $(MAKE) BARCH=$(ALTARCH) $(MAKECMDGOALS)); fi
+
+
+# end of Make.global
+
+

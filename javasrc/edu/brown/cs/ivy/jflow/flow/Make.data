@@ -1,0 +1,53 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/Make.data,v 1.5 2008-03-14 12:26:14 spr Exp $
+
+#
+# JFLOW.FLOW -- implementation for flow analysis JFLOW
+#
+
+PACKAGE= jflow/impl
+SUBDIR= impl
+
+SFILES= \
+	FlowMaster.java \
+	FlowAddons.java \
+	FlowArray.java \
+	FlowCall.java \
+	FlowCallSite.java \
+	FlowConditional.java \
+	FlowControl.java \
+	FlowDetails.java \
+	FlowField.java \
+	FlowIncremental.java \
+	FlowQueue.java \
+	LocalType.java \
+	MethodBase.java \
+	MethodFactory.java \
+	MethodSpecial.java \
+	ProtoBase.java \
+	ProtoCollection.java \
+	ProtoFactory.java \
+	ProtoMap.java \
+	SourceArray.java \
+	SourceBase.java \
+	SourceFactory.java \
+	SourceField.java \
+	SourceFixed.java \
+	SourceLocal.java \
+	SourceModel.java \
+	SourceObject.java \
+	SourceProto.java \
+	SourceSet.java \
+	SourceSetFactory.java \
+	SourceString.java \
+	StateBase.java \
+	StateCtor.java \
+	StateFactory.java \
+	ValueBad.java \
+	ValueBase.java \
+	ValueFactory.java \
+	ValueFloat.java \
+	ValueInt.java \
+	ValueNumber.java \
+	ValueObject.java \
+

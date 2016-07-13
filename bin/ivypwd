@@ -1,0 +1,10 @@
+#/bin/tcsh -f
+
+if (`ivyarch` == i386) then
+   set a = -P
+else
+   set a =
+endif
+
+
+/bin/pwd $a

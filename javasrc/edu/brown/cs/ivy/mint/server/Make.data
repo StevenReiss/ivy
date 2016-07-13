@@ -1,0 +1,29 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/Make.data,v 1.5 2013-06-11 23:24:53 spr Exp $
+
+#
+# MINT/SERVER -- MINT server implementation
+#
+# Copyright 1998 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= mint/server
+SUBDIR= server
+
+SFILES= MintServer.java \
+	MintServerConnection.java \
+	MintServerMessage.java \
+	MintServerUserConnection.java \
+	MintServerWebConnection.java \
+	MintPolicyManager.java \
+	MintPolicyContext.java \
+	MintPolicyException.java \
+	MintPolicyAction.java \
+	MintPolicyActionManager.java \
+	MintPolicyWhen.java \
+	MintPolicyWhenManager.java \
+	MintContextManager.java
+
+
+LOCALJAVAFLAGS= $(J6FLAGS)
+

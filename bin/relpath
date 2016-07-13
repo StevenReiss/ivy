@@ -1,0 +1,31 @@
+#!/usr/bin/perl -w
+use strict;
+
+use Cwd;
+my $cwd = getcwd();
+my $path;
+
+if (@ARGV) {
+	$path = $ARGV[0];
+} else {
+	chomp($path = <STDIN>);
+}
+
+$path =~ s{/$}{};
+$cwd  =~ s{/$}{};
+
+my @cwd =	split m{/}, $cwd;
+my @path =	split m{/}, $path;
+
+my $i = 0;
+$i++ while defined $cwd[$i] && defined $path[$i] && $cwd[$i] eq $path[$i];
+
+splice @path,0,$i; # matching start...
+splice @cwd, 0,$i; # same
+
+my $out = '../' x (scalar @cwd);
+$out .= join '/' => @path;
+
+print "$out\n";
+
+

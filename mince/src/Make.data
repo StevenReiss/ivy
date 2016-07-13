@@ -1,0 +1,53 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/mince/src/Make.data,v 1.6 2016/03/22 13:11:07 spr Exp $
+
+#
+# MINCE -- C++ interface to MINT xml-based message server
+#
+# Copyright 1997 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= mince
+
+
+BFILES= minceclient.o mincemaster.o mincematch.o mincemessage.o
+SFILES= minceclient.C mincemaster.C mincematch.C mincemessage.C
+HFILES= mince.H mince_local.H
+
+LOCALHFILES= mince_thread.H mince_qt.H mince_poll.H
+
+OTHER= mincetest.C
+INCLINKS= mince.H mince_thread.H mince_qt.H mince_poll.H
+
+ifeq ($(LIBTYPE),$(SHAREDEXT))
+SHLIBLINKS= libmince.$(SHAREDEXT)
+OSHLIBLINKS= libminceopt.$(SHAREDEXT)
+PSHLIBLINKS= libminceprof.$(SHAREDEXT)
+else
+LIBBLINKS= libmince.a
+OLIBBLINKS= libminceopt.a
+PLIBBLINKS= libminceprof.a
+endif
+
+
+DYNLIB= $(XMLCLIB)
+X64=1
+
+ALL= libmince.$(LIBTYPE)
+ALL= libmince.$(LIBTYPE) mincetest
+
+mincetest.o: mincetest.C
+	$(CCPLUS) $(CPLUSFLAGS) $(THREADFLAGS) -c $<
+
+mincetest: mincetest.o $(BFILES)
+	$(CCPLUS) $(CPLUSFLAGS) -o mincetest mincetest.o $(BFILES) $(XERCESLIB) $(SOCKETLIB) $(THREADLIB)
+
+
+
+opt:	allopt libminceopt.$(LIBTYPE)
+
+prof:	allprof libminceprof.$(LIBTYPE)
+
+
+testit: mincetest
+	mincetest

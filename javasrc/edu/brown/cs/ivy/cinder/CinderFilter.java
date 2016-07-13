@@ -1,0 +1,81 @@
+/********************************************************************************/
+/*										*/
+/*		CinderFilter.java						*/
+/*										*/
+/*	Interface to let clients define class filters for use with cinder	*/
+/*										*/
+/********************************************************************************/
+/*	Copyright 1997 Brown University -- Steven P. Reiss			*/
+/*********************************************************************************
+ *  Copyright 1997, Brown University, Providence, RI.				 *
+ *										 *
+ *			  All Rights Reserved					 *
+ *										 *
+ *  Permission to use, copy, modify, and distribute this software and its	 *
+ *  documentation for any purpose other than its incorporation into a		 *
+ *  commercial product is hereby granted without fee, provided that the 	 *
+ *  above copyright notice appear in all copies and that both that		 *
+ *  copyright notice and this permission notice appear in supporting		 *
+ *  documentation, and that the name of Brown University not be used in 	 *
+ *  advertising or publicity pertaining to distribution of the software 	 *
+ *  without specific, written prior permission. 				 *
+ *										 *
+ *  BROWN UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS		 *
+ *  SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND		 *
+ *  FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL BROWN UNIVERSITY	 *
+ *  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY 	 *
+ *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,		 *
+ *  WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,	 *
+ *  ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS 	 *
+ *  SOFTWARE.									 *
+ *										 *
+ ********************************************************************************/
+
+
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderFilter.java,v 1.3 2008-11-12 13:44:40 spr Exp $ */
+
+
+/*********************************************************************************
+ *
+ * $Log: CinderFilter.java,v $
+ * Revision 1.3  2008-11-12 13:44:40  spr
+ * No changes.
+ *
+ * Revision 1.2  2004/05/05 02:28:08  spr
+ * Update import lists using eclipse.
+ *
+ * Revision 1.1  2003/05/24 00:28:25  spr
+ * Add a class filter for package classes.
+ *
+ * Revision 1.1  2003/03/29 03:40:25  spr
+ * Move CINDER interface to JikesBT from Bloom to Ivy.
+ *
+ *
+ ********************************************************************************/
+
+
+
+
+package edu.brown.cs.ivy.cinder;
+
+
+
+
+
+
+
+public interface CinderFilter
+{
+
+
+
+public boolean isProjectClass(String cls,Object file,boolean fg);
+
+
+
+}	// end of interface CinderFilter
+
+
+
+
+/* end of CinderFilter.java */

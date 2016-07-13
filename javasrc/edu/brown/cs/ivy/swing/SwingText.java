@@ -1,0 +1,310 @@
+/********************************************************************************/
+/*										*/
+/*		SwingText.java							*/
+/*										*/
+/*	Text drawing support							*/
+/*										*/
+/********************************************************************************/
+/*	Copyright 1998 Brown University -- Steven P. Reiss		      */
+/*********************************************************************************
+ *  Copyright 2011, Brown University, Providence, RI.				 *
+ *										 *
+ *			  All Rights Reserved					 *
+ *										 *
+ *  Redistribution and use in source and binary forms, with or without		 *
+ *  modification, are permitted provided that the following conditions are met:  *
+ *										 *
+ *  + Redistributions of source code must retain the above copyright notice,	 *
+ *	this list of conditions and the following disclaimer.			 *
+ *  + Redistributions in binary form must reproduce the above copyright notice,  *
+ *	this list of conditions and the following disclaimer in the		 *
+ *	documentation and/or other materials provided with the distribution.	 *
+ *  + Neither the name of the Brown University nor the names of its		 *
+ *	contributors may be used to endorse or promote products derived from	 *
+ *	this software without specific prior written permission.		 *
+ *										 *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  *
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE	 *
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE	 *
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE	 *
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 	 *
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF	 *
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS	 *
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN	 *
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)	 *
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE	 *
+ *  POSSIBILITY OF SUCH DAMAGE. 						 *
+ *										 *
+ ********************************************************************************/
+
+
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.16 2015/11/20 15:09:26 spr Exp $ */
+
+
+/*********************************************************************************
+ *
+ * $Log: SwingText.java,v $
+ * Revision 1.16  2015/11/20 15:09:26  spr
+ * Reformatting.
+ *
+ * Revision 1.15  2015/07/02 19:01:33  spr
+ * Minor bug fixes
+ *
+ * Revision 1.14  2013/11/15 02:38:19  spr
+ * Update imports; add features to combo box.
+ *
+ * Revision 1.13  2011-09-12 20:50:31  spr
+ * Code cleanup.
+ *
+ * Revision 1.12  2011-05-27 19:32:51  spr
+ * Change copyrights.
+ *
+ * Revision 1.11  2011-01-11 00:26:57  spr
+ * Handle empty freeze pane; code cleanup.
+ *
+ * Revision 1.10  2010-09-17 16:25:06  spr
+ * Fix text character input.
+ *
+ * Revision 1.9  2010-09-17 15:46:19  spr
+ * Add Keymap converter for mac; clean up and finish tree table.
+ *
+ * Revision 1.8  2010-07-24 02:01:02  spr
+ * Add permanent option for freeze panes; code clean up; add mac support for text components.
+ *
+ * Revision 1.7  2009-10-02 00:18:30  spr
+ * Import clean up.
+ *
+ * Revision 1.6  2009-04-11 01:43:02  spr
+ * Prevent text from getting too big.
+ *
+ * Revision 1.5  2009-03-20 01:59:50  spr
+ * Add enum-based choice box; add remove/update calls to lists; loosen numeric field checking.
+ *
+ * Revision 1.4  2009-01-27 00:40:33  spr
+ * IvyXmlWriter cleanup.
+ *
+ * Revision 1.3  2008-06-11 01:46:38  spr
+ * Clean imports.
+ *
+ * Revision 1.2  2008-03-14 12:27:44  spr
+ * Code cleanup.
+ *
+ * Revision 1.1  2007-11-06 00:22:17  spr
+ * Add methods to draw text in a 2d box with proper scaling.
+ *
+ *
+ ********************************************************************************/
+
+
+
+
+package edu.brown.cs.ivy.swing;
+
+
+
+import javax.swing.*;
+import javax.swing.text.*;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineMetrics;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
+
+
+
+
+public class SwingText {
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Method to draw a string in a box					*/
+/*										*/
+/********************************************************************************/
+
+public static void drawText(String lbl,Graphics2D g,Rectangle2D box)
+{
+   if (lbl == null) return;
+
+   Font f = g.getFont();
+
+   FontRenderContext ctx = g.getFontRenderContext();
+   LineMetrics lm = f.getLineMetrics(lbl,ctx);
+   Rectangle2D rc = f.getStringBounds(lbl,ctx);
+
+   double s0 = box.getWidth() / rc.getWidth();
+   double s1 = box.getHeight() / rc.getHeight();
+   if (s0 > s1) s0 = s1;
+   if (s0 > 1) s0 = 1;
+   if (s0 < 0.01) return;
+   float fz = f.getSize2D() * ((float) s0);
+   Font f1 = f.deriveFont(fz);
+
+   double xp = box.getX() + (box.getWidth() - rc.getWidth() * s0) / 2;
+   double yp = box.getY() + (box.getHeight() - rc.getHeight() * s0) / 2 + lm.getAscent() * s0;
+
+   g.setFont(f1);
+   g.drawString(lbl,(float) xp,(float) yp);
+   g.setFont(f);
+}
+
+
+
+public static void drawText(String lbl,Graphics2D g,double x,double y,double w,double h)
+{
+   drawText(lbl,g,new Rectangle2D.Double(x,y,w,h));
+}
+
+
+
+
+public static void drawVerticalText(String lbl,Graphics2D g,Rectangle2D box)
+{
+   Font f0 = g.getFont();
+
+   AffineTransform nat = AffineTransform.getRotateInstance(-Math.PI/2.0);
+   Font f1 = f0.deriveFont(nat);
+
+   FontRenderContext ctx = g.getFontRenderContext();
+   LineMetrics lm = f0.getLineMetrics(lbl,ctx);
+   Rectangle2D rc = f0.getStringBounds(lbl,ctx);
+
+   double s0 = box.getWidth() / rc.getHeight();
+   double s1 = box.getHeight() / rc.getWidth();
+   if (s0 > s1) s0 = s1;
+   if (s0 > 1) s0 = 1;
+   if (s0 < 0.01) return;
+   float fz = f1.getSize2D() * ((float) s0);
+   Font f2 = f1.deriveFont(fz);
+
+   g.setFont(f2);
+
+   double yp = box.getY() + box.getHeight() - (box.getHeight() - rc.getWidth() * s0) / 2;
+   double xp = box.getX() + (box.getWidth() - rc.getHeight() * s0) / 2 + lm.getAscent() * s0;
+
+   // System.err.println("TEXT " + box + " (" + xp + " , " + yp + ") @ " + fz);
+
+   Rectangle2D r2 = g.getClipBounds();
+   g.setClip(box);
+
+   g.drawString(lbl,(float) xp,(float) yp);
+
+   g.setClip(r2);
+
+   g.setFont(f0);
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Methods to fix JTextComponent for the mac				*/
+/*										*/
+/********************************************************************************/
+
+public static void fixKeyBindings(JTextComponent tc)
+{
+   int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+   if (mask != Event.META_MASK) return;
+
+   Keymap k = tc.getKeymap();
+   fixKeyBindings(k);
+   tc.setKeymap(k);
+}
+
+
+
+public static void fixKeyBindings(Keymap k)
+{
+   int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+   if (mask != Event.META_MASK) return;
+   
+   for (KeyStroke ks : k.getBoundKeyStrokes()) {
+      if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK || ks.getModifiers() == InputEvent.CTRL_MASK) {
+	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
+	 Action act = k.getAction(ks);
+	 k.removeKeyStrokeBinding(ks);
+	 k.addActionForKeyStroke(nks,act);
+       }
+    }
+   
+   k.setDefaultAction(new MacKeyTypedAction());
+}
+
+
+public static void fixKeyBindings(InputMap m) 
+{
+   int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+   if (mask != Event.META_MASK) return;
+   
+   for (KeyStroke ks : m.keys()) {
+      if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK || ks.getModifiers() == InputEvent.CTRL_MASK) {
+         KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
+         Object act = m.get(ks);
+         if (act instanceof Action) {
+            m.remove(ks);
+            m.put(nks,act);
+         }
+       }
+    }   
+}
+
+
+//
+//   InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
+//   im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+//   im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+//   im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+
+
+private static class MacKeyTypedAction extends TextAction {
+
+   private static final long serialVersionUID = 1;
+
+   MacKeyTypedAction() {
+      super(DefaultEditorKit.defaultKeyTypedAction);
+    }
+
+   @Override public void actionPerformed(ActionEvent e) {
+      JTextComponent target = getTextComponent(e);
+
+      if (target != null && e != null) {
+	 if (!target.isEditable() || !target.isEnabled()) {
+	    target.getToolkit().beep();
+	    return;
+	  }
+       }
+
+      String content = e.getActionCommand();
+      int mod = e.getModifiers();
+
+      if ((content != null) && (content.length() > 0) &&
+	     (((mod & ActionEvent.META_MASK) == 0) &&
+		 ! (((mod & ActionEvent.CTRL_MASK) != 0) &&
+		       ((mod & ActionEvent.ALT_MASK) == 0) ))) {
+	 char c = content.charAt(0);
+	 if (c >= 0x20 && (c != 0x7F)) { // Filter out CTRL chars and delete
+	    if (target != null)
+	       target.replaceSelection(content);
+	  }
+       }
+    }
+
+}	// end of inner class MacKeyTypedAction
+
+
+
+
+}	// end of class SwingText
+
+
+
+
+/* end of SwingText.java */

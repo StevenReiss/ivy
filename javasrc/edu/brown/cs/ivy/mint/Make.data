@@ -1,0 +1,44 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/Make.data,v 1.9 2013-06-11 23:24:51 spr Exp $
+
+#
+# MINT -- General Message Interface
+#
+# Copyright 1998 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= mint
+
+
+SFILES= \
+	MintArguments.java \
+	MintConnect.java \
+	MintConstants.java \
+	MintControl.java \
+	MintDefaultReply.java \
+	MintErrorHandler.java \
+	MintHandler.java \
+	MintLogger.java \
+	MintMaster.java \
+	MintMessage.java \
+	MintReply.java \
+	MintSelector.java \
+	MintServerMaster.java \
+
+
+SUBDIRS= client server match web test
+
+LOCALJAVAFLAGS= $(J6FLAGS)
+
+testit:
+	ivyjava -Dedu.brown.cs.ivy.mint.debug=true edu.brown.cs.ivy.mint.test.MintTest
+
+
+CP=/pro/ivy/java
+
+
+jars:
+	taigabuildimpljar -cp $(CP) -j mintmaster.jar -x edu.brown.cs.ivy.mint.MintServerMaster \
+		edu.brown.cs.ivy.mint.MintConstants$$HostPort
+	taigabuildimpljar -cp $(CP) -j mintserver.jar -x edu.brown.cs.ivy.mint.server.MintServer
+

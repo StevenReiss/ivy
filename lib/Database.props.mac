@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="edu.brown.cs.ivy.file.dbmstype">MYSQL</entry>
+<entry key="edu.brown.cs.ivy.file.dbmshost">localhost</entry>
+<entry key="edu.brown.cs.ivy.file.dbmsuser">spr</entry>
+<entry key="edu.brown.cs.ivy.file.dbmspassword" />
+<entry key="edu.brown.cs.ivy.file.dbmsfiles">TRUE</entry>
+</properties>

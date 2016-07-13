@@ -1,0 +1,20 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/Make.data,v 1.3 2006-08-03 12:33:16 spr Exp $
+
+#
+# CINDER -- class file patching mechanisms
+#
+
+
+PACKAGE= cinder
+
+SFILES= \
+	CinderConstants.java \
+	CinderFilter.java \
+	CinderInstrumenter.java \
+	CinderMain.java \
+	CinderManager.java \
+	CinderPatchType.java \
+	CinderPatcher.java \
+	CinderTaj.java \
+

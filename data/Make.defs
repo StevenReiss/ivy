@@ -1,0 +1,2096 @@
+#		Make.defs
+#
+#	Global makefile for all projects -- definitions section
+#	(This is loaded before the directory-specific information)
+#
+# Copyright 1996 Steven P. Reiss, Brown University - All rights reserved.
+#
+#
+#	This file is used by gmake (gnu-make) as the primary makefile
+#	when building any of our binary directorys.  It is included by
+#	Make.template in the project directory to define all the standard
+#	items.
+#
+
+
+#
+#	establish default item to build
+#
+
+what_default:	all
+
+
+
+
+
+#
+#	General Make-related definitions
+#
+
+MAKE=make -w $(MFLAGS)
+
+.SUFFIXES: .C .H .Y .L .java .class .jj .jjt .cxx
+.KEEP_STATE:
+
+SHELL= /bin/sh
+JINCL= include
+
+SYSROOT:= $(SYSROOT)
+BINDIR:= $(BINDIR)
+DATAPATH:= $(DATAPATH)
+SRCDIR:= $(SRCDIR)
+PRONAME:= $(PRONAME)
+
+
+#
+#	Definitions of tool locations and names
+#
+
+DEFAULT_CC= cc
+DEFAULT_CCPLUS= CC
+DEFAULT_JAVAC= javac
+DEFAULT_JAVACC= javacc
+DEFAULT_JJTREE= jjtree
+DEFAULT_RMIC = rmic -keep -depend
+
+
+JAVACOMPILE= $(DEFAULTJAVAC) $(JAVAFLAGS)
+
+ifndef LD
+LD= ld
+endif
+LINT= lint
+AR= ar
+RANLIB= ranlib
+M4= m4
+MAKEDEP= makedepend -w 1
+MAKEDEPSEP= --
+J6FLAGS= -source 1.6 -target 1.6
+
+#
+#	Implicit rules that are needed
+#
+
+%.o: %.c
+	$(CC) $(CFLAGS) $(CONLYFLAGS) -c $<
+
+%: %.o
+	$(DL) $(CFLAGS) -o $@ $< $(LIB) $(XLIB)
+
+%: %.c
+	$(CC) $(CFLAGS) -c $<
+	$(CC) $(CFLAGS) -o $@ $@.o $(LIB) $(XLIB) $(TLIB)
+
+%.C:
+%.cxx:
+
+%.o: %.C
+	$(CCPLUS) $(CPLUSFLAGS) -c $<
+
+%.o: %.cxx
+	$(CCPLUS) $(CPLUSFLAGS) -c $<
+
+%.I: %.C
+	$(CCPLUS) -Fc -.I $(CPLUSFLAGS) -c $<
+
+%.C: %.Y
+	$(YACC) $<
+	mv y.tab.c $@
+
+%.C: %.L
+	$(LEX) $<
+	mv lex.yy.c $@
+
+
+%.o: %.s
+	as $(ARCHFLAGS) -P -o $@ $<
+
+
+
+
+JAVACCFILES= ASCII_CharStream.java Token.java ParseException.java TokenMgrError.java
+
+%.java: %.jj
+#	(cd $(VPATH); rm -rf $(JAVACCFILES) $*Constants.java $*.java $*TokenManager.java )
+	(cd $(VPATH); $(JAVACC) $<)
+#	(cd $(VPATH); chmod 444 $(JAVACCFILES) $*Constants.java $*.java $*TokenManager.java )
+
+%.class: %.java
+	$(JAVAC) $(JAVAFLAGS) $<
+
+
+%.java: %.jjt
+	(cd $(VPATH); rm -rf $(JAVACCFILES) $*.java $*Constants.java $*TokenManager.java )
+	(cd $(VPATH); rm -rf $*TreeConstants.java $*Visitor.java )
+	(cd $(VPATH); rm -rf $*.jj )
+	(cd $(VPATH); rm -rf $(*D)JJT$(*F)State.java )
+	(cd $(VPATH); $(JJTREE) $< )
+	(cd $(VPATH); $(JAVACC) $*.jj )
+	(cd $(VPATH); chmod 444 $*Constants.java $*.java $*TokenManager.java )
+	(cd $(VPATH); chmod 444 Token.java ParseException.java TokenMgrError.java )
+	(cd $(VPATH); if [ -f $(*D)ASCII_UCodeESC_CharStream.java ] ; then \
+	     chmod 444 $(*D)ASCII_UCodeESC_CharStream.java; fi )
+	(cd $(VPATH); if [ -f $(*D)ASCII_CharStream.java ] ; then \
+	     chmod 444 $(*D)ASCII_CharStream.java; fi )
+	(cd $(VPATH); if [ -f $*Visitor.java ] ; then chmod 444 $*Visitor.java; fi )
+	(cd $(VPATH); chmod 444 $*TreeConstants.java )
+	(cd $(VPATH); chmod 444 $*.jj )
+	(cd $(VPATH); chmod 444 $(*D)JJT$(*F)State.java )
+	cp $(VPATH)/$*.java .
+
+
+#
+#	Standard flag definitions that can be overriden by machine dependencies
+#
+
+DBGFLAG= -g
+OPTFLAG= -O
+PROFFLAG= -pg
+SHARFLAGS=	-KPIC
+ARCREATE= $(CCPLUS) $(CPLUSFLAGS) -xar -o
+THREADFLAGS=
+THREADLIB= -lpthread
+QTINCL= $(QTDIR)/include
+
+XERCESLIB= -lxerces-c
+XERCESLIB64= $(XERCESLIB)
+SHAREDEXT= so
+LIBTYPE= $(SHAREDEXT)
+
+
+#
+#	Machine dependencies
+#
+
+ifeq ($(BARCH),sol)
+X11BASEDIR=/usr/openwin
+X11LIBDIR64= /usr/openwin/lib/sparcv9
+XERCESLIB64= -lxerces-c1_7_0_v9
+MOTIFBASEDIR=/usr/dt
+OPENLIB_XLIB= -ldga
+GLLIBDIR=$(X11LIBDIR)
+GLINCL=/usr/openwin/include/GL
+X64FLAGS= -xarch=v9a
+X32FLAGS= -xarch=v8plus
+ARCHFLAGS= -xarch=v8plus
+ARCH64FLAGS= -xarch=v9a
+AUTO_TEMPLATES= 1
+RANLIB= \#
+NO_RANLIB= 1
+PROFFLAG= -pg $(ARCHFLAGS)
+SHARED_LD_OPTION= -G
+ARFLAGS= rvuf
+ifdef COMPILERHOME
+DEPFLAGS= -Dsun=1 -I$(COMPILERHOME)/WS6U2/include/CC/Cstd -I$(COMPILERHOME)/WS6U2/include/CC/std -I$(COMPILERHOME)/WS6U2/include/CC -I$(COMPILERHOME)/WS6U2/include/cc
+DEPFLAGS=
+endif
+SHARFLAGS=	-KPIC
+OPTFLAG= -xO4
+ARCREATE= $(CCPLUS) $(CPLUSFLAGS) -xar -o
+SOCKETLIB= -lnsl -lsocket
+THREADFLAGS= -mt
+THREADLIB= -lpthread -lrt
+XTHREADLIB= -lrt
+QTDIR=/cs/src/Qt/qt-2.2.1
+QTLIB= -L$(QTDIR)/lib $(LD_SEARCH)$(QTDIR)/lib -lqt
+QTINCL= $(QTDIR)/include
+TIFFLIB= -L/cs/src/tiff/lib64 $(LD_SEARCH)/cs/src/tiff/lib64 -ltiff
+TIFFINCL= -I/cs/include/tiff
+endif
+
+ifeq ($(BARCH),sol32)
+X11BASEDIR=/usr/openwin
+X11LIBDIR64= /usr/openwin/lib
+MOTIFBASEDIR=/usr/dt
+OPENLIB_XLIB= -ldga
+GLLIBDIR=$(X11LIBDIR)
+GLINCL=/usr/openwin/include/GL
+X64FLAGS= -xarch=v8plus
+X32FLAGS= -xarch=v8plus
+ARCHFLAGS= -xarch=v8plus
+ARCH64FLAGS= -xarch=v8plus
+AUTO_TEMPLATES= 1
+RANLIB= \#
+NO_RANLIB= 1
+PROFFLAG= -pg $(ARCHFLAGS)
+SHARED_LD_OPTION= -G
+ARFLAGS= rvuf
+ifdef COMPILERHOME
+DEPFLAGS= -Dsun=1 -I$(COMPILERHOME)/WS6U2/include/CC/Cstd -I$(COMPILERHOME)/WS6U2/include/CC/std -I$(COMPILERHOME)/WS6U2/include/CC -I$(COMPILERHOME)/WS6U2/include/cc
+DEPFLAGS=
+endif
+SHARFLAGS=	-KPIC
+OPTFLAG= -xO4
+ARCREATE= $(CCPLUS) $(CPLUSFLAGS) -xar -o
+SOCKETLIB= -lnsl -lsocket
+THREADFLAGS= -mt
+THREADLIB= -lpthread -lrt
+XTHREADLIB= -lrt
+QTDIR=/cs/src/Qt/compiles/qt-2.2.4-CC6.0-mt-debug
+QTLIB= -L$(QTDIR)/lib $(LD_SEARCH)$(QTDIR)/lib -lqt
+QTINCL= $(QTDIR)/include
+TIFFLIB= -L/cs/lib $(LD_SEARCH)/cs/lib -ltiff
+TIFFINCL= -I/cs/include/tiff
+endif
+
+ifeq ($(BARCH),gnusun4)
+X11BASEDIR= /usr/openwin
+MOTIFBASEDIR= /usr/dt
+GLLIBDIR= /usr/openwin/lib
+GLINCL=/usr/openwin/include/GL
+OPENLIB_XLIB= -ldga
+X64FLAGS=
+RANLIB= \#
+NO_RANLIB= 1
+PROFFLAG= -pg
+SHARED_LD_OPTION= -shared
+ifdef COMPILERHOME
+DEPFLAGS= -Dsun=1
+endif
+OPTFLAG= -O2
+LOCAL_CC=gcc
+LOCAL_CCPLUS=g++-new
+SHARFLAGS= -fPIC
+ARCREATE= ar rvuf
+LD_SEARCH_OPTION=-L
+SOCKET_LIB=
+endif
+
+ifeq ($(BARCH),i686)
+X11BASEDIR= /usr/X11R6
+MOTIFBASEDIR= /usr/X11R6
+MACHFLAGS= -DLINUX -D_REENTRANT -D_THREAD_SAFE
+MACHCPLUSFLAGS= -Wno-non-template-friend -D_XOPEN_SOURCE=500 -D_BSD_SOURCE=1
+MACHLIB=
+X64FLAGS=
+NO_RANLIB= 1
+PROFFLAG= -pg
+SHARED_LD_OPTION= -shared
+OPTFLAG= -O3
+LOCAL_CC= gcc
+LOCAL_CCPLUS=g++
+SHARFLAGS= -fPIC
+ARCREATE= ar rvuf
+LD_SEARCH_OPTION=-L
+SOCKET_LIB=
+THREADFLAGS=
+TIFFLIB= /usr/lib/libtiff.so.3
+QTINCL=/usr/include/qt
+QTLIB= -lqgl -lqt -lpng
+QTLIB= -lqt -lpng
+QTLIB= /usr/lib/libqt-gl.so.2 /usr/lib/libqt-mt.so.2 -lpng
+GLIB= -lGLU -lGL -L/usr/X11R6/lib -lX11 -lXmu
+GLLIBDIR=/usr/lib
+GLINCL=/usr/include/GL
+NO64=1
+J6FLAGS= -source 1.6 -target 1.6 -bootclasspath /pro/java/linux/jdk1.6/jre/lib/rt.jar
+endif
+
+
+ifeq ($(BARCH),x86_64)
+X11BASEDIR= /usr/X11R6
+MOTIFBASEDIR= /usr/X11R6
+MACHFLAGS= -DLINUX -D_REENTRANT -D_THREAD_SAFE -I/pro/bloom/include/xml
+MACHFLAGS= -DLINUX -D_REENTRANT -D_THREAD_SAFE
+MACHCPLUSFLAGS= -Wno-non-template-friend -D_XOPEN_SOURCE=500 -D_BSD_SOURCE=1
+MACHLIB=
+X64FLAGS=
+NO_RANLIB= 1
+PROFFLAG= -pg
+SHARED_LD_OPTION= -shared
+OPTFLAG= -O3
+LOCAL_CC= gcc
+LOCAL_CCPLUS=g++
+SHARFLAGS= -fPIC
+ARCREATE= ar rvuf
+LD_SEARCH_OPTION=-L
+SOCKET_LIB=
+THREADFLAGS=
+TIFFLIB= /usr/lib/libtiff.so.3
+QTINCL=/usr/include/qt
+QTLIB= -lqgl -lqt -lpng
+QTLIB= -lqt -lpng
+QTLIB= /usr/lib/libqt-gl.so.2 /usr/lib/libqt-mt.so.2 -lpng
+GLIB= -lGLU -lGL -L/usr/X11R6/lib -lX11 -lXmu
+GLLIBDIR=/usr/lib
+GLINCL=/usr/include/GL
+NO64=1
+J6FLAGS= -source 1.6 -target 1.6 -bootclasspath /pro/java/linux/jdk1.6/jre/lib/rt.jar
+endif
+
+
+ifeq ($(BARCH),ppc)
+SHAREDEXT= dylib
+X11BASEDIR= /usr/X11R6
+MOTIFBASEDIR= /usr/X11R6
+MACHFLAGS= -DAPPLE -D_REENTRANT -D_THREAD_SAFE -I/opt/local/include -I/sw/include
+MACHCPLUSFLAGS= -Wno-non-template-friend -D_XOPEN_SOURCE=500 -D_BSD_SOURCE=1
+MACHLIB=
+X64FLAGS=
+PROFFLAG= -pg
+SHARED_LD_OPTION= -dynamiclib
+OPTFLAG= -O3
+LOCAL_CC= cc
+LOCAL_CCPLUS=g++
+SHARFLAGS= -fPIC
+ARCREATE= arcreate
+LD_SEARCH_OPTION=-L
+LD_SEARCH_NOSPACE= true
+SOCKET_LIB=
+THREADFLAGS=
+TIFFLIB= -L/sw/lib -ltiff
+QTINCL=/downloads/QtMacEval/include
+QTINCL=/downloads/QtMacEval/include
+QTLIB= -lqgl -lqt -lpng
+QTLIB= -lqt -lpng
+QTLIB= /usr/lib/libqt-gl.so.2 /usr/lib/libqt-mt.so.2 -lpng
+QTLIB= -L/downloads/QtMacEval/lib -lqt-mt
+GLIB= -lGLU -lGL -L/usr/X11R6/lib -lX11 -lXmu
+GLLIBDIR=/usr/lib
+GLINCL=/Developer/OpenGL/Headers
+NO64=1
+MAKEDEP= mkdep
+MAKEDEPSEP=
+JHOME:= /System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK
+JINCL= Headers
+MACHINCLUDES= -I/usr/local/include
+XERCESLIB= -L/opt/local/lib -lxerces-c
+endif
+
+ifeq ($(BARCH),i386)
+SHAREDEXT= dylib
+JSHAREDEXT= jnilib
+X11BASEDIR= /usr/X11R6
+MOTIFBASEDIR= /usr/X11R6
+MACHFLAGS= -DAPPLE -D_REENTRANT -D_THREAD_SAFE
+MACHCPLUSFLAGS= -Wno-non-template-friend
+MACHLIB=
+X64FLAGS=
+PROFFLAG= -pg
+SHARED_LD_OPTION= -dynamiclib
+OPTFLAG= -O3
+LOCAL_CC= cc
+LOCAL_CCPLUS=g++
+SHARFLAGS= -fPIC
+ARCREATE= arcreate
+LD_SEARCH_OPTION=-L
+LD_SEARCH_NOSPACE= true
+SOCKET_LIB=
+THREADFLAGS=
+TIFFLIB= -L/sw/lib -ltiff
+MAKEDEP= mkdep
+MAKEDEPSEP=
+JHOME:= /System/Library/Frameworks/JavaVM.framework/Versions/A
+JINCL= Headers
+MACHINCLUDES= -I/usr/local/include -I/sw/include -I/sw/include/xml
+XERCESLIB= -L/usr/local/lib -L/sw/lib -lxerces-c.27
+ALTARCH=mac64
+endif
+
+ifeq ($(BARCH),mac64)
+SHAREDEXT= dylib
+JSHAREDEXT= jnilib
+X11BASEDIR= /usr/X11R6
+MOTIFBASEDIR= /usr/X11R6
+MACHFLAGS= -DAPPLE -D_REENTRANT -D_THREAD_SAFE
+MACHCPLUSFLAGS=
+MACHLIB=
+X64FLAGS=
+PROFFLAG= -pg
+SHARED_LD_OPTION= -dynamiclib
+OPTFLAG= -O3
+LOCAL_CC= cc
+LOCAL_CCPLUS=g++
+SHARFLAGS= -fPIC
+ARCREATE= arcreate
+LD_SEARCH_OPTION=-L
+LD_SEARCH_NOSPACE= true
+SOCKET_LIB=
+THREADFLAGS=
+TIFFLIB= -L/sw/lib -ltiff
+QTINCL=/downloads/QtMacEval/include
+QTINCL=/downloads/QtMacEval/include
+QTLIB= -lqgl -lqt -lpng
+QTLIB= -lqt -lpng
+QTLIB= /usr/lib/libqt-gl.so.2 /usr/lib/libqt-mt.so.2 -lpng
+QTLIB= -L/downloads/QtMacEval/lib -lqt-mt
+GLIB= -lGLU -lGL -L/usr/X11R6/lib -lX11 -lXmu
+GLLIBDIR=/usr/lib
+GLINCL=/Developer/OpenGL/Headers
+NO64=1
+MAKEDEP= mkdep
+MAKEDEPSEP=
+#JHOME:= /Library/Java/JavaVirtualMachines/jdk1.7.0_25.jdk/Contents/Home
+JHOME:= $(shell /usr/libexec/java_home -v 1.7)
+JINCL= include
+MACHINCLUDES= -I/pro/include -I/usr/local/include -I/sw/include -I/sw/include/xml
+MACHINCLUDES= -I/pro/include -I/usr/local/include
+XERCESLIB= -L/pro/lib -lxerces-c
+J6FLAGS= -source 1.6 -target 1.6 -bootclasspath $(JHOME)/jre/lib/rt.jar:$(JHOME)/jre/lib/jce.jar
+endif
+
+
+#
+#	Setup default paths
+#
+
+SRC= $(VPATH)
+INCLUDE= $(ROOTPATH)/include
+MAKEFILE= $(ROOTPATH)/src/data/Make.template
+
+STAMP= .stamp.$(PACKAGE)
+
+OPTIONFGS=
+
+
+
+#
+#	Flag definitions
+#
+
+
+DBGFLAGS=	$(DBGFLAG) $(MACHFLAGS) $(OPTIONFGS) $(USERFLAGS)
+OPTFLAGS=	$(OPTFLAG) $(MACHFLAGS) $(OPTIONFGS) $(USERFLAGS)
+PROFFLAGS=	$(PROFFLAG)
+
+FLAGS=$(DBGFLAGS)
+
+INCLUDES= -I$(VPATH) -I$(INCLUDE) -I$(BROWN_BLOOM_IVY)/include $(PKGINCLUDES) $(MACHINCLUDES)
+
+ifndef OPTIMIZE
+CFLAGS= $(FLAGS) $(INCLUDES)
+else
+CFLAGS= $(OPTFLAGS) $(INCLUDES)
+endif
+
+ifdef PROFILE
+CFLAGS += $(PROFFLAGS)
+endif
+
+ifdef SHAREDLIB
+CFLAGS += $(SHARFLAGS)
+endif
+
+
+CPLUSFLAGS= $(CFLAGS) $(TMPLFLAGS) $(MACHCPLUSFLAGS) $(USERCPLUSFLAGS)
+TCPLUSFLAGS= $(CFLAGS) $(TTMPLFLAGS) $(MACHCPLUSFLAGS) $(USERCPLUSFLAGS)
+ECPLUSFLAGS= $(CFLAGS) $(ETMPLFLAGS) $(MACHCPLUSFLAGS) $(USERCPLUSFLAGS)
+CONLYFLAGS= $(MACHCFLAGS)
+
+
+
+
+
+JAVAPATH= $(ROOTPATH)/java
+JAVASRCPATH = $(ROOTPATH)/javasrc
+CLASSPATH:= $(JAVAPATH):$(JAVASRCPATH):$(CLASSPATH)
+JAVAFLAGS= -g -d $(JAVAPATH)
+JAVAFLAGS= -g -d $(JAVAPATH) -Xlint:all -Xlint:-path $(LOCALJAVAFLAGS)
+
+
+
+
+
+
+ifndef LD_SEARCH_OPTION
+LD_SEARCH_OPTION= -R
+endif
+ifndef LD_SEARCH_NOSPACE
+LD_SEARCH= $(LD_SEARCH_OPTION) # leave a space afterward
+else
+LD_SEARCH= $(LD_SEARCH_OPTION)
+endif
+
+
+#
+#	Motif, X11, OpenGL definitions
+#
+
+ifndef X11BASEDIR
+X11BASEDIR=/usr
+endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

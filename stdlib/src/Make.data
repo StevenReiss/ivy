@@ -1,0 +1,26 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/stdlib/src/Make.data,v 1.2 2006-08-03 12:36:12 spr Exp $
+
+#
+# STDLIB -- Basic extensions to C++	
+#
+# Copyright 1999 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+
+PACKAGE= stdlib
+
+
+BFILES=
+SFILES=
+HFILES= ivy_datatypes.H ivy_hash.H ivy_pstream.H \
+	ivy_string.H ivy_file.H \
+	ivy_fileio.H ivy_memory.H \
+	ivy_regexpr.H ivy_unixregexpr.H ivy_winregexpr.H \
+	ivy_mat3.H ivy_xml.H ivy_time.H \
+	ivy_thread.H ivy_pthread.H ivy_winthread.H \
+	ivy_socket.H ivy_unixsocket.H ivy_winsocket.H \
+	ivy_solaris.H ivy_linux.H ivy_win32.H ivy_apple.H
+
+
+INCLINKS= $(HFILES)

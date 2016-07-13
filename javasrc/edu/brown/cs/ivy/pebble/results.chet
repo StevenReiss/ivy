@@ -1,0 +1,861 @@
+<CHET TIME='1118412934352'>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='([Ljava/lang/String;)V'>
+    <NORETURN />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain' SIGNATURE='([Ljava/lang/String;)V'>
+    <NULLCALL METHOD='edu.brown.cs.cs032.crawler.CrawlerUrlManager.setDoTesting' CLASS='edu.brown.cs.cs032.crawler.CrawlerUrlManager' SIGNATURE='(Z)V' LINE='136' INSTRUCTION='74' ALWAYS='false' />
+    <NULLCALL METHOD='edu.brown.cs.cs032.crawler.CrawlerUrlManager.clearRepository' CLASS='edu.brown.cs.cs032.crawler.CrawlerUrlManager' SIGNATURE='()V' LINE='139' INSTRUCTION='81' ALWAYS='false' />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.badArgs' SIGNATURE='()V'>
+    <NORETURN />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='()V'>
+    <NULLCALL METHOD='java.lang.Object.notifyAll' CLASS='java.lang.Object' SIGNATURE='()V' LINE='233' INSTRUCTION='37' ALWAYS='false' />
+    <NULLCALL METHOD='edu.brown.cs.cs032.crawler.CrawlerUrlManager.addFutureUrls' CLASS='edu.brown.cs.cs032.crawler.CrawlerUrlManager' SIGNATURE='(Ljava/lang/String;Ljava/util/Collection;)V' LINE='238' INSTRUCTION='59' ALWAYS='false' />
+    <NOTEXEC LINE='234' INSTRUCTION='43' />
+    <NOTEXEC LINE='234' INSTRUCTION='47' />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.loadUrls' SIGNATURE='()V'>
+    <NULLCALL METHOD='edu.brown.cs.cs032.crawler.CrawlerUrlManager.normalizeNewUrl' CLASS='edu.brown.cs.cs032.crawler.CrawlerUrlManager' SIGNATURE='(Ljava/lang/String;Ledu/brown/cs/cs032/crawler/CrawlerUrl;)Ledu/brown/cs/cs032/crawler/CrawlerUrl;' LINE='264' INSTRUCTION='55' ALWAYS='false' />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.addRedirectUrl' SIGNATURE='(Ledu/brown/cs/cs032/crawler/CrawlerUrl;Ljava/lang/String;)V'>
+    <NULLCALL METHOD='edu.brown.cs.cs032.crawler.CrawlerUrlManager.normalizeNewUrl' CLASS='edu.brown.cs.cs032.crawler.CrawlerUrlManager' SIGNATURE='(Ljava/lang/String;Ledu/brown/cs/cs032/crawler/CrawlerUrl;)Ledu/brown/cs/cs032/crawler/CrawlerUrl;' LINE='280' INSTRUCTION='4' ALWAYS='false' />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.addUrlCandidate' SIGNATURE='(Ledu/brown/cs/cs032/crawler/CrawlerUrl;Ljava/lang/String;)Ledu/brown/cs/cs032/crawler/CrawlerUrl;'>
+    <NOTUSED />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.addUrlCandidate' SIGNATURE='(Ledu/brown/cs/cs032/crawler/CrawlerUrl;)Z'>
+    <NULLCALL METHOD='java.util.Set.contains' CLASS='java.util.Set' SIGNATURE='(Ljava/lang/Object;)Z' LINE='312' INSTRUCTION='18' ALWAYS='false' />
+    <NULLCALL METHOD='java.util.Set.add' CLASS='java.util.Set' SIGNATURE='(Ljava/lang/Object;)Z' LINE='313' INSTRUCTION='30' ALWAYS='false' />
+    <NULLCALL METHOD='java.util.Set.contains' CLASS='java.util.Set' SIGNATURE='(Ljava/lang/Object;)Z' LINE='317' INSTRUCTION='53' ALWAYS='false' />
+    <NULLCALL METHOD='java.util.Set.add' CLASS='java.util.Set' SIGNATURE='(Ljava/lang/Object;)Z' LINE='320' INSTRUCTION='77' ALWAYS='false' />
+    <NULLCALL METHOD='java.lang.Object.notify' CLASS='java.lang.Object' SIGNATURE='()V' LINE='321' INSTRUCTION='81' ALWAYS='false' />
+    <NOTEXEC LINE='323' INSTRUCTION='87' />
+    <NOTEXEC LINE='323' INSTRUCTION='91' />
+    <NOTEXEC LINE='314' INSTRUCTION='36' />
+    <NOTEXEC LINE='314' INSTRUCTION='40' />
+    <NOTEXEC LINE='307' INSTRUCTION='2' />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='()Ledu/brown/cs/cs032/crawler/CrawlerUrl;'>
+    <NULLCALL METHOD='java.util.Set.isEmpty' CLASS='java.util.Set' SIGNATURE='()Z' LINE='339' INSTRUCTION='32' ALWAYS='false' />
+    <NULLCALL METHOD='java.lang.Object.notifyAll' CLASS='java.lang.Object' SIGNATURE='()V' LINE='341' INSTRUCTION='41' ALWAYS='false' />
+    <NULLCALL METHOD='java.lang.Object.wait' CLASS='java.lang.Object' SIGNATURE='()V' LINE='346' INSTRUCTION='50' ALWAYS='false' />
+    <NULLCALL METHOD='java.util.Set.iterator' CLASS='java.util.Set' SIGNATURE='()Ljava/util/Iterator;' LINE='351' INSTRUCTION='59' ALWAYS='false' />
+    <NULLCALL METHOD='java.util.Set.remove' CLASS='java.util.Set' SIGNATURE='(Ljava/lang/Object;)Z' LINE='353' INSTRUCTION='68' ALWAYS='false' />
+    <NULLCALL METHOD='edu.brown.cs.cs032.crawler.CrawlerUrlManager.beginProcessing' CLASS='edu.brown.cs.cs032.crawler.CrawlerUrlManager' SIGNATURE='(Ledu/brown/cs/cs032/crawler/CrawlerUrl;)Z' LINE='354' INSTRUCTION='73' ALWAYS='false' />
+    <NOTEXEC LINE='335' INSTRUCTION='16' />
+    <NOTEXEC LINE='335' INSTRUCTION='20' />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.addFutureUrls' SIGNATURE='(Ljava/util/Collection;)V'>
+    <NULLCALL METHOD='java.util.Set.addAll' CLASS='java.util.Set' SIGNATURE='(Ljava/util/Collection;)Z' LINE='371' INSTRUCTION='12' ALWAYS='false' />
+    <NOTEXEC LINE='372' INSTRUCTION='18' />
+    <NOTEXEC LINE='372' INSTRUCTION='22' />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='()V'>
+    <NULLCALL METHOD='java.util.Collection.add' CLASS='java.util.Collection' SIGNATURE='(Ljava/lang/Object;)Z' LINE='389' INSTRUCTION='17' ALWAYS='false' />
+  </FLOW>
+  <FLOW METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='()V'>
+    <NULLCALL METHOD='java.util.Collection.iterator' CLASS='java.util.Collection' SIGNATURE='()Ljava/util/Iterator;' LINE='400' INSTRUCTION='2' ALWAYS='false' />
+  </FLOW>
+  <TEST STATUS='OK' CHECKTIME='68' NAME='iterator_check' META='generic'>
+    <SOURCES>
+      <SOURCE METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' INSTANCE='0' LINE='400' INSTRUCTION='2' ID='CHETSRC_2599' CID='C1' FILE='CrawlMain.java' TYPE='RETURN' CALL='java.lang.Iterable.iterator' CALLSIGN='java.util.Iterator()' />
+    </SOURCES>
+    <AUTOEVENTS>
+      <EVENT ID='E4' TRIGGER='false' NAME='hasMore' TYPE='CALL' METHOD='hasMoreElements'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E2' TRIGGER='false' NAME='hasNext' TYPE='CALL' METHOD='hasNext'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E3' TRIGGER='false' NAME='next' TYPE='CALL' METHOD='next'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E5' TRIGGER='false' NAME='nextElement' TYPE='CALL' METHOD='nextElement'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E1' TRIGGER='true' NAME='NewIterator' TYPE='CALL' METHOD='iterator'>
+        <MATCH WHAT='VALUE' ID='C1' MODE='NEW' />
+      </EVENT>
+    </AUTOEVENTS>
+    <AUTOMATON START='S1' STARTNAME='Start' TRIGGER='NEW'>
+      <STATE ID='S1' NAME='Start'>
+        <ON EVENT='E4' GOTO='S1' GOTONAME='Start' />
+        <ON EVENT='E2' GOTO='S1' GOTONAME='Start' />
+        <ON EVENT='E3' GOTO='S1' GOTONAME='Start' />
+        <ON EVENT='E5' GOTO='S1' GOTONAME='Start' />
+        <ON EVENT='E1' GOTO='S2' GOTONAME='IteratorAllocated' />
+      </STATE>
+      <STATE ID='S2' NAME='IteratorAllocated' ACCEPT='true'>
+        <ON EVENT='E4' GOTO='S3' GOTONAME='hasNextCalled' />
+        <ON EVENT='E2' GOTO='S3' GOTONAME='hasNextCalled' />
+        <ON EVENT='E3' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E5' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E1' GOTO='S2' GOTONAME='IteratorAllocated' />
+      </STATE>
+      <STATE ID='S3' NAME='hasNextCalled' ACCEPT='true'>
+        <ON EVENT='E4' GOTO='S3' GOTONAME='hasNextCalled' />
+        <ON EVENT='E2' GOTO='S3' GOTONAME='hasNextCalled' />
+        <ON EVENT='E3' GOTO='S2' GOTONAME='IteratorAllocated' />
+        <ON EVENT='E5' GOTO='S2' GOTONAME='IteratorAllocated' />
+        <ON EVENT='E1' GOTO='S3' GOTONAME='hasNextCalled' />
+      </STATE>
+      <STATE ID='S4' NAME='nextCalled' ERROR='true'>
+        <ON EVENT='E4' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E2' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E3' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E5' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E1' GOTO='S4' GOTONAME='nextCalled' />
+      </STATE>
+    </AUTOMATON>
+    <EVENTS>
+      <EVENTLOC STATEID='S_36' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='400' ENDLINE='400'>
+        <EVENT ID='E1' TRIGGER='true' NAME='NewIterator' TYPE='CALL' METHOD='iterator'>
+          <MATCH WHAT='VALUE' ID='C1' MODE='NEW' />
+        </EVENT>
+      </EVENTLOC>
+      <EVENTLOC STATEID='S_38' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='400' ENDLINE='401'>
+        <BLOCK START='400' END='401' />
+        <BLOCK START='407' END='407' />
+        <EVENT ID='E2' TRIGGER='false' NAME='hasNext' TYPE='CALL' METHOD='hasNext'>
+          <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+        </EVENT>
+      </EVENTLOC>
+      <EVENTLOC STATEID='S_40' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='401' ENDLINE='401'>
+        <BLOCK START='400' END='401' />
+        <BLOCK START='403' END='403' />
+        <BLOCK START='405' END='406' />
+        <EVENT ID='E3' TRIGGER='false' NAME='next' TYPE='CALL' METHOD='next'>
+          <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+        </EVENT>
+      </EVENTLOC>
+    </EVENTS>
+    <PROGRAM>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' ENTRY='S_1' EXIT='S_2' ID='S_1' START='true'>
+        <STATES>
+          <STATE ID='S_1' FILE='CrawlMain.java' LINE='68' ENDLINE='70'>
+            <ARCTO ID='S_4' />
+            <ARCTO ID='S_2' />
+          </STATE>
+          <STATE ID='S_2' FILE='CrawlMain.java' LINE='73' ENDLINE='73' />
+          <STATE ID='S_4' FILE='CrawlMain.java' LINE='70' ENDLINE='72' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' CALLID='S_6'>
+            <ARCTO ID='S_2' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' ENTRY='S_6' EXIT='S_7' ID='S_6'>
+        <STATES>
+          <STATE ID='S_6' FILE='CrawlMain.java' LINE='224' ENDLINE='226'>
+            <BLOCK START='224' END='234' />
+            <ARCTO ID='S_24' />
+            <ARCTO ID='S_7' />
+          </STATE>
+          <STATE ID='S_7' FILE='CrawlMain.java' LINE='241' ENDLINE='241' />
+          <STATE ID='S_24' FILE='CrawlMain.java' LINE='236' ENDLINE='238' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' CALLID='S_34'>
+            <BLOCK START='236' END='240' />
+            <ARCTO ID='S_7' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' ENTRY='S_34' EXIT='S_35' ID='S_34'>
+        <STATES>
+          <STATE ID='S_34' FILE='CrawlMain.java' LINE='400' ENDLINE='400'>
+            <ARCTO ID='S_36' />
+          </STATE>
+          <STATE ID='S_35' FILE='CrawlMain.java' LINE='407' ENDLINE='407' />
+          <STATE ID='S_36' FILE='CrawlMain.java' LINE='400' ENDLINE='400' HASEVENT='true'>
+            <EVENT ID='E1' TRIGGER='true' NAME='NewIterator' TYPE='CALL' METHOD='iterator'>
+              <MATCH WHAT='VALUE' ID='C1' MODE='NEW' />
+            </EVENT>
+            <ARCTO ID='S_38' />
+          </STATE>
+          <STATE ID='S_38' FILE='CrawlMain.java' LINE='400' ENDLINE='401' HASEVENT='true'>
+            <EVENT ID='E2' TRIGGER='false' NAME='hasNext' TYPE='CALL' METHOD='hasNext'>
+              <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+            </EVENT>
+            <BLOCK START='400' END='401' />
+            <BLOCK START='407' END='407' />
+            <ARCTO ID='S_35' />
+            <ARCTO ID='S_40' />
+          </STATE>
+          <STATE ID='S_40' FILE='CrawlMain.java' LINE='401' ENDLINE='401' HASEVENT='true'>
+            <EVENT ID='E3' TRIGGER='false' NAME='next' TYPE='CALL' METHOD='next'>
+              <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+            </EVENT>
+            <BLOCK START='400' END='401' />
+            <BLOCK START='403' END='403' />
+            <BLOCK START='405' END='406' />
+            <ARCTO ID='S_38' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <PGMSTATS METHODS='3' STATES='11' />
+    </PROGRAM>
+    <CHECKER>
+      <TRANSITION START='S1' STARTNAME='Start' FINAL='S3' FINALNAME='hasNextCalled' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' STATUS='OK'>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_1' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='68' ENDLINE='70' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_4' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='70' ENDLINE='72' />
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_6' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' FILE='CrawlMain.java' LINE='224' ENDLINE='226'>
+            <BLOCK START='224' END='234' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_24' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' FILE='CrawlMain.java' LINE='236' ENDLINE='238'>
+            <BLOCK START='236' END='240' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_34' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='400' ENDLINE='400' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_36' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='400' ENDLINE='400'>
+            <EVENT ID='E1' TRIGGER='true' NAME='NewIterator' TYPE='CALL' METHOD='iterator'>
+              <MATCH WHAT='VALUE' ID='C1' MODE='NEW' />
+            </EVENT>
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT STATE='S2' STATENAME='IteratorAllocated'>
+          <EVENTLOC STATEID='S_38' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='400' ENDLINE='401'>
+            <BLOCK START='400' END='401' />
+            <BLOCK START='407' END='407' />
+            <EVENT ID='E2' TRIGGER='false' NAME='hasNext' TYPE='CALL' METHOD='hasNext'>
+              <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+            </EVENT>
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S3' STATENAME='hasNextCalled'>
+          <EVENTLOC STATEID='S_35' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='407' ENDLINE='407' />
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S3' STATENAME='hasNextCalled'>
+          <EVENTLOC STATEID='S_7' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' FILE='CrawlMain.java' LINE='241' ENDLINE='241' />
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S3' STATENAME='hasNextCalled'>
+          <EVENTLOC STATEID='S_2' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='73' ENDLINE='73' />
+        </ELEMENT>
+      </TRANSITION>
+    </CHECKER>
+  </TEST>
+  <TEST STATUS='ERR' CHECKTIME='2' NAME='iterator_check' META='generic'>
+    <SOURCES>
+      <SOURCE METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' INSTANCE='0' LINE='351' INSTRUCTION='59' ID='CHETSRC_2754' CID='C1' FILE='CrawlMain.java' TYPE='RETURN' CALL='java.lang.Iterable.iterator' CALLSIGN='java.util.Iterator()' />
+    </SOURCES>
+    <AUTOEVENTS>
+      <EVENT ID='E4' TRIGGER='false' NAME='hasMore' TYPE='CALL' METHOD='hasMoreElements'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E2' TRIGGER='false' NAME='hasNext' TYPE='CALL' METHOD='hasNext'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E3' TRIGGER='false' NAME='next' TYPE='CALL' METHOD='next'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E5' TRIGGER='false' NAME='nextElement' TYPE='CALL' METHOD='nextElement'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E1' TRIGGER='true' NAME='NewIterator' TYPE='CALL' METHOD='iterator'>
+        <MATCH WHAT='VALUE' ID='C1' MODE='NEW' />
+      </EVENT>
+    </AUTOEVENTS>
+    <AUTOMATON START='S1' STARTNAME='Start' TRIGGER='NEW'>
+      <STATE ID='S1' NAME='Start'>
+        <ON EVENT='E4' GOTO='S1' GOTONAME='Start' />
+        <ON EVENT='E2' GOTO='S1' GOTONAME='Start' />
+        <ON EVENT='E3' GOTO='S1' GOTONAME='Start' />
+        <ON EVENT='E5' GOTO='S1' GOTONAME='Start' />
+        <ON EVENT='E1' GOTO='S2' GOTONAME='IteratorAllocated' />
+      </STATE>
+      <STATE ID='S2' NAME='IteratorAllocated' ACCEPT='true'>
+        <ON EVENT='E4' GOTO='S3' GOTONAME='hasNextCalled' />
+        <ON EVENT='E2' GOTO='S3' GOTONAME='hasNextCalled' />
+        <ON EVENT='E3' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E5' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E1' GOTO='S2' GOTONAME='IteratorAllocated' />
+      </STATE>
+      <STATE ID='S3' NAME='hasNextCalled' ACCEPT='true'>
+        <ON EVENT='E4' GOTO='S3' GOTONAME='hasNextCalled' />
+        <ON EVENT='E2' GOTO='S3' GOTONAME='hasNextCalled' />
+        <ON EVENT='E3' GOTO='S2' GOTONAME='IteratorAllocated' />
+        <ON EVENT='E5' GOTO='S2' GOTONAME='IteratorAllocated' />
+        <ON EVENT='E1' GOTO='S3' GOTONAME='hasNextCalled' />
+      </STATE>
+      <STATE ID='S4' NAME='nextCalled' ERROR='true'>
+        <ON EVENT='E4' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E2' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E3' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E5' GOTO='S4' GOTONAME='nextCalled' />
+        <ON EVENT='E1' GOTO='S4' GOTONAME='nextCalled' />
+      </STATE>
+    </AUTOMATON>
+    <EVENTS>
+      <EVENTLOC STATEID='S_142' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' FILE='CrawlMain.java' LINE='351' ENDLINE='352'>
+        <EVENT ID='E1' TRIGGER='true' NAME='NewIterator' TYPE='CALL' METHOD='iterator'>
+          <MATCH WHAT='VALUE' ID='C1' MODE='NEW' />
+        </EVENT>
+      </EVENTLOC>
+      <EVENTLOC STATEID='S_143' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' FILE='CrawlMain.java' LINE='352' ENDLINE='356'>
+        <BLOCK START='352' END='356' />
+        <BLOCK START='359' END='361' />
+        <EVENT ID='E3' TRIGGER='false' NAME='next' TYPE='CALL' METHOD='next'>
+          <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+        </EVENT>
+      </EVENTLOC>
+    </EVENTS>
+    <PROGRAM>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' ENTRY='S_47' EXIT='S_48' ID='S_47' START='true'>
+        <STATES>
+          <STATE ID='S_47' FILE='CrawlMain.java' LINE='68' ENDLINE='70'>
+            <ARCTO ID='S_50' />
+            <ARCTO ID='S_48' />
+          </STATE>
+          <STATE ID='S_48' FILE='CrawlMain.java' LINE='73' ENDLINE='73' />
+          <STATE ID='S_50' FILE='CrawlMain.java' LINE='70' ENDLINE='72' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' CALLID='S_52'>
+            <ARCTO ID='S_48' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' ENTRY='S_52' EXIT='S_53' ID='S_52'>
+        <STATES>
+          <STATE ID='S_52' FILE='CrawlMain.java' LINE='224' ENDLINE='228'>
+            <ARCTO ID='S_53' />
+            <ARCTO ID='S_60' />
+          </STATE>
+          <STATE ID='S_53' FILE='CrawlMain.java' LINE='241' ENDLINE='241' />
+          <STATE ID='S_60' FILE='CrawlMain.java' LINE='228' ENDLINE='229' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' CALLID='S_80'>
+            <BLOCK START='228' END='234' />
+            <BLOCK START='236' END='240' />
+            <ARCTO ID='S_53' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' ENTRY='S_80' EXIT='S_81' ID='S_80'>
+        <STATES>
+          <STATE ID='S_80' FILE='CrawlMain.java' LINE='387' ENDLINE='387'>
+            <BLOCK START='387' END='390' />
+            <BLOCK START='395' END='395' />
+            <ARCTO ID='S_85' />
+            <ARCTO ID='S_81' />
+          </STATE>
+          <STATE ID='S_81' FILE='CrawlMain.java' LINE='395' ENDLINE='395' />
+          <STATE ID='S_85' FILE='CrawlMain.java' LINE='390' ENDLINE='392'>
+            <WAIT TYPE='SYNCH'>
+              <SOURCE TYPE='NEW' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' INSTRUCTION='30' CLASS='java.lang.Object' />
+            </WAIT>
+            <ARCTO ID='S_87' />
+          </STATE>
+          <STATE ID='S_87' FILE='CrawlMain.java' LINE='392' ENDLINE='393' ASYNC='true' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlThread.run' SIGNATURE='void()' CALLID='S_108'>
+            <ARCTO ID='S_88' />
+            <ARCTO ID='S_101' />
+          </STATE>
+          <STATE ID='S_88' FILE='CrawlMain.java' LINE='393' ENDLINE='393'>
+            <WAIT TYPE='END_SYNCH'>
+              <SOURCE TYPE='NEW' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' INSTRUCTION='30' CLASS='java.lang.Object' />
+            </WAIT>
+            <BLOCK START='387' END='390' />
+            <BLOCK START='393' END='393' />
+            <BLOCK START='395' END='395' />
+            <ARCTO ID='S_85' />
+            <ARCTO ID='S_81' />
+          </STATE>
+          <STATE ID='S_101' FILE='CrawlMain.java' LINE='393' ENDLINE='393'>
+            <WAIT TYPE='END_SYNCH'>
+              <SOURCE TYPE='NEW' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' INSTRUCTION='30' CLASS='java.lang.Object' />
+            </WAIT>
+            <ARCTO ID='S_81' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlThread.run' SIGNATURE='void()' ENTRY='S_108' EXIT='S_109' ID='S_108'>
+        <STATES>
+          <STATE ID='S_108' FILE='CrawlThread.java' LINE='105' ENDLINE='105'>
+            <ARCTO ID='S_111' />
+          </STATE>
+          <STATE ID='S_109' FILE='CrawlThread.java' LINE='117' ENDLINE='117' />
+          <STATE ID='S_111' FILE='CrawlThread.java' LINE='105' ENDLINE='106' USERETURN='true' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' CALLID='S_123'>
+            <ARCTO ID='S_112' />
+            <ARCTO ID='S_109' />
+            <ARCTO ID='S_113' />
+          </STATE>
+          <STATE ID='S_112' FILE='CrawlThread.java' LINE='106' ENDLINE='106' CONDITION='NULL'>
+            <SOURCE TYPE='PROGRAMRETURN' />
+            <BLOCK START='106' END='106' />
+            <BLOCK START='116' END='116' />
+            <ARCTO ID='S_109' />
+          </STATE>
+          <STATE ID='S_113' FILE='CrawlThread.java' LINE='106' ENDLINE='106' CONDITION='NONNULL'>
+            <SOURCE TYPE='PROGRAMRETURN' />
+            <BLOCK START='105' END='106' />
+            <BLOCK START='108' END='108' />
+            <BLOCK START='110' END='114' />
+            <ARCTO ID='S_111' />
+            <ARCTO ID='S_109' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' ENTRY='S_123' EXIT='S_124' ID='S_123'>
+        <STATES>
+          <STATE ID='S_123' FILE='CrawlMain.java' LINE='333' ENDLINE='333'>
+            <BLOCK START='333' END='333' />
+            <BLOCK START='335' END='335' />
+            <BLOCK START='338' END='338' />
+            <ARCTO ID='S_130' />
+          </STATE>
+          <STATE ID='S_124' FILE='CrawlMain.java' LINE='362' ENDLINE='362' />
+          <STATE ID='S_130' FILE='CrawlMain.java' LINE='338' ENDLINE='342'>
+            <WAIT TYPE='SYNCH'>
+              <SOURCE TYPE='NEW' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' INSTRUCTION='30' CLASS='java.lang.Object' />
+            </WAIT>
+            <BLOCK START='338' END='342' />
+            <BLOCK START='346' END='346' />
+            <BLOCK START='348' END='351' />
+            <ARCTO ID='S_134' />
+            <ARCTO ID='S_142' />
+          </STATE>
+          <STATE ID='S_134' FILE='CrawlMain.java' LINE='342' ENDLINE='342'>
+            <WAIT TYPE='END_SYNCH'>
+              <SOURCE TYPE='NEW' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' INSTRUCTION='30' CLASS='java.lang.Object' />
+            </WAIT>
+            <ARCTO ID='S_136' />
+          </STATE>
+          <STATE ID='S_136' FILE='CrawlMain.java' LINE='342' ENDLINE='342' PROGRAMRETURN='NULL'>
+            <ARCTO ID='S_124' />
+          </STATE>
+          <STATE ID='S_142' FILE='CrawlMain.java' LINE='351' ENDLINE='352' HASEVENT='true'>
+            <EVENT ID='E1' TRIGGER='true' NAME='NewIterator' TYPE='CALL' METHOD='iterator'>
+              <MATCH WHAT='VALUE' ID='C1' MODE='NEW' />
+            </EVENT>
+            <ARCTO ID='S_143' />
+          </STATE>
+          <STATE ID='S_143' FILE='CrawlMain.java' LINE='352' ENDLINE='356' HASEVENT='true'>
+            <EVENT ID='E3' TRIGGER='false' NAME='next' TYPE='CALL' METHOD='next'>
+              <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+            </EVENT>
+            <BLOCK START='352' END='356' />
+            <BLOCK START='359' END='361' />
+            <ARCTO ID='S_148' />
+            <ARCTO ID='S_152' />
+          </STATE>
+          <STATE ID='S_148' FILE='CrawlMain.java' LINE='356' ENDLINE='356'>
+            <WAIT TYPE='END_SYNCH'>
+              <SOURCE TYPE='NEW' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' INSTRUCTION='30' CLASS='java.lang.Object' />
+            </WAIT>
+            <BLOCK START='356' END='356' />
+            <BLOCK START='361' END='361' />
+            <ARCTO ID='S_124' />
+          </STATE>
+          <STATE ID='S_152' FILE='CrawlMain.java' LINE='361' ENDLINE='361'>
+            <WAIT TYPE='END_SYNCH'>
+              <SOURCE TYPE='NEW' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' INSTRUCTION='30' CLASS='java.lang.Object' />
+            </WAIT>
+            <BLOCK START='338' END='338' />
+            <BLOCK START='361' END='362' />
+            <ARCTO ID='S_130' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <PGMSTATS METHODS='5' STATES='26' />
+    </PROGRAM>
+    <CHECKER>
+      <TRANSITION START='S1' STARTNAME='Start' FINAL='S4' FINALNAME='nextCalled' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' STATUS='ERR'>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_47' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='68' ENDLINE='70' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_50' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='70' ENDLINE='72' />
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_52' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' FILE='CrawlMain.java' LINE='224' ENDLINE='228' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_60' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' FILE='CrawlMain.java' LINE='228' ENDLINE='229'>
+            <BLOCK START='228' END='234' />
+            <BLOCK START='236' END='240' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_80' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' FILE='CrawlMain.java' LINE='387' ENDLINE='387'>
+            <BLOCK START='387' END='390' />
+            <BLOCK START='395' END='395' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_85' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' FILE='CrawlMain.java' LINE='390' ENDLINE='392' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_87' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' FILE='CrawlMain.java' LINE='392' ENDLINE='393' />
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_108' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlThread.run' SIGNATURE='void()' FILE='CrawlThread.java' LINE='105' ENDLINE='105' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_111' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlThread.run' SIGNATURE='void()' FILE='CrawlThread.java' LINE='105' ENDLINE='106' />
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_123' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' FILE='CrawlMain.java' LINE='333' ENDLINE='333'>
+            <BLOCK START='333' END='333' />
+            <BLOCK START='335' END='335' />
+            <BLOCK START='338' END='338' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_130' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' FILE='CrawlMain.java' LINE='338' ENDLINE='342'>
+            <BLOCK START='338' END='342' />
+            <BLOCK START='346' END='346' />
+            <BLOCK START='348' END='351' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Start'>
+          <EVENTLOC STATEID='S_142' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' FILE='CrawlMain.java' LINE='351' ENDLINE='352'>
+            <EVENT ID='E1' TRIGGER='true' NAME='NewIterator' TYPE='CALL' METHOD='iterator'>
+              <MATCH WHAT='VALUE' ID='C1' MODE='NEW' />
+            </EVENT>
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT STATE='S2' STATENAME='IteratorAllocated'>
+          <EVENTLOC STATEID='S_143' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' FILE='CrawlMain.java' LINE='352' ENDLINE='356'>
+            <BLOCK START='352' END='356' />
+            <BLOCK START='359' END='361' />
+            <EVENT ID='E3' TRIGGER='false' NAME='next' TYPE='CALL' METHOD='next'>
+              <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+            </EVENT>
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S4' STATENAME='nextCalled'>
+          <EVENTLOC STATEID='S_148' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.getNextUrl' SIGNATURE='edu.brown.cs.cs032.crawler.CrawlerUrl()' FILE='CrawlMain.java' LINE='356' ENDLINE='356'>
+            <BLOCK START='356' END='356' />
+            <BLOCK START='361' END='361' />
+          </EVENTLOC>
+        </ELEMENT>
+      </TRANSITION>
+    </CHECKER>
+  </TEST>
+  <TEST STATUS='OK' CHECKTIME='1' NAME='comodification' META='generic'>
+    <SOURCES>
+      <SOURCE METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' INSTANCE='0' LINE='400' INSTRUCTION='2' ID='CHETSRC_2599' CID='C2' FILE='CrawlMain.java' TYPE='RETURN' CALL='java.lang.Iterable.iterator' CALLSIGN='java.util.Iterator()' />
+      <SOURCE METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' INSTANCE='0' LINE='131' INSTRUCTION='60' ID='CHETSRC_11' CID='C1' FILE='CrawlMain.java' TYPE='NEW' CLASS='java.util.Vector' />
+    </SOURCES>
+    <AUTOEVENTS>
+      <EVENT ID='E4' TRIGGER='false' NAME='Add2' TYPE='CALL' METHOD='addAll'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E2' TRIGGER='false' NAME='Add' TYPE='CALL' METHOD='add'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E7' TRIGGER='false' NAME='Next1' TYPE='CALL' METHOD='nextElement'>
+        <MATCH WHAT='OBJECT' ID='C2' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E3' TRIGGER='false' NAME='Add1' TYPE='CALL' METHOD='addElement'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E5' TRIGGER='false' NAME='Iterator' TYPE='CALL' METHOD='iterator'>
+        <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+        <MATCH WHAT='VALUE' ID='C2' MODE='EITHER' />
+      </EVENT>
+      <EVENT ID='E6' TRIGGER='false' NAME='Next' TYPE='CALL' METHOD='next'>
+        <MATCH WHAT='OBJECT' ID='C2' MODE='CHECK' />
+      </EVENT>
+      <EVENT ID='E1' TRIGGER='true' NAME='NewVector' TYPE='ALLOC'>
+        <MATCH WHAT='CLASS' ID='C1' MODE='NEW' />
+      </EVENT>
+    </AUTOEVENTS>
+    <AUTOMATON START='S0' STARTNAME='Start' TRIGGER='NEW'>
+      <STATE ID='S0' NAME='Start'>
+        <ON EVENT='E4' GOTO='S0' GOTONAME='Start' />
+        <ON EVENT='E2' GOTO='S0' GOTONAME='Start' />
+        <ON EVENT='E7' GOTO='S0' GOTONAME='Start' />
+        <ON EVENT='E3' GOTO='S0' GOTONAME='Start' />
+        <ON EVENT='E5' GOTO='S0' GOTONAME='Start' />
+        <ON EVENT='E6' GOTO='S0' GOTONAME='Start' />
+        <ON EVENT='E1' GOTO='S1' GOTONAME='Play' />
+      </STATE>
+      <STATE ID='S1' NAME='Play' ACCEPT='true'>
+        <ON EVENT='E4' GOTO='S1' GOTONAME='Play' />
+        <ON EVENT='E2' GOTO='S1' GOTONAME='Play' />
+        <ON EVENT='E7' GOTO='SX' GOTONAME='Comodification' />
+        <ON EVENT='E3' GOTO='S1' GOTONAME='Play' />
+        <ON EVENT='E5' GOTO='S2' GOTONAME='Iterate' />
+        <ON EVENT='E6' GOTO='SX' GOTONAME='Comodification' />
+        <ON EVENT='E1' GOTO='SI' GOTONAME='Ignore' />
+      </STATE>
+      <STATE ID='S2' NAME='Iterate' ACCEPT='true'>
+        <ON EVENT='E4' GOTO='S1' GOTONAME='Play' />
+        <ON EVENT='E2' GOTO='S1' GOTONAME='Play' />
+        <ON EVENT='E7' GOTO='S2' GOTONAME='Iterate' />
+        <ON EVENT='E3' GOTO='S1' GOTONAME='Play' />
+        <ON EVENT='E5' GOTO='S2' GOTONAME='Iterate' />
+        <ON EVENT='E6' GOTO='S2' GOTONAME='Iterate' />
+        <ON EVENT='E1' GOTO='SI' GOTONAME='Ignore' />
+      </STATE>
+      <STATE ID='SI' NAME='Ignore'>
+        <ON EVENT='E4' GOTO='SI' GOTONAME='Ignore' />
+        <ON EVENT='E2' GOTO='SI' GOTONAME='Ignore' />
+        <ON EVENT='E7' GOTO='SI' GOTONAME='Ignore' />
+        <ON EVENT='E3' GOTO='SI' GOTONAME='Ignore' />
+        <ON EVENT='E5' GOTO='SI' GOTONAME='Ignore' />
+        <ON EVENT='E6' GOTO='SI' GOTONAME='Ignore' />
+        <ON EVENT='E1' GOTO='SI' GOTONAME='Ignore' />
+      </STATE>
+      <STATE ID='SX' NAME='Comodification' ERROR='true'>
+        <ON EVENT='E4' GOTO='SX' GOTONAME='Comodification' />
+        <ON EVENT='E2' GOTO='SX' GOTONAME='Comodification' />
+        <ON EVENT='E7' GOTO='SX' GOTONAME='Comodification' />
+        <ON EVENT='E3' GOTO='SX' GOTONAME='Comodification' />
+        <ON EVENT='E5' GOTO='SX' GOTONAME='Comodification' />
+        <ON EVENT='E6' GOTO='SX' GOTONAME='Comodification' />
+        <ON EVENT='E1' GOTO='SX' GOTONAME='Comodification' />
+      </STATE>
+    </AUTOMATON>
+    <EVENTS>
+      <EVENTLOC STATEID='S_174' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='131' ENDLINE='131'>
+        <BLOCK START='131' END='137' />
+        <BLOCK START='139' END='139' />
+        <BLOCK START='141' END='144' />
+        <BLOCK START='146' END='146' />
+        <EVENT ID='E1' TRIGGER='true' NAME='NewVector' TYPE='ALLOC'>
+          <MATCH WHAT='CLASS' ID='C1' MODE='NEW' />
+        </EVENT>
+      </EVENTLOC>
+      <EVENTLOC STATEID='S_228' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' FILE='CrawlMain.java' LINE='388' ENDLINE='392'>
+        <BLOCK START='387' END='393' />
+        <BLOCK START='395' END='395' />
+        <EVENT ID='E2' TRIGGER='false' NAME='Add' TYPE='CALL' METHOD='add'>
+          <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+        </EVENT>
+      </EVENTLOC>
+      <EVENTLOC STATEID='S_249' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='400' ENDLINE='401'>
+        <BLOCK START='400' END='401' />
+        <BLOCK START='407' END='407' />
+        <EVENT ID='E5' TRIGGER='false' NAME='Iterator' TYPE='CALL' METHOD='iterator'>
+          <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+          <MATCH WHAT='VALUE' ID='C2' MODE='EITHER' />
+        </EVENT>
+      </EVENTLOC>
+      <EVENTLOC STATEID='S_252' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='401' ENDLINE='401'>
+        <BLOCK START='400' END='401' />
+        <BLOCK START='403' END='403' />
+        <BLOCK START='405' END='407' />
+        <EVENT ID='E6' TRIGGER='false' NAME='Next' TYPE='CALL' METHOD='next'>
+          <MATCH WHAT='OBJECT' ID='C2' MODE='CHECK' />
+        </EVENT>
+      </EVENTLOC>
+    </EVENTS>
+    <PROGRAM>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' ENTRY='S_160' EXIT='S_161' ID='S_160' START='true'>
+        <STATES>
+          <STATE ID='S_160' FILE='CrawlMain.java' LINE='68' ENDLINE='68'>
+            <ARCTO ID='S_162' />
+          </STATE>
+          <STATE ID='S_161' FILE='CrawlMain.java' LINE='73' ENDLINE='73' />
+          <STATE ID='S_162' FILE='CrawlMain.java' LINE='68' ENDLINE='70' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' CALLID='S_165'>
+            <ARCTO ID='S_163' />
+            <ARCTO ID='S_161' />
+          </STATE>
+          <STATE ID='S_163' FILE='CrawlMain.java' LINE='70' ENDLINE='72' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' CALLID='S_198'>
+            <ARCTO ID='S_161' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' ENTRY='S_165' EXIT='S_166' ID='S_165'>
+        <STATES>
+          <STATE ID='S_165' FILE='CrawlMain.java' LINE='114' ENDLINE='114'>
+            <BLOCK START='114' END='125' />
+            <BLOCK START='125' END='131' />
+            <ARCTO ID='S_174' />
+          </STATE>
+          <STATE ID='S_166' FILE='CrawlMain.java' LINE='146' ENDLINE='146' />
+          <STATE ID='S_174' FILE='CrawlMain.java' LINE='131' ENDLINE='131' HASEVENT='true'>
+            <EVENT ID='E1' TRIGGER='true' NAME='NewVector' TYPE='ALLOC'>
+              <MATCH WHAT='CLASS' ID='C1' MODE='NEW' />
+            </EVENT>
+            <BLOCK START='131' END='137' />
+            <BLOCK START='139' END='139' />
+            <BLOCK START='141' END='144' />
+            <BLOCK START='146' END='146' />
+            <ARCTO ID='S_166' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' ENTRY='S_198' EXIT='S_199' ID='S_198'>
+        <STATES>
+          <STATE ID='S_198' FILE='CrawlMain.java' LINE='224' ENDLINE='228'>
+            <ARCTO ID='S_206' />
+            <ARCTO ID='S_199' />
+          </STATE>
+          <STATE ID='S_199' FILE='CrawlMain.java' LINE='241' ENDLINE='241' />
+          <STATE ID='S_206' FILE='CrawlMain.java' LINE='228' ENDLINE='229' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' CALLID='S_223'>
+            <BLOCK START='228' END='234' />
+            <BLOCK START='236' END='236' />
+            <ARCTO ID='S_214' />
+            <ARCTO ID='S_199' />
+          </STATE>
+          <STATE ID='S_214' FILE='CrawlMain.java' LINE='236' ENDLINE='238' CALL='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' CALLID='S_247'>
+            <BLOCK START='236' END='240' />
+            <ARCTO ID='S_199' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' ENTRY='S_223' EXIT='S_224' ID='S_223'>
+        <STATES>
+          <STATE ID='S_223' FILE='CrawlMain.java' LINE='387' ENDLINE='387'>
+            <BLOCK START='387' END='389' />
+            <BLOCK START='395' END='395' />
+            <ARCTO ID='S_224' />
+            <ARCTO ID='S_228' />
+          </STATE>
+          <STATE ID='S_224' FILE='CrawlMain.java' LINE='395' ENDLINE='395' />
+          <STATE ID='S_228' FILE='CrawlMain.java' LINE='388' ENDLINE='392' HASEVENT='true'>
+            <EVENT ID='E2' TRIGGER='false' NAME='Add' TYPE='CALL' METHOD='add'>
+              <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+            </EVENT>
+            <BLOCK START='387' END='393' />
+            <BLOCK START='395' END='395' />
+            <ARCTO ID='S_224' />
+            <ARCTO ID='S_228' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <METHODFSA METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' ENTRY='S_247' EXIT='S_248' ID='S_247'>
+        <STATES>
+          <STATE ID='S_247' FILE='CrawlMain.java' LINE='400' ENDLINE='400'>
+            <ARCTO ID='S_249' />
+          </STATE>
+          <STATE ID='S_248' FILE='CrawlMain.java' LINE='407' ENDLINE='407' />
+          <STATE ID='S_249' FILE='CrawlMain.java' LINE='400' ENDLINE='401' HASEVENT='true'>
+            <EVENT ID='E5' TRIGGER='false' NAME='Iterator' TYPE='CALL' METHOD='iterator'>
+              <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+              <MATCH WHAT='VALUE' ID='C2' MODE='EITHER' />
+            </EVENT>
+            <BLOCK START='400' END='401' />
+            <BLOCK START='407' END='407' />
+            <ARCTO ID='S_248' />
+            <ARCTO ID='S_252' />
+          </STATE>
+          <STATE ID='S_252' FILE='CrawlMain.java' LINE='401' ENDLINE='401' HASEVENT='true'>
+            <EVENT ID='E6' TRIGGER='false' NAME='Next' TYPE='CALL' METHOD='next'>
+              <MATCH WHAT='OBJECT' ID='C2' MODE='CHECK' />
+            </EVENT>
+            <BLOCK START='400' END='401' />
+            <BLOCK START='403' END='403' />
+            <BLOCK START='405' END='407' />
+            <ARCTO ID='S_248' />
+            <ARCTO ID='S_252' />
+          </STATE>
+        </STATES>
+      </METHODFSA>
+      <PGMSTATS METHODS='5' STATES='18' />
+    </PROGRAM>
+    <CHECKER>
+      <TRANSITION START='S0' STARTNAME='Start' FINAL='S1' FINALNAME='Play' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' STATUS='OK'>
+        <ELEMENT ENTER='true' STATE='S0' STATENAME='Start'>
+          <EVENTLOC STATEID='S_160' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='68' ENDLINE='68' />
+        </ELEMENT>
+        <ELEMENT STATE='S0' STATENAME='Start'>
+          <EVENTLOC STATEID='S_162' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='68' ENDLINE='70' />
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S0' STATENAME='Start'>
+          <EVENTLOC STATEID='S_165' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='114' ENDLINE='114'>
+            <BLOCK START='114' END='125' />
+            <BLOCK START='125' END='131' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT STATE='S0' STATENAME='Start'>
+          <EVENTLOC STATEID='S_174' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='131' ENDLINE='131'>
+            <BLOCK START='131' END='137' />
+            <BLOCK START='139' END='139' />
+            <BLOCK START='141' END='144' />
+            <BLOCK START='146' END='146' />
+            <EVENT ID='E1' TRIGGER='true' NAME='NewVector' TYPE='ALLOC'>
+              <MATCH WHAT='CLASS' ID='C1' MODE='NEW' />
+            </EVENT>
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_166' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='146' ENDLINE='146' />
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_161' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='73' ENDLINE='73' />
+        </ELEMENT>
+      </TRANSITION>
+      <TRANSITION START='S0' STARTNAME='Start' FINAL='S2' FINALNAME='Iterate' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' STATUS='OK'>
+        <ELEMENT ENTER='true' STATE='S0' STATENAME='Start'>
+          <EVENTLOC STATEID='S_160' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='68' ENDLINE='68' />
+        </ELEMENT>
+        <ELEMENT STATE='S0' STATENAME='Start'>
+          <EVENTLOC STATEID='S_162' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='68' ENDLINE='70' />
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S0' STATENAME='Start'>
+          <EVENTLOC STATEID='S_165' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='114' ENDLINE='114'>
+            <BLOCK START='114' END='125' />
+            <BLOCK START='125' END='131' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT STATE='S0' STATENAME='Start'>
+          <EVENTLOC STATEID='S_174' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='131' ENDLINE='131'>
+            <BLOCK START='131' END='137' />
+            <BLOCK START='139' END='139' />
+            <BLOCK START='141' END='144' />
+            <BLOCK START='146' END='146' />
+            <EVENT ID='E1' TRIGGER='true' NAME='NewVector' TYPE='ALLOC'>
+              <MATCH WHAT='CLASS' ID='C1' MODE='NEW' />
+            </EVENT>
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_166' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.&lt;init&gt;' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='146' ENDLINE='146' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_163' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='70' ENDLINE='72' />
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_198' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' FILE='CrawlMain.java' LINE='224' ENDLINE='228' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_206' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' FILE='CrawlMain.java' LINE='228' ENDLINE='229'>
+            <BLOCK START='228' END='234' />
+            <BLOCK START='236' END='236' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_223' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' FILE='CrawlMain.java' LINE='387' ENDLINE='387'>
+            <BLOCK START='387' END='389' />
+            <BLOCK START='395' END='395' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_224' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.startThreads' SIGNATURE='void()' FILE='CrawlMain.java' LINE='395' ENDLINE='395' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_214' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' FILE='CrawlMain.java' LINE='236' ENDLINE='238'>
+            <BLOCK START='236' END='240' />
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT ENTER='true' STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_247' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='400' ENDLINE='400' />
+        </ELEMENT>
+        <ELEMENT STATE='S1' STATENAME='Play'>
+          <EVENTLOC STATEID='S_249' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='400' ENDLINE='401'>
+            <BLOCK START='400' END='401' />
+            <BLOCK START='407' END='407' />
+            <EVENT ID='E5' TRIGGER='false' NAME='Iterator' TYPE='CALL' METHOD='iterator'>
+              <MATCH WHAT='OBJECT' ID='C1' MODE='CHECK' />
+              <MATCH WHAT='VALUE' ID='C2' MODE='EITHER' />
+            </EVENT>
+          </EVENTLOC>
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S2' STATENAME='Iterate'>
+          <EVENTLOC STATEID='S_248' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.waitForDone' SIGNATURE='void()' FILE='CrawlMain.java' LINE='407' ENDLINE='407' />
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S2' STATENAME='Iterate'>
+          <EVENTLOC STATEID='S_199' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.process' SIGNATURE='void()' FILE='CrawlMain.java' LINE='241' ENDLINE='241' />
+        </ELEMENT>
+        <ELEMENT RETURN='true' STATE='S2' STATENAME='Iterate'>
+          <EVENTLOC STATEID='S_161' METHOD='edu.brown.cs.cs032.crawler.crawl.CrawlMain.main' SIGNATURE='void(java.lang.String[])' FILE='CrawlMain.java' LINE='73' ENDLINE='73' />
+        </ELEMENT>
+      </TRANSITION>
+    </CHECKER>
+  </TEST>
+</CHET>

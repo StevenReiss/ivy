@@ -1,0 +1,41 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/Make.data,v 1.16 2012-10-25 01:27:17 spr Exp $
+
+#
+# SWING -- Bloom interface to swing
+#
+
+PACKAGE= swing
+
+SFILES= \
+	SwingBorderPanel.java \
+	SwingColorButton.java \
+	SwingColorRangeChooser.java \
+	SwingColors.java \
+	SwingColorSet.java \
+	SwingComboBox.java \
+	SwingDebugGraphics.java \
+	SwingDimensionChooser.java \
+	SwingEditorPane.java \
+	SwingEnumButton.java \
+	SwingEventListenerList.java \
+	SwingFontChooser.java \
+	SwingGridPanel.java \
+	SwingFreezePane.java \
+	SwingHelpFrame.java \
+	SwingListPanel.java \
+	SwingListSet.java \
+	SwingMenuBar.java \
+	SwingMonitoredWindow.java \
+	SwingNumericField.java \
+	SwingRangeScrollBar.java \
+	SwingRangeSlider.java \
+	SwingRootMonitor.java \
+	SwingRoundedCornerLabel.java \
+	SwingSetup.java \
+	SwingSourceViewer.java \
+	SwingText.java \
+	SwingToolBar.java \
+	SwingTree.java \
+	SwingTreeTable.java \
+

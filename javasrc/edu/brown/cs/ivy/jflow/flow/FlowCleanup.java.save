@@ -1,0 +1,489 @@
+/********************************************************************************/
+/*										*/
+/*		FlowReporter.java						*/
+/*										*/
+/*	Class to handle generating reports based on flow control		*/
+/*										*/
+/********************************************************************************/
+/*	Copyright 1998 Brown University -- Steven P. Reiss		      */
+/*********************************************************************************
+ *  Copyright 1998, Brown University, Providence, RI.				 *
+ *										 *
+ *			  All Rights Reserved					 *
+ *										 *
+ *  Permission to use, copy, modify, and distribute this software and its	 *
+ *  documentation for any purpose other than its incorporation into a		 *
+ *  commercial product is hereby granted without fee, provided that the 	 *
+ *  above copyright notice appear in all copies and that both that		 *
+ *  copyright notice and this permission notice appear in supporting		 *
+ *  documentation, and that the name of Brown University not be used in 	 *
+ *  advertising or publicity pertaining to distribution of the software 	 *
+ *  without specific, written prior permission. 				 *
+ *										 *
+ *  BROWN UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS		 *
+ *  SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND		 *
+ *  FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL BROWN UNIVERSITY	 *
+ *  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY 	 *
+ *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,		 *
+ *  WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS		 *
+ *  ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 	 *
+ *  OF THIS SOFTWARE.								 *
+ *										 *
+ ********************************************************************************/
+
+/* RCS: $Header: /pro/spr_cvs/pro/clime/javasrc/edu/brown/clime/chet/flow/FlowReporter.java,v 1.7 2005/06/07 02:24:09 spr Exp $ */
+
+
+/*********************************************************************************
+ *
+ * $Log: FlowReporter.java,v $
+ * Revision 1.7  2005/06/07 02:24:09  spr
+ * Changes for java 5.0
+ *
+ * Revision 1.6  2005/02/24 15:20:08  spr
+ * Casts to library interfaces should work for project classes.  Add required
+ * events to specifications.
+ *
+ * Revision 1.5  2004/06/11 17:06:19  spr
+ * Cleaner handling of exceptions, particularly Error-based exceptions.
+ *
+ * Revision 1.4  2004/05/06 02:35:04  spr
+ * Organize imports (ala eclipse) and remove Eclipse warnings.
+ *
+ * Revision 1.3  2004/04/28 15:49:19  spr
+ * Add map prototypes to chet; fix bugs otherwise.
+ *
+ * Revision 1.2  2004/03/11 00:04:20  spr
+ * Improved simplification of programs; correct problems with detailed
+ * flow analysis; performance improvements.
+ *
+ * Revision 1.1  2004/02/13 19:46:11  spr
+ * Add subpackage for flow analysis.  Derived from ChetFlowControl.
+ *
+ *
+ ********************************************************************************/
+
+
+package edu.brown.clime.chet.flow;
+
+import edu.brown.clime.chet.*;
+import edu.brown.cs.ivy.xml.IvyXmlWriter;
+
+import com.ibm.jikesbt.*;
+
+import java.util.*;
+
+
+
+class FlowReporter implements ChetConstants, BT_Opcodes
+{
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Private storage 							*/
+/*										*/
+/********************************************************************************/
+
+private FlowControl	flow_control;
+private int		num_method;
+private int		num_method_inst;
+private int		num_bytecode;
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Constructors								*/
+/*										*/
+/********************************************************************************/
+
+FlowReporter(FlowControl fc)
+{
+   flow_control = fc;
+   num_method = 0;
+   num_method_inst = 0;
+   num_bytecode = 0;
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Top level checking method						*/
+/*										*/
+/********************************************************************************/
+
+void checkMethod(BT_Method bm,IvyXmlWriter xw)
+{
+   if (bm.isNative() || bm.isAbstract()) return;
+
+   ++num_method;
+
+   Outputer ot = new Outputer(bm,xw);
+
+   checkNeverUsed(bm,ot);
+
+   checkNeverReturns(bm,ot);
+
+   checkCode(bm,ot);
+
+   ot.end();
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Check for never used							*/
+/*										*/
+/********************************************************************************/
+
+private void checkNeverUsed(BT_Method bm,Outputer ot)
+{
+   int ct = 0;
+
+   for (Iterator it = ChetMethod.Factory.getAllMethods(bm); it.hasNext(); ) {
+      ChetMethod fm = (ChetMethod) it.next();
+      if (flow_control.getFlowQueue(fm) != null) ++ct;
+    }
+
+   if (ct == 0) reportNeverUsed(bm,ot);
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Check for never returns 						*/
+/*										*/
+/********************************************************************************/
+
+private void checkNeverReturns(BT_Method bm,Outputer ot)
+{
+   int ct = 0;
+   int rct = 0;
+
+   for (Iterator it = ChetMethod.Factory.getAllMethods(bm); it.hasNext(); ) {
+      ChetMethod fm = (ChetMethod) it.next();
+      if (flow_control.getFlowQueue(fm) != null) {
+	 ++ct;
+	 if (fm.hasResult()) ++rct;
+       }
+    }
+
+   if (ct > 0 && rct < ct) {
+      reportNeverReturns(bm,ot);
+    }
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Check at the code level for null, not executed, etc.			*/
+/*										*/
+/********************************************************************************/
+
+private void checkCode(BT_Method bm,Outputer ot)
+{
+   for (Iterator it = ChetMethod.Factory.getAllMethods(bm); it.hasNext(); ) {
+      ChetMethod fm = (ChetMethod) it.next();
+      ++num_method_inst;
+      FlowQueue wq = flow_control.getFlowQueue(fm);
+      if (wq != null) {
+	 doCodeChecks(wq,ot);
+       }
+    }
+
+   Set ne = ot.getNotExecuted();
+   if (ne != null) {
+      BT_CodeAttribute cod = bm.getCode();
+      BT_InsVector insv = cod.ins;
+
+      for (Iterator it = ne.iterator(); it.hasNext(); ) {
+	 BT_Ins ins = (BT_Ins) it.next();
+	 int ino = insv.indexOf(ins);
+	 reportNotExecuted(bm,ino,ot);
+       }
+    }
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Helper methods for doing code checks					*/
+/*										*/
+/********************************************************************************/
+
+private void doCodeChecks(FlowQueue wq,Outputer ot)
+{
+   ChetMethod method = wq.getMethod();
+   BT_FieldRefIns frins;
+   BT_MethodRefIns mrins;
+   ChetState st1;
+   ChetValue s0,s1;
+
+   for (int ino = 0; ino < wq.getNumInstructions(); ++ino) {
+      BT_Ins ins = wq.getInstruction(ino);
+      st1 = wq.getState(ins);
+      if (st1 != null) ++num_bytecode;
+
+      switch (ins.opcode) {
+	 case opc_getfield :
+	    frins = (BT_FieldRefIns) ins;
+	    if (st1 == null) break;
+	    st1 = st1.cloneState();
+	    s0 = st1.popStack();
+	    if (s0.canBeNull()) reportNullField(wq,ino,s0.mustBeNull(),ot);
+	    break;
+	 case opc_putfield :
+	    frins = (BT_FieldRefIns) ins;
+	    if (st1 == null) break;
+	    st1 = st1.cloneState();
+	    s0 = st1.popStack();
+	    s1 = st1.popStack();
+	    if (s1.canBeNull()) reportNullField(wq,ino,s1.mustBeNull(),ot);
+	    break;
+
+	 case opc_invokeinterface :
+	 case opc_invokevirtual :
+	 case opc_invokespecial :
+	    { mrins = (BT_MethodRefIns) ins;
+	      BT_Method bm = mrins.getTarget();
+	      if (bm.isInstanceMethod() || bm.isConstructor()) {
+		 if (st1 == null) break;
+		 st1 = st1.cloneState();
+		 BT_MethodSignature sgn = bm.getSignature();
+		 for (int i = 0; i < sgn.types.size(); ++i) {
+		    st1.popStack();
+		  }
+		 ChetValue cs = st1.popStack();
+		 if (cs.canBeNull()) reportNullCall(wq,ino,cs.mustBeNull(),ot);
+	       }
+	     }
+	    break;
+
+	 case opc_bblock :
+	    ot.addExec(ins,(st1 != null));
+	    if (st1 == null) method.addIgnoreBlock(ins);
+	    break;
+	 default :
+	    break;
+       }
+    }
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Statistics methods							*/
+/*										*/
+/********************************************************************************/
+
+void reportStats()
+{
+   System.err.println("CHET: Number of project Java methods scanned = " + num_method);
+   System.err.println("CHET: Number of project method instances =     " + num_method_inst);
+   System.err.println("CHET: Number of project byte codes scanned =   " + num_bytecode);
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Reporting methods							*/
+/*										*/
+/********************************************************************************/
+
+private void reportNeverUsed(BT_Method bm,Outputer ot)
+{
+   System.err.println("CHET: Method " + bm.fullName() + bm.getSignature() + " never used");
+
+   ot.begin("NOTUSED");
+   ot.end();
+}
+
+
+
+private void reportNeverReturns(BT_Method bm,Outputer ot)
+{
+   System.err.println("CHET: Method " + bm.fullName() + bm.getSignature() + " never returns");
+
+   ot.begin("NORETURN");
+   ot.end();
+}
+
+
+
+private void reportNullCall(FlowQueue wq,int ino,boolean must,Outputer ot)
+{
+   ChetMethod method = wq.getMethod();
+   BT_MethodRefIns mrins = (BT_MethodRefIns) wq.getInstruction(ino);
+
+   if (!ot.addNull(mrins)) return;
+
+   int lno = flow_control.getLineNumber(method.getMethod(),ino);
+
+/***********
+   System.err.print("CHET: Calling ");
+   if (!must) System.err.print("possible ");
+   System.err.print("method of null: " + mrins.getTarget().getName() +
+		       " at " + lno + " (" + ino + ") of " + method.getMethodName() + " " +
+		       method.getMethodSignature());
+   System.err.println();
+********/
+
+   ot.begin("NULLCALL");
+   ot.field("METHOD",mrins.getTarget().fullName());
+   ot.field("CLASS",mrins.getTarget().getDeclaringClass().getName());
+   ot.field("SIGNATURE",mrins.getTarget().getSignature().toString());
+   ot.field("LINE",lno);
+   ot.field("INSTRUCTION",ino);
+   ot.field("ALWAYS",must);
+   ot.end();
+}
+
+
+
+
+private void reportNullField(FlowQueue wq,int ino,boolean must,Outputer ot)
+{
+   ChetMethod method = wq.getMethod();
+   BT_FieldRefIns frins = (BT_FieldRefIns) wq.getInstruction(ino);
+
+   if (!ot.addNull(frins)) return;
+
+   int lno = flow_control.getLineNumber(method.getMethod(),ino);
+
+/***************
+   System.err.print("CHET: Accessing ");
+   if (!must) System.err.print("possible ");
+   System.err.print("field of null: " + frins.getFieldTarget().getName() +
+		       " at " + lno + " (" + ino + ") of " + method.getMethodName() + " " +
+		       method.getMethodSignature());
+   System.err.println();
+*************/
+
+   ot.begin("NULLFIELD");
+   ot.field("FIELD",frins.getFieldTarget().getName());
+   ot.field("CLASS",frins.getFieldTarget().getDeclaringClass().getName());
+   ot.field("LINE",lno);
+   ot.field("INSTRUCTION",ino);
+   ot.field("ALWAYS",must);
+   ot.end();
+}
+
+
+
+
+private void reportNotExecuted(BT_Method bm,int ino,Outputer ot)
+{
+   int lno = flow_control.getLineNumber(bm,ino);
+
+/********************
+   System.err.print("CHET: Unexecutable basic block at ");
+   System.err.print(lno + " (" + ino + ") of " + bm.fullName() + " " +
+		       bm.getSignature().toString());
+   System.err.println();
+*****************/
+
+   ot.begin("NOTEXEC");
+   ot.field("LINE",lno);
+   ot.field("INSTRUCTION",ino);
+   ot.end();
+}
+
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Outputer -- class to handle XML output					*/
+/*										*/
+/********************************************************************************/
+
+private static class Outputer {
+
+   private BT_Method for_method;
+   private IvyXmlWriter xml_writer;
+   private boolean has_begun;
+   private Set<BT_Ins> null_set;
+   private Map<BT_Ins,Boolean> exec_set;
+
+   Outputer(BT_Method bm,IvyXmlWriter xw) {
+      for_method = bm;
+      xml_writer = xw;
+      has_begun = false;
+      null_set = null;
+      exec_set = null;
+    }
+
+   boolean addNull(BT_Ins ins) {
+      if (null_set == null) null_set = new HashSet<BT_Ins>();
+      return null_set.add(ins);
+    }
+
+   void addExec(BT_Ins ins,boolean fg) {
+      if (exec_set == null) exec_set = new HashMap<BT_Ins,Boolean>();
+      Boolean bfg = exec_set.get(ins);
+      if (bfg == null || !bfg.booleanValue()) bfg = Boolean.valueOf(fg);
+      exec_set.put(ins,bfg);
+    }
+
+   Set<BT_Ins> getNotExecuted() {
+      if (exec_set == null) return null;
+      Set<BT_Ins> rslt = null;
+      for (Map.Entry<BT_Ins,Boolean> ent : exec_set.entrySet()) {
+	 Boolean bfg = ent.getValue();
+	 if (!bfg.booleanValue()) {
+	    if (rslt == null) rslt = new HashSet<BT_Ins>();
+	    rslt.add(ent.getKey());
+	  }
+       }
+      return rslt;
+    }
+
+   void begin(String elt) {
+      if (!has_begun) {
+	 has_begun = true;
+	 xml_writer.begin("FLOW");
+	 xml_writer.field("METHOD",for_method.fullName());
+	 xml_writer.field("SIGNATURE",for_method.getSignature().toString());
+       }
+      xml_writer.begin(elt);
+    }
+
+   void end() {
+      if (!has_begun) return;
+      xml_writer.end();
+      xml_writer.flush();
+    }
+
+   void field(String elt,String val)		{ xml_writer.field(elt,val); }
+   void field(String elt,boolean val)		{ xml_writer.field(elt,val); }
+   void field(String elt,int val)		{ xml_writer.field(elt,val); }
+
+
+}	// end of subclass Outputer
+
+
+
+
+}	// end of class FlowReporter
+
+
+
+
+/* end of FlowReporter.java */

@@ -1,0 +1,56 @@
+#! /bin/tcsh -f
+
+if ($#argv != 1) then
+   echo `ivycreatec++ <project>`
+   exit 1
+endif
+
+if ($1:t == "src") then
+   set dir = $1:h
+   set dir = $dir:t
+else
+   set dir = $1:t
+endif
+
+set ar = `ivyarch`
+set cwd = `pwd`
+set bp = `ivybasepath`
+set xar =
+if ("$ar" == "i386") then
+   set xar = mac64
+endif
+
+ivysetup
+
+
+if (! -d $bp/$dir) then
+   mkdir $bp/$dir
+endif
+
+
+if (! -d $bp/$dir/src) then
+   mkdir $bp/$dir/src
+endif
+
+foreach i (bin bin.prof bin.opt bin.share bin.share.prof bin.share.opt)
+   if (! -d $bp/$dir/$i.$ar) then
+      mkdir $bp/$dir/$i.$ar
+   endif
+   rm -rf $bp/$dir/$i.$ar/Makefile
+   ln -s $bp/data/Make.template $bp/$dir/$i.$ar/Makefile
+   if ("X$xar" != "X") then
+      if (! -d $bp/$dir/$i.$xar) then
+	 mkdir $bp/$dir/$i.$xar
+      endif
+      rm -rf $bp/$dir/$i.$xar/Makefile
+      ln -s $bp/data/Make.template $bp/$dir/$i.$xar/Makefile
+   endif
+end
+
+rm -rf $bp/$dir/src/Makefile
+ln -s $bp/data/Make.pass $bp/$dir/src/Makefile
+touch $bp/$dir/src/Make.data
+
+cd $bp/$dir/src
+gnumake create
+cd $cwd

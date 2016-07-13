@@ -1,0 +1,381 @@
+<JFLOW>
+   <METHOD NAME="java.lang.System.arraycopy" ARRAYCOPY="1" />
+   <METHOD NAME="java.lang.System.exit" EXIT="1" />
+
+   <METHOD NAME="java.lang.Object.&lt;init&gt;" />
+
+   <METHOD NAME="java.lang.System.getProperties" />
+   <METHOD NAME="java.lang.System.getProperty" />
+   <METHOD NAME="java.io.FileSystem.getFileSystem" RETURN="java.io.UnixFileSystem" />
+   <METHOD NAME="java.sql.DriverManager.getConnection" />
+   <CLASS NAME="java.sql.Connection" />
+   <CLASS NAME="java.sql.Statement" />
+   <CLASS NAME="java.sql.ResultSet" />
+   <METHOD NAME="javax.xml.parsers.SAXParserFactory.newInstance"
+	RETURN="com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl"
+	ARETURN="org.apache.crimson.jaxp.SAXParserFactoryImpl" />
+   <METHOD NAME="javax.xml.parsers.DocumentBuilderFactory.newInstance"
+	RETURN="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl"
+	ARETURN="org.apache.crimson.jaxp.DocumentBuilderFactoryImpl" />
+   <METHOD NAME="org.xml.sax.helpers.XMLReaderFactory.createXMLReader"
+	RETURN="com.sun.org.apache.xerces.internal.parsers.SAXParser"
+	ARETURN="org.apache.crimson.parser.XMLReaderImpl" />
+   <METHOD NAME="org.xml.sax.helpers.ParserFactory.makeParser"
+	RETURN="com.sun.org.apache.xerces.internal.parsers.SAXParser"
+	ARETURN="org.apache.crimson.parser.XMLReaderImpl" />
+   <METHOD NAME="javax.xml.transform.TransformerFactory.newInstance"
+	RETURN="com.sun.org.apache.xalan.internal.xsltc.trax.SmartTransformerFactoryImpl" />
+   <METHOD NAME="javax.xml.transform.TransformerFactory.newTransformer"
+	RETURN="com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl" />
+   <METHOD NAME="org.apache.crimson.tree.AttributeSet.item" />
+
+   <METHOD NAME="java.nio.charset.Charset.forName"
+	RETURN="sun.nio.cs.ISO_8859_1" />
+   <METHOD NAME="java.nio.charset.Charset.lookup"
+	RETURN="sun.nio.cs.ISO_8859_1" />
+   <METHOD NAME="java.nio.channels.spi.SelectorProvider.provider"
+	RETURN="sun.nio.ch.DevPollSelectorProvider" />
+   <METHOD NAME="sun.nio.ch.ServerSocketChannelImpl.accept"
+	RETURN="sun.nio.ch.SocketChannelImpl" NULL="true" />
+
+   <METHOD NAME="java.util.Set.addAll" REPLACE="java.util.Collection.addAll" />
+
+   <METHOD NAME="java.lang.reflect.Array.newInstance"
+	RETURN="java.lang.Object[]" MUTABLE="true" />
+   <METHOD NAME="java.lang.reflect.Constructor.newInstance"
+	RETURN="java.lang.Object" MUTABLE="true" />
+   <METHOD NAME="java.lang.reflect.Method.invoke"
+	RETURN="java.lang.Object" MUTABLE="true" />
+   <METHOD NAME="java.util.Locale.getDefault" />
+   <METHOD NAME="java.lang.Class.newInstance" RETURN="java.lang.Object" MUTABLE="true" />
+   <METHOD NAME="java.lang.Class.desiredAssertionStatus" RETURN="boolean" />
+   <METHOD NAME="java.lang.Class.getEnumConstants" RETURN="java.lang.Enum[]" MUTABLE="true" />
+
+   <CLASS NAME="java.lang.reflect.Field" />
+   <CLASS NAME='java.lang.ClassLoader' />
+   <CLASS NAME='java.lang.Class' />
+
+   <CLASS NAME='java.lang.StringBuilder' />
+   <METHOD NAME='java.lang.StringBuilder.toString' NULL='false' MUTABLE='false' />
+   <METHOD NAME="java.lang.StringBuilder.&lt;init&gt;" />
+   <METHOD NAME="java.lang.StringBuilder.append" RETURN="0" />
+   <METHOD NAME="java.lang.StringBuffer.&lt;init&gt;" />
+   <CLASS NAME='java.lang.StringBuffer' />
+   <METHOD NAME="java.lang.StringBuffer.append" RETURN="0" />
+   <METHOD NAME='java.lang.StringBuffer.toString' NULL='false' MUTABLE='false' />
+   <CLASS NAME='java.lang.AbstractStringBuilder' />
+
+   <METHOD NAME="java.rmi.Naming.lookup" RETURN="java.lang.Object" MUTABLE="true" />
+   <PACKAGE NAME="java.rmi." />
+
+   <METHOD NAME="java.lang.System.getSecurityManager"
+		RETURN="java.lang.SecurityManager" MUTABLE="true" NULL="true" />
+
+   <METHOD NAME="java.security.AccessController.doPrivileged" REPLACE="run" />
+   <METHOD NAME="java.lang.Thread.start" REPLACE="run" ASYNC="true" />
+   <METHOD NAME="java.lang.Thread.interrupt" />
+   <METHOD NAME="java.lang.Runtime.exec" RETURN="java.lang.UNIXProcess" />
+   <METHOD NAME="java.lang.String.getBytes" />
+   <METHOD NAME="java.lang.String.equals" />
+   <METHOD NAME="java.lang.Object.equals" />
+   <METHOD NAME="java.util.Calendar.equals" />
+   <METHOD NAME="java.lang.Enum.valueOf" />
+   <CLASS NAME="java.test.MessageFormat" />
+   <CLASS NAME="java.util.Locale" VOID='TRUE' />
+   <METHOD NAME="java.lang.Object.toString" />
+   <CLASS NAME="java.lang.reflect.Method" />
+   <CLASS NAME="java.text.DecimalFormat" />
+   <CLASS NAME="java.net.Inet4Address" />
+   <METHOD NAME="java.io.File.equals" />
+   <CLASS NAME="java.lang.Integer" />
+   <CLASS NAME="java.lang.Float" />
+   <CLASS NAME="java.lang.Double" />
+   <CLASS NAME="java.lang.Boolean" />
+   <CLASS NAME="java.net.URL" />
+   <CLASS NAME="java.net.CacheRequest" />
+   <CLASS NAME="java.net.PasswordAuthentication" />
+   <CLASS NAME="java.net.URI" />
+   <CLASS NAME="java.net.CookieHandler" />
+   <CLASS NAME="java.util.EnumSet" />
+   <CLASS NAME='java.text.DateFormatSymbols'  />
+
+   <METHOD NAME="java.security.KeyFactory.getInstance" RETURN="java.security.KeyFactory" />
+   <METHOD NAME="java.security.KeyPairGenerator.getInstance" RETURN="java.security.KeyPairGenerator" />
+   <METHOD NAME="java.security.KeyPairGenerator.generateKeyPair" RETURN="java.security.KeyPair" />
+   <METHOD NAME="javax.crypto.Cipher.getInstance" RETURN="javax.crypto.NullCipher" />
+   <METHOD NAME="javax.crypto.KeyGenerator.getInstance" RETURN="javax.crypto.KeyGenerator" />
+   <METHOD NAME="javax.crypto.SecretKeyFactory.getInstance" RETURN="javax.crypto.SecretKeyFactory" />
+   <CLASS NAME="java.security.MessageDigest" />
+   <CLASS NAME="java.security.MessageDigestSpi" />
+
+   <METHOD NAME="java.lang.Exception.getMessage" />
+
+   <METHOD NAME="java.lang.Runtime.execInternal" RETURN="java.lang.UNIXProcess" />
+   <METHOD NAME="java.net.InetAddressImplFactory.create" RETURN="java.net.Inet4AddressImpl" />
+
+   <METHOD NAME="java.net.URL.openConnection" RETURN="sun.net.www.protocol.http.HttpURLConnection" MUTABLE="true" />
+   <METHOD NAME="java.net.URLConnection.getInputStream" RETURN="java.io.InputStream" MUTABLE="true" />
+
+   <METHOD NAME="sun.misc.Perf.attach" RETURN="java.nio.DirectByteBuffer" MUTABLE="true" />
+
+   <CLASS NAME='java.util.ResourceBundle' />
+
+   <CLASS NAME='java.lang.ProcessEnvironment' />
+   <CLASS NAME='sun.misc.JavaLangAccess' />
+
+   <PACKAGE NAME="java.awt." VOID='1' />
+   <METHOD NAME="java.awt.List.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="java.awt.TextField.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="java.awt.Button.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="java.awt.MenuItem.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="java.awt.ScrollPaneAdjustable.addAdjustmentListener" CBID="awt" CALLBACK="adjustmentValueChanged" ARGS="1" />
+   <METHOD NAME="java.awt.Scrollbar.addAdjustmentListener" CBID="awt" CALLBACK="adjustmentValueChanged" ARGS="1" />
+   <METHOD NAME="java.awt.Toolkit.addAWTEventListener" CBID="awt" CALLBACK="eventDispatched" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addComponentListener" CBID="awt" CALLBACK="componentHidden componentMoved componentResized componentShown" ARGS="1" />
+   <METHOD NAME="java.awt.Container.addContainerListener" CBID="awt" CALLBACK="componentAdded componentRemoved" ARGS="1" />
+   <METHOD NAME="java.awt.dnd.DragGestureRecognizer.addDragGestureListener" CBID="awt" CALLBACK="dragGestureRecognized" ARGS="1" />
+   <METHOD NAME="java.awt.dnd.DragSourceContext.addDragSourceListener" CBID="awt" CALLBACK="dragDropEnd dragEnter dragExit dragOver dropActionChanged" ARGS="1" />
+   <METHOD NAME="java.awt.dnd.DragSource.addDragSourceListener" CBID="awt" CALLBACK="dragDropEnd dragEnter dragExit dragOver dropActionChanged" ARGS="1" />
+   <METHOD NAME="java.awt.dnd.DragSource.addDragSourceMotionListener" CBID="awt" CALLBACK="dragMouseMoved" ARGS="1" />
+   <METHOD NAME="java.awt.dnd.DropTarget.addDropTargetListener" CBID="awt" CALLBACK="dragEnter dragExit dragOver drop dropActionChanged" ARGS="1" />
+   <METHOD NAME="java.awt.List$AccessibleAWTList$AccessibleAWTListChild.addFocusListener" CBID="awt" CALLBACK="focusGained focusLost" ARGS="1" />
+   <METHOD NAME="java.awt.MenuComponent$AccessibleAWTMenuComponent.addFocusListener" CBID="awt" CALLBACK="focusGained focusLost" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addFocusListener" CBID="awt" CALLBACK="focusGained focusLost" ARGS="1" />
+   <METHOD NAME="java.awt.Component$AccessibleAWTComponent.addFocusListener" CBID="awt" CALLBACK="focusGained focusLost" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addHierarchyBoundsListener" CBID="awt" CALLBACK="ancestorMoved ancestorResized" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addHierarchyListener" CBID="awt" CALLBACK="hierarchyChanged" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addInputMethodListener" CBID="awt" CALLBACK="caretPositionChanged inputMethodTextChanged" ARGS="1" />
+   <METHOD NAME="java.awt.CheckboxMenuItem.addItemListener" CBID="awt" CALLBACK="itemStateChanged" ARGS="1" />
+   <METHOD NAME="java.awt.Choice.addItemListener" CBID="awt" CALLBACK="itemStateChanged" ARGS="1" />
+   <METHOD NAME="java.awt.Checkbox.addItemListener" CBID="awt" CALLBACK="itemStateChanged" ARGS="1" />
+   <METHOD NAME="java.awt.ItemSelectable.addItemListener" CBID="awt" CALLBACK="itemStateChanged" ARGS="1" />
+   <METHOD NAME="java.awt.List.addItemListener" CBID="awt" CALLBACK="itemStateChanged" ARGS="1" />
+   <METHOD NAME="java.awt.KeyboardFocusManager.addKeyEventDispatcher" CBID="awt" CALLBACK="dispatchKeyEvent" ARGS="1" />
+   <METHOD NAME="java.awt.KeyboardFocusManager.addKeyEventPostProcessor" CBID="awt" CALLBACK="postProcessKeyEvent" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addKeyListener" CBID="awt" CALLBACK="keyPressed keyReleased keyTyped" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addMouseListener" CBID="awt" CALLBACK="mouseClicked mouseEntered mouseExited mousePressed mouseReleased" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addMouseMotionListener" CBID="awt" CALLBACK="mouseDragged mouseMoved" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addMouseWheelListener" CBID="awt" CALLBACK="mouseWheelMoved" ARGS="1" />
+   <METHOD NAME="java.awt.KeyboardFocusManager.addPropertyChangeListener" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="java.awt.Window.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="java.awt.Container.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="java.awt.Component.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="java.awt.Component$AccessibleAWTComponent.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="java.awt.KeyboardFocusManager.addPropertyChangeListener" NARG="2" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="java.awt.Toolkit.addPropertyChangeListener" NARG="2" CBID="awt" CALLBACK="propertyChange" ARGS="2" />
+   <METHOD NAME="java.awt.Container.addPropertyChangeListener" NARG="2" CBID="awt" CALLBACK="propertyChange" ARGS="2" />
+   <METHOD NAME="java.awt.Component.addPropertyChangeListener" NARG="2" CBID="awt" CALLBACK="propertyChange" ARGS="2" />
+   <METHOD NAME="java.awt.TextComponent.addTextListener" CBID="awt" CALLBACK="textValueChanged" ARGS="1" />
+   <METHOD NAME="java.awt.KeyboardFocusManager.addVetoableChangeListener" CBID="awt" CALLBACK="vetoableChange" ARGS="1" NARG="1" />
+   <METHOD NAME="java.awt.KeyboardFocusManager.addVetoableChangeListener" CBID="awt" CALLBACK="vetoableChange" ARGS="2" NARG="2" />
+   <METHOD NAME="java.awt.Window.addWindowFocusListener" CBID="awt" CALLBACK="windowGainedFocus windowLostFocus" ARGS="1" />
+   <METHOD NAME="java.awt.Window.addWindowListener" CBID="awt" CALLBACK="windowActivated windowClosed windowClosing windowDeactivated windowDeiconified windowIconified windowOpened" ARGS="1" />
+   <METHOD NAME="java.awt.Window.addWindowStateListener" CBID="awt" CALLBACK="windowStateChanged" ARGS="1" />
+
+   <METHOD NAME="javax.swing.JList.createSelectionModel" RETURN="javax.swing.DefaultListSelectionModel" />
+   <METHOD NAME="javax.swing.JTable.createDefaultColumnModel" RETURN="javax.swing.table.DefaultTableColumnModel" />
+   <METHOD NAME="javax.swing.JTable.createDefaultDataModel" RETURN="javax.swing.table.DefaultTableModel" />
+   <METHOD NAME="javax.swing.JTable.createDefaultSelectionModel" RETURN="javax.swing.DefaultListSelectionModel" />
+   <METHOD NAME="javax.swing.JTable.createDefaultTableHeader" RETURN="javax.swing.table.JTableHeader" />
+   <METHOD NAME="javax.swing.JTextField.createDefaultModel" RETURN="javax.swing.text.PlainDocument" />
+   <METHOD NAME="javax.swing.text.DefaultEditorKit.createDefaultDocument" RETURN="javax.swing.text.PlainDocument" />
+   <METHOD NAME="javax.swing.text.StyledEditorKit.createDefaultDocument" RETURN="javax.swing.text.DefaultStyledDocument" />
+   <METHOD NAME="javax.swing.JTree.createTreeModel" RETURN="javax.swing.tree.DefaultTreeModel" />
+   <METHOD NAME="javax.swing.JFileChooser.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="javax.swing.JComboBox.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="javax.swing.JTextField.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="javax.swing.AbstractButton.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="javax.swing.Timer.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="javax.swing.plaf.basic.BasicComboBoxEditor.addActionListener" CBID="awt" CALLBACK="actionPerformed" ARGS="1" />
+   <METHOD NAME="javax.swing.JScrollBar.addAdjustmentListener" CBID="awt" CALLBACK="adjustmentValueChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JComponent.addAncestorListener" CBID="awt" CALLBACK="ancestorAdded ancestorMoved ancestorRemoved" ARGS="1" />
+   <METHOD NAME="javax.swing.text.JTextComponent.addCaretListener" CBID="awt" CALLBACK="caretUpdate" ARGS="1" />
+   <METHOD NAME="javax.swing.AbstractCellEditor.addCellEditorListener" CBID="awt" CALLBACK="editingCanceled editingStopped" ARGS="1" />
+   <METHOD NAME="javax.swing.tree.DefaultTreeCellEditor.addCellEditorListener" CBID="awt" CALLBACK="editingCanceled editingStopped" ARGS="1" />
+   <METHOD NAME="javax.swing.JSlider.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JProgressBar.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JSpinner.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.AbstractSpinnerModel.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JTabbedPane.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.DefaultBoundedRangeModel.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.DefaultSingleSelectionModel.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JViewport.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.DefaultButtonModel.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.MenuSelectionManager.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.AbstractButton.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.colorchooser.DefaultColorSelectionModel.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.text.StyleContext.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.text.StyleContext$NamedStyle.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.text.DefaultCaret.addChangeListener" CBID="awt" CALLBACK="stateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JFileChooser.addChoosableFileFilter" CBID="awt" CALLBACK="accept" ARGS="1" />
+   <METHOD NAME="javax.swing.table.DefaultTableColumnModel.addColumnModelListener" CBID="awt" CALLBACK="columnAdded columnMarginChanged columnMoved columnRemoved columnSelectionChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.text.DefaultStyledDocument.addDocumentListener" CBID="awt" CALLBACK="changedUpdate insertUpdate removeUpdate" ARGS="1" />
+   <METHOD NAME="javax.swing.text.AbstractDocument.addDocumentListener" CBID="awt" CALLBACK="changedUpdate insertUpdate removeUpdate" ARGS="1" />
+   <METHOD NAME="javax.swing.JList$AccessibleJList$AccessibleJListChild.addFocusListener" CBID="awt" CALLBACK="focusGained focusLost" ARGS="1" />
+   <METHOD NAME="javax.swing.JTree$AccessibleJTree$AccessibleJTreeNode.addFocusListener" CBID="awt" CALLBACK="focusGained focusLost" ARGS="1" />
+   <METHOD NAME="javax.swing.JTable$AccessibleJTable$AccessibleJTableCell.addFocusListener" CALLBACS="focusGained focusLost" ARGS="1" />
+   <METHOD NAME="javax.swing.table.JTableHeader$AccessibleJTableHeader$AccessibleJTableHeaderEntry.addFocusListener" CALLACKS="focusGained focusLost" ARGS="1" />
+   <METHOD NAME="javax.swing.JEditorPane.addHyperlinkListener" CBID="awt" CALLBACK="hyperlinkUpdate" ARGS="1" />
+   <METHOD NAME="javax.swing.text.JTextComponent.addInputMethodListener" CBID="awt" CALLBACK="caretPositionChanged inputMethodTextChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JInternalFrame.addInternalFrameListener" CBID="awt" CALLBACK="internalFrameActivated internalFrameClosed internalFrameClosing internalFrameDeactivated internalFrameDeiconified internalFrameIconified internalFrameOpened" ARGS="1" />
+   <METHOD NAME="javax.swing.JComboBox.addItemListener" CBID="awt" CALLBACK="itemStateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.DefaultButtonModel.addItemListener" CBID="awt" CALLBACK="itemStateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.AbstractButton.addItemListener" CBID="awt" CALLBACK="itemStateChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.AbstractListModel.addListDataListener" CBID="awt" CALLBACK="contentsChanged intervalAdded intervalRemoved" ARGS="1" />
+   <METHOD NAME="javax.swing.DefaultListSelectionModel.addListSelectionListener" CBID="awt" CALLBACK="valueChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JList.addListSelectionListener" CBID="awt" CALLBACK="valueChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JMenuItem.addMenuDragMouseListener" CBID="awt" CALLBACK="menuDragMouseDragged menuDragMouseEntered menuDragMouseExited menuDragMouseReleased" ARGS="1" />
+   <METHOD NAME="javax.swing.JMenuItem.addMenuKeyListener" CBID="awt" CALLBACK="menuKeyPressed menuKeyReleased menyKeyTyped" ARGS="1" />
+   <METHOD NAME="javax.swing.JMenu.addMenuListener" CBID="awt" CALLBACK="menuCanceled menuDeselected menuSelected" ARGS="1" />
+   <METHOD NAME="javax.swing.JComboBox.addPopupMenuListener" CBID="awt" CALLBACK="popupMenuCanceled popupMenuWillBecomeInvisible popupMenuWillBecomeVisible" ARGS="1" />
+   <METHOD NAME="javax.swing.JPopupMenu.addPopupMenuListener" CBID="awt" CALLBACK="popupMenuCanceled popupMenuWillBecomeInvisible popupMenuWillBecomeVisible" ARGS="1" />
+   <METHOD NAME="javax.swing.JList$AccessibleJList$AccessibleJListChild.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.JTree$AccessibleJTree$AccessibleJTreeNode.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.JTable$AccessibleJTable$AccessibleJTableCell.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.UIDefaults.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.UIManager.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.AbstractAction.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.JComponent.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.JComponent$AccessibleJComponent.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.event.SwingPropertyChangeSupport.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.table.TableColumn.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.table.JTableHeader$AccessibleJTableHeader$AccessibleJTableHeaderEntry.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.tree.DefaultTreeSelectionModel.addPropertyChangeListener" NARG="1" CBID="awt" CALLBACK="propertyChange" ARGS="1" />
+   <METHOD NAME="javax.swing.JComponent.addPropertyChangeListener" NARG="2" CBID="awt" CALLBACK="propertyChange" ARGS="2" />
+   <METHOD NAME="javax.swing.event.SwingPropertyChangeSupport.addPropertyChangeListener" NARG="2" CBID="awt" CALLBACK="propertyChange" ARGS="2" />
+   <METHOD NAME="javax.swing.table.AbstractTableModel.addTableModelListener" CBID="awt" CALLBACK="tableChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.tree.DefaultTreeModel.addTreeModelListener" CBID="awt" CALLBACK="treeNodesChanged treeNodesInserted treeNodesRemoved treeStructureChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JTree.addTreeSelectionListener" CBID="awt" CALLBACK="valueChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.tree.DefaultTreeSelectionModel.addTreeSelectionListener" CBID="awt" CALLBACK="valueChanged" ARGS="1" />
+   <METHOD NAME="javax.swing.JTree.addTreeWillExpandListener" CBID="awt" CALLBACK="treeWillCollapse treeWillExpand" ARGS="1" />
+   <METHOD NAME="javax.swing.text.AbstractDocument.addUndoableEditListener" CBID="awt" CALLBACK="undoableEditHappened" ARGS="1" />
+   <METHOD NAME="javax.swing.undo.UndoableEditSupport.addUndoableEditListener" CBID="awt" CALLBACK="undoableEditHappened" ARGS="1" />
+   <METHOD NAME="javax.swing.JComponent.addVetoableChangeListener" CBID="awt" CALLBACK="vetoableChange" ARGS="1" NARG="1" />
+   <METHOD NAME='javax.swing.JEditorPane.getEditorKit' SCAN='true' />
+
+   <METHOD NAME="java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment"
+	RETURN="sun.awt.X11GraphicsEnvironment" />
+
+   <METHOD NAME="java.awt.Container.setVisible" STARTCB="awt" />
+   <METHOD NAME="edu.brown.cs.ivy.jflow.ChetDummy.callbackHandler_awt" THREADS="1" />
+
+   <METHOD NAME="org.apache.commons.logging.LogFactory.getFactory"
+	RETURN="org.apache.commons.logging.impl.LogFactoryImpl" />
+   <METHOD NAME="org.apache.commons.logging.LogFactory.getLog"
+	RETURN="org.apache.commons.logging.impl.SimpleLog" />
+
+   <METHOD NAME="java.util.Timer.schedule" CBID="timer" CALLBACK="run" ARGS="1" />
+   <METHOD NAME="java.util.Timer.scheduleAtFixedRate" CBID="timer" CALLBACK="run" ARGS="1" />
+   <CLASS NAME="java.util.TimeZone" />
+
+   <PACKAGE NAME="java.util.regex." />
+
+   <METHOD NAME="javax.media.opengl.GLDrawableFactory.getFactory"
+	RETURN="com.sun.opengl.impl.GLDrawableFactoryImpl" />
+   <CLASS NAME="javax.media.opengl.GLCanvas" USE='true' VOID='true' />
+   <PACKAGE NAME="net.java.games.jogl." USE="true" VOID="true" />
+   <PACKAGE NAME="javax.media.opengl." USE="true" VOID="true" />
+   <PACKAGE NAME="javax.sound.sampled." VOID="true" />
+
+   <PACKAGE NAME="java.util.logging." VOID='true' />
+   <PACKAGE NAME="java.security." VOID='true' />
+   <PACAKGE NAME="java.text." VOID='true' />
+
+   <CLASS NAME="com.sun.org.apache.internal.impl.XMLErrorReporter" VOID="1" />
+   <CLASS NAME="com.sun.org.apache.internal.impl.msg.XMLMessageFormatter" VOID="1" />
+   <METHOD NAME="java.lang.String.valueOf" />
+
+
+   <METHOD NAME="javax.xml.parsers.DocumentBuilderFactory.newDocumentBuilder"
+	RETURN="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl" />
+   <METHOD NAME="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl.newDocumentBuilder"
+	RETURN="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl" />
+   <METHOD NAME="com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse"
+	   RETURN="com.sun.org.apache.xerces.internal.dom.DocumentImpl" />
+
+   <PACKAGE NAME="com.ibm.jikesbt." />
+
+   <PACKAGE NAME="sun.jkernel." />
+
+   <DETAIL>
+      <SOURCE CLASS="java.lang.Exception" INHERIT='TRUE' MODE='FALSE' >
+	 <FROM LIBRARY='TRUE' />
+      </SOURCE>
+      <SOURCE CLASS="java.lang.Error" INHERIT='TRUE' MODE='FALSE' >
+	 <FROM LIBRARY='TRUE' />
+      </SOURCE>
+      <METHOD CLASS="java.lang.Thread" MODE='TRUE' />
+      <FIELD CLASS="java.lang.Thread" MODE='TRUE' />
+
+      <IGNORE>
+	 <SOURCE CLASS="java.util.Collection" INHERIT='TRUE' MODE='TRUE' >
+	    <FROM LIBRARY='TRUE' />
+	 </SOURCE>
+	 <METHOD CLASS="java.util.Collection" INHERIT='TRUE' MODE='TRUE' />
+	 <FIELD CLASS="java.util.Collection" INHERIT='TRUE' MODE='TRUE' />
+	 <METHOD CLASS="java.util.Map$Entry" INHERIT='TRUE' MODE='TRUE' />
+	 <FIELD CLASS="java.util.Map$Entry" INHERIT='TRUE' MODE='TRUE' />
+	 <METHOD CLASS="java.util.Iterator" INHERIT='TRUE' MODE='TRUE' />
+	 <FIELD CLASS="java.util.Iterator" INHERIT='TRUE' MODE='TRUE' />
+      </IGNORE>
+   </DETAIL>
+
+   <PROTOTYPES>
+      <PROTOTYPE CLASS="java.util.HashSet" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.LinkedHashSet" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.Vector" INHERIT='TRUE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.LinkedList" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.Collections$UnmodifiableList" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.Collections$UnmodifiableRandomAccessList" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.Collections$SynchronizedList" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.Collections$SynchronizedCollection" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.Collections$UnmodifiableCollection" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.Collections$SynchronizedRandomAccessList" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.ArrayList" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.TreeSet" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.Collections$UnmodifiableSet" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.Collections$SynchronizedSet" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.AbstractSet" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.AbstractCollection" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.HashMap" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoMap" />
+      <PROTOTYPE CLASS="java.util.WeakHashMap" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoMap" />
+      <PROTOTYPE CLASS="java.util.concurrent.ConcurrentHashMap" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoMap" />
+      <PROTOTYPE CLASS="java.util.LinkedHashMap" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoMap" />
+      <PROTOTYPE CLASS="java.util.Collections$UnmodifiableMap" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoMap" />
+      <PROTOTYPE CLASS="java.util.Collections$SynchronizedMap" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoMap" />
+      <PROTOTYPE CLASS="java.util.Hashtable" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoMap" />
+      <PROTOTYPE CLASS="java.util.AbstractMap" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoMap" />
+      <PROTOTYPE CLASS="java.util.TreeMap" INHERIT='FALSE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoMap" />
+      <PROTOTYPE CLASS="java.util.AbstractQueue" INHERIT='TRUE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+      <PROTOTYPE CLASS="java.util.PriorityQueue" INHERIT='TRUE'
+	    USE="edu.brown.cs.ivy.jflow.flow.ProtoCollection" />
+   </PROTOTYPES>
+
+</JFLOW>
+

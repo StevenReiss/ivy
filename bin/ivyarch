@@ -1,0 +1,60 @@
+#! /bin/tcsh -f
+
+set path = ( /bin /usr/bin /usr/ucb/bin )
+
+set a = "XXX"
+
+if ($?BROWN_IVY_ARCH) then
+   echo $BROWN_IVY_ARCH
+   exit
+endif
+
+if (-e /bin/uname || -e /usr/bin/uname) then
+   if (`uname` == SunOS) then
+      set a = "sol"
+   else if (`uname` == Linux) then
+      if ( -e /bin/arch ) then
+	 set a = `arch`
+      else
+	 set a = `uname -m`
+      endif
+   else if (`uname` == Darwin) then
+      if (`uname -r` =~ 1* ) then
+	 set a = mac64
+      else
+	 set a = `uname -m`
+	 if ("$a" == "Power Macintosh") then
+	    set a = ppc
+	 endif
+      endif
+   else if (`uname` == CYGWIN_NT-6.0) then
+      set a = 'cygwin'
+   else
+      set a = `uname`
+   endif
+endif
+
+
+if ($a == "XXX") then
+   if (! -e /bin/arch && -e /bin/machine) alias arch machine
+   set a = `arch`
+endif
+
+
+echo $a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

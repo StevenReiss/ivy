@@ -1,0 +1,326 @@
+/********************************************************************************/
+/*										*/
+/*		SwingFreezePane.java						*/
+/*										*/
+/*	Panel that will cache its contents to avoid redraw			*/
+/*										*/
+/********************************************************************************/
+/*	Copyright 1998 Brown University -- Steven P. Reiss		      */
+/*********************************************************************************
+ *  Copyright 1998, Brown University, Providence, RI.				 *
+ *										 *
+ *			  All Rights Reserved					 *
+ *										 *
+ *  Permission to use, copy, modify, and distribute this software and its	 *
+ *  documentation for any purpose other than its incorporation into a		 *
+ *  commercial product is hereby granted without fee, provided that the 	 *
+ *  above copyright notice appear in all copies and that both that		 *
+ *  copyright notice and this permission notice appear in supporting		 *
+ *  documentation, and that the name of Brown University not be used in 	 *
+ *  advertising or publicity pertaining to distribution of the software 	 *
+ *  without specific, written prior permission. 				 *
+ *										 *
+ *  BROWN UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS		 *
+ *  SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND		 *
+ *  FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL BROWN UNIVERSITY	 *
+ *  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY 	 *
+ *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,		 *
+ *  WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS		 *
+ *  ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 	 *
+ *  OF THIS SOFTWARE.								 *
+ *										 *
+ ********************************************************************************/
+
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingFreezePane.java,v 1.2 2010-07-07 01:37:51 spr Exp $ */
+
+
+/*********************************************************************************
+ *
+ * $Log: SwingFreezePane.java,v $
+ * Revision 1.2  2010-07-07 01:37:51  spr
+ * Add freeze option to freeze pane; caret listener for files.
+ *
+ * Revision 1.1  2010-07-02 23:30:46  spr
+ * Add freeze pane implementation.
+ *
+ *
+ ********************************************************************************/
+
+
+
+
+package edu.brown.cs.ivy.swing;
+
+
+
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.image.*;
+
+
+
+
+public class SwingFreezePane extends JPanel
+{
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Private Storage 							*/
+/*										*/
+/********************************************************************************/
+
+private int		paint_count;
+private Image		draw_image;
+private boolean 	image_valid;
+private int		count_threshold;
+private boolean is_forced_frozen;
+
+
+private static final int	REDRAW_THRESHOLD = 1;
+private static final int	MIN_AREA = 10000;
+private static final int	EXPLICIT_FREEZE = 100000;
+
+private static final long serialVersionUID = 1;
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Constructors								*/
+/*										*/
+/********************************************************************************/
+
+public SwingFreezePane(Component c)
+{
+   super(new GridLayout(1,1));
+
+   draw_image = null;
+   paint_count = 0;
+   image_valid = false;
+   is_forced_frozen = false;
+   count_threshold = REDRAW_THRESHOLD;
+
+   add(c);
+
+   invalidate();
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Access methods								*/
+/*										*/
+/********************************************************************************/
+
+public void invalidateFreeze()
+{
+   invalidateImage();
+}
+
+
+public void disableFreeze()
+{
+   paint_count = -1;
+}
+
+
+
+public void enableFreeze()
+{
+   paint_count = 0;
+}
+
+
+public void forceFreeze() {
+   if (!is_forced_frozen) {
+      setupImage();
+      is_forced_frozen = true;
+   }
+}
+
+public void unfreeze() {
+   is_forced_frozen = false;
+   paint_count = 0;
+   invalidateImage();
+}
+
+
+public void setThreshold(int ct)
+{
+   count_threshold = ct;
+}
+
+
+
+public boolean isValid()	{   return image_valid; }
+
+
+/********************************************************************************/
+/*										*/
+/*	Detection of updates							*/
+/*										*/
+/********************************************************************************/
+
+@Override public void repaint(long tm,int x,int y,int width,int height)
+{
+   invalidateImage();
+   super.repaint(tm,x,y,width,height);
+}
+
+
+
+private void invalidateImage()
+{
+   // if (image_valid) System.err.println("UNFREEZE " + getComponent(0));
+   if (paint_count >= EXPLICIT_FREEZE) return;
+
+   paint_count = 0;
+   image_valid = false;
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Drawing methods 							*/
+/*										*/
+/********************************************************************************/
+
+@Override public void paint(Graphics g)
+{
+
+   if (checkImage(g)) return;
+
+   super.paint(g);
+}
+
+
+
+@Override public void paintAll(Graphics g)
+{
+
+   if (checkImage(g)) return;
+
+   super.paintAll(g);
+}
+
+
+
+private boolean checkImage(Graphics g)
+{
+   if (is_forced_frozen) {
+      g.drawImage(draw_image, 0, 0, null);
+      return true;
+   }
+
+   if (paint_count < 0) return false;
+
+   RepaintManager rpm = RepaintManager.currentManager(getComponent(0));
+   if (!(rpm instanceof FreezeRepainter)) {
+      FreezeRepainter fp = new FreezeRepainter();
+      RepaintManager.setCurrentManager(fp);
+    }
+
+   Rectangle r = rpm.getDirtyRegion((JComponent) getComponent(0));
+   if (r.width != 0 || r.height != 0)
+      paint_count = 0;
+
+   if (image_valid) {
+      g.drawImage(draw_image,0,0,null);
+      return true;
+    }
+
+   if (!image_valid && ++paint_count > count_threshold) {
+      SwingUtilities.invokeLater(new ImageSetter());
+      // setupImage();
+    }
+
+   if (image_valid) g.drawImage(draw_image,0,0,null);
+
+   return image_valid;
+}
+
+
+
+
+private boolean setupImage()
+{
+   Component c = getComponent(0);
+   int wd = c.getWidth();
+   int ht = c.getHeight();
+
+   if (wd * ht < MIN_AREA) return false;
+   Point loc = MouseInfo.getPointerInfo().getLocation();
+   SwingUtilities.convertPointFromScreen(loc,this);
+
+   if (loc.x >= 0 && loc.x < getWidth() && loc.y >= 0 && loc.y < getHeight()) {
+      return false;
+    }
+
+   if (draw_image == null || draw_image.getWidth(this) != wd || draw_image.getHeight(this) != ht) {
+      // draw_image = c.createImage(wd,ht);
+      draw_image = new BufferedImage(wd,ht,BufferedImage.TYPE_4BYTE_ABGR);
+    }
+
+   Graphics2D g2 = (Graphics2D) draw_image.getGraphics();
+   g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+   g2.setColor(c.getBackground());
+   g2.fillRect(0,0,wd,ht);
+   g2.setColor(c.getForeground());
+
+   c.paintAll(g2);
+   g2.dispose();
+   // System.err.println("FREEZE " + c);
+   image_valid = true;
+
+   return true;
+}
+
+
+
+
+private class ImageSetter implements Runnable {
+
+   @Override public void run() {
+      setupImage();
+    }
+
+}	// end of inner class ImageSetter
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Repaint manager 							*/
+/*										*/
+/********************************************************************************/
+
+private static class FreezeRepainter extends RepaintManager {
+
+   @Override public void addDirtyRegion(JComponent c,int x,int y,int w,int h) {
+      super.addDirtyRegion(c,x,y,w,h);
+      for (Component p = c; p != null; p = p.getParent()) {
+	 if (p instanceof SwingFreezePane) {
+	    SwingFreezePane fp = (SwingFreezePane) p;
+	    fp.invalidateFreeze();
+	  }
+       }
+    }
+
+}	// end of inner class RepaintManager
+
+
+
+
+}	// end of class SwingFreezePane
+
+
+
+
+/* end of SwingFreezePane.java */

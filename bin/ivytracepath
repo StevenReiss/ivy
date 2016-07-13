@@ -1,0 +1,26 @@
+#! /bin/tcsh -f
+
+if ($?BROWN_IVY_ROOT == 0) then
+   set x0 = `zsh -c "whence $0"`
+   set x1 = ${x0:h}
+   set x2 = $x1/ivysetupenv
+   source $x2
+endif
+
+
+if ($?BROWN_IVY_TRACE) then
+else
+   set x0 = `hostname`
+   set x1 = `grep "^$x0" $BROWN_IVY_IVY/lib/tracefiles`
+   if ( "X$x1" == "X" ) then
+      set x1 = "`grep '^*' $BROWN_IVY_IVY/lib/tracefiles`"
+    endif
+
+   set x2 = `echo "$x1" | awk '{ print $2 }'`
+
+   setenv BROWN_IVY_TRACE "$x2"
+endif
+
+
+echo $BROWN_IVY_TRACE
+
