@@ -16,3 +16,5 @@ To build:
 
 6)  make newmachine
 
+7)  make
+
