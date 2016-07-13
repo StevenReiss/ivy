@@ -24,7 +24,6 @@ SFILES= \
    JflowSource.java \
    JflowSourceSet.java \
    JflowValue.java \
-   JflowTest.java \
 
 
 SUBDIRS= flow model
@@ -39,19 +38,4 @@ jflowdummy.jar: JflowDummy.java
 
 SLIBLINKS= jflow.xml jflowivy.xml
 
-
-test1: all
-	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest >/ws/volfred/spr/test1.out 2>&1
-
-test2: all
-	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest x >/ws/volfred/spr/test2.out 2>&1
-
-test3: all
-	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest x x >/ws/volfred/spr/test3.out 2>&1
-
-test4: all
-	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest x x x >/ws/volfred/spr/test4.out 2>&1
-
-test5: all
-	ivyjava -d64 -Xmx6000m edu.brown.cs.ivy.jflow.JflowTest x x x x >/ws/volfred/spr/test5.out 2>&1
 

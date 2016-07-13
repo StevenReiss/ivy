@@ -43,7 +43,7 @@ SETUPCOMPS= lib bin data
 OTHERCOMPS= include
 
 C++_COMPONENTS= stdlib mince native
-JCOMPONENTS= exec file swing xml cinder petal pebble mint jflow jcomp jcode limbo project
+JCOMPONENTS= exec file swing xml petal pebble mint jflow jcomp jcode limbo project
 
 COMPONENTS= $(JCOMPONENTS) $(C++_COMPONENTS)
 
@@ -234,7 +234,6 @@ javadoc:
 		edu.brown.cs.ivy.file \
 		edu.brown.cs.ivy.swing \
 		edu.brown.cs.ivy.xml \
-		edu.brown.cs.ivy.cinder \
 		edu.brown.cs.ivy.petal \
 		edu.brown.cs.ivy.pebble \
 		edu.brown.cs.ivy.mint \
