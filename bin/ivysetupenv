@@ -191,7 +191,7 @@ endif
 set xxx = `echo $CLASSPATH | fgrep org.eclipse.jdt.debug`
 if ( "X$xxx" == X && $?ECLIPSEROOT == 0 ) then
    set eclipsejar =
-   foreach i ($BORWN_IVY_IVY/lib/eclipsejar/*.jar)
+   foreach i ($BROWN_IVY_IVY/lib/eclipsejar/*.jar)
       set eclipsejar = ${eclipsejar}:$i
    end
    setenv ECLIPSEPATH "$eclipsejar"
