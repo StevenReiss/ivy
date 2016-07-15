@@ -18,3 +18,4 @@ To build:
 
 7)  make
 
+In general, to use ivy, you should source ivysetupenv before use.
