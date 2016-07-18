@@ -283,7 +283,7 @@ GLIB= -lGLU -lGL -L/usr/X11R6/lib -lX11 -lXmu
 GLLIBDIR=/usr/lib
 GLINCL=/usr/include/GL
 NO64=1
-J6FLAGS= -source 1.6 -target 1.6 -bootclasspath /pro/java/linux/jdk1.6/jre/lib/rt.jar
+J6FLAGS= -source 1.6 -target 1.6
 endif
 
 
@@ -315,7 +315,7 @@ GLIB= -lGLU -lGL -L/usr/X11R6/lib -lX11 -lXmu
 GLLIBDIR=/usr/lib
 GLINCL=/usr/include/GL
 NO64=1
-J6FLAGS= -source 1.6 -target 1.6 -bootclasspath /pro/java/linux/jdk1.6/jre/lib/rt.jar
+J6FLAGS= -source 1.6 -target 1.6
 endif
 
 
@@ -426,7 +426,7 @@ JINCL= include
 MACHINCLUDES= -I/pro/include -I/usr/local/include -I/sw/include -I/sw/include/xml
 MACHINCLUDES= -I/pro/include -I/usr/local/include
 XERCESLIB= -L/pro/lib -lxerces-c
-J6FLAGS= -source 1.6 -target 1.6 -bootclasspath $(JHOME)/jre/lib/rt.jar:$(JHOME)/jre/lib/jce.jar
+J6FLAGS= -source 1.6 -target 1.6
 JDEPS= $(BROWN_IVY_IVY)/bin/jdeps
 endif
 
