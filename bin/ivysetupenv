@@ -206,9 +206,10 @@ endif
 
 set xxx = `echo $CLASSPATH | fgrep org.eclipse.jdt.debug`
 if ( "X$xxx" == X ) then
-   set eclipse = ~spr/eclipse43/eclipse
    if ( $?ECLIPSEROOT == 1) then
       set eclipse = $ECLIPSEROOT
+   else
+      set eclipse = ~spr/eclipse43/eclipse
    endif
    set nonomatch
    set eclipsejar =
