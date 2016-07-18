@@ -52,7 +52,7 @@ DEFAULT_JAVAC= javac
 DEFAULT_JAVACC= javacc
 DEFAULT_JJTREE= jjtree
 DEFAULT_RMIC = rmic -keep -depend
-
+JDEPS= jdeps
 
 JAVACOMPILE= $(DEFAULTJAVAC) $(JAVAFLAGS)
 
@@ -427,6 +427,7 @@ MACHINCLUDES= -I/pro/include -I/usr/local/include -I/sw/include -I/sw/include/xm
 MACHINCLUDES= -I/pro/include -I/usr/local/include
 XERCESLIB= -L/pro/lib -lxerces-c
 J6FLAGS= -source 1.6 -target 1.6 -bootclasspath $(JHOME)/jre/lib/rt.jar:$(JHOME)/jre/lib/jce.jar
+JDEPS= $(BROWN_IVY_IVY)/bin/jdeps
 endif
 
 

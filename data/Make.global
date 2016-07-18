@@ -561,7 +561,7 @@ javadep:
 
 xjavadep:
 ifneq ($(words $(JFILES)),0)
-	-$(BROWN_IVY_IVY)/bin/jdeps -d $(JAVAPATH) $(JFILES) > javadep1
+	-$(JDEPS) -d $(JAVAPATH) $(JFILES) > javadep1
 	sed -e 's^$(JBINDIR)/^^g' < javadep1 > javadep2
 	sed -e 's^$(BROWN_IVY_ROOT)^\$$(BROWN_IVY_ROOT)^g' < javadep2 > javadep
 	rm -f javadep1 javadep2
