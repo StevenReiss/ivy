@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowTest.java,v 1.12 2015/11/20 15:09:13 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/Attic/JflowTest.java,v 1.14 2016/07/22 13:26:38 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: JflowTest.java,v $
+ * Revision 1.14  2016/07/22 13:26:38  spr
+ * Update makefiles for external use. Fix test to compile.
+ *
  * Revision 1.12  2015/11/20 15:09:13  spr
  * Reformatting.
  *

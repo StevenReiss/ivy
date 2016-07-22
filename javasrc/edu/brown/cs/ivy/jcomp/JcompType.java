@@ -565,6 +565,25 @@ private static JcompType findCommonParent(JcompTyper typr,JcompType jt1,JcompTyp
 }
 
 
+private static JcompType findCommonParent(JcompTyper typer,List<JcompType> base)
+{
+   if (base.size() == 0) {
+      return typer.findSystemType("java.lang.Object");
+    }
+   for (JcompType t1 = base.get(0); t1 != null; t1 = t1.getSuperType()) {
+      boolean compat = true;
+      for (int i = 1; i < base.size(); ++i) {
+          compat &= base.get(i).isCompatibleWith(t1);
+       }
+      if (compat) return t1;
+    }
+   
+   // should we find all common interfaces here???
+   
+   return typer.findSystemType("java.lang.Object");  
+}
+
+
 
 
 /********************************************************************************/
@@ -1397,13 +1416,13 @@ private static class EnumType extends UnknownClassInterfaceType {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
       if (js != null) return js;
       if (id.equals("values") && atyps.getComponents().size() == 0) {
-	 if (values_method == null) {
-	    JcompType typ1 = JcompType.createArrayType(this);
-	    JcompType typ2 = JcompType.createMethodType(typ1,new ArrayList<JcompType>(),false);
-	    int acc = Modifier.PUBLIC | Modifier.STATIC;
-	    values_method = JcompSymbol.createKnownMethod("values",typ2,this,acc,null,false);
-	  }
-	 return values_method;
+         if (values_method == null) {
+            JcompType typ1 = JcompType.createArrayType(this);
+            JcompType typ2 = JcompType.createMethodType(typ1,new ArrayList<JcompType>(),false);
+            int acc = Modifier.PUBLIC | Modifier.STATIC;
+            values_method = JcompSymbol.createKnownMethod("values",typ2,this,acc,null,false);
+          }
+         return values_method;
        }
       return null;
     }
@@ -1461,10 +1480,11 @@ private static class ParamType extends JcompType {
    @Override public boolean isCompatibleWith(JcompType jt) {
       if (jt == this) return true;
       if (jt.isParameterizedType()) {
-	 if (!getBaseType().isCompatibleWith(jt.getBaseType())) return false;
-	 ParamType pt = (ParamType) jt;
-	 if (type_params.equals(pt.type_params)) return true;
-	 return false;
+         if (!getBaseType().isCompatibleWith(jt.getBaseType())) return false;
+         ParamType pt = (ParamType) jt;
+         if (type_params.equals(pt.type_params)) return true;
+         if (type_params.isEmpty()) return true;
+         return false;
        }
       return getBaseType().isCompatibleWith(jt);
     }
@@ -1721,6 +1741,12 @@ private static class UnionType extends JcompType {
 
    @Override public String getJavaTypeName() {
       return null;
+    }
+   
+   @Override protected JcompSymbol lookupMethod(JcompTyper typer,
+         String id,JcompType atyps,JcompType basetype) {
+      JcompType jt = findCommonParent(typer,base_types);
+      return jt.lookupMethod(typer,id,atyps,basetype);
     }
 
 }	// end of inner class UnionType

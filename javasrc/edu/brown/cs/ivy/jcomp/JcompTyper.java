@@ -731,7 +731,7 @@ private class TypeSetter extends ASTVisitor {
       JcompType out = outer_type;
       JcompType jt = JcompAst.getJavaType(t);
       outer_type = jt;
-
+   
       canbe_type = true;
       visitItem(t.getSuperclassType());
       visitList(t.typeParameters());
@@ -739,28 +739,28 @@ private class TypeSetter extends ASTVisitor {
       visitItem(t.getName());
       canbe_type = false;
       if (t.modifiers().contains(Modifier.ABSTRACT)) {
-	 jt.setAbstract(true);
+         jt.setAbstract(true);
        }
-
+   
       if (type_prefix != null) nm = type_prefix + "." + nm;
       Type sty = t.getSuperclassType();
       if (sty != null && jt != null) jt.setSuperType(JcompAst.getJavaType(sty));
       for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-	 Type ity = (Type) it.next();
-	 if (jt != null) jt.addInterface(JcompAst.getJavaType(ity));
+         Type ity = (Type) it.next();
+         if (jt != null) jt.addInterface(JcompAst.getJavaType(ity));
        }
-
+   
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
-
+   
       if (out != null && jt != null) jt.setOuterType(out);
-
+   
       outer_type = out;
-
+   
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-
+   
       return false;
     }
 
@@ -845,14 +845,14 @@ private class TypeSetter extends ASTVisitor {
       visitItem(t.getType());
       visitList(t.typeArguments());
       canbe_type = false;
-
+   
       JcompType jt0 = JcompAst.getJavaType(t.getType());
       List<JcompType> ljt = new ArrayList<JcompType>();
       for (Iterator<?> it = t.typeArguments().iterator(); it.hasNext(); ) {
-	 Type t1 = (Type) it.next();
-	 JcompType jt2 = JcompAst.getJavaType(t1);
-	 if (jt2 == null) jt2 = JcompType.createErrorType();
-	 ljt.add(jt2);
+         Type t1 = (Type) it.next();
+         JcompType jt2 = JcompAst.getJavaType(t1);
+         if (jt2 == null) jt2 = JcompType.createErrorType();
+         ljt.add(jt2);
        }
       JcompType jt1 = JcompType.createParameterizedType(jt0,ljt);
       setJavaType(t,jt1);
@@ -862,12 +862,12 @@ private class TypeSetter extends ASTVisitor {
    @Override public void endVisit(TypeParameter t) {
       JcompType vart = JcompAst.getJavaType(t);
       for (Object o : t.typeBounds()) {
-	 Type tt = (Type) o;
-	 JcompType jt = JcompAst.getJavaType(tt);
-	 if (jt != null) {
-	    if (jt.isInterfaceType()) vart.addInterface(jt);
-	    else vart.setSuperType(jt);
-	  }
+         Type tt = (Type) o;
+         JcompType jt = JcompAst.getJavaType(tt);
+         if (jt != null) {
+            if (jt.isInterfaceType()) vart.addInterface(jt);
+            else vart.setSuperType(jt);
+          }
        }
     }
 

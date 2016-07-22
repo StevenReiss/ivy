@@ -38,11 +38,14 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebServlet.java,v 1.7 2013/11/15 02:39:13 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebServlet.java,v 1.8 2016/07/22 13:27:00 spr Exp $ */
 
 /*********************************************************************************
  *
  * $Log: MintWebServlet.java,v $
+ * Revision 1.8  2016/07/22 13:27:00  spr
+ * Update makefiles for external use.  Remove annotation to get jdeps to work.
+ *
  * Revision 1.7  2013/11/15 02:39:13  spr
  * Fix imports
  *

@@ -1,12 +1,14 @@
 IVY is a general support library for both Java and C++.  It contains various
 packages that are of general use.
 
+Linux packages needed: tcsh, zsh, xercesc
+
 
 To build:
 
 1)  cd to directory ivy (this directoy)
 
-2)  run csh
+2)  run tcsh
 
 3)  cd bin
 

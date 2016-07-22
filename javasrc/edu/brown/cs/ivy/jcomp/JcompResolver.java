@@ -469,29 +469,33 @@ private class RefPass extends ASTVisitor {
    public @Override boolean visit(QualifiedName n) {
       JcompType nt = JcompAst.getJavaType(n);
       if (nt != null) {
-	 JcompAst.setExprType(n,nt);
-	 return false;
+         JcompAst.setExprType(n,nt);
+         return false;
        }
       Name qn = n.getQualifier();
       JcompType qt = JcompAst.getJavaType(qn);
       if (qt == null) {
-	 qn.accept(this);
-	 qt = JcompAst.getExprType(qn);
+         qn.accept(this);
+         qt = JcompAst.getExprType(qn);
+       }
+      JcompSymbol typesym = qt.getDefinition();
+      if (typesym != null && JcompAst.getReference(qn) == null) {
+         JcompAst.setReference(qn,typesym);
        }
       JcompSymbol js = null;
       if (qt != null) js = qt.lookupField(type_data,n.getName().getIdentifier());
       if (js == null && qt != null && (qt.isArrayType() || qt.isErrorType()) &&
-	     n.getName().getIdentifier().equals("length")) {
-	 JcompAst.setExprType(n,findType("int"));
-	 return false;
+             n.getName().getIdentifier().equals("length")) {
+         JcompAst.setExprType(n,findType("int"));
+         return false;
        }
       else if (js == null) {
-	 JcompAst.setExprType(n,findType(TYPE_ERROR));
+         JcompAst.setExprType(n,findType(TYPE_ERROR));
        }
       else {
-	 JcompAst.setReference(n.getName(),js);
-	 JcompType t = js.getType();
-	 JcompAst.setExprType(n,t);
+         JcompAst.setReference(n.getName(),js);
+         JcompType t = js.getType();
+         JcompAst.setExprType(n,t);
        }
       return false;
     }
@@ -552,15 +556,15 @@ private class RefPass extends ASTVisitor {
       Expression e = n.getExpression();
       boolean isstatic = false;
       if (e != null) {
-	 e.accept(this);
-	 bt = JcompAst.getJavaType(e);
-	 if (bt == null) bt = JcompAst.getExprType(e);
-	 else isstatic = true;
+         e.accept(this);
+         bt = JcompAst.getJavaType(e);
+         if (bt == null) bt = JcompAst.getExprType(e);
+         else isstatic = true;
        }
       List<JcompType> atyp = buildArgumentList(n.arguments(),true);
       lookupMethod(bt,atyp,n,n.getName(),null,isstatic);
       // might want to use outer types if this failed
-
+   
       return false;
     }
 
@@ -808,9 +812,9 @@ private class RefPass extends ASTVisitor {
       Name nm = n.getQualifier();
       JcompType jt = cur_type;
       if (nm != null) {
-	 jt = JcompAst.getJavaType(nm);
-	 if (jt == null) jt = JcompAst.getExprType(nm);
-	 if (jt == null) jt = findType(TYPE_ERROR);
+         jt = JcompAst.getJavaType(nm);
+         if (jt == null) jt = JcompAst.getExprType(nm);
+         if (jt == null) jt = findType(TYPE_ERROR);
        }
       JcompAst.setExprType(n,jt);
     }
@@ -886,56 +890,56 @@ private class RefPass extends ASTVisitor {
    private void lookupMethod(JcompType bt,List<JcompType> atyp,ASTNode n,SimpleName nm,String id,boolean isstatic) {
       JcompType mtyp = null;
       try {
-	 mtyp = JcompType.createMethodType(null,atyp,false);
+         mtyp = JcompType.createMethodType(null,atyp,false);
        }
       catch (Throwable t) {
-	 System.err.println("PROBLEM CREATING METHOD TYPE: " + t);
-	 System.err.println("CASE: " + bt + " " + nm + " " + n);
-	 t.printStackTrace();
-	 mtyp = findType(TYPE_ERROR);
+         System.err.println("PROBLEM CREATING METHOD TYPE: " + t);
+         System.err.println("CASE: " + bt + " " + nm + " " + n);
+         t.printStackTrace();
+         mtyp = findType(TYPE_ERROR);
        }
-
+   
       if (id == null && nm != null) id = nm.getIdentifier();
-
+   
       JcompSymbol js = null;
       if (bt != null) js = callLookupMethod(bt,id,mtyp);
       if (js != null) {
-	 js = checkProtections(js,bt,n);
+         js = checkProtections(js,bt,n);
        }
       if (js != null && bt != null && isstatic && !js.isStatic()) {
-	 if (!bt.isCompatibleWith(js.getClassType())) {
-	    System.err.println("JCOMP: Attempt to call non-static method statically");
-	    // js = null;
-	  }
+         if (!bt.isCompatibleWith(js.getClassType())) {
+            System.err.println("JCOMP: Attempt to call non-static method statically");
+            // js = null;
+          }
        }
       if (js != null) {
-	 if (nm != null) JcompAst.setReference(nm,js);
-	 JcompAst.setReference(n,js);
-	 JcompType rt = js.getType().getBaseType();
-	 if (rt == null) {
-	    if (id != null && id.equals("<init>")) rt = findType("void");
-	    else rt = findType(TYPE_ERROR);
-	  }
-	 if (rt.isParameterizedType()) {
-	    boolean usesvar = false;
-	    for (JcompType prt : rt.getComponents()) {
-	       if (prt.isTypeVariable()) usesvar = true;
-	     }
-	    if (usesvar) {
-	       rt = rt.getBaseType();
-	     }
-	  }
-	 else if (rt.isTypeVariable()) {
-	    // handle variable type
-	  }
-	 if (n instanceof ClassInstanceCreation) {
-	    ClassInstanceCreation cic = (ClassInstanceCreation) n;
-	    JcompAst.setExprType(n,JcompAst.getJavaType(cic.getType()));
-	  }
-	 else JcompAst.setExprType(n,rt);
+         if (nm != null) JcompAst.setReference(nm,js);
+         JcompAst.setReference(n,js);
+         JcompType rt = js.getType().getBaseType();
+         if (rt == null) {
+            if (id != null && id.equals("<init>")) rt = findType("void");
+            else rt = findType(TYPE_ERROR);
+          }
+         if (rt.isParameterizedType()) {
+            boolean usesvar = false;
+            for (JcompType prt : rt.getComponents()) {
+               if (prt.isTypeVariable()) usesvar = true;
+             }
+            if (usesvar) {
+               rt = rt.getBaseType();
+             }
+          }
+         else if (rt.isTypeVariable()) {
+            // handle variable type
+          }
+         if (n instanceof ClassInstanceCreation) {
+            ClassInstanceCreation cic = (ClassInstanceCreation) n;
+            JcompAst.setExprType(n,JcompAst.getJavaType(cic.getType()));
+          }
+         else JcompAst.setExprType(n,rt);
        }
       else {
-	 JcompAst.setExprType(n,findType(TYPE_ERROR));
+         JcompAst.setExprType(n,findType(TYPE_ERROR));
        }
     }
 
@@ -1005,12 +1009,12 @@ private class RefPass extends ASTVisitor {
 
    private JcompSymbol callLookupMethod(JcompType bt,String id,JcompType mtyp) {
       try {
-	 return bt.lookupMethod(type_data,id,mtyp);
+         return bt.lookupMethod(type_data,id,mtyp);
        }
       catch (Throwable t) {
-	 System.err.println("JCOMP: PROBLEM LOOKING UP " + bt + " " + id + " " + mtyp);
-	 t.printStackTrace();
-	 return null;
+         System.err.println("JCOMP: PROBLEM LOOKING UP " + bt + " " + id + " " + mtyp);
+         t.printStackTrace();
+         return null;
        }
     }
 
