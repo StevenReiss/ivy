@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.22 2016/07/13 13:03:28 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.23 2016/09/30 20:45:22 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFile.java,v $
+ * Revision 1.23  2016/09/30 20:45:22  spr
+ * Add new utility methods.
+ *
  * Revision 1.22  2016/07/13 13:03:28  spr
  * Add other file read/write routines
  *
@@ -460,6 +463,63 @@ public static void copyFile(File sf,File df,Map<String,String> vals) throws IOEx
    r.close();
 }
 
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Path management methods                                                 */
+/*                                                                              */
+/********************************************************************************/
+
+public static String getRelativePath(File f,File dir)
+{
+   String p1 = f.getAbsolutePath();
+   String p2 = dir.getAbsolutePath();
+   if (p1.equals(p2)) return "";
+   
+   if (p2.length() > p1.length()) {
+      String p3 = p1;
+      p1 = p2;
+      p2 = p3;
+    }
+   else if (p1.length() == p2.length()) return null;
+   
+   if (!p1.startsWith(p2)) return null;
+   char ch = p1.charAt(p2.length());
+   if (ch != File.separatorChar) return null;
+   
+   return p1.substring(p2.length()+1);
+}
+
+
+
+public static File getCommonParent(File f1,File f2)
+{
+   List<File> path1 = new ArrayList<File>();
+   List<File> path2 = new ArrayList<File>();
+   
+   path1.add(f1);
+   while (f1.getParentFile() != null) {
+      f1 = f1.getParentFile();
+      path1.add(f1);
+    }
+   
+   path2.add(f2);
+   while (f2.getParentFile() != null) {
+      f2 = f2.getParentFile();
+      path2.add(f2);
+    }
+   
+   File par = null;
+   for (int i = 0; ; ++i) {
+      if (i >= path1.size() || i >= path2.size()) break;
+      File p1 = path1.get(path1.size()-i-1);
+      File p2 = path2.get(path2.size()-i-1);
+      if (!p1.equals(p2)) break;
+      par = p1;
+    }
+   return par;
+}
 
 
 

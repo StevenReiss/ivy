@@ -79,12 +79,15 @@
  * @author Scott Violet
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.15 2015/11/20 15:09:26 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.16 2016/09/30 20:45:37 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingTreeTable.java,v $
+ * Revision 1.16  2016/09/30 20:45:37  spr
+ * Fix problem with default models.
+ *
  * Revision 1.15  2015/11/20 15:09:26  spr
  * Reformatting.
  *
@@ -623,7 +626,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 
 
    @Override public Object getRoot()			{ return model_root; }
-   @Override public boolean isLeaf(Object node)		{ return getChildCount(node) == 0; }
+   @Override public boolean isLeaf(Object node)         { return getChildCount(node) == 0; }
 
    @Override public void valueForPathChanged(TreePath path, Object newValue) {}
 
@@ -703,26 +706,29 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
     }
 
    protected void fireTreeStructureChanged(Object source, Object[] path,
-					      int[] childIndices,
-					      Object[] children) {
+        					      int[] childIndices,
+        				      Object[] children) {
       // Guaranteed to return a non-null array
       Object[] listeners = listenerList.getListenerList();
       TreeModelEvent e = null;
       // Process the listeners last to first, notifying
       // those that are interested in this event
       for (int i = listeners.length-2; i>=0; i-=2) {
-	 if (listeners[i]==TreeModelListener.class) {
-	    // Lazily create the event:
-	    if (e == null)
-	       e = new TreeModelEvent(source, path, childIndices, children);
-	    ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
-	  }
+         if (listeners[i]==TreeModelListener.class) {
+            // Lazily create the event:
+            if (e == null)
+               e = new TreeModelEvent(source, path, childIndices, children);
+            ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
+          }
        }
     }
 
    // TreeTableModel interace implementations
 
-   @Override public Class<?> getColumnClass(int column) { return Object.class; }
+   @Override public Class<?> getColumnClass(int column) {
+      if (column == 0) return SwingTreeTable.TreeTableModel.class;
+      return Object.class; 
+      }
 
    @Override public boolean isCellEditable(Object node, int column) {
       return getColumnClass(column) == TreeTableModel.class;

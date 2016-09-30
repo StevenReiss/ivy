@@ -590,29 +590,29 @@ private class RefPass extends ASTVisitor {
       JcompType xt = null;
       Expression e = n.getExpression();
       if (e != null) {
-	 xt = JcompAst.getJavaType(e);
-	 if (xt == null) xt = JcompAst.getExprType(e);
+         xt = JcompAst.getJavaType(e);
+         if (xt == null) xt = JcompAst.getExprType(e);
        }
-
+   
       JcompType bt = JcompAst.getJavaType(n.getType());
       if (bt == null) {
-	 bt = JcompType.createErrorType();
-	 JcompAst.setJavaType(n.getType(),bt);
+         bt = JcompType.createErrorType();
+         JcompAst.setJavaType(n.getType(),bt);
        }
       List<JcompType> atys = buildArgumentList(n.arguments(),false);
       JcompAst.setExprType(n,bt);		      // set default type
       lookupMethod(bt,atys,n,null,"<init>",false);    // this can reset the type
       JcompType rt = JcompAst.getExprType(n);
       if (rt.isErrorType() && atys.size() == 0) {
-	 boolean havecnst = false;
-	 if (bt.getScope() != null) {
-	    for (JcompSymbol xjs : bt.getScope().getDefinedMethods()) {
-	       if (xjs.getName().equals("<init>")) havecnst = true;
-	     }
-	  }
-	 if (!havecnst) {
-	    JcompAst.setExprType(n,bt);  // handle default constructor
-	  }
+         boolean havecnst = false;
+         if (bt.getScope() != null) {
+            for (JcompSymbol xjs : bt.getScope().getDefinedMethods()) {
+               if (xjs.getName().equals("<init>")) havecnst = true;
+             }
+          }
+         if (!havecnst) {
+            JcompAst.setExprType(n,bt);  // handle default constructor
+          }
        }
    }
 
