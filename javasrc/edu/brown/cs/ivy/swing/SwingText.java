@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.16 2015/11/20 15:09:26 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.17 2016/10/15 00:29:03 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingText.java,v $
+ * Revision 1.17  2016/10/15 00:29:03  spr
+ * Handle parent on mac; fix selection model for tree + table.
+ *
  * Revision 1.16  2015/11/20 15:09:26  spr
  * Reformatting.
  *
@@ -224,7 +227,7 @@ public static void fixKeyBindings(Keymap k)
    int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
    if (mask != Event.META_MASK) return;
-   
+
    for (KeyStroke ks : k.getBoundKeyStrokes()) {
       if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK || ks.getModifiers() == InputEvent.CTRL_MASK) {
 	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
@@ -233,27 +236,30 @@ public static void fixKeyBindings(Keymap k)
 	 k.addActionForKeyStroke(nks,act);
        }
     }
-   
+
    k.setDefaultAction(new MacKeyTypedAction());
+
+   Keymap par = k.getResolveParent();
+   if (par != null && par != k) fixKeyBindings(par);
 }
 
 
-public static void fixKeyBindings(InputMap m) 
+public static void fixKeyBindings(InputMap m)
 {
    int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
    if (mask != Event.META_MASK) return;
-   
+
    for (KeyStroke ks : m.keys()) {
       if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK || ks.getModifiers() == InputEvent.CTRL_MASK) {
-         KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
-         Object act = m.get(ks);
-         if (act instanceof Action) {
-            m.remove(ks);
-            m.put(nks,act);
-         }
+	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
+	 Object act = m.get(ks);
+	 if (act instanceof Action) {
+	    m.remove(ks);
+	    m.put(nks,act);
+	 }
        }
-    }   
+    }
 }
 
 

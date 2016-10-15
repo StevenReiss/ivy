@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/pebble/PebbleEditor.java,v 1.15 2015/11/20 15:09:22 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/pebble/PebbleEditor.java,v 1.16 2016/10/15 00:28:04 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PebbleEditor.java,v $
+ * Revision 1.16  2016/10/15 00:28:04  spr
+ * Spacing change.
+ *
  * Revision 1.15  2015/11/20 15:09:22  spr
  * Reformatting.
  *
@@ -429,86 +432,86 @@ private static class MenuBar extends SwingMenuBar implements ActionListener {
    @Override public void actionPerformed(ActionEvent e) {
       String btn = e.getActionCommand();
       if (btn.equals("Quit")) {
-	 System.exit(0);
+         System.exit(0);
        }
       else if (btn.equals("Close")) {
-	 if (!for_editor.base_model.supportsSave()) for_editor.base_model.handleSave(for_editor,for_window);
-	 for_window.setVisible(false);
+         if (!for_editor.base_model.supportsSave()) for_editor.base_model.handleSave(for_editor,for_window);
+         for_window.setVisible(false);
        }
       else if (btn.equals("Abort")) {
-	 for_window.setVisible(false);
+         for_window.setVisible(false);
        }
       else if (btn.equals("Cut")) {
-	 for_editor.editor_pane.commandCut();
+         for_editor.editor_pane.commandCut();
        }
       else if (btn.equals("Copy")) {
-	 for_editor.editor_pane.commandCopy();
+         for_editor.editor_pane.commandCopy();
        }
       else if (btn.equals("Paste")) {
-	 for_editor.editor_pane.commandPaste();
+         for_editor.editor_pane.commandPaste();
        }
       else if (btn.equals("Clear")) {
-	 for_editor.editor_pane.commandClear();
-	 for_editor.edit_model.clear();
+         for_editor.editor_pane.commandClear();
+         for_editor.edit_model.clear();
        }
       else if (btn.equals("Select All")) {
-	 for_editor.editor_pane.commandSelectAll();
+         for_editor.editor_pane.commandSelectAll();
        }
       else if (btn.equals("Clear Selection")) {
-	 for_editor.editor_pane.commandDeselectAll();
+         for_editor.editor_pane.commandDeselectAll();
        }
       else if (btn.equals("Undo")) {
-	 for_editor.editor_pane.commandUndo();
+         for_editor.editor_pane.commandUndo();
        }
       else if (btn.equals("Redo")) {
-	 for_editor.editor_pane.commandRedo();
+         for_editor.editor_pane.commandRedo();
        }
       else if (btn.equals("Select All")) {
-	 for_editor.editor_pane.commandSelectAll();
+         for_editor.editor_pane.commandSelectAll();
        }
       else if (btn.equals("Clear Selections")) {
-	 for_editor.editor_pane.commandDeselectAll();
+         for_editor.editor_pane.commandDeselectAll();
        }
       else if (btn.equals("Level Layout")) {
-	 for_editor.layout_method = new PetalLevelLayout(for_editor.editor_pane);
-	 for_editor.editor_pane.commandLayout(for_editor.layout_method);
+         for_editor.layout_method = new PetalLevelLayout(for_editor.editor_pane);
+         for_editor.editor_pane.commandLayout(for_editor.layout_method);
        }
       else if (btn.equals("Relaxation Layout")) {
-	 for_editor.layout_method = new PetalRelaxLayout(for_editor.editor_pane);
-	 for_editor.editor_pane.commandLayout(for_editor.layout_method);
+         for_editor.layout_method = new PetalRelaxLayout(for_editor.editor_pane);
+         for_editor.editor_pane.commandLayout(for_editor.layout_method);
        }
       else if (btn.equals("Show Self Loops")) {
-	 JCheckBoxMenuItem jcb = (JCheckBoxMenuItem) e.getSource();
-	 for_editor.setShowSelfArcs(jcb.getState());
+         JCheckBoxMenuItem jcb = (JCheckBoxMenuItem) e.getSource();
+         for_editor.setShowSelfArcs(jcb.getState());
        }
       else if (btn.equals("Show Default Arcs")) {
-	 JCheckBoxMenuItem jcb = (JCheckBoxMenuItem) e.getSource();
-	 for_editor.show_default = jcb.getState();
-	 for_editor.fixLayout();
-	 for_editor.editor_pane.update();
+         JCheckBoxMenuItem jcb = (JCheckBoxMenuItem) e.getSource();
+         for_editor.show_default = jcb.getState();
+         for_editor.fixLayout();
+         for_editor.editor_pane.update();
        }
       else if (btn.equals("Automata Properties")) {
-	 for_editor.automata_dialog.process(for_editor.editor_pane);
+         for_editor.automata_dialog.process(for_editor.editor_pane);
        }
       else if (btn.equals("Normalize Automata")) {
-	 for_editor.edit_model.normalizeAutomata();
-	 for_editor.fixLayout();
-	 for_editor.editor_pane.update();
+         for_editor.edit_model.normalizeAutomata();
+         for_editor.fixLayout();
+         for_editor.editor_pane.update();
        }
       else if (btn.equals("New")) {
-	 for_editor.reset();
-	 for_editor.automata_dialog.process(for_editor.editor_pane);
+         for_editor.reset();
+         for_editor.automata_dialog.process(for_editor.editor_pane);
       }
       else if (btn.equals("Open")) {
-	 for_editor.loadFile(for_window);
+         for_editor.loadFile(for_window);
        }
       else if (btn.equals("Save")) {
-	 for_editor.base_model.handleSave(for_editor,for_window);
-	 for_editor.editor_pane.update();
+         for_editor.base_model.handleSave(for_editor,for_window);
+         for_editor.editor_pane.update();
        }
       else if (btn.equals("New State")) {
-	  for_editor.edit_model.createState(null);
-	  for_editor.editor_pane.update();
+          for_editor.edit_model.createState(null);
+          for_editor.editor_pane.update();
       }
     }
 
@@ -536,9 +539,9 @@ private class AutomataDialog {
    void process(Component c) {
       layoutPanel();
       int sts = JOptionPane.showOptionDialog(c,message_box,null,
-						JOptionPane.OK_CANCEL_OPTION,
-						JOptionPane.PLAIN_MESSAGE,
-						null,null,null);
+        					JOptionPane.OK_CANCEL_OPTION,
+        					JOptionPane.PLAIN_MESSAGE,
+        					null,null,null);
       if (sts == 0) setValues();
       message_box = null;
       attr_map = null;

@@ -79,12 +79,15 @@
  * @author Scott Violet
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.16 2016/09/30 20:45:37 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.17 2016/10/15 00:29:04 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingTreeTable.java,v $
+ * Revision 1.17  2016/10/15 00:29:04  spr
+ * Handle parent on mac; fix selection model for tree + table.
+ *
  * Revision 1.16  2016/09/30 20:45:37  spr
  * Fix problem with default models.
  *
@@ -297,6 +300,24 @@ public void addTreeExpansionListener(TreeExpansionListener tel)
 public void removeTreeExpansionListener(TreeExpansionListener tel)
 {
    getTree().removeTreeExpansionListener(tel);
+}
+
+
+@Override public void setSelectionMode(int type) {
+   super.setSelectionMode(type);
+   int tmode = 0;
+   switch (type) {
+      case ListSelectionModel.MULTIPLE_INTERVAL_SELECTION :
+         tmode = TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION;
+         break;
+      case ListSelectionModel.SINGLE_INTERVAL_SELECTION :
+         tmode = TreeSelectionModel.SINGLE_TREE_SELECTION;
+         break;
+      case ListSelectionModel.SINGLE_SELECTION :
+         tmode = TreeSelectionModel.SINGLE_TREE_SELECTION;
+         break;
+    }
+   tree.getSelectionModel().setSelectionMode(tmode);
 }
 
 
