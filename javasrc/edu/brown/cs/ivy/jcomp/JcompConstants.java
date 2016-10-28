@@ -36,7 +36,7 @@
 package edu.brown.cs.ivy.jcomp;
 
 
-interface JcompConstants {
+public interface JcompConstants {
 
 
 

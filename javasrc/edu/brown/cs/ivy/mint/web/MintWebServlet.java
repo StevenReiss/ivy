@@ -38,11 +38,14 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebServlet.java,v 1.8 2016/07/22 13:27:00 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebServlet.java,v 1.9 2016/10/28 18:31:43 spr Exp $ */
 
 /*********************************************************************************
  *
  * $Log: MintWebServlet.java,v $
+ * Revision 1.9  2016/10/28 18:31:43  spr
+ * Add annotation back in for now.
+ *
  * Revision 1.8  2016/07/22 13:27:00  spr
  * Update makefiles for external use.  Remove annotation to get jdeps to work.
  *
@@ -82,7 +85,7 @@ import java.io.IOException;
 import java.util.*;
 
 
-// @WebServlet(description = "mint web interconnect", urlPatterns = { "/mint" })
+@WebServlet(description = "mint web interconnect", urlPatterns = { "/mint" })
 public class MintWebServlet extends HttpServlet implements MintWebConstants
 {
 

@@ -169,6 +169,18 @@ JcompScopeFixed()
    return rslt;
 }
 
+
+@Override void getFields(Map<String,JcompType> flds)
+{
+   for (Map.Entry<String,JcompSymbol> ent : var_names.entrySet()) {
+      String fnm = ent.getKey();
+      JcompSymbol fld = ent.getValue();
+      if (fld.isFieldSymbol()) {
+         flds.put(fld.getFullName(),fld.getType());
+       }
+    }
+}
+
 @Override synchronized Set<JcompSymbol> lookupAbstracts(JcompTyper typer)
 {
    Set<JcompSymbol> rslt = new HashSet<JcompSymbol>();

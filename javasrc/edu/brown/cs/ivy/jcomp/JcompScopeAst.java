@@ -117,6 +117,11 @@ private JcompScopeLookup getLookupScope()	      { return lookup_scope; }
    return lookup_scope.lookupStatics(id,this);
 }
 
+@Override void getFields(Map<String,JcompType> flds)
+{
+   lookup_scope.getFields(flds);
+}
+
 @Override Set<JcompSymbol> lookupAbstracts(JcompTyper typer)
 {
    return lookup_scope.lookupAbstracts(typer);

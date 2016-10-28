@@ -89,6 +89,7 @@ abstract void defineMethod(JcompSymbol js);
 
 abstract JcompSymbol lookupMethod(String id,JcompType aty);
 abstract List<JcompSymbol> lookupStatics(String id);
+abstract void getFields(Map<String,JcompType> flds);
 abstract Set<JcompSymbol> lookupAbstracts(JcompTyper typer);
 
 public Collection<JcompSymbol> getDefinedMethods()	      { return null; }

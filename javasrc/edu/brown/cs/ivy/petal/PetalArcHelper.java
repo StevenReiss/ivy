@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalArcHelper.java,v 1.16 2015/11/20 15:09:23 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalArcHelper.java,v 1.17 2016/10/28 18:31:56 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalArcHelper.java,v $
+ * Revision 1.17  2016/10/28 18:31:56  spr
+ * Clean up possible concurrent modification exception.
+ *
  * Revision 1.16  2015/11/20 15:09:23  spr
  * Reformatting.
  *
@@ -328,6 +331,7 @@ public void setColor(Color c)
    arc_points = new Point[ct];
    ct = 0;
 
+   if (source_node == null || target_node == null) return;
    Component sc = source_node.getComponent();
    Component tc = target_node.getComponent();
 
