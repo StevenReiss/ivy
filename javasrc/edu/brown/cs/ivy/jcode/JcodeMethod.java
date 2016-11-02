@@ -76,7 +76,7 @@ private Collection<JcodeTryCatchBlock> try_blocks;
 
 JcodeMethod(JcodeFactory bf,JcodeClass cls,int a,String n,String d,String s,String [] ex)
 {
-   super(a,n,d,s,ex);
+   super(Opcodes.ASM5,a,n,d,s,ex);
    bcode_factory = bf;
    in_class = cls;
    match_name = null;
@@ -179,7 +179,7 @@ public List<JcodeDataType> getExceptionTypes()
 {
    List<JcodeDataType> rslt = new ArrayList<JcodeDataType>();
    for (int i = 0; i < exceptions.size(); ++i) {
-      String enm = (String) exceptions.get(i);
+      String enm = exceptions.get(i);
       JcodeDataType fdt = bcode_factory.findClassType(enm);
       if (fdt != null) rslt.add(fdt);
     }
@@ -191,7 +191,7 @@ public List<JcodeClass> getExceptionClasses()
 {
    List<JcodeClass> rslt = new ArrayList<JcodeClass>();
    for (int i = 0; i < exceptions.size(); ++i) {
-      String enm = (String) exceptions.get(i);
+      String enm = exceptions.get(i);
       JcodeClass fdt = bcode_factory.findClass(enm);
       if (fdt != null) rslt.add(fdt);
     }
@@ -312,11 +312,11 @@ public int getIndexOf(JcodeInstruction ins)
 }
 
 
-@Override public void visitMethodInsn(int opc,String o,String n,String d)
+@Override public void visitMethodInsn(int opc,String o,String n,String d,boolean itf)
 {
    in_class.getFactory().noteClass(o);
    in_class.getFactory().noteType(d);
-   super.visitMethodInsn(opc,o,n,d);
+   super.visitMethodInsn(opc,o,n,d,itf);
 }
 
 

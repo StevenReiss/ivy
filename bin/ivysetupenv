@@ -1,4 +1,4 @@
-#! /bin/tcsh -f 
+#! /bin/tcsh -f
 
 if ($?BROWN_IVY_IVY == 1) then
 else
@@ -173,9 +173,9 @@ if ($?BROWN_IVY_DBMS == 0) then
    endif
 endif
 
-set xxx = `echo $CLASSPATH | fgrep asm4.jar`
+set xxx = `echo $CLASSPATH | fgrep asm5.jar`
 if ( "X$xxx" == X ) then
-   setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/asm4.jar"
+   setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/asm5.jar"
 endif
 
 set xxx = `echo $CLASSPATH | fgrep javax.servlet.jar`

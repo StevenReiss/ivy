@@ -18,7 +18,7 @@
  *										 *
  ********************************************************************************/
 
-/* SVN: $Id: JcompProjectImpl.java,v 1.4 2016/05/10 13:43:30 spr Exp $ */
+/* SVN: $Id: JcompProjectImpl.java,v 1.5 2016/11/02 19:02:00 spr Exp $ */
 
 
 
@@ -44,7 +44,7 @@ private JcompContext	  base_context;
 private boolean 	  is_resolved;
 private Set<JcompType>	  all_types;
 
-	
+
 
 
 /********************************************************************************/
@@ -86,6 +86,8 @@ void addFile(JcompFile jf)
    jf.setRoot(this);
 }
 
+
+
 @Override public Collection<JcompSemantics> getSources()
 {
    return new ArrayList<JcompSemantics>(file_nodes);
@@ -124,7 +126,7 @@ synchronized void setResolved(boolean fg,JcompTyper typer)
     }
 }
 
-	
+
 
 synchronized boolean isResolved()
 {

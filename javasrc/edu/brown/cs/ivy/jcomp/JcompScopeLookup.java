@@ -252,7 +252,7 @@ List<JcompSymbol> lookupStatics(String id,JcompScope jscp)
 void getFields(Map<String,JcompType> flds) 
 {
    for (Map.Entry<String,List<VarElement>> ent : var_names.entrySet()) {
-      String fnm = ent.getKey();
+
       for (VarElement ve : ent.getValue()) {
          JcompSymbol js = ve.getSymbol();
          if (js.isFieldSymbol()) {

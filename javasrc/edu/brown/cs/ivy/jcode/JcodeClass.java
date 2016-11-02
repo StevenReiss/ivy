@@ -67,7 +67,7 @@ private JcodeFileInfo from_file;
 
 JcodeClass(JcodeFactory bf,JcodeFileInfo fi,boolean proj)
 {
-   super();
+   super(Opcodes.ASM5);
    bcode_factory = bf;
    from_file = fi;
    base_type = null;
@@ -360,7 +360,6 @@ public Collection<JcodeMethod> findChildMethods(String nm,String desc,boolean ch
 }
 
 
-@SuppressWarnings("unchecked")
 @Override public MethodVisitor visitMethod(int a,String n,String d,String sgn,String [] ex)
 {
    if (ex != null) {
@@ -375,7 +374,6 @@ public Collection<JcodeMethod> findChildMethods(String nm,String desc,boolean ch
 }
 
 
-@SuppressWarnings("unchecked")
 @Override public FieldVisitor visitField(int a,String n,String d,String sgn,Object val)
 {
    bcode_factory.noteType(d);

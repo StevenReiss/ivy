@@ -35,7 +35,6 @@
 package edu.brown.cs.ivy.jcomp;
 
 import edu.brown.cs.ivy.exec.IvyExecQuery;
-
 import org.objectweb.asm.*;
 
 import java.io.*;
@@ -57,7 +56,7 @@ class JcompContext implements JcompConstants {
 
 private Map<String,AsmClass>	known_types;
 private Map<String,JcompType>	special_types;
-private List<JarFile>		base_files;
+private List<ClassPathEntry>	base_files;
 private JcompContext		parent_context;
 
 
@@ -83,11 +82,11 @@ JcompContext(JcompContext par,String jarname)
   parent_context = par;
 
   try {
-     JarFile jf = new JarFile(jarname);
-     base_files.add(jf);
+     addClassPathEntry(jarname);
    }
   catch (IOException e) {
      System.err.println("JCOMP: can't open file " + jarname + ": " + e);
+     e.printStackTrace();
      return;
    }
 }
@@ -100,11 +99,11 @@ JcompContext(JcompContext par,Iterable<String> jarnames)
 
    for (String jarname : jarnames) {
       try {
-	 JarFile jf = new JarFile(jarname);
-	 base_files.add(jf);
+	 addClassPathEntry(jarname);
        }
       catch (IOException e) {
 	 System.err.println("JCOMP: can't open file " + jarname + ": " + e);
+	 e.printStackTrace();
 	 return;
        }
     }
@@ -118,7 +117,7 @@ private JcompContext()
    special_types = new HashMap<String,JcompType>();
 
    parent_context = null;
-   base_files = new ArrayList<JarFile>();
+   base_files = new ArrayList<ClassPathEntry>();
 }
 
 
@@ -779,8 +778,7 @@ private void computeBasePath(String javahome)
 
    for (File f : base) {
       try {
-	 JarFile jf = new JarFile(f);
-	 base_files.add(jf);
+	 addClassPathEntry(f);
        }
       catch (IOException e) { }
     }
@@ -795,8 +793,8 @@ private void computeBasePath(String javahome)
 
 public synchronized boolean contains(String name)
 {
-   for (JarFile jf : base_files) {
-      if (jf.getEntry(name) != null) return true;
+   for (ClassPathEntry cpe : base_files) {
+      if (cpe.contains(name)) return true;
     }
 
    return false;
@@ -806,11 +804,68 @@ public synchronized boolean contains(String name)
 
 public synchronized InputStream getInputStream(String name)
 {
-   for (JarFile jf : base_files) {
-      ZipEntry ent = jf.getEntry(name);
+   for (ClassPathEntry cpe : base_files) {
+      InputStream ins = cpe.getInputStream(name);
+      if (ins != null) return ins;
+    }
+
+   return null;
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Methods for class path entries						*/
+/*										*/
+/********************************************************************************/
+
+private void addClassPathEntry(String fil) throws IOException
+{
+   addClassPathEntry(new File(fil));
+}
+
+
+
+private void addClassPathEntry(File f) throws IOException
+{
+   if (!f.exists()) return;
+   if (f.isDirectory()) {
+      base_files.add(new DirClassPathEntry(f));
+    }
+   else {
+      base_files.add(new JarClassPathEntry(new JarFile(f)));
+    }
+}
+
+
+
+private abstract static class ClassPathEntry {
+
+   abstract boolean contains(String name);
+   abstract InputStream getInputStream(String name);
+
+}	// end of inner class ClassPathEntry
+
+
+private static class JarClassPathEntry extends ClassPathEntry {
+
+   private JarFile jar_file;
+
+   JarClassPathEntry(JarFile jf) {
+      jar_file = jf;
+    }
+
+   @Override boolean contains(String name) {
+      if (jar_file.getEntry(name) != null) return true;
+      return false;
+    }
+
+   @Override InputStream getInputStream(String name) {
+      ZipEntry ent = jar_file.getEntry(name);
       if (ent != null) {
 	 try {
-	    return jf.getInputStream(ent);
+	    return jar_file.getInputStream(ent);
 	  }
 	 catch (ZipException e) {
 	    System.err.println("JCOMP: Problem with system zip file: " + e);
@@ -819,10 +874,51 @@ public synchronized InputStream getInputStream(String name)
 	    System.err.println("JCOMP: Problem opening system jar entry: " + e);
 	  }
        }
+      return null;
     }
 
-   return null;
-}
+}	// end of inner class JarClassPathEntry
+
+
+
+private static class DirClassPathEntry extends ClassPathEntry {
+
+   private File root_dir;
+
+   DirClassPathEntry(File dir) {
+      root_dir = dir;
+    }
+
+   @Override boolean contains(String name) {
+      File fil = findFile(name);
+      if (fil == null) return false;
+      return true;
+    }
+
+   @Override InputStream getInputStream(String name) {
+      File fil = findFile(name);
+      if (fil == null) return null;
+      try {
+	 return new FileInputStream(fil);
+       }
+      catch (IOException e) {
+	 System.err.println("JCOMP: Probleam reading file " + fil);
+       }
+      return null;
+    }
+
+   private File findFile(String name) {
+      StringTokenizer tok = new StringTokenizer(name,"/");
+      File rslt = root_dir;
+      while (tok.hasMoreTokens()) {
+	 String fnm = tok.nextToken();
+	 rslt = new File(rslt,fnm);
+       }
+      if (rslt.exists()) return rslt;
+      return null;
+    }
+
+}	// end of inner class DirClassPathEntry
 
 
 

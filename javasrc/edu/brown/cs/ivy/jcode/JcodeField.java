@@ -36,7 +36,7 @@
 package edu.brown.cs.ivy.jcode;
 
 import org.objectweb.asm.tree.*;
-
+import org.objectweb.asm.Opcodes;
 import java.lang.reflect.*;
 
 
@@ -64,7 +64,7 @@ private JcodeClass	in_class;
 
 JcodeField(JcodeClass cls,int a,String n,String d,String s,Object val)
 {
-   super(a,n,d,s,val);
+   super(Opcodes.ASM5,a,n,d,s,val);
 
    in_class = cls;
 }
