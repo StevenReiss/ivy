@@ -1,6 +1,3 @@
-
-# RCS: $Header: /pro/spr_cvs/pro/ivy/native/src/Make.data,v 1.2 2016/07/22 13:27:54 spr Exp $
-
 #
 # Native -- native code for various IVY packages
 #
@@ -29,7 +26,7 @@ DYNLIB= $(XMLCLIB)
 X64=1
 
 ALL= libnative.$(LIBTYPE)
-	
+
 opt:	allopt libnativeopt.$(LIBTYPE)
 
 prof:	allprof libnativeprof.$(LIBTYPE)
