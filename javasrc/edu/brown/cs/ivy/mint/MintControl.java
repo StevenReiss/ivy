@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintControl.java,v 1.6 2012-06-14 12:39:43 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintControl.java,v 1.7 2017/02/15 02:09:15 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintControl.java,v $
+ * Revision 1.7  2017/02/15 02:09:15  spr
+ * Formatting
+ *
  * Revision 1.6  2012-06-14 12:39:43  spr
  * Check connections.
  *

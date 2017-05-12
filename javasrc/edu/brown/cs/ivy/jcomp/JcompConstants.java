@@ -70,8 +70,6 @@ String TYPE_ANY_CLASS = "*ANY*";
 String TYPE_ERROR = "*ERROR*";
 
 
-
-
 }	// end of interface JcompConstants
 
 

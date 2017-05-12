@@ -18,7 +18,7 @@
  *										 *
  ********************************************************************************/
 
-/* SVN: $Id: JcompSearch.java,v 1.1 2014/11/07 15:47:21 spr Exp $ */
+/* SVN: $Id: JcompSearch.java,v 1.2 2017/02/17 21:17:50 spr Exp $ */
 
 
 
@@ -436,11 +436,11 @@ private class FindLocationVisitor extends ASTVisitor {
       JcompSymbol js = JcompAst.getDefinition(n);
       if (js == null) js = JcompAst.getReference(n);
       if (js == null) {
-	 JcompType jt = JcompAst.getJavaType(n);
-	 if (jt != null) js = jt.getDefinition();
+         JcompType jt = JcompAst.getJavaType(n);
+         if (jt != null) js = jt.getDefinition();
       }
       if (js != null) {
-	 match_symbols.add(js);
+         match_symbols.add(js);
        }
       return false;
     }

@@ -1,9 +1,9 @@
 /********************************************************************************/
-/*                                                                              */
-/*              JcompSymbolKind.java                                            */
-/*                                                                              */
-/*      Types of symbols supported by the compiler                              */
-/*                                                                              */
+/*										*/
+/*		JcompSymbolKind.java						*/
+/*										*/
+/*	Types of symbols supported by the compiler				*/
+/*										*/
 /********************************************************************************/
 /*	Copyright 2014 Brown University -- Steven P. Reiss		      */
 /*********************************************************************************
@@ -49,9 +49,10 @@ public enum JcompSymbolKind
    FIELD,
    PACKAGE,
    ANNOTATION,
+   ANNOTATION_MEMBER,
    LOCAL,
-   
-}       // end of enum JcompSymbolKind
+
+}	// end of enum JcompSymbolKind
 
 
 

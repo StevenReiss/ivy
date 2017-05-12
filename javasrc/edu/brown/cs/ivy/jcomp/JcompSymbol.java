@@ -109,6 +109,12 @@ static JcompSymbol createSymbol(VariableDeclarationFragment n,JcompTyper typer)
 }
 
 
+static JcompSymbol createNestedThis(JcompType cls,JcompType outer)
+{
+   return new NestedThisSymbol(outer,cls);
+}
+
+
 
 
 static JcompSymbol createSymbol(EnumConstantDeclaration n)
@@ -508,6 +514,10 @@ private static class KnownField extends JcompSymbol {
    @Override public boolean isFinal()		{ return is_final; }
    @Override public JcompType getClassType()	{ return class_type; }
 
+   @Override public String getFullName() {
+      return class_type.getName() + "." + field_name;
+    }
+
 }	// end of subtype KnownField
 
 
@@ -620,6 +630,59 @@ private static class VariableSymbol extends JcompSymbol {
 
 
 
+
+private static class NestedThisSymbol extends JcompSymbol {
+   
+   private JcompType java_type;
+   private JcompType class_type;
+   
+   NestedThisSymbol(JcompType t,JcompType clstyp) {
+      java_type = t;
+      class_type = clstyp;
+    }
+   
+   @Override public String getName()	        { return "this$0"; }
+   @Override public JcompType getType()         { return java_type; }
+   
+   @Override public boolean isFieldSymbol()     { return true; }
+   
+   @Override public JcompSymbolKind getSymbolKind() {
+      return JcompSymbolKind.FIELD;
+    }
+   
+   @Override public JcompType getClassType()    { return class_type; }
+   
+   @Override public int getModifiers() {
+      return Modifier.PROTECTED;
+    }
+   
+   @Override public boolean isStatic() {
+      return false;
+    }
+   @Override public boolean isPrivate() {
+      return false;
+    }
+   @Override public boolean isPublic() {
+      return false;
+    }
+   @Override public boolean isProtected() {
+      return true;
+    }
+   @Override public boolean isFinal() {
+      return false;
+    }
+   
+   @Override public String getHandle(String proj) {
+      String pfx = proj + "#";
+      JcompType jt = getType();
+      if (jt == null) return pfx + getName();
+      return pfx + jt.getJavaTypeName() + "." + getName();
+    }
+   
+}	// end of subclass NestedThisSymbol
+
+
+
 /********************************************************************************/
 /*										*/
 /*	EnumSymbol -- enumeration constant					*/
@@ -692,7 +755,7 @@ private static class MethodSymbol extends JcompSymbol {
       is_used = false;
       symbol_mods = ast_node.getModifiers();
       if (JcompAst.isInInterface(n)) {
-	 symbol_mods |= Modifier.PUBLIC | Modifier.ABSTRACT;
+         symbol_mods |= Modifier.PUBLIC | Modifier.ABSTRACT;
        }
     }
 
@@ -705,9 +768,9 @@ private static class MethodSymbol extends JcompSymbol {
       return ast_node.getName().getIdentifier();
     }
 
-   @Override public JcompType getType() 	{ return JcompAst.getJavaType(ast_node); }
+   @Override public JcompType getType() 		{ return JcompAst.getJavaType(ast_node); }
 
-   @Override public ASTNode getDefinitionNode() { return ast_node; }
+   @Override public ASTNode getDefinitionNode() 	{ return ast_node; }
    @Override public ASTNode getNameNode()		{ return ast_node; }
 
    @Override public boolean isMethodSymbol()		{ return true; }

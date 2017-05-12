@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/limbo/LimboFactory.java,v 1.8 2011-05-27 19:32:41 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/limbo/LimboFactory.java,v 1.9 2017/04/14 23:39:02 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: LimboFactory.java,v $
+ * Revision 1.9  2017/04/14 23:39:02  spr
+ * Fix ups to support limbo from bedrock.
+ *
  * Revision 1.8  2011-05-27 19:32:41  spr
  * Change copyrights.
  *

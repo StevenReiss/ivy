@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.71 2016/05/10 13:43:21 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.72 2017/05/12 20:54:03 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyXml.java,v $
+ * Revision 1.72  2017/05/12 20:54:03  spr
+ * Unsyncrhonize parser
+ *
  * Revision 1.71  2016/05/10 13:43:21  spr
  * Clean up code.
  *
@@ -337,14 +340,14 @@ public synchronized static Document convertStringToDocument(String s)
 }
 
 
-public synchronized static Document convertStringToDocument(String s,boolean nsa)
+public static Document convertStringToDocument(String s,boolean nsa)
 {
    if (s == null) return null;
 
    Document xdoc = null;
    XmlParser xp = null;
    try {
-      // xp = (nsa ? ns_xml_parser : xml_parser);
+      // xp = (nsa ? ns_xml_parser : xml_parser);  // requires rtn to be synchronized
       if (xp == null) xp = new XmlParser(nsa);
     }
    catch (Throwable t) {

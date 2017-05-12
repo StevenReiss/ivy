@@ -166,9 +166,20 @@ JcompSymbol defineKnownMethod(JcompTyper typer,String cls,String id,JcompType ar
    List<AsmMethod> aml = ac.findMethods(typer,id,argtype,ctyp);
    if (aml == null || aml.size() == 0) return null;
 
-   AsmMethod am = aml.get(0);
+   AsmMethod best = null;
+   int bestscore = 0;
+   for (AsmMethod am1 : aml) {
+      int score = am1.isCompatibleWith(typer,argtype);
+      if (score < 0) continue;
+      if (best == null || score < bestscore) {
+	 best = am1;
+	 bestscore = score;
+       }
+    }
 
-   return am.createMethod(typer,argtype,ctyp);
+   if (best == null) return null;
+
+   return best.createMethod(typer,argtype,ctyp);
 }
 
 
@@ -350,7 +361,7 @@ private class KnownClassVisitor extends ClassVisitor {
    @Override public void visitAttribute(Attribute attr) 			{ }
    @Override public void visitEnd()						{ }
    @Override public void visitInnerClass(String n,String o,String i,int acc)	{ }
-   @Override public void visitOuterClass(String own,String nam,String d)		{ }
+   @Override public void visitOuterClass(String own,String nam,String d)	{ }
    @Override public void visitSource(String src,String dbg)			{ }
 
    @Override public FieldVisitor visitField(int access,String name,String desc,String sign,Object val) {
@@ -438,12 +449,50 @@ private JcompType getAsmType(JcompTyper typer,Type t)
 	 break;
       case Type.ARRAY :
 	 JcompType jt = getAsmType(typer,t.getElementType());
-	 for (int i = 0; i < t.getDimensions(); ++i) jt = typer.findArrayType(jt);
+	 if (jt == null) {
+	    System.err.println("JCOMP: Problem finding array base type for " + t + " " +
+				  t.getElementType() + " " + t.getDimensions());
+	    return null;
+	  }
+	 for (int i = 0; i < t.getDimensions(); ++i) {
+	    jt = typer.findArrayType(jt);
+	    if (jt == null) break;
+	  }
+	 if (jt == null) {
+	    System.err.println("JCOMP: Problem finding array type for " + t + " " +
+				  t.getElementType() + " " + t.getDimensions());
+	  }
 	 return jt;
+    }
+
+   JcompType njt = typer.findSystemType(tnm);
+
+   if (njt == null) {
+      System.err.println("JCOMP: Problem finding system type: " + tnm);
+      njt = typer.findSystemType("java.lang.Object");
     }
 
    return typer.findSystemType(tnm);
 }
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Compatability matching							*/
+/*										*/
+/********************************************************************************/
+
+private static int score(JcompType jt0,JcompType jt1)
+{
+   if (jt0 == jt1) return 0;
+   else if (jt0.isNumericType() && jt1.isNumericType()) return 1;
+   else if (jt0.isClassType() && !jt1.isClassType()) return 100;
+   else if (jt1.isClassType() && !jt0.isClassType()) return 100;
+   else if (jt0.isClassType() && jt1.isClassType()) return 10;
+   return 5;
+}
+
 
 
 
@@ -463,7 +512,7 @@ private class AsmClass {
    private List<AsmField> field_data;
    private List<AsmMethod> method_data;
    private JcompType base_type;
-   private boolean all_defined;
+   private Set<JcompScope> all_defined;
 
    AsmClass(String nm,int acc,String sgn,String sup,String [] ifc) {
       class_name = nm;
@@ -474,37 +523,58 @@ private class AsmClass {
       base_type = null;
       field_data = new ArrayList<AsmField>();
       method_data = new ArrayList<AsmMethod>();
-      all_defined = false;
+      all_defined = null;
     }
 
    synchronized JcompType getJcompType(JcompTyper typer) {
       if (base_type == null) {
-	 String jnm = class_name.replace('/','.');
-	 jnm = jnm.replace('$','.');
-	 if ((access_info & Opcodes.ACC_INTERFACE) != 0) {
-	    base_type = JcompType.createKnownInterfaceType(jnm);
-	  }
-	 else {
-	    base_type = JcompType.createKnownType(jnm);
-	    if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
-	       base_type.setAbstract(true);
-	     }
-	  }
-	 base_type.setContextType(false);
-	 if (super_name != null) {
-	    JcompType sjt = getAsmTypeName(typer,super_name);
-	    if (!sjt.isKnownType()) {
-	       System.err.println("SUPER TYPE IS UNKNOWN");
-	     }
-	    if (sjt != null) base_type.setSuperType(sjt);
-	  }
-	 if (iface_names != null) {
-	    for (String inm : iface_names) {
-	       JcompType ijt = getAsmTypeName(typer,inm);
-	       if (ijt != null) base_type.addInterface(ijt);
-	     }
-	  }
-	 base_type.setDefinition(JcompSymbol.createSymbol(base_type));
+         String jnm = class_name.replace('/','.');
+         jnm = jnm.replace('$','.');
+         if ((access_info & Opcodes.ACC_INTERFACE) != 0) {
+            base_type = JcompType.createKnownInterfaceType(jnm);
+          }
+         else if ((access_info & Opcodes.ACC_ANNOTATION) != 0) {
+            base_type = JcompType.createKnownAnnotationType(jnm);
+            if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
+               base_type.setAbstract(true);
+             }
+          }
+         else {
+            base_type = JcompType.createKnownType(jnm);
+            if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
+               base_type.setAbstract(true);
+             }
+          }
+         int idx = class_name.lastIndexOf("/");
+         if (idx < 0) idx = 0;
+         int idx1 = class_name.indexOf("$",idx);
+         if (idx1 > 0) {
+            String ojtnm = class_name.substring(0,idx1);
+            JcompType oty = getAsmTypeName(typer,ojtnm);
+            if (oty == null || !oty.isKnownType()) {
+               System.err.println("OUTER TYPE IS UNKNOWN");
+             }
+            if (oty != null) base_type.setOuterType(oty);
+            if (idx1 > 0 && (access_info & Opcodes.ACC_STATIC) == 0) {
+               base_type.setInnerNonStatic(true);
+             }
+          }
+         
+         base_type.setContextType(false);
+         if (super_name != null) {
+            JcompType sjt = getAsmTypeName(typer,super_name);
+            if (sjt == null || !sjt.isKnownType()) {
+               System.err.println("SUPER TYPE IS UNKNOWN");
+             }
+            if (sjt != null) base_type.setSuperType(sjt);
+          }
+         if (iface_names != null) {
+            for (String inm : iface_names) {
+               JcompType ijt = getAsmTypeName(typer,inm);
+                     if (ijt != null) base_type.addInterface(ijt);
+             }
+          }
+         base_type.setDefinition(JcompSymbol.createSymbol(base_type));
        }
       typer.fixJavaType(base_type);
       return base_type;
@@ -535,23 +605,23 @@ private class AsmClass {
 
    AsmField findField(JcompTyper typer,String id) {
       for (AsmField af : field_data) {
-	 if (af.getName().equals(id)) return af;
+         if (af.getName().equals(id)) return af;
        }
       if (super_name != null) {
-	 AsmClass scl = findKnownType(typer,super_name);
-	 if (scl != null) {
-	    AsmField af = scl.findField(typer,id);
-	    if (af != null) return af;
-	  }
+         AsmClass scl = findKnownType(typer,super_name);
+         if (scl != null) {
+            AsmField af = scl.findField(typer,id);
+            if (af != null) return af;
+          }
        }
       if (iface_names != null) {
-	 for (String inm : iface_names) {
-	    AsmClass icl = findKnownType(typer,inm);
-	    if (icl != null) {
-	       AsmField af = icl.findField(typer,id);
-	       if (af != null) return af;
-	     }
-	  }
+         for (String inm : iface_names) {
+            AsmClass icl = findKnownType(typer,inm);
+            if (icl != null) {
+               AsmField af = icl.findField(typer,id);
+               if (af != null) return af;
+             }
+          }
        }
       return null;
     }
@@ -559,7 +629,7 @@ private class AsmClass {
    List<AsmMethod> findMethods(JcompTyper typer,String id,JcompType argtyp,JcompType ctyp) {
       List<AsmMethod> rslt = new ArrayList<AsmMethod>();
       for (AsmMethod am : method_data) {
-	 if ((id == null || am.getName().equals(id)) && am.isCompatibleWith(typer,argtyp))
+	 if ((id == null || am.getName().equals(id)) && am.isCompatibleWith(typer,argtyp) >= 0)
 	    rslt.add(am);
        }
       if (super_name != null && rslt.isEmpty()) {
@@ -590,21 +660,40 @@ private class AsmClass {
     }
 
    synchronized void defineAll(JcompTyper typer,JcompScope scp) {
-      if (all_defined) return;
-      all_defined = true;
+      if (all_defined !=  null && all_defined.contains(scp)) return;
+      if (all_defined == null) all_defined = new HashSet<JcompScope>();
+      all_defined.add(scp);
+   
       for (AsmField af : field_data) {
-	 if (scp.lookupVariable(af.getName()) == null) {
-	    JcompSymbol js = af.createField(typer);
-	    scp.defineVar(js);
-	  }
+         if (scp.lookupVariable(af.getName()) == null) {
+            JcompSymbol js = af.createField(typer);
+            scp.defineVar(js);
+          }
+         else {
+            JcompSymbol js = af.createField(typer);
+            scp.defineDupVar(js);
+          }
        }
       for (AsmMethod am : method_data) {
-	 JcompType atyp = am.getMethodType(typer,null);
-	 if (scp.lookupMethod(am.getName(),atyp) == null) {
-	    JcompSymbol js = am.createMethod(typer,null,getJcompType(typer));
-	    scp.defineMethod(js);
-	  }
+         JcompType atyp = am.getMethodType(typer,null);
+         if (scp.lookupMethod(am.getName(),atyp) == null) {
+            JcompSymbol js = am.createMethod(typer,null,getJcompType(typer));
+            scp.defineMethod(js);
+          }
        }
+      if (super_name != null) {
+         AsmClass scl = findKnownType(typer,super_name);
+         if (scl != null) scl.defineAll(typer,scp);
+       }
+      if (iface_names != null) {
+         for (String inm : iface_names) {
+            AsmClass icl = findKnownType(typer,inm);
+            if (icl != null) {
+               icl.defineAll(typer,scp);
+             }
+          }
+       }
+   
     }
 
 }	// end of innerclass AsmClass
@@ -671,19 +760,21 @@ private class AsmMethod {
 
    String getName()			{ return method_name; }
 
-   boolean isCompatibleWith(JcompTyper typer,JcompType argtyp) {
-      if (argtyp == null) return true;
+   int isCompatibleWith(JcompTyper typer,JcompType argtyp) {
+      if (argtyp == null) return 0;
 
       List<JcompType> args = argtyp.getComponents();
       Type [] margs = Type.getArgumentTypes(method_desc);
 
       boolean isok = false;
+      int score = 0;
       if (margs.length == args.size()) {
 	 isok = true;
 	 for (int i = 0; i < margs.length; ++i) {
 	    JcompType jt0 = getAsmType(typer,margs[i]);
 	    JcompType jt1 = args.get(i);
 	    if (!jt1.isCompatibleWith(jt0)) isok = false;
+	    else score += score(jt0,jt1);
 	  }
        }
 
@@ -693,8 +784,9 @@ private class AsmMethod {
 	    JcompType jt0 = getAsmType(typer,margs[i]);
 	    JcompType jt1 = args.get(i);
 	    if (!jt1.isCompatibleWith(jt0)) isok = false;
-
+	    else score += score(jt0,jt1);
 	  }
+	 score += 5;
 	 JcompType rjt0 = getAsmType(typer,margs[margs.length-1]);
 	 if (rjt0.isArrayType()) rjt0 = rjt0.getBaseType();
 	 for (int i = margs.length-1; i < args.size(); ++i) {
@@ -714,13 +806,18 @@ private class AsmMethod {
 		  JcompType jt0 = getAsmType(typer,margs[i]);
 		  JcompType jt1 = args.get(i);
 		  if (!jt1.isCompatibleWith(jt0)) isok = false;
+		  else score += score(jt0,jt1);
 		}
 	     }
 	  }
        }
 
-      return isok;
+      if (!isok) score = -1;
+      return score;
     }
+
+
+
 
    JcompSymbol createMethod(JcompTyper typer,JcompType argtyp,JcompType ctyp) {
       Type mret = Type.getReturnType(method_desc);

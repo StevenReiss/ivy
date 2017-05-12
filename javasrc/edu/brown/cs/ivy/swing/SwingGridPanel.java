@@ -38,12 +38,18 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingGridPanel.java,v 1.44 2015/11/20 15:09:26 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingGridPanel.java,v 1.46 2017/05/12 20:53:54 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingGridPanel.java,v $
+ * Revision 1.46  2017/05/12 20:53:54  spr
+ * Minor fix up.
+ *
+ * Revision 1.45  2017/02/15 02:09:50  spr
+ * Use Class.getEnumConstants.
+ *
  * Revision 1.44  2015/11/20 15:09:26  spr
  * Reformatting.
  *
@@ -194,7 +200,6 @@ import javax.swing.undo.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.List;
 
@@ -280,7 +285,10 @@ public final Object getComponentForLabel(String c)
    if (c == null) return null;
 
    for (Map.Entry<Object,String> ent : tag_map.entrySet()) {
-      if (c.equals(ent.getValue())) return ent.getKey();
+      if (c.equals(ent.getValue())) {
+         Object rslt = ent.getKey();
+         if (rslt instanceof Component) return rslt;
+      }
     }
 
    return null;
@@ -521,13 +529,14 @@ public final <T> SwingComboBox<T> addChoice(String lbl,Collection<T> data,int id
    addGBComponent(tag,0,y_count,1,1,0,0);
 
    SwingComboBox<T> cbx = new SwingComboBox<T>(lbl,data,compl,undo_support);
-   cbx.setActionCommand(lbl);
-   if (cb != null) cbx.addActionListener(cb);
 
    if (data != null && data.size() > 0 && idx >= 0) cbx.setSelectedIndex(idx);
    addGBComponent(cbx,1,y_count++,1,1,10,0);
 
    tag_map.put(cbx,lbl);
+   
+   cbx.setActionCommand(lbl);
+   if (cb != null) cbx.addActionListener(cb);
 
    return cbx;
 }
@@ -616,8 +625,7 @@ public final <T extends Enum<?>> SwingComboBox<T> addChoice(String lbl,T v,boole
 
    try {
       Class<?> c = v.getClass();
-      Method m = c.getMethod("values");
-      Object[] vals = (Object []) m.invoke(null);
+      Object[] vals = c.getEnumConstants();
       vs = new Vector<T>();
       for (Object o : vals) {
 	 @SuppressWarnings("unchecked") T x = (T) o;
@@ -1081,6 +1089,7 @@ public final JButton addBottomButton(String nm,String tag,boolean enabled,Action
    btn.setEnabled(enabled);
    bottom_box.add(btn);
    bottom_box.add(Box.createHorizontalGlue());
+   tag_map.put(btn, tag);
 
    return btn;
 }
@@ -1101,6 +1110,7 @@ public final JToggleButton addBottomToggle(String nm,String tag,boolean st,Chang
    btn.setEnabled(true);
    bottom_box.add(btn);
    bottom_box.add(Box.createHorizontalGlue());
+   tag_map.put(btn, tag);
 
    return btn;
 }

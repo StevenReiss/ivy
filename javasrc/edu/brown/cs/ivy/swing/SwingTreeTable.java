@@ -7,34 +7,34 @@
 /********************************************************************************/
 /*	Copyright 2010 Brown University -- Steven P. Reiss		      */
 /*********************************************************************************
- *  Copyright 2011, Brown University, Providence, RI.                            *
- *                                                                               *
- *                        All Rights Reserved                                    *
- *                                                                               *
- *  Redistribution and use in source and binary forms, with or without           *
+ *  Copyright 2011, Brown University, Providence, RI.				 *
+ *										 *
+ *			  All Rights Reserved					 *
+ *										 *
+ *  Redistribution and use in source and binary forms, with or without		 *
  *  modification, are permitted provided that the following conditions are met:  *
- *                                                                               *
- *  + Redistributions of source code must retain the above copyright notice,     *
- *      this list of conditions and the following disclaimer.                    *
+ *										 *
+ *  + Redistributions of source code must retain the above copyright notice,	 *
+ *	this list of conditions and the following disclaimer.			 *
  *  + Redistributions in binary form must reproduce the above copyright notice,  *
- *      this list of conditions and the following disclaimer in the              *
- *      documentation and/or other materials provided with the distribution.     *
- *  + Neither the name of the Brown University nor the names of its              *
- *      contributors may be used to endorse or promote products derived from     *
- *      this software without specific prior written permission.                 *
- *                                                                               *
+ *	this list of conditions and the following disclaimer in the		 *
+ *	documentation and/or other materials provided with the distribution.	 *
+ *  + Neither the name of the Brown University nor the names of its		 *
+ *	contributors may be used to endorse or promote products derived from	 *
+ *	this software without specific prior written permission.		 *
+ *										 *
  *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  *
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    *
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE   *
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE    *
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR          *
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF         *
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS     *
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN      *
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)      *
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   *
- *  POSSIBILITY OF SUCH DAMAGE.                                                  *
- *                                                                               *
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE	 *
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE	 *
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE	 *
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 	 *
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF	 *
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS	 *
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN	 *
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)	 *
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE	 *
+ *  POSSIBILITY OF SUCH DAMAGE. 						 *
+ *										 *
  ********************************************************************************/
 
 /*
@@ -79,12 +79,15 @@
  * @author Scott Violet
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.17 2016/10/15 00:29:04 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.18 2017/02/15 02:09:50 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingTreeTable.java,v $
+ * Revision 1.18  2017/02/15 02:09:50  spr
+ * Use Class.getEnumConstants.
+ *
  * Revision 1.17  2016/10/15 00:29:04  spr
  * Handle parent on mac; fix selection model for tree + table.
  *
@@ -308,14 +311,14 @@ public void removeTreeExpansionListener(TreeExpansionListener tel)
    int tmode = 0;
    switch (type) {
       case ListSelectionModel.MULTIPLE_INTERVAL_SELECTION :
-         tmode = TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION;
-         break;
+	 tmode = TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION;
+	 break;
       case ListSelectionModel.SINGLE_INTERVAL_SELECTION :
-         tmode = TreeSelectionModel.SINGLE_TREE_SELECTION;
-         break;
+	 tmode = TreeSelectionModel.SINGLE_TREE_SELECTION;
+	 break;
       case ListSelectionModel.SINGLE_SELECTION :
-         tmode = TreeSelectionModel.SINGLE_TREE_SELECTION;
-         break;
+	 tmode = TreeSelectionModel.SINGLE_TREE_SELECTION;
+	 break;
     }
    tree.getSelectionModel().setSelectionMode(tmode);
 }
@@ -420,7 +423,7 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 
 class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
 
-   
+
 
    @Override public Component getTableCellEditorComponent(JTable table,
 						   Object value,
@@ -647,7 +650,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 
 
    @Override public Object getRoot()			{ return model_root; }
-   @Override public boolean isLeaf(Object node)         { return getChildCount(node) == 0; }
+   @Override public boolean isLeaf(Object node) 	{ return getChildCount(node) == 0; }
 
    @Override public void valueForPathChanged(TreePath path, Object newValue) {}
 
@@ -727,20 +730,23 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
     }
 
    protected void fireTreeStructureChanged(Object source, Object[] path,
-        					      int[] childIndices,
-        				      Object[] children) {
+						      int[] childIndices,
+					      Object[] children) {
       // Guaranteed to return a non-null array
       Object[] listeners = listenerList.getListenerList();
       TreeModelEvent e = null;
       // Process the listeners last to first, notifying
       // those that are interested in this event
       for (int i = listeners.length-2; i>=0; i-=2) {
-         if (listeners[i]==TreeModelListener.class) {
-            // Lazily create the event:
-            if (e == null)
-               e = new TreeModelEvent(source, path, childIndices, children);
-            ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
-          }
+	 if (listeners[i]==TreeModelListener.class) {
+	    // Lazily create the event:
+	    if (e == null)
+	       e = new TreeModelEvent(source, path, childIndices, children);
+	    try {
+	       ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
+	     }
+	    catch (Throwable t) { }
+	  }
        }
     }
 
@@ -748,7 +754,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 
    @Override public Class<?> getColumnClass(int column) {
       if (column == 0) return SwingTreeTable.TreeTableModel.class;
-      return Object.class; 
+      return Object.class;
       }
 
    @Override public boolean isCellEditable(Object node, int column) {
@@ -833,8 +839,6 @@ private static class TreeTableModelAdapter extends AbstractTableModel
    private TreeTableModel tree_table_model;
 
    private static final long serialVersionUID = 1;
-
-
 
    public TreeTableModelAdapter(TreeTableModel treetablemodel, JTree tree) {
       for_tree = tree;

@@ -54,8 +54,8 @@ class JcompFile implements JcompSemantics, JcompConstants {
 /********************************************************************************/
 
 private JcompSource		for_file;
-private ASTNode          	ast_root;
-private JcompProjectImpl    	for_project;
+private ASTNode 		ast_root;
+private JcompProjectImpl	for_project;
 
 
 
@@ -84,9 +84,9 @@ JcompFile(JcompSource rf)
 {
    if (ast_root == null) {
       if (for_file instanceof JcompExtendedSource) {
-         JcompExtendedSource efile = (JcompExtendedSource) for_file;
-         ast_root = efile.getAstRootNode();
-         if (ast_root != null) return ast_root;
+	 JcompExtendedSource efile = (JcompExtendedSource) for_file;
+	 ast_root = efile.getAstRootNode();
+	 if (ast_root != null) return ast_root;
        }
       String txt = for_file.getFileContents();
       if (txt != null) {
@@ -96,9 +96,10 @@ JcompFile(JcompSource rf)
 	 parser.setCompilerOptions(options);
 	 parser.setKind(ASTParser.K_COMPILATION_UNIT);
 	 parser.setSource(txt.toCharArray());
-         parser.setResolveBindings(false);
+	 parser.setResolveBindings(false);
+	 parser.setStatementsRecovery(true);
 	 ast_root = parser.createAST(null);
-         JcompAst.setSource(ast_root,for_file);
+	 JcompAst.setSource(ast_root,for_file);
        }
     }
    return ast_root;
@@ -115,25 +116,25 @@ JcompFile(JcompSource rf)
 }
 
 
-@Override public JcompSource getFile()          { return for_file; }
+@Override public JcompSource getFile()		{ return for_file; }
 
 @Override public List<JcompMessage> getMessages()
 {
    List<JcompMessage> rslt = new ArrayList<JcompMessage>();
 
    ASTNode root = getAstNode();
-   
+
    if (root != null && root instanceof CompilationUnit) {
       CompilationUnit cu = (CompilationUnit) root;
       for (IProblem p : cu.getProblems()) {
-         JcompMessageSeverity sev = JcompMessageSeverity.NOTICE;
-         if (p.isError()) sev = JcompMessageSeverity.ERROR;
-         else if (p.isWarning()) sev = JcompMessageSeverity.WARNING;
-         JcompMessage rm = new JcompMessage(getFile(),sev,
-               p.getID(),p.getMessage(),
-               p.getSourceLineNumber(),
-               p.getSourceStart(),p.getSourceEnd());
-         rslt.add(rm);
+	 JcompMessageSeverity sev = JcompMessageSeverity.NOTICE;
+	 if (p.isError()) sev = JcompMessageSeverity.ERROR;
+	 else if (p.isWarning()) sev = JcompMessageSeverity.WARNING;
+	 JcompMessage rm = new JcompMessage(getFile(),sev,
+	       p.getID(),p.getMessage(),
+	       p.getSourceLineNumber(),
+	       p.getSourceStart(),p.getSourceEnd());
+	 rslt.add(rm);
        }
     }
 
@@ -170,30 +171,30 @@ private class ErrorVisitor extends ASTVisitor {
       boolean fg = error_stack.pop();
       have_error |= fg;
       if (!have_error) {
-         JcompType jt = JcompAst.getExprType(n);
-         if (jt != null && jt.isErrorType()) {
-            if (n instanceof MethodInvocation) {
-               MethodInvocation mi = (MethodInvocation) n;
-               String mnm = "";
-               if (mi.getExpression() != null) {
-                  mnm = JcompAst.getExprType(mi.getExpression()).getName() + ".";
-                }
-               mnm += mi.getName().getIdentifier();
-               addError("Undefined method " + mnm,IProblem.UndefinedMethod,n);
-             }
-            else {
-               addError("Expression error",IProblem.InvalidOperator,n);
-             }
-            have_error = true;
-          }
+	 JcompType jt = JcompAst.getExprType(n);
+	 if (jt != null && jt.isErrorType()) {
+	    if (n instanceof MethodInvocation) {
+	       MethodInvocation mi = (MethodInvocation) n;
+	       String mnm = "";
+	       if (mi.getExpression() != null) {
+		  mnm = JcompAst.getExprType(mi.getExpression()).getName() + ".";
+		}
+	       mnm += mi.getName().getIdentifier();
+	       addError("Undefined method " + mnm,IProblem.UndefinedMethod,n);
+	     }
+	    else {
+	       addError("Expression error",IProblem.InvalidOperator,n);
+	     }
+	    have_error = true;
+	  }
        }
     }
 
    @Override public boolean visit(SimpleName n) {
       JcompType jt = JcompAst.getExprType(n);
       if (jt != null && jt.isErrorType()) {
-         addError("Undefined name: " + n.getIdentifier(),IProblem.UndefinedName,n);
-         have_error = true;
+	 addError("Undefined name: " + n.getIdentifier(),IProblem.UndefinedName,n);
+	 have_error = true;
        }
       return true;
     }
@@ -203,11 +204,11 @@ private class ErrorVisitor extends ASTVisitor {
       int end = start + n.getLength();
       int line = 0;
       if (ast_root instanceof CompilationUnit) {
-         CompilationUnit cu = (CompilationUnit) ast_root;
-         line = cu.getLineNumber(start);
+	 CompilationUnit cu = (CompilationUnit) ast_root;
+	 line = cu.getLineNumber(start);
        }
       JcompMessage rm = new JcompMessage(getFile(),JcompMessageSeverity.ERROR,
-            id,msg,line,start,end);
+	    id,msg,line,start,end);
       message_list.add(rm);
     }
 
@@ -229,9 +230,6 @@ void setRoot(JcompProjectImpl root)
    ast_root = null;
    for_project.setResolved(false,null);
 }
-
-
-
 
 
 
@@ -258,8 +256,6 @@ private AbstractTypeDeclaration findTypeDecl(String cls,List<?> typs)
 
 
 
-
-
 /********************************************************************************/
 /*										*/
 /*	Determine if a class is defined in this file				*/
@@ -269,7 +265,7 @@ private AbstractTypeDeclaration findTypeDecl(String cls,List<?> typs)
 @Override public boolean definesClass(String cls)
 {
    ASTNode root = getAstNode();
-   if (root == null || root.getNodeType() != ASTNode.COMPILATION_UNIT) 
+   if (root == null || root.getNodeType() != ASTNode.COMPILATION_UNIT)
       return false;
    CompilationUnit cu = (CompilationUnit) root;
 

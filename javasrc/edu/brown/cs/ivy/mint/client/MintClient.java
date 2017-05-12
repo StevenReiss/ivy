@@ -38,12 +38,18 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/client/MintClient.java,v 1.29 2015/11/20 15:09:18 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/client/MintClient.java,v 1.31 2017/03/14 14:00:30 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintClient.java,v $
+ * Revision 1.31  2017/03/14 14:00:30  spr
+ * Formattig
+ *
+ * Revision 1.30  2017/02/21 23:13:47  spr
+ * Formatting.
+ *
  * Revision 1.29  2015/11/20 15:09:18  spr
  * Reformatting.
  *
@@ -406,15 +412,15 @@ private static class PatternInfo {
       MintArguments args = pattern_matcher.matchMessage(msg);
       if (args == null) return false;
       if (use_handler != null) {
-	 try {
-	    use_handler.receive(msg,args);
-	  }
-	 catch (Throwable t) {
-	    MintLogger.log("Problem in MintHandler: " + t);
-	    t.printStackTrace();
-	  }
+         try {
+            use_handler.receive(msg,args);
+          }
+         catch (Throwable t) {
+            MintLogger.log("Problem in MintHandler: " + t);
+            t.printStackTrace()   ;
+          }
        }
-
+   
       return true;
     }
 
@@ -868,13 +874,13 @@ private class ProcessThread extends Thread {
 
    @Override public void run() {
       for ( ; ; ) {
-	 Object o = getNextMessage(true);
-	 if (o == null && interrupted()) break;
-	 if (o == null) continue;
-	 if (synch_mode == MintSyncMode.MULTIPLE || synch_mode == MintSyncMode.ONLY_REPLIES) {
-	    asynchProcessMessage(o);
-	  }
-	 else processMessage(o);
+         Object o = getNextMessage(true);
+         if (o == null && interrupted()) break;
+         if (o == null) continue;
+         if (synch_mode == MintSyncMode.MULTIPLE || synch_mode == MintSyncMode.ONLY_REPLIES) {
+            asynchProcessMessage(o);
+          }
+         else processMessage(o);
        }
     }
 
@@ -891,13 +897,13 @@ private class ReplyThread extends Thread {
 
    @Override public void run() {
       for ( ; ; ) {
-	 Object o = getNextReply(true);
-	 if (o == null && interrupted()) break;
-	 if (o == null) continue;
-	 if (synch_mode == MintSyncMode.MULTIPLE) {
-	    asynchProcessMessage(o);
-	  }
-	 else processMessage(o);
+         Object o = getNextReply(true);
+         if (o == null && interrupted()) break;
+         if (o == null) continue;
+         if (synch_mode == MintSyncMode.MULTIPLE) {
+            asynchProcessMessage(o);
+          }
+         else processMessage(o);
        }
     }
 
@@ -928,31 +934,31 @@ private class ReaderThread extends Thread {
 
    @Override public void run() {
       if (line_reader == null) return;
-
+   
       try {
-	 for ( ; ; ) {
-	    String hdr = line_reader.readLine();
-	    if (hdr == null) break;
-	    StringBuffer body = null;
-	    for ( ; ; ) {
-	       String s = line_reader.readLine();
-	       if (s == null || s.equals(MINT_TRAILER)) break;
-	       if (body == null) body = new StringBuffer(s);
-	       else {
-		  body.append('\n');
-		  body.append(s);
-		}
-	     }
-	    String s = (body == null ? null : body.toString());
-	    processItem(hdr,s);
-	  }
+         for ( ; ; ) {
+            String hdr = line_reader.readLine();
+            if (hdr == null) break;
+            StringBuffer body = null;
+            for ( ; ; ) {
+               String s = line_reader.readLine();
+               if (s == null || s.equals(MINT_TRAILER)) break;
+               if (body == null) body = new StringBuffer(s);
+               else {
+        	  body.append('\n');
+        	  body.append(s);
+        	}
+             }
+            String s = (body == null ? null : body.toString());
+            processItem(hdr,s);
+          }
        }
       catch (InterruptedIOException e) {
-	 return;
+         return;
        }
       catch (IOException e) {
-	 serverError(e.getMessage());
-	 return;
+         serverError(e.getMessage());
+         return;
        }
       serverError("End of file from the server");
     }
@@ -960,24 +966,24 @@ private class ReaderThread extends Thread {
    void readPending(int min) throws IOException {
       if (line_reader == null) return;		// terminated
       if (isAlive()) return;			// thread is running, let it do the reads
-
+   
       for (int ctr = 0; ctr < min || line_reader.ready(); ++ctr) {
-	 String hdr = line_reader.readLine();
-	 if (hdr == null) {
-	    throw new IOException("End of file from server");
-	  }
-	 StringBuffer body = null;
-	 for ( ; ; ) {
-	    String s = line_reader.readLine();
-	    if (s == null || s.equals(MINT_TRAILER)) break;
-	    if (body == null) body = new StringBuffer(s);
-	    else {
-	       body.append('\n');
-	       body.append(s);
-	     }
-	  }
-	 String s = (body == null ? null : body.toString());
-	 processItem(hdr,s);
+         String hdr = line_reader.readLine();
+         if (hdr == null) {
+            throw new IOException("End of file from server");
+          }
+         StringBuffer body = null;
+         for ( ; ; ) {
+            String s = line_reader.readLine();
+            if (s == null || s.equals(MINT_TRAILER)) break;
+            if (body == null) body = new StringBuffer(s);
+            else {
+               body.append('\n');
+               body.append(s);
+             }
+          }
+         String s = (body == null ? null : body.toString());
+         processItem(hdr,s);
        }
     }
 
@@ -986,27 +992,27 @@ private class ReaderThread extends Thread {
       if (!tok.hasMoreTokens()) return;
       String cmd = tok.nextToken();
       if (cmd.equals(MINT_HEADER_REPLY)) {
-	 if (tok.hasMoreTokens()) {
-	    int rid = Integer.parseInt(tok.nextToken());
-	    Element xml = IvyXml.convertStringToXml(body);
-	    handleReply(rid,xml);
-	  }
+         if (tok.hasMoreTokens()) {
+            int rid = Integer.parseInt(tok.nextToken());
+            Element xml = IvyXml.convertStringToXml(body);
+            handleReply(rid,xml);
+          }
        }
       else if (cmd.equals(MINT_HEADER_DONE)) {
-	 if (tok.hasMoreTokens()) {
-	    int rid = Integer.parseInt(tok.nextToken());
-	    handleDone(rid);
-	  }
+         if (tok.hasMoreTokens()) {
+            int rid = Integer.parseInt(tok.nextToken());
+            handleDone(rid);
+          }
        }
       else if (cmd.equals(MINT_HEADER_GET)) {
-	 if (tok.hasMoreTokens()) {
-	    int mid = Integer.parseInt(tok.nextToken());
-	    if (tok.hasMoreTokens()) {
-	       int rid = Integer.parseInt(tok.nextToken());
-	       Element xml = IvyXml.convertStringToXml(body);
-	       handleMessage(mid,rid,xml);
-	     }
-	  }
+         if (tok.hasMoreTokens()) {
+            int mid = Integer.parseInt(tok.nextToken());
+            if (tok.hasMoreTokens()) {
+               int rid = Integer.parseInt(tok.nextToken());
+               Element xml = IvyXml.convertStringToXml(body);
+               handleMessage(mid,rid,xml);
+             }
+          }
        }
     }
 

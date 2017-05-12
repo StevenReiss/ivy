@@ -44,12 +44,15 @@
  * @version 1.0
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingComboBox.java,v 1.20 2015/11/20 15:09:26 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingComboBox.java,v 1.21 2016/12/20 21:31:18 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingComboBox.java,v $
+ * Revision 1.21  2016/12/20 21:31:18  spr
+ * Formating changes.
+ *
  * Revision 1.20  2015/11/20 15:09:26  spr
  * Reformatting.
  *
@@ -278,6 +281,7 @@ public void clear()
    JTextComponent tc = (JTextComponent) getEditor().getEditorComponent();
    tc.setText("");
 }
+
 
 
 

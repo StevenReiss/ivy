@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.17 2016/10/15 00:29:03 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.18 2016/11/17 15:56:22 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingText.java,v $
+ * Revision 1.18  2016/11/17 15:56:22  spr
+ * Clean up keyboard mappings.
+ *
  * Revision 1.17  2016/10/15 00:29:03  spr
  * Handle parent on mac; fix selection model for tree + table.
  *
@@ -227,7 +230,7 @@ public static void fixKeyBindings(Keymap k)
    int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
    if (mask != Event.META_MASK) return;
-
+   
    for (KeyStroke ks : k.getBoundKeyStrokes()) {
       if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK || ks.getModifiers() == InputEvent.CTRL_MASK) {
 	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);

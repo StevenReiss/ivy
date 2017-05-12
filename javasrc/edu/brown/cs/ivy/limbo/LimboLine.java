@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/limbo/LimboLine.java,v 1.6 2011-05-27 19:32:41 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/limbo/LimboLine.java,v 1.7 2017/04/14 23:39:02 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: LimboLine.java,v $
+ * Revision 1.7  2017/04/14 23:39:02  spr
+ * Fix ups to support limbo from bedrock.
+ *
  * Revision 1.6  2011-05-27 19:32:41  spr
  * Change copyrights.
  *

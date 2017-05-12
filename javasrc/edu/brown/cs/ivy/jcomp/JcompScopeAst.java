@@ -1,6 +1,6 @@
 /********************************************************************************/
 /*										*/
-/*		JcompScopeAst.java 					*/
+/*		JcompScopeAst.java					*/
 /*										*/
 /*	Class to represent a scope for an AST node				*/
 /*										*/
@@ -40,6 +40,7 @@ package edu.brown.cs.ivy.jcomp;
 import java.util.*;
 
 
+
 class JcompScopeAst extends JcompScope implements JcompConstants {
 
 
@@ -51,7 +52,7 @@ class JcompScopeAst extends JcompScope implements JcompConstants {
 /*										*/
 /********************************************************************************/
 
-private JcompScopeAst    parent_scope;
+private JcompScopeAst	 parent_scope;
 private JcompScopeLookup lookup_scope;
 
 
@@ -78,9 +79,9 @@ JcompScopeAst(JcompScope parent)
 /*										*/
 /********************************************************************************/
 
-@Override JcompScope getParent()		      { return parent_scope; }
+@Override public JcompScope getParent() 		{ return parent_scope; }
 
-private JcompScopeLookup getLookupScope()	      { return lookup_scope; }
+private JcompScopeLookup getLookupScope()		{ return lookup_scope; }
 
 
 
@@ -93,17 +94,19 @@ private JcompScopeLookup getLookupScope()	      { return lookup_scope; }
 
 @Override void defineVar(JcompSymbol js)		      { lookup_scope.defineVar(js,this); }
 
-@Override JcompSymbol lookupVariable(String nm)	      { return lookup_scope.lookupVariable(nm,this); }
+@Override JcompSymbol lookupVariable(String nm)       { return lookup_scope.lookupVariable(nm,this); }
 
 @Override public Collection<JcompSymbol> getDefinedFields()
 {
-   return lookup_scope.getDefinedFields(this);
+   Collection<JcompSymbol> rslt = lookup_scope.getDefinedFields(this);
+   
+   return rslt;
 }
 
 @Override void defineMethod(JcompSymbol js)		      { lookup_scope.defineMethod(js,this); }
 
-@Override JcompSymbol lookupMethod(String id,JcompType aty) 
-{ 
+@Override JcompSymbol lookupMethod(String id,JcompType aty)
+{
    return lookup_scope.lookupMethod(id,aty,this);
 }
 
@@ -119,7 +122,7 @@ private JcompScopeLookup getLookupScope()	      { return lookup_scope; }
 
 @Override void getFields(Map<String,JcompType> flds)
 {
-   lookup_scope.getFields(flds);
+   lookup_scope.getFields(flds,this);
 }
 
 @Override Set<JcompSymbol> lookupAbstracts(JcompTyper typer)

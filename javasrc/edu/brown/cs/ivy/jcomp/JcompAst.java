@@ -237,6 +237,7 @@ static void setExprType(ASTNode n,JcompType t)
 
 public static JcompSource getSource(ASTNode n)
 {
+   n = n.getRoot();
    return (JcompSource) n.getProperty(PROP_JAVA_SOURCE);
 }
 
@@ -244,6 +245,7 @@ public static JcompSource getSource(ASTNode n)
 
 static public void setSource(ASTNode n,JcompSource s)
 {
+   n = n.getRoot();
    n.setProperty(PROP_JAVA_SOURCE,s);
 }
 
@@ -575,18 +577,18 @@ private static class ExceptionFinder extends ASTVisitor
    private void handleCall(JcompSymbol js) {
       if (js == null) return;
       for (JcompType jt : js.getExceptions()) {
-	 found_exceptions.add(jt);
+         found_exceptions.add(jt);
        }
       if (js.getDefinitionNode() != null) {
-	 ASTNode an = js.getDefinitionNode();
-	 if (an.getNodeType() == ASTNode.METHOD_DECLARATION) {
-	    MethodDeclaration md = (MethodDeclaration) an;
-	    for (Object o : md.thrownExceptions()) {
-	       Name n = (Name) o;
-	       JcompType jt = JcompAst.getJavaType(n);
-	       if (jt != null) found_exceptions.add(jt);
-	     }
-	  }
+         ASTNode an = js.getDefinitionNode();
+         if (an.getNodeType() == ASTNode.METHOD_DECLARATION) {
+            MethodDeclaration md = (MethodDeclaration) an;
+            for (Object o : md.thrownExceptions()) {
+               Name n = (Name) o;
+               JcompType jt = JcompAst.getJavaType(n);
+               if (jt != null) found_exceptions.add(jt);
+             }
+          }
        }
     }
 
@@ -773,7 +775,18 @@ private static class FindLocationVisitor extends ASTVisitor {
       int eoff = soff + n.getLength();
       if (eoff < start_offset) return false;
       if (soff > start_offset) return false;
-      best_match = n;
+      if (best_match == null) best_match = n;
+      else {
+	 switch (n.getNodeType()) {
+	    case ASTNode.JAVADOC :
+	    case ASTNode.BLOCK_COMMENT :
+	    case ASTNode.LINE_COMMENT :
+	       break;
+	    default :
+	       best_match = n;
+	       break;
+	  }
+       }
       return true;
     }
 

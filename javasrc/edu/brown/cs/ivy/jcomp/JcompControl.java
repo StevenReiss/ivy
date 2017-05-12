@@ -1,6 +1,6 @@
 /********************************************************************************/
 /*										*/
-/*		JcompLanguage.java					   */
+/*		JcompControl.java						*/
 /*										*/
 /*	Main access point for java-based semantics				*/
 /*										*/
@@ -18,7 +18,7 @@
  *										 *
  ********************************************************************************/
 
-/* SVN: $Id: JcompControl.java,v 1.6 2016/05/10 13:43:30 spr Exp $ */
+/* SVN: $Id: JcompControl.java,v 1.8 2016/11/17 15:56:30 spr Exp $ */
 
 
 
@@ -49,6 +49,7 @@ public class JcompControl implements JcompConstants
 
 private Map<JcompSource,JcompFile>  semantic_map;
 private JcompContext base_context;
+private JcompTyper   system_typer;
 private JcompContext android_context;
 
 
@@ -68,6 +69,7 @@ public JcompControl()
 {
    semantic_map = new WeakHashMap<JcompSource,JcompFile>();
    base_context = new JcompContext(null);
+   system_typer = new JcompTyper(base_context);
    android_context = null;
 }
 
@@ -129,6 +131,19 @@ public synchronized JcompSemantics getSemanticData(JcompSource rf)
     }
    return rjf;
 }
+
+
+public JcompTyper getSystemTyper()
+{
+   return system_typer;
+}
+
+
+public JcompType getSystemType(String name)
+{
+   return system_typer.findSystemType(name);
+}
+
 
 
 

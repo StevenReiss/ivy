@@ -1,6 +1,6 @@
 /********************************************************************************/
 /*										*/
-/*		JcompScope.java						*/
+/*		JcompScope.java 					*/
 /*										*/
 /*	Class to represent an abstract scope					*/
 /*										*/
@@ -51,7 +51,7 @@ abstract public class JcompScope implements JcompConstants {
 /*										*/
 /********************************************************************************/
 
-JcompScope getParent()			{ return null; }
+public JcompScope getParent()		{ return null; }
 
 
 
@@ -63,6 +63,11 @@ JcompScope getParent()			{ return null; }
 /********************************************************************************/
 
 abstract void defineVar(JcompSymbol s);
+
+void defineDupVar(JcompSymbol s)
+{
+   defineVar(s);
+}
 
 abstract JcompSymbol lookupVariable(String nm);
 
@@ -93,7 +98,7 @@ abstract void getFields(Map<String,JcompType> flds);
 abstract Set<JcompSymbol> lookupAbstracts(JcompTyper typer);
 
 public Collection<JcompSymbol> getDefinedMethods()	      { return null; }
-public Collection<JcompSymbol> getDefinedFields() 	      { return null; }
+public Collection<JcompSymbol> getDefinedFields()	      { return null; }
 
 
 

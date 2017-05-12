@@ -38,12 +38,18 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalEditor.java,v 1.26 2015/11/20 15:09:23 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalEditor.java,v 1.28 2017/04/30 02:54:57 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalEditor.java,v $
+ * Revision 1.28  2017/04/30 02:54:57  spr
+ * Clean up code.
+ *
+ * Revision 1.27  2017/03/14 14:01:23  spr
+ * Expose findArc; formatting
+ *
  * Revision 1.26  2015/11/20 15:09:23  spr
  * Reformatting.
  *
@@ -561,7 +567,7 @@ private PetalNode findNodeHelper(Point p, MouseEvent evt)
 
 
 
-private PetalArc findArc(Point p)
+public PetalArc findArc(Point p)
 {
    return findArcHelper(p,null);
 }
@@ -1053,7 +1059,7 @@ private int gridCoord(int x)
 /*										*/
 /********************************************************************************/
 
-@Override public void componentHidden(ComponentEvent evt) 		{ }
+@Override public void componentHidden(ComponentEvent evt)		{ }
 
 
 @Override public void componentMoved(ComponentEvent evt)			{ }
@@ -1162,7 +1168,7 @@ private synchronized void setSizes()
 
 /********************************************************************************/
 /*										*/
-/*	Scaling (zooming) methods						*/
+/*	Painting methods							*/
 /*										*/
 /********************************************************************************/
 

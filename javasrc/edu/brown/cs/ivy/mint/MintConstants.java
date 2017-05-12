@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintConstants.java,v 1.14 2013-06-11 23:14:31 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintConstants.java,v 1.15 2016/12/09 21:46:50 spr Exp $ */
 
 
 /***************2*****************************************************************
  *
  * $Log: MintConstants.java,v $
+ * Revision 1.15  2016/12/09 21:46:50  spr
+ * Formatting
+ *
  * Revision 1.14  2013-06-11 23:14:31  spr
  * Code cleanup.
  *

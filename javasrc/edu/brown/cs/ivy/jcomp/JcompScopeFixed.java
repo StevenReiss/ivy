@@ -82,6 +82,14 @@ JcompScopeFixed()
    var_names.put(s.getName(),s);
 }
 
+@Override synchronized void defineDupVar(JcompSymbol s)
+{
+   if (var_names.get(s.getFullName()) != null) return;
+   
+   var_names.put(s.getFullName(),s);
+}
+
+
 
 
 
@@ -175,10 +183,13 @@ JcompScopeFixed()
    for (Map.Entry<String,JcompSymbol> ent : var_names.entrySet()) {
       JcompSymbol fld = ent.getValue();
       if (fld.isFieldSymbol()) {
-         flds.put(fld.getFullName(),fld.getType());
+	 flds.put(fld.getFullName(),fld.getType());
        }
     }
+   if (getParent() != null) getParent().getFields(flds);
 }
+
+
 
 @Override synchronized Set<JcompSymbol> lookupAbstracts(JcompTyper typer)
 {
