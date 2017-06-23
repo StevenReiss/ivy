@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowConditional.java,v 1.8 2010-02-12 00:34:14 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowConditional.java,v 1.9 2017/06/20 00:52:48 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: FlowConditional.java,v $
+ * Revision 1.9  2017/06/20 00:52:48  spr
+ * Formatting.
+ *
  * Revision 1.8  2010-02-12 00:34:14  spr
  * Add some fixups for eclipse.
  *

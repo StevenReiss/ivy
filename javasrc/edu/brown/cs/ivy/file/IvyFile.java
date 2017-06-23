@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.23 2016/09/30 20:45:22 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.24 2017/06/20 00:51:52 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFile.java,v $
+ * Revision 1.24  2017/06/20 00:51:52  spr
+ * Add copy directory method.
+ *
  * Revision 1.23  2016/09/30 20:45:22  spr
  * Add new utility methods.
  *
@@ -411,6 +414,22 @@ public static void copyFile(File sf,File df) throws IOException
     }
    w.close();
    r.close();
+}
+
+
+
+public static void copyHierarchy(File sd,File dd) throws IOException
+{
+   if (sd.isDirectory()) {
+      if (!dd.exists()) dd.mkdirs();
+      for (File f : sd.listFiles()) {
+         File df = new File(dd,f.getName());
+         copyHierarchy(f,df);
+       }
+    }
+   else {
+      copyFile(sd,dd);
+    }
 }
 
 

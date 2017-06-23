@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalNodeDefault.java,v 1.8 2017/03/14 14:01:23 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalNodeDefault.java,v 1.9 2017/06/07 01:58:47 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalNodeDefault.java,v $
+ * Revision 1.9  2017/06/07 01:58:47  spr
+ * Allow different shaped nodes.
+ *
  * Revision 1.8  2017/03/14 14:01:23  spr
  * Expose findArc; formatting
  *
@@ -139,6 +142,12 @@ public PetalNodeDefault(String s)
 }
 
 
+public PetalNodeDefault(PetalNodeShape ns,String s)
+{
+   this(new PetalNodeComponent(ns,s));
+}
+
+
 
 protected PetalNodeDefault()
 {
@@ -169,6 +178,11 @@ protected void setComponent(Component c)	{ node_component = c; }
 
 @Override public Point findPortPoint(Point at,Point from)
 {
+   if (getComponent() instanceof PetalNodeComponent) {
+      PetalNodeComponent pnc = (PetalNodeComponent) getComponent();
+      return pnc.findPortPoint(at,from);
+    }
+   
    return PetalHelper.findPortPoint(node_component.getBounds(),at,from);
 }
 

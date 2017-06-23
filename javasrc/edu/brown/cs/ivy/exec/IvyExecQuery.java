@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExecQuery.java,v 1.12 2015/03/31 02:19:04 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExecQuery.java,v 1.13 2017/05/17 14:13:36 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyExecQuery.java,v $
+ * Revision 1.13  2017/05/17 14:13:36  spr
+ * Add call to get java binary name.
+ *
  * Revision 1.12  2015/03/31 02:19:04  spr
  * Formatting cleanup
  *
@@ -245,6 +248,24 @@ public static String computeHostName()
     }
 
    return "localhost";
+}
+
+
+
+public static String getJavaPath()
+{
+   String jpath = System.getProperty("java.home");
+   File jhome = new File(jpath);
+   File f1 = new File(jhome,"bin");
+   File f2 = new File(f1,"java");
+   if (f2.exists() && f2.canExecute()) return f2.getPath();
+   
+   File f3 = new File(jpath,"jre");
+   File f4 = new File(f3,"bin");
+   File f5 = new File(f4,"java");
+   if (f5.exists() && f5.canExecute()) return f5.getPath();
+      
+   return "java";
 }
 
 

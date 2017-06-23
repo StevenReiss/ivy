@@ -25,6 +25,7 @@ SFILES= \
 	PetalModelBase.java \
 	PetalModelDefault.java \
 	PetalNode.java \
+	PetalNodeComponent.java \
 	PetalNodeDefault.java \
 	PetalPort.java \
 	PetalRelaxLayout.java \

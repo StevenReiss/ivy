@@ -138,10 +138,10 @@ package edu.brown.cs.ivy.mint;
 
 import edu.brown.cs.ivy.exec.IvyExec;
 import edu.brown.cs.ivy.exec.IvyExecQuery;
+import edu.brown.cs.ivy.file.IvyFileLocker;
 
 import java.io.*;
 import java.net.*;
-import java.nio.channels.FileLock;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -432,7 +432,7 @@ private static boolean getMasterSocket()
    File ffnp = ffn.getParentFile();
    if (!ffnp.exists()) ffnp.mkdirs();
 
-   Locker lock = new Locker(fn);
+   IvyFileLocker lock = new IvyFileLocker(fn);
    try {
       lock.lock();
 
@@ -671,61 +671,7 @@ private static List<String> findActiveServers()
 
 
 
-/********************************************************************************/
-/*										*/
-/*	Class to handle locking 						*/
-/*										*/
-/********************************************************************************/
 
-private static class Locker {
-
-   private FileOutputStream lock_file;
-   private FileLock file_lock;
-
-   Locker(String base) {
-      lock_file = null;
-      file_lock = null;
-
-      File f = new File(base);
-      if (f.isDirectory()) f = new File(base + File.separator + "Lock");
-      else if (!base.endsWith(".lock")) f = new File(base + ".lock");
-      try {
-	 lock_file = new FileOutputStream(f);
-       }
-      catch (IOException e) {
-	 MintLogger.log("Lock file " + f + " couldn't be opened");
-       }
-    }
-
-   void lock() {
-      if (lock_file == null) return;
-      if (file_lock != null) return;
-
-      Exception e = null;
-      for (int i = 0; i < 250; ++i) {
-	 try {
-	    file_lock = lock_file.getChannel().lock();
-	    return;
-	  }
-	 catch (IOException ex) {
-	    e = ex;
-	  }
-       }
-      MintLogger.log("Lock failed: " + e);
-    }
-
-   void unlock() {
-      if (file_lock == null) return;
-      try {
-	 file_lock.release();
-       }
-      catch (IOException e) {
-	 MintLogger.log("Unlock failed: " + e);
-       }
-      file_lock = null;
-    }
-
-}	// end of subclass Locker
 
 
 

@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.18 2016/11/17 15:56:22 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.19 2017/06/20 00:53:17 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingText.java,v $
+ * Revision 1.19  2017/06/20 00:53:17  spr
+ * Add DPI getting routine.
+ *
  * Revision 1.18  2016/11/17 15:56:22  spr
  * Clean up keyboard mappings.
  *
@@ -123,6 +126,18 @@ import java.awt.geom.Rectangle2D;
 
 
 public class SwingText {
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      <comment here>                                                          */
+/*                                                                              */
+/********************************************************************************/
+
+private static Double           dpi_scale = null;
+
+private static final int        NORMAL_DPI = 96;
 
 
 
@@ -309,6 +324,42 @@ private static class MacKeyTypedAction extends TextAction {
 }	// end of inner class MacKeyTypedAction
 
 
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Handle DPI scaling                                                      */
+/*                                                                              */
+/********************************************************************************/
+
+private static double getDpiScale()
+{
+   if (dpi_scale == null) {
+      if (System.getProperty("os.name").toLowerCase().contains("win")) {
+         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+         GraphicsDevice gd = ge.getDefaultScreenDevice();
+         for (GraphicsConfiguration gc : gd.getConfigurations()) {
+            System.err.println("GC: " + gc + " " + gc.getBounds() + " " + gc.getNormalizingTransform());
+          }
+         Toolkit tk = Toolkit.getDefaultToolkit();
+         double dpi = tk.getScreenResolution();
+         double ratio = dpi/NORMAL_DPI;
+         System.err.println("DPI = " + dpi + " " + ratio);
+         if (ratio > 1.1 || ratio < 0.9) dpi_scale = ratio;
+         else dpi_scale = 1.0;
+       }
+      else dpi_scale = 1.0;
+    }
+   
+   return dpi_scale;
+}
+
+
+
+public static void main(String [] args)
+{
+   getDpiScale();
+}
 
 
 }	// end of class SwingText

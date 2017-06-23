@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.3 2016/03/22 13:10:16 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.4 2017/06/07 01:59:00 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingColorSet.java,v $
+ * Revision 1.4  2017/06/07 01:59:00  spr
+ * Provide a general String to color routine.
+ *
  * Revision 1.3  2016/03/22 13:10:16  spr
  * Handle Color[...] as string.
  *
@@ -64,6 +67,7 @@ package edu.brown.cs.ivy.swing;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.io.*;
 
 
@@ -95,6 +99,10 @@ public static Color getColorByName(String v)
 
    Color c = color_map.get(v.toLowerCase());
    if (c != null) return c;
+   if (v.contains("_")) {
+      c = color_map.get(v.replace("_"," ").toLowerCase());
+      if (c != null) return c;
+    }
 
    if (v.startsWith("java.awt.Color[r=")) {
       int idx = v.indexOf("r=")+2;
@@ -111,6 +119,34 @@ public static Color getColorByName(String v)
       return c;
     }
 
+   if (v.contains(",")) {
+      StringTokenizer tok = new StringTokenizer(v,", ");
+      if (tok.countTokens() == 3) {
+	 try {
+	    int rc = Integer.parseInt(tok.nextToken());
+	    int gc = Integer.parseInt(tok.nextToken());
+	    int bc = Integer.parseInt(tok.nextToken());
+	    c = new Color(rc,gc,bc);
+	    color_map.put(v.toLowerCase(),c);
+	    return c;
+	  }
+	 catch (NumberFormatException e) { }
+       }
+      else if (tok.countTokens() == 4) {
+	 try {
+	    int rc = Integer.parseInt(tok.nextToken());
+	    int gc = Integer.parseInt(tok.nextToken());
+	    int bc = Integer.parseInt(tok.nextToken());
+	    int ac = Integer.parseInt(tok.nextToken());
+	    c = new Color(rc,gc,bc,ac);
+	    color_map.put(v.toLowerCase(),c);
+	    return c;
+	  }
+	 catch (Exception e) {
+	    System.err.println("SWING: Bad color: " + v + ": " + e);
+	  }
+       }
+    }
    String nv = v;
    if (nv.startsWith("#")) nv = nv.substring(1);
    if (nv.startsWith("0x")) nv = nv.substring(2);
@@ -904,6 +940,7 @@ static {
    color_map.put("DarkRed".toLowerCase(),new Color(139,0,0));
    color_map.put("light green".toLowerCase(),new Color(144,238,144));
    color_map.put("LightGreen".toLowerCase(),new Color(144,238,144));
+   color_map.put("invisible",new Color(0,true));
 }
 
 

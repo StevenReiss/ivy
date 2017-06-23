@@ -763,7 +763,7 @@ private class TypeSetter extends ASTVisitor {
       JcompType out = outer_type;
       JcompType jt = JcompAst.getJavaType(t);
       outer_type = jt;
-
+   
       canbe_type = true;
       visitItem(t.getSuperclassType());
       visitList(t.typeParameters());
@@ -771,29 +771,29 @@ private class TypeSetter extends ASTVisitor {
       visitItem(t.getName());
       canbe_type = false;
       if (t.modifiers().contains(Modifier.ABSTRACT)) {
-	 jt.setAbstract(true);
+         jt.setAbstract(true);
        }
       if (out != null && !t.modifiers().contains(Modifier.STATIC)) {
-	 jt.setInnerNonStatic(true);
+         jt.setInnerNonStatic(true);
        }
-
+   
       if (type_prefix != null) nm = type_prefix + "." + nm;
       Type sty = t.getSuperclassType();
       if (sty != null && jt != null) jt.setSuperType(JcompAst.getJavaType(sty));
       for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-	 Type ity = (Type) it.next();
-	 if (jt != null) jt.addInterface(JcompAst.getJavaType(ity));
+         Type ity = (Type) it.next();
+         if (jt != null) jt.addInterface(JcompAst.getJavaType(ity));
        }
-
+   
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
-
+   
       outer_type = out;
-
+   
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-
+   
       return false;
     }
 

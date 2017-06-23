@@ -99,6 +99,10 @@ JcompFile(JcompSource rf)
 	 parser.setResolveBindings(false);
 	 parser.setStatementsRecovery(true);
 	 ast_root = parser.createAST(null);
+         if (for_file instanceof JcompAstCleaner) {
+            JcompAstCleaner updr = (JcompAstCleaner) for_file;
+            ast_root = updr.cleanupAst(ast_root);
+          }
 	 JcompAst.setSource(ast_root,for_file);
        }
     }

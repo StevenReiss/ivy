@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalConstants.java,v 1.4 2011-05-27 19:32:48 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalConstants.java,v 1.5 2017/06/07 01:58:46 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalConstants.java,v $
+ * Revision 1.5  2017/06/07 01:58:46  spr
+ * Allow different shaped nodes.
+ *
  * Revision 1.4  2011-05-27 19:32:48  spr
  * Change copyrights.
  *
@@ -73,6 +76,24 @@ public interface PetalConstants
 
 
 
+/********************************************************************************/
+/*                                                                              */
+/*      Node Shapes                                                             */
+/*                                                                              */
+/********************************************************************************/
+
+public enum PetalNodeShape {
+   SQUARE,
+   RECTANGLE,
+   TRIANGLE,
+   TRIANGLE_DOWN,
+   CIRCLE,
+   DIAMOND,
+   PENTAGON
+}
+
+
+   
 /********************************************************************************/
 /*										*/
 /*	Petal Arc End constants 						*/

@@ -324,8 +324,13 @@ public int getIndexOf(JcodeInstruction ins)
 @Override public void visitTryCatchBlock(Label start,Label end,Label hdlr,String typ)
 {
    super.visitTryCatchBlock(start,end,hdlr,typ);
+   
+   TryCatchBlockNode tcbn = tryCatchBlocks.get(tryCatchBlocks.size()-1);
+   Label sl = tcbn.start.getLabel();
+   Label el = tcbn.end.getLabel();
+   Label hl = tcbn.handler.getLabel();
 
-   JcodeTryCatchBlock tcd = new JcodeTryCatchBlock(this,start,end,hdlr,typ);
+   JcodeTryCatchBlock tcd = new JcodeTryCatchBlock(this,sl,el,hl,typ);
    try_blocks.add(tcd);
 }
 

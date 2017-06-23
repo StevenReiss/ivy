@@ -408,6 +408,7 @@ void setDefinition(JcompSymbol js)		{ assoc_symbol = js; }
 public List<JcompType> getComponents()		{ return null; }
 
 
+public boolean isVarArgs()			{ return false; }
 
 JcompType getKnownType(JcompTyper typr) {
    return typr.findType("java.lang.Object");
@@ -1166,18 +1167,18 @@ private static abstract class ClassInterfaceType extends JcompType {
       Map<String,JcompType> rslt = super.getFields();
       Map<String,JcompType> toadd = new HashMap<String,JcompType>();
       if (super_type != null) {
-         Map<String,JcompType> nf = super_type.getFields();
-         if (nf != null) toadd.putAll(nf);
+	 Map<String,JcompType> nf = super_type.getFields();
+	 if (nf != null) toadd.putAll(nf);
        }
       if (interface_types != null) {
-         for (JcompType jt : interface_types) {
-            Map<String,JcompType> ntypes = jt.getFields();
-            if (ntypes != null) toadd.putAll(ntypes);
-          }
+	 for (JcompType jt : interface_types) {
+	    Map<String,JcompType> ntypes = jt.getFields();
+	    if (ntypes != null) toadd.putAll(ntypes);
+	  }
        }
       for (Map.Entry<String,JcompType> ent : toadd.entrySet()) {
-         String fnm = ent.getKey();
-         if (!rslt.containsKey(fnm)) rslt.put(fnm,ent.getValue());
+	 String fnm = ent.getKey();
+	 if (!rslt.containsKey(fnm)) rslt.put(fnm,ent.getValue());
        }
       return rslt;
     }
@@ -1661,6 +1662,14 @@ private static class ParamType extends JcompType {
       return base_type.getScope();
     }
 
+   @Override public void defineAll(JcompTyper typer) {
+      base_type.defineAll(typer);
+    }
+
+   @Override public boolean definesAllNeededMethods(JcompTyper typer) {
+      return base_type.definesAllNeededMethods(typer);
+    }
+
    @Override @SuppressWarnings("unchecked")
    public Type createAstNode(AST ast) {
       ParameterizedType pt = ast.newParameterizedType(base_type.createAstNode(ast));
@@ -1689,7 +1698,7 @@ private static class ParamType extends JcompType {
    @Override public JcompType resetType(JcompTyper typer) {
       JcompType nbase = base_type.resetType(typer);
       boolean chng = nbase != base_type;
-      List<JcompType> ptyps = new ArrayList<>();
+      List<JcompType> ptyps = new ArrayList<JcompType>();
       for (JcompType jt : type_params) {
 	 JcompType njt = jt.resetType(typer);
 	 chng |= (njt != jt);
@@ -1761,6 +1770,7 @@ private static class MethodType extends JcompType {
    @Override public JcompType getBaseType()	       { return return_type; }
 
    @Override public List<JcompType> getComponents()    { return param_types; }
+   @Override public boolean isVarArgs() 	       { return is_varargs; }
 
    private static String buildMethodTypeName(JcompType r,Collection<JcompType> pl,boolean varargs) {
       StringBuffer buf = new StringBuffer();
@@ -1827,9 +1837,9 @@ private static class MethodType extends JcompType {
       boolean chng = nret != return_type;
       List<JcompType> nargs = new ArrayList<JcompType>();
       for (JcompType jt : param_types) {
-         JcompType njt = jt.resetType(typer);
-         chng |= jt != njt;
-         nargs.add(njt);
+	 JcompType njt = jt.resetType(typer);
+	 chng |= jt != njt;
+	 nargs.add(njt);
        }
       if (!chng) return this;
       return new MethodType(nret,nargs,is_varargs);

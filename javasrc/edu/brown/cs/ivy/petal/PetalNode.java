@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalNode.java,v 1.4 2011-05-27 19:32:49 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalNode.java,v 1.5 2017/06/07 01:58:46 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalNode.java,v $
+ * Revision 1.5  2017/06/07 01:58:46  spr
+ * Allow different shaped nodes.
+ *
  * Revision 1.4  2011-05-27 19:32:49  spr
  * Change copyrights.
  *
