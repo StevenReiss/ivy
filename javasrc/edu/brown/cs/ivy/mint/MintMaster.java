@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintMaster.java,v 1.28 2014/08/29 15:10:27 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintMaster.java,v 1.29 2017/06/23 20:54:54 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintMaster.java,v $
+ * Revision 1.29  2017/06/23 20:54:54  spr
+ * Use public file locking class.
+ *
  * Revision 1.28  2014/08/29 15:10:27  spr
  * Fix up memory size
  *

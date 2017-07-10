@@ -39,12 +39,15 @@
 
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalLevelLayout.java,v 1.19 2016/10/28 18:31:56 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalLevelLayout.java,v 1.20 2017/07/07 20:56:18 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalLevelLayout.java,v $
+ * Revision 1.20  2017/07/07 20:56:18  spr
+ * Fix problem with possible index out of bounds
+ *
  * Revision 1.19  2016/10/28 18:31:56  spr
  * Clean up possible concurrent modification exception.
  *
@@ -402,7 +405,7 @@ private boolean optLevel(int nnod,Node sn,int [] ctrs)
 
    for (int i = 0; i < 3; ++i) {
       int lvl = olvl + i - 1;
-      if (lvl < 1) continue;
+      if (lvl < 1 || lvl >= ctrs.length) continue;
 
       int t = 0;
       for (Arc sa : sn.getAllArcs()) {
@@ -416,7 +419,7 @@ private boolean optLevel(int nnod,Node sn,int [] ctrs)
        }
 
       int mtch = -1;
-      if (blvl < 0) mtch = 1;
+      if (blvl < 0 || blvl >= ctrs.length) mtch = 1;
       else if (t > bcost) mtch = 0;
       else if (t < bcost) mtch = 1;
       else {

@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.4 2017/06/07 01:59:00 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.5 2017/06/23 20:55:07 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingColorSet.java,v $
+ * Revision 1.5  2017/06/23 20:55:07  spr
+ * Output erroreous lines for debugging.
+ *
  * Revision 1.4  2017/06/07 01:59:00  spr
  * Provide a general String to color routine.
  *

@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvySetup.java,v 1.9 2013/09/24 01:06:52 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvySetup.java,v 1.10 2017/07/07 20:56:08 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvySetup.java,v $
+ * Revision 1.10  2017/07/07 20:56:08  spr
+ * Fix problem with running setup.
+ *
  * Revision 1.9  2013/09/24 01:06:52  spr
  * Minor fix
  *
@@ -120,8 +123,7 @@ public static void main(String [] args)
    File jarf = new File(dir,"ivyfull.jar");
    if (!jarf.exists()) {
       File dirf = new File(dir,"IVY");
-      dir = dirf.getPath();
-      jarf = new File(dir,"ivyfull.jar");
+      jarf = new File(dirf,"ivyfull.jar");
     }
    boolean installok = jarf.exists();
    if (!installok) {
@@ -166,17 +168,20 @@ public static void main(String [] args)
        }
     }
 
-   try {
-      Registry rmireg = LocateRegistry.getRegistry("valerie");
-      Object o = rmireg.lookup("edu.brown.cs.ivy.mint.registry");
-      if (o != null && !nohost) {
-	 p.setProperty("edu.brown.cs.ivy.mint.registryhost","valerie.cs.brown.edu");
+   if (!nohost) {
+      try {
+	 Registry rmireg = LocateRegistry.getRegistry("valerie");
+	 Object o = rmireg.lookup("edu.brown.cs.ivy.mint.registry");
+	 if (o != null && !nohost) {
+	    p.setProperty("edu.brown.cs.ivy.mint.registryhost","valerie.cs.brown.edu");
+	  }
        }
-    }
-   catch (Exception e) {
-      System.err.println("IVYSETUP: Mint registry host not used");
-      System.err.println("ERROR: " + e);
-      e.printStackTrace();
+      catch (Exception e) {
+	 System.err.println("IVYSETUP: Mint registry host not used");
+	 System.err.println("ERROR: " + e);
+	 e.printStackTrace();
+	 nohost = true;
+       }
     }
 
    if (nohost) {
