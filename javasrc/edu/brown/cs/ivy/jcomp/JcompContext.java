@@ -581,7 +581,7 @@ private class AsmClass {
          if (iface_names != null) {
             for (String inm : iface_names) {
                JcompType ijt = getAsmTypeName(typer,inm);
-                     if (ijt != null) base_type.addInterface(ijt);
+               if (ijt != null) base_type.addInterface(ijt);
              }
           }
          base_type.setDefinition(JcompSymbol.createSymbol(base_type));
@@ -639,33 +639,33 @@ private class AsmClass {
    List<AsmMethod> findMethods(JcompTyper typer,String id,JcompType argtyp,JcompType ctyp) {
       List<AsmMethod> rslt = new ArrayList<AsmMethod>();
       for (AsmMethod am : method_data) {
-	 if ((id == null || am.getName().equals(id)) && am.isCompatibleWith(typer,argtyp) >= 0)
-	    rslt.add(am);
+         if ((id == null || am.getName().equals(id)) && am.isCompatibleWith(typer,argtyp) >= 0)
+            rslt.add(am);
        }
       if (super_name != null && rslt.isEmpty()) {
-	 AsmClass scl = findKnownType(typer,super_name);
-	 if (scl != null) {
-	    List<AsmMethod> rl = scl.findMethods(typer,id,argtyp,ctyp);
-	    if (rl != null) rslt.addAll(rl);
-	  }
+         AsmClass scl = findKnownType(typer,super_name);
+         if (scl != null) {
+            List<AsmMethod> rl = scl.findMethods(typer,id,argtyp,ctyp);
+            if (rl != null) rslt.addAll(rl);
+          }
        }
       if (iface_names != null && rslt.isEmpty()) {
-	 for (String inm : iface_names) {
-	    AsmClass icl = findKnownType(typer,inm);
-	    if (icl != null) {
-	       List<AsmMethod> rl = icl.findMethods(typer,id,argtyp,ctyp);
-	       if (rl != null) rslt.addAll(rl);
-	     }
-	  }
+         for (String inm : iface_names) {
+            AsmClass icl = findKnownType(typer,inm);
+            if (icl != null) {
+               List<AsmMethod> rl = icl.findMethods(typer,id,argtyp,ctyp);
+               if (rl != null) rslt.addAll(rl);
+             }
+          }
        }
       if (rslt.isEmpty() && (access_info & Opcodes.ACC_INTERFACE) != 0) {
-	 AsmClass jlo = findKnownType(typer,"java.lang.Object");
-	 List<AsmMethod> rl = jlo.findMethods(typer,id,argtyp,ctyp);
-	 if (rl != null) rslt.addAll(rl);
+         AsmClass jlo = findKnownType(typer,"java.lang.Object");
+         List<AsmMethod> rl = jlo.findMethods(typer,id,argtyp,ctyp)   ;
+         if (rl != null) rslt.addAll(rl);
        }
-
+   
       if (rslt.isEmpty()) return null;
-
+   
       return rslt;
     }
 

@@ -437,24 +437,6 @@ protected class HelpInfo {
 
 
 
-/********************************************************************************/
-/*										*/
-/*	Subclass to listen for Mouse Events in the Glossary List		*/
-/*										*/
-/********************************************************************************/
-
-public class Mouser extends MouseAdapter {
-
-   @Override public void mouseClicked(MouseEvent e) {
-      if (e.getClickCount() == 2) {
-	 HelpInfo item = glossary_list.getSelectedValue();
-	 if (item != null)
-	    displayFile(item.fileName);
-       }
-    }
-
-}	// end of subclass Mouser
-
 
 /********************************************************************************/
 /*										*/

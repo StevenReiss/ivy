@@ -79,12 +79,15 @@
  * @author Scott Violet
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.18 2017/02/15 02:09:50 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.19 2017/07/14 19:36:58 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingTreeTable.java,v $
+ * Revision 1.19  2017/07/14 19:36:58  spr
+ * Update colors.	Make inner classes private.
+ *
  * Revision 1.18  2017/02/15 02:09:50  spr
  * Use Class.getEnumConstants.
  *
@@ -331,7 +334,7 @@ public void removeTreeExpansionListener(TreeExpansionListener tel)
 /*										*/
 /********************************************************************************/
 
-public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
+private class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 
    /** Last table/tree row asked to renderer. */
    protected int visibleRow;
@@ -421,7 +424,7 @@ public class TreeTableCellRenderer extends JTree implements TableCellRenderer {
  * JTree.
  */
 
-class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+private class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
 
 
 
@@ -490,7 +493,7 @@ class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor 
  * in the DefaultTreeSelectionModel.
  */
 
-class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel {
+private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel {
 
    /** Set to true when we are updating the ListSelectionModel. */
    protected boolean	     updatingListSelectionModel;
@@ -826,6 +829,8 @@ public static class AbstractCellEditor implements CellEditor {
 
 }	// end of inner class AbstractCellEditor
 
+
+	
 
 /********************************************************************************/
 /*										*/

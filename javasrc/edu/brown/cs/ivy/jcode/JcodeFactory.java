@@ -146,6 +146,12 @@ public JcodeClass findClass(String name)
 {
    JcodeClass jdt = known_classes.get(name);
    if (jdt != null) return jdt;
+   for (String anm = name; anm.contains("."); ) {
+      int idx = anm.lastIndexOf(".");
+      anm = anm.substring(0,idx) + "$" +  anm.substring(idx+1);
+      jdt = known_classes.get(anm);
+      if (jdt != null) return jdt;
+    }
 
    work_list.add(name);
    loadClasses();
@@ -580,6 +586,16 @@ private class LoadTask implements Runnable {
 
    @Override public void run() {
       JcodeFileInfo fi = class_map.get(load_class);
+      String altname = load_class;
+      if (fi == null) {
+         while (altname.contains(".")) {
+            int idx = altname.lastIndexOf(".");
+            altname = altname.substring(0,idx) + "$" + altname.substring(idx+1);
+            fi = class_map.get(altname);
+            if (fi != null) break;
+          }
+       }
+       
       if (fi == null) {
          System.err.println("JCODE: Can't find class " + load_class);
          return;
@@ -602,11 +618,11 @@ private class LoadTask implements Runnable {
                String c2 = "L" + c1 + ";";
                known_classes.put(c2,bc);
                if (c1.contains("$")) {
-        	  String c3 = c1.replace('$','.');
-        	  known_classes.put(c3,bc);
-        	  String c4 = load_class.replace('$','.');
-        	  known_classes.put(c4,bc);
-        	}
+                  String c3 = c1.replace('$','.');
+                  known_classes.put(c3,bc);
+                  String c4 = load_class.replace('$','.');
+                  known_classes.put(c4,bc);
+                }
              }
           }
    
@@ -662,7 +678,7 @@ void noteClass(String nm)
       noteType(nm);
       return;
     }
-
+   
    if (work_holder != null) {
       work_holder.workOnClass(nm);
     }
@@ -672,6 +688,11 @@ void noteClass(String nm)
       known_classes.put(nm,null);
     }
 }
+
+
+
+
+
 
 
 

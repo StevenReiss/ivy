@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.5 2017/06/23 20:55:07 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.6 2017/07/14 19:36:58 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingColorSet.java,v $
+ * Revision 1.6  2017/07/14 19:36:58  spr
+ * Update colors.	Make inner classes private.
+ *
  * Revision 1.5  2017/06/23 20:55:07  spr
  * Output erroreous lines for debugging.
  *
@@ -944,6 +947,7 @@ static {
    color_map.put("light green".toLowerCase(),new Color(144,238,144));
    color_map.put("LightGreen".toLowerCase(),new Color(144,238,144));
    color_map.put("invisible",new Color(0,true));
+   color_map.put("transparent",new Color(0,true));
 }
 
 
