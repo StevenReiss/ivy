@@ -1,0 +1,28 @@
+<project name='ivy.jcomp' default='compile'>
+
+   <property file='../../../../../../build.properties' />
+   <property name='PRO' value='/pro' />
+   <property name='IVY' value='/pro/ivy' />
+   <target name='init' >
+      <path id='ivy.classpath'>
+	 <pathelement location='${IVY}/java' />
+	 <fileset dir='${IVY}/lib/eclipsejar/' includes='*.jar' />
+	 <pathelement location='${IVY}/lib/asm5.jar' />
+      </path>
+      <path id='test.classpath'>
+	 <pathelement location='${IVY}/java' />
+	 <fileset dir='${IVY}/lib/' includes='org*.jar' />
+      </path>
+   </target>
+
+   <target name='compile' depends='init'>
+      <javac srcdir='.' destdir='${IVY}/java' debug='on' deprecation='on'
+		includeantruntime='false'>
+	 <classpath refid='ivy.classpath' />
+      </javac>
+   </target>
+
+</project>
+
+
+

@@ -1,0 +1,36 @@
+#
+# FILE -- common classes for file management with Brown software
+#
+# Copyright 2009 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= project
+
+
+SFILES= \
+	IvyExecutable.java \
+	IvyExecutableBase.java \
+	IvyProject.java \
+	IvyProjectBase.java \
+	IvyProjectConstants.java \
+	IvyProjectEclipse.java \
+	IvyProjectException.java \
+	IvyProjectManager.java	\
+	IvyProjectSetup.java \
+
+
+
+test: all
+	ivyjava edu.brown.cs.ivy.project.IvyProjectEclipse
+
+setup: all
+	ivyjava edu.brown.cs.ivy.project.IvyProjectSetup -w /home/spr/Eclipse/workspace2
+
+setup1: all
+	ivyjava edu.brown.cs.ivy.project.IvyProjectSetup -w /Users/spr/workspace
+	ivyjava edu.brown.cs.ivy.project.IvyProjectSetup -w /Users/spr/Documents/workspace
+
+setup2: all
+	ivyjava edu.brown.cs.ivy.project.IvyProjectSetup -w /home/spr/Eclipse/argouml2
+
+

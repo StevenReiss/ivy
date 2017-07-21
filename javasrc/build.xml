@@ -1,0 +1,45 @@
+<project name='ivy' default='all' >
+
+   <property file='../build.properties' />
+   <property name='PRO' value='/pro' />
+   <property name='IVY' value='/pro/ivy' />
+
+   <target name='all'>
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/exec" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/file" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/swing" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/xml" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/petal" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/pebble" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/mint" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/jcomp" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/jcode" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/limbo" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/project" />
+   </target>
+
+   <path id='jdocsrc'>
+      <pathelement location='${IVY}/java' />
+      <fileset dir='${FAIT}/lib/' />
+   </path>
+
+
+   <target name='doc'>
+      <javadoc sourcepathref='jdocsrc' classpathref='bubbles.classpath' destdir='${PRO}/bubbles/doc'>
+	 <package name='edu.brown.cs.ivy.exec' />
+	 <package name='edu.brown.cs.ivy.file' />
+	 <package name='edu.brown.cs.ivy.swing' />
+	 <package name='edu.brown.cs.ivy.xml' />
+	 <package name='edu.brown.cs.ivy.petal' />
+	 <package name='edu.brown.cs.ivy.pebble' />
+	 <package name='edu.brown.cs.ivy.mint' />
+	 <package name='edu.brown.cs.ivy.jcomp' />
+	 <package name='edu.brown.cs.ivy.jcode' />
+	 <package name='edu.brown.cs.ivy.limbo' />
+	 <package name='edu.brown.cs.ivy.project' />
+      </javadoc>
+   </target>
+
+
+</project>
+

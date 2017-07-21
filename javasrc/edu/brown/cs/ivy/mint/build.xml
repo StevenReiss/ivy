@@ -1,0 +1,26 @@
+<project name='ivy.mint' default='compile'>
+
+   <property file='../../../../../../build.properties' />
+   <property name='PRO' value='/pro' />
+   <property name='IVY' value='/pro/ivy' />
+   <target name='init' >
+      <path id='ivy.classpath'>
+	 <pathelement location='${IVY}/java' />
+	 <pathelement location='${IVY}/lib/javax.servlet.jar' />
+      </path>
+      <path id='test.classpath'>
+	 <pathelement location='${IVY}/java' />
+      </path>
+   </target>
+
+   <target name='compile' depends='init'>
+      <javac srcdir='.' destdir='${IVY}/java' debug='on' deprecation='on'
+		includeantruntime='false'>
+	 <classpath refid='ivy.classpath' />
+      </javac>
+   </target>
+
+</project>
+
+
+
