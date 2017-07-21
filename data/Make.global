@@ -574,7 +574,6 @@ ifdef SUBDIRS
 	   done
 endif
 
--include javadep
 
 
 #

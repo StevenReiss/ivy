@@ -209,12 +209,19 @@ if ( "X$xxx" == X ) then
    if ( $?ECLIPSEROOT == 1) then
       set eclipse = $ECLIPSEROOT
    else
-      set eclipse = ~spr/eclipse43/eclipse
+      set eclipse = ~spr/eclipse-neon/eclipse
    endif
-   set nonomatch
    set eclipsejar =
+   set nonomatch
    set swt = swt.gtk.linux.x86_64
    if ($BROWN_IVY_ARCH == i386 || $BROWN_IVY_ARCH == ppc) set swt = swt.carbon.macosx
+
+   set x1 = `echo $eclipse/plugins/org.eclipse.jface.text_*.jar`
+   set x2 = $eclipse/plugins/org.eclipse.jface.text_\*.jar
+   if ($x1 == $x2) then
+      set eclipse = ~spr/.p2/pool
+   endif
+
 
    foreach i (jdt.core core.filebuffers core.resources core.runtime core.jobs \
 		core.contenttype equinox.common equinox.preferences equinox.registry \
