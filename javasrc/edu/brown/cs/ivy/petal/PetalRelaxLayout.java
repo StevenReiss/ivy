@@ -68,12 +68,15 @@
  */
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalRelaxLayout.java,v 1.12 2015/11/20 15:09:23 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalRelaxLayout.java,v 1.13 2017/07/21 14:42:11 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalRelaxLayout.java,v $
+ * Revision 1.13  2017/07/21 14:42:11  spr
+ * Fix relaxation layout so it works better.
+ *
  * Revision 1.12  2015/11/20 15:09:23  spr
  * Reformatting.
  *
@@ -288,9 +291,9 @@ private boolean relax()
       double vy = node_set[e.to].y - node_set[e.from].y;
       double len = Math.sqrt(vx * vx + vy * vy);
 
-      if (len < edge_set[i].len) continue;	// ignore if too close
+      if (len < e.len) continue;	// ignore if too close
 
-      double f = (edge_set[i].len - len) / (edge_set[i].len * 3) ;
+      double f = (e.len - len) / (len * 3) / num_edges;
       double dx = f * vx * p0;
       double dy = f * vy * p0;
 
@@ -332,13 +335,15 @@ private boolean relax()
 
    double minx = 0;
    double miny = 0;
+   double szx = Math.max(graph_size.width / 100.0,5);
+   double szy = Math.max(graph_size.height / 100.0,5);
 
    for (int i = 0 ; i < num_nodes ; i++) {
       Node n = node_set[i];
       // Dimension csz = n.getSize();
       if (!n.fixed) {
-	 n.x += Math.max(-5, Math.min(5, n.dx));
-	 n.y += Math.max(-5, Math.min(5, n.dy));
+	 n.x += Math.max(-szx, Math.min(szx, n.dx));
+	 n.y += Math.max(-szy, Math.min(szy, n.dy));
 	 if (n.dx >= THRESHOLD || n.dy >= THRESHOLD) chng = true;
 	 // System.out.println("v= " + n.dx + "," + n.dy);
 	 if (i == 0 || n.x < minx) minx = n.x;

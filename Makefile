@@ -257,7 +257,8 @@ bubbles:
 	rm -rf bin.files
 	cp ivybin.jar /pro/bubbles/suds/lib/ivy.jar
 	mv ivybin.jar /pro/bubbles/lib/ivy.jar
-
+	jar cf ivylib.jar lib/*.props lib/*.jar lib/androidjar lib/eclipsejar lib/*.xml
+	mv ivylib.jar /pro/bubbles/
 
 #	   rm -rf javasrc/edu/brown/cs/ivy/$$x/Makefile; \
 #	   ln -s ../../../../../data/Make.pass javasrc/edu/brown/cs/ivy/$$x/Makefile; \

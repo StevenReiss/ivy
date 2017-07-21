@@ -99,7 +99,7 @@ public JcodeTest()
    Assert.assertNotNull(t4);
    Assert.assertNotNull(t5);
    Assert.assertNotNull(t6);
-   
+
    JcodeDataType x1 = bcode_factory.findNamedType("int");
    JcodeDataType x2 = bcode_factory.findNamedType("spr.onsets.OnsetExprSet");
    JcodeDataType x3 = bcode_factory.findNamedType("spr.onsets.OnsetExprSet.Expr");
@@ -108,7 +108,7 @@ public JcodeTest()
    Assert.assertNotNull(x2);
    Assert.assertNotNull(x3);
    Assert.assertNotNull(x4);
-   
+
    JcodeDataType y1 = bcode_factory.findJavaType("Lspr/onsets/OnsetTypeSet;");
    Assert.assertNotNull(y1);
    JcodeClass y2 = bcode_factory.findClass("spr.onsets.OnsetTypeSet");
@@ -120,7 +120,7 @@ public JcodeTest()
    Assert.assertNotNull(y4);
    Assert.assertEquals(y4,y5);
    Assert.assertNotNull(y6);
-   
+
    Collection<JcodeClass> y7 = y2.getParents();
    Assert.assertEquals(y7.size(),1);
    Collection<JcodeMethod> y8 = y2.getMethods();
