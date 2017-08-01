@@ -279,6 +279,17 @@ public void setScaleFactor(double v)
    fixupWindowSize();
 }
 
+public void addZoomWheeler()
+{
+   JComponent c = this;
+   if (c.getParent() != null && c.getParent() instanceof JViewport)
+      c = (JComponent) c.getParent();
+   if (c.getParent() != null && c.getParent() instanceof JScrollPane)
+      c = (JComponent) c.getParent();
+   c.addMouseWheelListener(new Wheeler());
+}
+
+
 public Dimension getExtent()					{ return getUsedSize(); }
 
 
@@ -307,6 +318,8 @@ private static final int	MIN_NODE_SIZE = 40;		// size for determining position
 
 private static final int	X_OFFSET = 16;			// horizontal offset for overlapping nodes
 private static final int	Y_OFFSET = 16;			// vertical offset for overlapping nodes
+
+private static final double     SCALE_FACTOR = 1.125;
 
 private static final Cursor	DEFAULT_CURSOR = null;
 private static final Cursor	ITEM_CURSOR = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
@@ -364,6 +377,8 @@ private int x_offset;
 private int y_offset;
 
 private double		scale_by;
+private double          user_scale;
+private double          prior_scale;
 
 
 private static Clipboard clip_board = new Clipboard("Petal Clipboard");
@@ -396,6 +411,8 @@ private PetalEditor()
    resize_x = 0;
    resize_y = 0;
    scale_by = 1.0;
+   user_scale = 1.0;
+   prior_scale = 1.0;
    pivot_index = -1;
    pivot_arc = null;
    new_pivot = false;
@@ -1041,6 +1058,53 @@ private int gridCoord(int x)
 
 
 
+
+/********************************************************************************/
+/*                                                                              */
+/*      Methods for handling ZOOM                                               */
+/*                                                                              */
+/********************************************************************************/
+
+private void zoom(int amt) 
+{
+   for (int i = 0; i < Math.abs(amt); ++i) {
+      if (amt < 0) user_scale /= SCALE_FACTOR;
+      else user_scale *= SCALE_FACTOR;
+    }
+   if (Math.abs(user_scale - 1.0) < 0.001) user_scale = 1;
+   if (user_scale < 1/128.0) user_scale = 1/128.0;
+   // if (user_scale > 2048) user_scale = 2048;
+   
+   double sf = getScaleFactor();
+   if (sf * user_scale / prior_scale > 2) {
+      user_scale = 2 * prior_scale / sf;
+    }
+   sf = sf * user_scale / prior_scale;
+   setScaleFactor(sf);
+   prior_scale = user_scale;
+   repaint();
+}
+
+
+
+private class Wheeler implements MouseWheelListener {
+   
+   
+   @Override public void mouseWheelMoved(MouseWheelEvent e) {
+      int mods = e.getModifiersEx();
+      if ((mods & (InputEvent.CTRL_DOWN_MASK|InputEvent.META_DOWN_MASK)) == 0) 
+         return;
+      
+      int ct = e.getWheelRotation();
+      zoom(ct);
+      e.consume();
+    }
+   
+}	// end of inner class Wheeler
+
+
+
+
 /********************************************************************************/
 /*										*/
 /*	Property change event methods						*/
@@ -1352,7 +1416,6 @@ private class Keyer extends KeyAdapter {
 /*	Classes for locally drawn frames					*/
 /*										*/
 /********************************************************************************/
-
 
 private class TabFrame extends JPanel {
 

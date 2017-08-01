@@ -617,6 +617,8 @@ private class Item {
 
 private void computeRanks()
 {
+   if (rank_data == null) return;
+
    cur_pass = 0;
    while (cur_pass++ < num_pass && nextPass()) ;
 
@@ -676,7 +678,7 @@ private boolean nextPass()
 	 Arrays.sort(ritms,ic);
 	 for (int i = 0; i < nitm; ++i) rank_data[lvl][i] = ritms[i];
        }
-      adjustRanks(lvl);
+      if (max_rank[lvl] < 100) adjustRanks(lvl);
       assignRanks(max_rank[lvl],rank_data[lvl]);
 
       for (int i = 0; i < max_rank[lvl]; ++i) {

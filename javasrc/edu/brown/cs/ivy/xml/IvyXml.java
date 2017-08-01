@@ -497,7 +497,8 @@ public static void outputXmlString(String s,boolean field,boolean html,Writer pw
 	       pw.write("&quot;");
 	       break;
 	    case '\'' :
-	       pw.write("&apos;");
+	       if (html) pw.write("&#39");
+	       else pw.write("&apos;");
 	       break;
 	    case '\034' :
 	       pw.write(";");
