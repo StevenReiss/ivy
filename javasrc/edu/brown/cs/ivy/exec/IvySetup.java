@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvySetup.java,v 1.10 2017/07/07 20:56:08 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvySetup.java,v 1.11 2017/08/04 02:02:57 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvySetup.java,v $
+ * Revision 1.11  2017/08/04 02:02:57  spr
+ * Remove excess at end of file.
+ *
  * Revision 1.10  2017/07/07 20:56:08  spr
  * Fix problem with running setup.
  *
@@ -280,3 +283,4 @@ public static boolean setup(File ivv)
 
 /* end of IvySetup.java */
 
+												

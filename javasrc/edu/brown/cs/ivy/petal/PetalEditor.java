@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalEditor.java,v 1.28 2017/04/30 02:54:57 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalEditor.java,v 1.29 2017/08/04 12:42:55 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalEditor.java,v $
+ * Revision 1.29  2017/08/04 12:42:55  spr
+ * Clean up
+ *
  * Revision 1.28  2017/04/30 02:54:57  spr
  * Clean up code.
  *

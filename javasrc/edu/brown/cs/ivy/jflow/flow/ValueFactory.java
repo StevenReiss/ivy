@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ValueFactory.java,v 1.6 2007-05-04 01:59:58 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ValueFactory.java,v 1.7 2017/08/04 12:42:33 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: ValueFactory.java,v $
+ * Revision 1.7  2017/08/04 12:42:33  spr
+ * clean up
+ *
  * Revision 1.6  2007-05-04 01:59:58  spr
  * Update jflow with generic value/source flags.
  *

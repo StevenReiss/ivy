@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintArguments.java,v 1.4 2011-05-27 19:32:42 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintArguments.java,v 1.5 2017/08/04 12:42:39 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintArguments.java,v $
+ * Revision 1.5  2017/08/04 12:42:39  spr
+ * clean up
+ *
  * Revision 1.4  2011-05-27 19:32:42  spr
  * Change copyrights.
  *

@@ -39,12 +39,15 @@
 
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalLevelLayout.java,v 1.20 2017/07/07 20:56:18 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalLevelLayout.java,v 1.21 2017/08/04 12:42:56 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalLevelLayout.java,v $
+ * Revision 1.21  2017/08/04 12:42:56  spr
+ * Clean up
+ *
  * Revision 1.20  2017/07/07 20:56:18  spr
  * Fix problem with possible index out of bounds
  *

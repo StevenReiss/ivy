@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.72 2017/05/12 20:54:03 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.73 2017/08/04 12:43:13 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyXml.java,v $
+ * Revision 1.73  2017/08/04 12:43:13  spr
+ * Add ant capability.
+ *
  * Revision 1.72  2017/05/12 20:54:03  spr
  * Unsyncrhonize parser
  *
@@ -1209,9 +1212,9 @@ private static class NodeIterator implements Iterable<Element>, Iterator<Element
       if (isElement(xml)) cur_child = xml.getFirstChild();
       else cur_child = null;
       element_type = et;
-
+   
       while (cur_child != null && !isElement(cur_child,element_type)) {
-	 cur_child = cur_child.getNextSibling();
+         cur_child = cur_child.getNextSibling();
        }
     }
 
