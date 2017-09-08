@@ -37,8 +37,10 @@ package edu.brown.cs.ivy.jcomp;
 
 import org.eclipse.jdt.core.dom.*;
 
+
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -95,6 +97,10 @@ static JcompSymbol createSymbol(VariableDeclarationFragment n,JcompTyper typer)
       typ = vs.getType();
       mods = vs.getModifiers();
     }
+   else if (par instanceof LambdaExpression) {
+      JcompType jt = typer.findSystemType("?");
+      return new VariableSymbol(n,jt,0,clstyp);
+    }
    else throw new Error("Unknown parent for variable decl: " + par);
 
    JcompType jt = JcompAst.getJavaType(typ);
@@ -135,6 +141,18 @@ static JcompSymbol createSymbol(LabeledStatement n)
 static JcompSymbol createSymbol(MethodDeclaration n)
 {
    return new MethodSymbol(n);
+}
+
+
+static JcompSymbol createSymbol(LambdaExpression n)
+{
+   return new LambdaSymbol(n);
+}
+
+
+static JcompSymbol createSymbol(MethodReference n)
+{
+   return new RefSymbol(n);
 }
 
 
@@ -205,6 +223,7 @@ public String getReportName()		{ return getName(); }
  **/
 
 public abstract JcompType getType();
+public void setType(JcompType typ)			{ }
 
 
 
@@ -392,7 +411,7 @@ public String getFullName()
       for (ASTNode p = dn.getParent(); p != null; p = p.getParent()) {
 	 if (p instanceof AbstractTypeDeclaration) {
 	    JcompType jt = JcompAst.getJavaType(p);
-	    return jt.getName() + "." + getName();
+	    if (jt != null) return jt.getName() + "." + getName();
 	  }
        }
     }
@@ -468,6 +487,26 @@ public Statement createDeclaration(AST ast)
 
    return vds;
 }
+
+
+/********************************************************************************/
+/*										*/
+/*	Generic handling							*/
+/*										*/
+/********************************************************************************/
+
+JcompSymbol parameterize(JcompTyper typer,List<JcompType> parms)
+{
+   return this;
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -550,6 +589,10 @@ private static class VariableSymbol extends JcompSymbol {
    @Override void noteUsed()			{ is_used = true; }
    @Override void noteRead()			{ is_read = true; }
 
+   @Override public void setType(JcompType typ) {
+      java_type = typ;
+    }
+
    @Override public ASTNode getDefinitionNode() {
       for (ASTNode p = ast_node; p != null; p = p.getParent()) {
 	 switch (p.getNodeType()) {
@@ -558,6 +601,7 @@ private static class VariableSymbol extends JcompSymbol {
 	    case ASTNode.SINGLE_VARIABLE_DECLARATION :
 	    case ASTNode.VARIABLE_DECLARATION_EXPRESSION :
 	    case ASTNode.VARIABLE_DECLARATION_STATEMENT :
+	    case ASTNode.LAMBDA_EXPRESSION :
 	       return p;
 	  }
        }
@@ -573,6 +617,8 @@ private static class VariableSymbol extends JcompSymbol {
 	    case ASTNode.METHOD_DECLARATION :
 	       return false;
 	    case ASTNode.CATCH_CLAUSE :
+	       return false;
+	    case ASTNode.LAMBDA_EXPRESSION :
 	       return false;
 	  }
        }
@@ -632,30 +678,30 @@ private static class VariableSymbol extends JcompSymbol {
 
 
 private static class NestedThisSymbol extends JcompSymbol {
-   
+
    private JcompType java_type;
    private JcompType class_type;
-   
+
    NestedThisSymbol(JcompType t,JcompType clstyp) {
       java_type = t;
       class_type = clstyp;
     }
-   
-   @Override public String getName()	        { return "this$0"; }
-   @Override public JcompType getType()         { return java_type; }
-   
-   @Override public boolean isFieldSymbol()     { return true; }
-   
+
+   @Override public String getName()		{ return "this$0"; }
+   @Override public JcompType getType() 	{ return java_type; }
+
+   @Override public boolean isFieldSymbol()	{ return true; }
+
    @Override public JcompSymbolKind getSymbolKind() {
       return JcompSymbolKind.FIELD;
     }
-   
-   @Override public JcompType getClassType()    { return class_type; }
-   
+
+   @Override public JcompType getClassType()	{ return class_type; }
+
    @Override public int getModifiers() {
       return Modifier.PROTECTED;
     }
-   
+
    @Override public boolean isStatic() {
       return false;
     }
@@ -671,14 +717,14 @@ private static class NestedThisSymbol extends JcompSymbol {
    @Override public boolean isFinal() {
       return false;
     }
-   
+
    @Override public String getHandle(String proj) {
       String pfx = proj + "#";
       JcompType jt = getType();
       if (jt == null) return pfx + getName();
       return pfx + jt.getJavaTypeName() + "." + getName();
     }
-   
+
 }	// end of subclass NestedThisSymbol
 
 
@@ -755,7 +801,8 @@ private static class MethodSymbol extends JcompSymbol {
       is_used = false;
       symbol_mods = ast_node.getModifiers();
       if (JcompAst.isInInterface(n)) {
-         symbol_mods |= Modifier.PUBLIC | Modifier.ABSTRACT;
+	 symbol_mods |= Modifier.PUBLIC;
+	 if (n.getBody() == null) symbol_mods |= Modifier.ABSTRACT;
        }
     }
 
@@ -836,6 +883,13 @@ private static class KnownMethod extends JcompSymbol {
    @Override public boolean isGenericReturn()		{ return is_generic; }
    @Override public boolean isConstructorSymbol()	{ return method_name.equals("<init>"); }
 
+   @Override JcompSymbol parameterize(JcompTyper typer,List<JcompType> params) {
+      JcompType jty = JcompGenerics.deriveMethodType(typer,method_type,class_type,params);
+      if (jty == null || jty == method_type) return this;
+      KnownMethod km = new KnownMethod(method_name,jty,class_type,access_flags,declared_exceptions,is_generic);
+      return km;
+    }
+
 }	// end of subclass KnownMethod
 
 
@@ -915,6 +969,104 @@ private static class AsmTypeSymbol extends JcompSymbol {
     }
 
 }	// end of subclass TypeSymbol
+
+
+
+/********************************************************************************/
+/*										*/
+/*	LambdaSymbol -> lambda expression					*/
+/*										*/
+/********************************************************************************/
+
+private static AtomicInteger lambda_counter = new AtomicInteger();
+
+private static class LambdaSymbol extends JcompSymbol {
+
+   private LambdaExpression ast_node;
+   private String lambda_name;
+
+   LambdaSymbol(LambdaExpression n) {
+      ast_node = n;
+      lambda_name = "LAMBDA$" + lambda_counter.incrementAndGet();
+    }
+
+   @Override public String getName() {
+      return lambda_name;
+    }
+
+   @Override public String getReportName() {
+      return lambda_name;
+    }
+
+   @Override public JcompType getType() 		{ return JcompAst.getJavaType(ast_node); }
+
+   @Override public ASTNode getDefinitionNode() 	{ return ast_node; }
+   @Override public ASTNode getNameNode()		{ return ast_node; }
+
+   @Override public boolean isMethodSymbol()	{ return true; }
+
+   @Override public JcompType getClassType() {
+      for (ASTNode n = ast_node; n != null; n = n.getParent()) {
+	 if (n instanceof TypeDeclaration) {
+	    return JcompAst.getJavaType(n);
+	  }
+       }
+      return null;
+    }
+
+   @Override public String getHandle(String proj) {
+      return proj + "#" + getFullName() + getType().getJavaTypeName();
+    }
+
+}	// end of subclass LambdaSymbol
+
+
+
+private static class RefSymbol extends JcompSymbol {
+
+   private MethodReference ast_node;
+   private String ref_name;
+
+   RefSymbol(MethodReference n) {
+      ast_node = n;
+      ref_name = "MREF$" + lambda_counter.incrementAndGet();
+    }
+
+   @Override public String getName() {
+      return ref_name;
+    }
+
+   @Override public String getReportName() {
+      return ref_name;
+    }
+
+   @Override public JcompType getType() 		{ return JcompAst.getJavaType(ast_node); }
+
+   @Override public ASTNode getDefinitionNode() 	{ return ast_node; }
+   @Override public ASTNode getNameNode()		{ return ast_node; }
+
+   @Override public boolean isMethodSymbol()		{ return true; }
+
+   @Override public JcompType getClassType() {
+      for (ASTNode n = ast_node; n != null; n = n.getParent()) {
+	 if (n instanceof TypeDeclaration) {
+	    return JcompAst.getJavaType(n);
+	  }
+       }
+      return null;
+    }
+
+   @Override public String getHandle(String proj) {
+      return proj + "#" + getFullName() + getType().getJavaTypeName();
+    }
+
+}	// end of subclass RefSymbol
+
+
+
+
+
+
 
 
 

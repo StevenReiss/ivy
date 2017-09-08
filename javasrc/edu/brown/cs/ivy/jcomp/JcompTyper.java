@@ -192,20 +192,20 @@ public JcompType findSystemType(String nm)
    JcompType jt = type_map.get(nm);
    if (jt != null) return jt;
 
-   int idx = nm.indexOf("<");
-   if (idx > 0) {
-      String t0 = nm.substring(0,idx);
-      int idx1 = nm.lastIndexOf(">");
-      String t1 = nm.substring(idx+1,idx1);
-      return findParameterizedSystemType(t0,t1);
-    }
-
-   idx = nm.lastIndexOf("[]");
+   int idx = nm.lastIndexOf("[]");
    if (idx > 0) {
       String nm0 = nm.substring(0,idx);
       JcompType bty = findSystemType(nm0);
       if (bty == null) return null;
       return findArrayType(bty);
+    }
+   
+   idx = nm.indexOf("<");
+   if (idx > 0) {
+      String t0 = nm.substring(0,idx);
+      int idx1 = nm.lastIndexOf(">");
+      String t1 = nm.substring(idx+1,idx1);
+      return findParameterizedSystemType(t0,t1);
     }
 
    jt = type_context.defineKnownType(this,nm);
@@ -244,7 +244,7 @@ private JcompType findParameterizedSystemType(String t0,String args)
    if (aty == null) return null;
    argl.add(aty);
 
-   return JcompType.createParameterizedType(btyp,argl);
+   return JcompType.createParameterizedType(btyp,argl,this);
 }
 
 
@@ -274,9 +274,11 @@ public JcompType fixJavaType(JcompType jt)
 {
    if (jt == null) return null;
 
-   JcompType jt1 = type_map.get(jt.getName());
+   String nm = jt.getName();
+   if (jt.isMethodType() && jt.getSignature() != null) nm += jt.getSignature();
+   JcompType jt1 = type_map.get(nm);
    if (jt1 != null) jt = jt1;
-   else type_map.put(jt.getName(),jt);
+   else type_map.put(nm,jt);
    return jt;
 }
 
@@ -743,7 +745,7 @@ private class TypeSetter extends ASTVisitor {
       canbe_type = false;
     }
 
-   @Override public boolean visit(PackageDeclaration t) {					
+   @Override public boolean visit(PackageDeclaration t) {				
       String pnm = t.getName().getFullyQualifiedName();
       type_prefix = pnm;
       return false;
@@ -763,7 +765,7 @@ private class TypeSetter extends ASTVisitor {
       JcompType out = outer_type;
       JcompType jt = JcompAst.getJavaType(t);
       outer_type = jt;
-   
+
       canbe_type = true;
       visitItem(t.getSuperclassType());
       visitList(t.typeParameters());
@@ -771,40 +773,71 @@ private class TypeSetter extends ASTVisitor {
       visitItem(t.getName());
       canbe_type = false;
       if (t.modifiers().contains(Modifier.ABSTRACT)) {
-         jt.setAbstract(true);
+	 jt.setAbstract(true);
        }
-      if (out != null && !t.modifiers().contains(Modifier.STATIC)) {
-         jt.setInnerNonStatic(true);
+      if (out != null && (t.getModifiers() & Modifier.STATIC) == 0) {
+	 jt.setInnerNonStatic(true);
        }
-   
+
       if (type_prefix != null) nm = type_prefix + "." + nm;
       Type sty = t.getSuperclassType();
-      if (sty != null && jt != null) {
-         JcompType suptyp = JcompAst.getJavaType(sty);
-         jt.setSuperType(suptyp);
+      if (sty != null) {
+	 JcompType suptyp = JcompAst.getJavaType(sty);
+	 jt.setSuperType(suptyp);
        }
       for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-         Type ity = (Type) it.next();
-         if (jt != null) {
-            JcompType inttyp = JcompAst.getJavaType(ity);
-            jt.addInterface(inttyp);
-          }    
+	 Type ity = (Type) it.next();
+	 if (ity != null) {
+	    JcompType inttyp = JcompAst.getJavaType(ity);
+	    jt.addInterface(inttyp);
+	  }
        }
-   
+
+      StringBuffer buf = new StringBuffer();
+      if (t.typeParameters().size() > 0) {
+	 buf.append("<");
+	 for (Object o : t.typeParameters()) {
+	    TypeParameter tp = (TypeParameter) o;
+	    buf.append(tp.getName().getIdentifier());
+	    buf.append(":");
+	    if (tp.typeBounds().size() == 0) {
+	       buf.append("Ljava/lang/Object;");
+	     }
+	    else {
+	       for (Object o1 : tp.typeBounds()) {
+		  Type t1 = (Type) o1;
+		  JcompType jt1 = JcompAst.getJavaType(t1);
+		  buf.append(jt1.getJavaTypeName());
+		}
+	     }
+	  }
+	 buf.append(">");
+       }
+      if (jt.getSuperType() != null) {
+	 buf.append(jt.getSuperType().getJavaTypeName());
+       }
+      else buf.append("Ljava/lang/Object;");
+      if (jt.getInterfaces() != null) {
+	 for (JcompType ity : jt.getInterfaces()) {
+	    buf.append(ity.getJavaTypeName());
+	  }
+       }
+      jt.setSignature(buf.toString());
+
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
-   
+
       outer_type = out;
-   
+
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-   
+
       return false;
     }
-   
-   
-   
+
+
+
    @Override public boolean visit(EnumDeclaration t) {
       String nm = t.getName().getIdentifier();
       if (type_prefix != null) nm = type_prefix + "." + nm;
@@ -886,16 +919,20 @@ private class TypeSetter extends ASTVisitor {
       visitItem(t.getType());
       visitList(t.typeArguments());
       canbe_type = false;
-
+   
       JcompType jt0 = JcompAst.getJavaType(t.getType());
       List<JcompType> ljt = new ArrayList<JcompType>();
       for (Iterator<?> it = t.typeArguments().iterator(); it.hasNext(); ) {
-	 Type t1 = (Type) it.next();
-	 JcompType jt2 = JcompAst.getJavaType(t1);
-	 if (jt2 == null) jt2 = JcompType.createErrorType();
-	 ljt.add(jt2);
+         Type t1 = (Type) it.next();
+         JcompType jt2 = JcompAst.getJavaType(t1);
+         if (jt2 == null) jt2 = JcompType.createErrorType();
+         ljt.add(jt2);
        }
-      JcompType jt1 = JcompType.createParameterizedType(jt0,ljt);
+   
+      JcompType jt1 = jt0;
+      if (ljt.size() > 0) {
+         jt1 = JcompType.createParameterizedType(jt0,ljt,JcompTyper.this);
+       }
       setJavaType(t,jt1);
       return false;
     }
@@ -941,6 +978,15 @@ private class TypeSetter extends ASTVisitor {
       setJavaType(t,ut);
     }
 
+   @Override public void endVisit(IntersectionType t) {
+      List<JcompType> tps = new ArrayList<JcompType>();
+      for (Object o : t.types()) {
+	 JcompType jt = JcompAst.getJavaType((ASTNode) o);
+	 if (jt != null) tps.add(jt);
+       }
+      JcompType ut = JcompType.createIntersectionType(tps);
+      setJavaType(t,ut);
+    }
 
    @Override public boolean visit(QualifiedType t) {
       canbe_type = true;
@@ -978,6 +1024,14 @@ private class TypeSetter extends ASTVisitor {
       return false;
     }
 
+   @Override public boolean visit(ExpressionMethodReference t) {
+      boolean ocbt = canbe_type;
+      canbe_type = true;
+      visitItem(t.getExpression());
+      canbe_type = ocbt;
+      return false;
+    }
+
    @Override public void endVisit(SimpleName t) {
       String s = t.getFullyQualifiedName();
       JcompType jt = lookupPossibleType(s);
@@ -987,11 +1041,12 @@ private class TypeSetter extends ASTVisitor {
    @Override public boolean visit(MethodDeclaration t) {
       canbe_type = true;
       visitItem(t.getReturnType2());
-      visitList(t.thrownExceptions());
+      visitList(t.thrownExceptionTypes());
       visitList(t.typeParameters());
       canbe_type = false;
       visitList(t.parameters());
-      if (t.isConstructor()) canbe_type = true;
+      if (t.isConstructor())
+	 canbe_type = true;
       visitItem(t.getName());
       canbe_type = false;
       visitItem(t.getBody());
@@ -1011,7 +1066,8 @@ private class TypeSetter extends ASTVisitor {
 	 if (outer != null) ljt.add(0,outer);
        }
 
-      JcompType mt = JcompType.createMethodType(jt,ljt,t.isVarargs());
+      //TODO:  if T is parameterized, need to create a generic signature here
+      JcompType mt = JcompType.createMethodType(jt,ljt,t.isVarargs(),null);
       mt = fixJavaType(mt);
       setJavaType(t,mt);
 
@@ -1163,9 +1219,9 @@ private class TypeSetter extends ASTVisitor {
 
    private void visitItem(ASTNode n) {
       if (n != null) {
-         boolean cbt = canbe_type;
-         n.accept(this);
-         canbe_type = cbt;
+	 boolean cbt = canbe_type;
+	 n.accept(this);
+	 canbe_type = cbt;
        }
     }
 
@@ -1173,9 +1229,9 @@ private class TypeSetter extends ASTVisitor {
       if (l == null) return;
       boolean cbt = canbe_type;
       for (Iterator<?> it = l.iterator(); it.hasNext(); ) {
-         ASTNode n = (ASTNode) it.next();
-         n.accept(this);
-         canbe_type = cbt;
+	 ASTNode n = (ASTNode) it.next();
+	 n.accept(this);
+	 canbe_type = cbt;
        }
     }
 
@@ -1183,18 +1239,18 @@ private class TypeSetter extends ASTVisitor {
       String s = findTypeName(nm,true);
       JcompType jt = type_map.get(s);
       if (jt != null) return jt;
-   
+
       jt = findSystemType(s);
       if (jt != null && !canbe_type) {
-         System.err.println("FOUND UNEXPECTED TYPE " + s);
+	 System.err.println("FOUND UNEXPECTED TYPE " + s);
        }
-   
+
       if (jt == null) {
-         jt = fixJavaType(JcompType.createUnknownType(nm));
-         jt.setUndefined(true);
-         jt.setSuperType(type_map.get("java.lang.Object"));
+	 jt = fixJavaType(JcompType.createUnknownType(nm));
+	 jt.setUndefined(true);
+	 jt.setSuperType(type_map.get("java.lang.Object"));
        }
-   
+
       return jt;
     }
 
@@ -1211,91 +1267,96 @@ private class TypeSetter extends ASTVisitor {
    private JcompType forceType(Name n) {
       JcompType jt = JcompAst.getJavaType(n);
       if (jt == null) {
-         String qnm = n.getFullyQualifiedName();
-         boolean fg = canbe_type;
-         canbe_type = true;
-         jt = lookupType(qnm);
-         canbe_type = fg;
-         setJavaType(n,jt);
+	 String qnm = n.getFullyQualifiedName();
+	 boolean fg = canbe_type;
+	 canbe_type = true;
+	 jt = lookupType(qnm);
+	 canbe_type = fg;
+	 setJavaType(n,jt);
        }
       return jt;
     }
-   
+
    private String findTypeName(String nm,boolean force) {
       String spn = specific_names.get(nm);
       if (spn != null) return spn;
       spn = known_names.get(nm);
       if (spn != null) return spn;
-   
+
       if (canbe_type && findSystemType(nm) != null) {
-         known_names.put(nm,nm);
-         return nm;
+	 known_names.put(nm,nm);
+	 return nm;
        }
-   
+
       int idx = nm.lastIndexOf('.');            // look for subtypes
       if (idx >= 0) {
-         String pfx = nm.substring(0,idx);
-         String s = findTypeName(pfx,false);
-         if (s != null) {
-            s += nm.substring(idx);
-            known_names.put(nm,s);
-            return s;
-          }
+	 String pfx = nm.substring(0,idx);
+	 String s = findTypeName(pfx,false);
+	 if (s != null) {
+	    s += nm.substring(idx);
+	    known_names.put(nm,s);
+	    return s;
+	  }
        }
-   
+
       for (String p : prefix_set) {		// look for on-demand types
-         String t = p + nm;
-         spn = known_names.get(t);
-         if (spn != null) {
-            known_names.put(nm,spn);
-            return spn;
-          }
-         if (canbe_type && findType(t) != null) {
-            known_names.put(nm,t);
-            return t;
-          }
-         if (canbe_type && findSystemType(t) != null) {
-            known_names.put(nm,t);
-            return t;
-          }
+	 String t = p + nm;
+	 spn = known_names.get(t);
+	 if (spn != null) {
+	    known_names.put(nm,spn);
+	    return spn;
+	  }
+	 if (canbe_type && findType(t) != null) {
+	    known_names.put(nm,t);
+	    return t;
+	  }
+	 if (canbe_type && findSystemType(t) != null) {
+	    known_names.put(nm,t);
+	    return t;
+	  }
        }
-   
+
       if (outer_type != null && canbe_type) {
-         for (JcompType outty = outer_type; outty != null; outty = outty.getOuterType()) {
-            JcompType stype = outty.getSuperType();
-            if (stype != null) {
-               while (stype.isParameterizedType()) stype = stype.getBaseType();
-               String t1 = stype.getName() + "." + nm;
-               JcompType jt1 = findType(t1);
-               if (jt1 != null) return jt1.getName();
-               JcompType jt2 = findSystemType(t1);
-               if (jt2 != null) return jt2.getName();
-             }
-            if (outty.getInterfaces() != null) {
-               for (JcompType jti : outty.getInterfaces()) {
-                  while (jti.isParameterizedType()) jti = jti.getBaseType();
-                  String t1 = jti.getName() + "." + nm;
-                  JcompType jt1 = findType(t1);
-                  if (jt1 != null) return jt1.getName();
-                  JcompType jt2 = findSystemType(t1);
-                  if (jt2 != null) return jt2.getName();
-                }
-             }
-          }
+	 for (JcompType outty = outer_type; outty != null; outty = outty.getOuterType()) {
+	    JcompType stype = outty.getSuperType();
+	    if (stype != null) {
+	       while (stype.isParameterizedType()) stype = stype.getBaseType();
+	       String t1 = stype.getName() + "." + nm;
+	       JcompType jt1 = findType(t1);
+	       if (jt1 != null) return jt1.getName();
+	       JcompType jt2 = findSystemType(t1);
+	       if (jt2 != null) return jt2.getName();
+	     }
+	    if (outty.getInterfaces() != null) {
+	       for (JcompType jti : outty.getInterfaces()) {
+		  while (jti.isParameterizedType()) jti = jti.getBaseType();
+		  String t1 = jti.getName() + "." + nm;
+		  JcompType jt1 = findType(t1);
+		  if (jt1 != null) return jt1.getName();
+		  JcompType jt2 = findSystemType(t1);
+		  if (jt2 != null) return jt2.getName();
+		}
+	     }
+	  }
        }
-   
+
       if (!force) return null;
-   
+
       if (type_prefix != null && idx < 0) {
-         spn = type_prefix + "." + nm;
+	 spn = type_prefix + "." + nm;
        }
       else spn = nm;
       known_names.put(nm,spn);
-   
+
       return spn;
     }
 
 }	// end of subclass TypeSetter
+
+
+
+
+
 
 
 

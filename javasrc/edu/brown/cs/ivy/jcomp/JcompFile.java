@@ -90,9 +90,9 @@ JcompFile(JcompSource rf)
        }
       String txt = for_file.getFileContents();
       if (txt != null) {
-	 ASTParser parser = ASTParser.newParser(AST.JLS4);
-	 Map<?,?> options = JavaCore.getOptions();
-	 JavaCore.setComplianceOptions(JavaCore.VERSION_1_6,options);
+	 ASTParser parser = ASTParser.newParser(AST.JLS8);
+	 Map<String,String> options = JavaCore.getOptions();
+	 JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,options);
 	 parser.setCompilerOptions(options);
 	 parser.setKind(ASTParser.K_COMPILATION_UNIT);
 	 parser.setSource(txt.toCharArray());

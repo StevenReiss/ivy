@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExec.java,v 1.29 2015/11/20 15:09:12 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExec.java,v 1.30 2017/09/08 18:23:24 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyExec.java,v $
+ * Revision 1.30  2017/09/08 18:23:24  spr
+ * Handle running the correct version of java.
+ *
  * Revision 1.29  2015/11/20 15:09:12  spr
  * Reformatting.
  *
@@ -543,8 +546,8 @@ public static IvyExec ivyJava(String cls,String jargs,String args,int flags) thr
     }
 
    StringBuffer cmd = new StringBuffer();
-   cmd.append("java ");
-   cmd.append("-Xmx1024m ");
+   cmd.append(IvyExecQuery.getJavaPath());
+   cmd.append(" -Xmx1024m ");
    cmd.append("'" + defs + "' ");
    cmd.append("'" + defs1 + "' ");
    cmd.append("'-Djava.library.path=" + libpath + "' ");

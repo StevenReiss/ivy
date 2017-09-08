@@ -540,16 +540,16 @@ private class AsmClass {
          String jnm = class_name.replace('/','.');
          jnm = jnm.replace('$','.');
          if ((access_info & Opcodes.ACC_INTERFACE) != 0) {
-            base_type = JcompType.createKnownInterfaceType(jnm);
+            base_type = JcompType.createKnownInterfaceType(jnm,generic_signature);
           }
          else if ((access_info & Opcodes.ACC_ANNOTATION) != 0) {
-            base_type = JcompType.createKnownAnnotationType(jnm);
+            base_type = JcompType.createKnownAnnotationType(jnm,generic_signature);
             if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
                base_type.setAbstract(true);
              }
           }
          else {
-            base_type = JcompType.createKnownType(jnm);
+            base_type = JcompType.createKnownType(jnm,generic_signature);
             if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
                base_type.setAbstract(true);
              }
@@ -685,7 +685,7 @@ private class AsmClass {
           }
        }
       for (AsmMethod am : method_data) {
-         JcompType atyp = am.getMethodType(typer,null);
+         JcompType atyp = am.getMethodType(typer,null,null);
          if (scp.lookupMethod(am.getName(),atyp) == null) {
             JcompSymbol js = am.createMethod(typer,null,getJcompType(typer));
             scp.defineMethod(js);
@@ -791,7 +791,7 @@ private class AsmMethod {
    
       List<JcompType> args = argtyp.getComponents();
       Type [] margs = Type.getArgumentTypes(method_desc);
-   
+      
       boolean isok = false;
       int score = 0;
       if (margs.length == args.size()) {
@@ -799,6 +799,7 @@ private class AsmMethod {
          for (int i = 0; i < margs.length; ++i) {
             JcompType jt0 = getAsmType(typer,margs[i]);
             JcompType jt1 = args.get(i);
+            jt0.defineAll(typer);
             if (!jt1.isCompatibleWith(jt0)) isok = false;
             else score += score(jt0,jt1);
           }
@@ -859,8 +860,8 @@ private class AsmMethod {
           }
        }
    
-      JcompType mt = getMethodType(typer,rt);
-   
+      JcompType mt = getMethodType(typer,rt,generic_signature);
+      
       List<JcompType> excs = new ArrayList<JcompType>();
       if (exception_types != null) {
          for (String s : exception_types) {
@@ -872,13 +873,13 @@ private class AsmMethod {
       return JcompSymbol.createKnownMethod(method_name,mt,for_class.getJcompType(typer),access_info,excs,gen);
     }
 
-   JcompType getMethodType(JcompTyper typer,JcompType rt) {
+   JcompType getMethodType(JcompTyper typer,JcompType rt,String signature) {
       List<JcompType> atys = new ArrayList<JcompType>();
       for (Type t : Type.getArgumentTypes(method_desc)) {
-	 atys.add(getAsmType(typer,t));
+         atys.add(getAsmType(typer,t));
        }
       boolean var = (access_info & Opcodes.ACC_VARARGS) != 0;
-      JcompType mt = JcompType.createMethodType(rt,atys,var);
+      JcompType mt = JcompType.createMethodType(rt,atys,var,signature);
       mt = typer.fixJavaType(mt);
       return mt;
     }

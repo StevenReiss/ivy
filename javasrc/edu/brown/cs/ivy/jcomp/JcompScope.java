@@ -36,7 +36,9 @@ package edu.brown.cs.ivy.jcomp;
 
 
 
+import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodReference;
 
 import java.util.*;
 
@@ -87,6 +89,28 @@ JcompSymbol defineMethod(String nm,MethodDeclaration n)
 
    return js;
 }
+
+
+JcompSymbol defineLambda(LambdaExpression n)
+{
+   JcompSymbol js = JcompSymbol.createSymbol(n);
+   
+   defineMethod(js);
+   
+   return js;
+}
+
+
+JcompSymbol defineReference(MethodReference n)
+{
+   JcompSymbol js = JcompSymbol.createSymbol(n);
+   
+   defineMethod(js);
+   
+   return js;
+}
+
+
 
 
 

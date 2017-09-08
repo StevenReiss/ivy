@@ -351,6 +351,23 @@ public JcodeDataType findChildForInterface(JcodeDataType ity)
 }
 
 
+public JcodeDataType getReturnType()
+{
+   return bcode_factory.findDataType(base_type.getReturnType());
+}
+
+
+public JcodeDataType [] getArgumentTypes()
+{
+   Type [] typs = base_type.getArgumentTypes();
+   JcodeDataType [] rslt = new JcodeDataType[typs.length];
+   for (int i = 0; i < typs.length; ++i) {
+      rslt[i] = bcode_factory.findDataType(typs[i]);
+    }
+   return rslt;
+}
+
+
 
 
 /********************************************************************************/

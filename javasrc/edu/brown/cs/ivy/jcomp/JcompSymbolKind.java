@@ -39,7 +39,6 @@ package edu.brown.cs.ivy.jcomp;
 
 public enum JcompSymbolKind
 {
-
    NONE,
    CLASS,
    INTERFACE,

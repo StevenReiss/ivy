@@ -275,7 +275,13 @@ public JcodeMethod findInheritedMethod(String nm,String desc)
    if (jm != null) return jm;
    JcodeClass bc = bcode_factory.findClassNode(superName);
    if (bc != null) jm = bc.findInheritedMethod(nm,desc);
-   return jm;
+   if (jm != null) return jm;
+   for (String ifs : interfaces) {
+      bc = bcode_factory.findClassNode(ifs);
+      if (bc != null) jm = bc.findInheritedMethod(nm,desc);
+      if (jm != null && !jm.isAbstract()) return jm; 
+    }
+   return null;
 }
 
 

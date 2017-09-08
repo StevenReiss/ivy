@@ -577,18 +577,18 @@ private static class ExceptionFinder extends ASTVisitor
    private void handleCall(JcompSymbol js) {
       if (js == null) return;
       for (JcompType jt : js.getExceptions()) {
-	 found_exceptions.add(jt);
+         found_exceptions.add(jt);
        }
       if (js.getDefinitionNode() != null) {
-	 ASTNode an = js.getDefinitionNode();
-	 if (an.getNodeType() == ASTNode.METHOD_DECLARATION) {
-	    MethodDeclaration md = (MethodDeclaration) an;
-	    for (Object o : md.thrownExceptions()) {
-	       Name n = (Name) o;
-	       JcompType jt = JcompAst.getJavaType(n);
-	       if (jt != null) found_exceptions.add(jt);
-	     }
-	  }
+         ASTNode an = js.getDefinitionNode();
+         if (an.getNodeType() == ASTNode.METHOD_DECLARATION) {
+            MethodDeclaration md = (MethodDeclaration) an;
+            for (Object o : md.thrownExceptionTypes()) {
+               Type n = (Type) o;
+               JcompType jt = JcompAst.getJavaType(n);
+               if (jt != null) found_exceptions.add(jt);
+             }
+          }
        }
     }
 

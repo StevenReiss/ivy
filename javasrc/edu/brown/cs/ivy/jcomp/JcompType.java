@@ -39,6 +39,7 @@ import org.eclipse.jdt.core.dom.*;
 
 import java.lang.reflect.Modifier;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -50,19 +51,6 @@ import java.util.*;
 abstract public class JcompType implements JcompConstants {
 
 
-
-/********************************************************************************/
-/*										*/
-/*	Private Storage 							*/
-/*										*/
-/********************************************************************************/
-
-private String type_name;
-private JcompScope assoc_scope;
-private JcompType assoc_type;
-private JcompSymbol assoc_symbol;
-private boolean is_abstract;
-private boolean inner_nonstatic;
 
 
 
@@ -85,9 +73,9 @@ static JcompType createVariableType(String nm)
 
 
 
-static JcompType createKnownType(String nm)
+static JcompType createKnownType(String nm,String sgn)
 {
-   return new KnownType(nm);
+   return new KnownType(nm,sgn);
 }
 
 
@@ -98,9 +86,9 @@ static JcompType createUnknownType(String nm)
 
 
 
-static JcompType createKnownInterfaceType(String nm)
+static JcompType createKnownInterfaceType(String nm,String sgn)
 {
-   return new KnownInterfaceType(nm);
+   return new KnownInterfaceType(nm,sgn);
 }
 
 
@@ -111,9 +99,9 @@ static JcompType createUnknownInterfaceType(String nm)
 
 
 
-static JcompType createKnownAnnotationType(String nm)
+static JcompType createKnownAnnotationType(String nm,String sgn)
 {
-   return new KnownAnnotationType(nm);
+   return new KnownAnnotationType(nm,sgn);
 }
 
 
@@ -131,9 +119,16 @@ static JcompType createEnumType(String nm)
 
 
 
-static JcompType createParameterizedType(JcompType jt,List<JcompType> ptl)
+static JcompType createParameterizedType(JcompType jt,List<JcompType> ptl,JcompTyper typer)
 {
-   return new ParamType(jt,ptl);
+   JcompType ptyp = jt.findParameterizedType(ptl);
+   if (ptyp != null) return ptyp;
+
+   ParamType pttyp = new ParamType(jt,ptl);
+   jt.defineParameterizedType(pttyp);
+   pttyp.applyParameters(typer);
+
+   return pttyp;
 }
 
 
@@ -149,6 +144,17 @@ static JcompType createUnionType(List<JcompType> tps)
 }
 
 
+static JcompType createIntersectionType(List<JcompType> tps)
+{
+   StringBuffer buf = new StringBuffer();
+   for (JcompType jt : tps) {
+      if (buf.length() > 0) buf.append("&");
+      buf.append(jt.getName());
+    }
+   return new IntersectionType(buf.toString(),tps);
+}
+
+
 static public JcompType createArrayType(JcompType jt)
 {
    return new ArrayType(jt);
@@ -156,9 +162,10 @@ static public JcompType createArrayType(JcompType jt)
 
 
 
-public static JcompType createMethodType(JcompType jt,List<JcompType> aty,boolean varargs)
+public static JcompType createMethodType(JcompType jt,List<JcompType> aty,boolean varargs,
+	String signature)
 {
-   return new MethodType(jt,aty,varargs);
+   return new MethodType(jt,aty,varargs,signature);
 }
 
 
@@ -176,6 +183,36 @@ static JcompType createErrorType()
 }
 
 
+static public JcompType createFunctionRefType(JcompType methodtype,JcompType nstype,JcompSymbol sym)
+{
+   return new FunctionRefType(methodtype,nstype,sym,null);
+}
+
+static JcompType createFunctionRefType(JcompType mtyp,JcompType nstype,JcompSymbol sym,JcompSymbol rsym)
+{
+   return new FunctionRefType(mtyp,nstype,sym,rsym);
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Private Storage 							*/
+/*										*/
+/********************************************************************************/
+
+private String type_name;
+private JcompScope assoc_scope;
+private JcompType assoc_type;
+private JcompSymbol assoc_symbol;
+private boolean is_abstract;
+private boolean inner_nonstatic;
+private String type_signature;
+private Map<String,JcompType> parameterized_types;
+
+
+
 
 /********************************************************************************/
 /*										*/
@@ -191,6 +228,8 @@ protected JcompType(String s)
    assoc_symbol = null;
    is_abstract = false;
    inner_nonstatic = false;
+   type_signature = null;
+   parameterized_types = null;
 }
 
 
@@ -265,6 +304,14 @@ public boolean isClassType()			{ return false; }
 public boolean isInterfaceType()		{ return false; }
 
 
+
+/**
+ *	Return method type if this is a functional interface
+ **/
+
+public JcompType getFunctionalType()	       { return null; }
+
+
 /**
  *	Return true if this is an enumeration type
  **/
@@ -276,7 +323,14 @@ public boolean isEnumType()			{ return false; }
  *	Return true if this is a type variable (part of a parameterized type).
  **/
 
-public boolean isTypeVariable() 	{ return false; }
+public boolean isTypeVariable() 		{ return false; }
+
+
+/**
+ *	Return true is this is a function reference type
+ **/
+
+public boolean isFunctionRef()			{ return false; }
 
 
 /**
@@ -313,6 +367,12 @@ public boolean isAnyType()			{ return false; }
 
 public boolean isUnionType()			{ return false; }
 
+
+/**
+ *	Return true if this is an intersection type.
+ **/
+
+public boolean isIntersectionType()		{ return false; }
 
 /**
  *	Return true if this type is not known.
@@ -454,6 +514,14 @@ public JcompType getAssociatedType()		{ return assoc_type; }
 
 void setAssociatedType(JcompType jt)		{ assoc_type = jt; }
 
+
+
+public String getSignature()			{ return type_signature; }
+
+protected void setSignature(String s)
+{
+   type_signature = s;
+}
 
 
 
@@ -762,6 +830,50 @@ protected Set<JcompSymbol> lookupKnownAbstracts(JcompTyper typer)
 
 
 
+
+/********************************************************************************/
+/*										*/
+/*	Parameterization methods						*/
+/*										*/
+/********************************************************************************/
+
+JcompType findParameterizedType(List<JcompType> parms)
+{
+   if (parameterized_types == null) return null;
+
+   String key = "";
+   for (JcompType jt : parms) key += jt.getName() + "@";
+
+   return parameterized_types.get(key);
+}
+
+
+void defineParameterizedType(JcompType ptyp)
+{
+   if (parameterized_types == null) parameterized_types = new ConcurrentHashMap<>();
+
+   String key = "";
+   for (JcompType jt : ptyp.getComponents()) key += jt.getName() + "@";
+
+   parameterized_types.put(key,ptyp);
+}
+
+
+
+static protected List<JcompSymbol> getAbstractMethods(JcompType jt)
+{
+   List<JcompSymbol> rslt = new ArrayList<>();
+   if (jt.assoc_scope != null) {
+      for (JcompSymbol js : jt.assoc_scope.getDefinedMethods()) {
+	 if (js.isAbstract()) rslt.add(js);
+       }
+    }
+   return rslt;
+}
+
+
+
+
 /********************************************************************************/
 /*										*/
 /*	Output methods								*/
@@ -1010,24 +1122,30 @@ private static abstract class ClassInterfaceType extends JcompType {
       if (jt == this) return true;
       if (jt.isTypeVariable()) return true;
       if (jt.isUnionType()) {
-         for (JcompType uty : jt.getComponents()) {
-            if (isCompatibleWith(uty)) return true;
-          }
-         return false;
+	 for (JcompType uty : jt.getComponents()) {
+	    if (isCompatibleWith(uty)) return true;
+	  }
+	 return false;
+       }
+      if (jt.isIntersectionType()) {
+	 for (JcompType uty : jt.getComponents()) {
+	    if (!isCompatibleWith(uty)) return false;
+	  }
+	 return true;
        }
       if (jt.isInterfaceType() && interface_types != null) {
-         for (JcompType ity : interface_types) {
-            if (ity.isCompatibleWith(jt)) return true;
-          }
+	 for (JcompType ity : interface_types) {
+	    if (ity.isCompatibleWith(jt)) return true;
+	  }
        }
       if (jt.getName().equals(getName()))
-         return true;
+	 return true;
       if (super_type != null) {
-         if (super_type.isCompatibleWith(jt)) return true;
+	 if (super_type.isCompatibleWith(jt)) return true;
        }
       if (jt.isPrimitiveType()) {
-         JcompType at = getAssociatedType();
-         if (at != null) return at.isCompatibleWith(jt);
+	 JcompType at = getAssociatedType();
+	 if (at != null) return at.isCompatibleWith(jt);
        }
       return false;
     }
@@ -1040,7 +1158,7 @@ private static abstract class ClassInterfaceType extends JcompType {
 
       List<JcompType> prms = new ArrayList<JcompType>();
       prms.add(typ);
-      JcompType atyp = createMethodType(null,prms,false);
+      JcompType atyp = createMethodType(null,prms,false,null);
       JcompSymbol sym = lookupMethod(typer,"<init>",atyp);
 
       if (sym != null && !sym.isPrivate()) {
@@ -1054,7 +1172,7 @@ private static abstract class ClassInterfaceType extends JcompType {
 
    @Override List<JcompSymbol> isConformableTo(JcompTyper typer,JcompType typ) {
       List<JcompType> prms = new ArrayList<JcompType>();
-      JcompType atyp = createMethodType(typ,prms,false);
+      JcompType atyp = createMethodType(typ,prms,false,null);
 
       Set<JcompSymbol> rslt = new HashSet<JcompSymbol>();
       if (getScope() != null) {
@@ -1115,32 +1233,41 @@ private static abstract class ClassInterfaceType extends JcompType {
 
    @Override protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,JcompType basetype) {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
+      if (js != null && id.equals("<init>") && basetype != js.getClassType()) {
+	 js = null;
+       }
       if (js != null) return js;
       if (super_type != null && super_type != this) {
-         if (id == null || !id.equals("<init>"))
-            js = super_type.lookupMethod(typer,id,atyps,basetype);
+	 if (id == null || !id.equals("<init>"))
+	    js = super_type.lookupMethod(typer,id,atyps,basetype);
        }
-      else if (!getName().equals("java.lang.Object")) {
-         JcompType ot = typer.findType("java.lang.Object");
-         js = ot.lookupMethod(typer,id,atyps,basetype);
+      else if (!getName().equals("java.lang.Object") && !id.equals("<init>")) {
+	 JcompType ot = typer.findType("java.lang.Object");
+	 js = ot.lookupMethod(typer,id,atyps,basetype);
        }
       if (js != null) return js;
       if (interface_types != null) {
-         if (!isAbstract()) {
-            for (JcompType it : interface_types) {
-               js = it.lookupMethod(typer,id,atyps,basetype);
-               if (js != null) return js;
-             }
-          }
+	 if (!isAbstract()) {
+	    for (JcompType it : interface_types) {
+	       js = it.lookupMethod(typer,id,atyps,basetype);
+	       if (js != null) return js;
+	     }
+	  }
+	 else {
+	    for (JcompType it : interface_types) {
+	       js = it.lookupMethod(typer,id,atyps,basetype);
+	       if (js != null && !js.isAbstract()) return js;
+	     }
+	  }
        }
       if (outer_type != null && (id == null || !id.equals("<init>"))) {
-         js = outer_type.lookupMethod(typer,id,atyps,basetype);
-         if (js != null) return js;
+	 js = outer_type.lookupMethod(typer,id,atyps,basetype);
+	 if (js != null) return js;
        }
       return null;
     }
 
-   @Override protected List<JcompSymbol> lookupStatics(JcompTyper typer,String id,JcompType basetype) {
+      @Override protected List<JcompSymbol> lookupStatics(JcompTyper typer,String id,JcompType basetype) {
       List<JcompSymbol> rslt = super.lookupStatics(typer,id,basetype);
       if (super_type != null) {
 	 List<JcompSymbol> r1 = super_type.lookupStatics(typer,id,basetype);
@@ -1336,6 +1463,28 @@ private static abstract class ClassInterfaceType extends JcompType {
       return "L" + s + s1 + ";";
     }
 
+   @Override public JcompType getFunctionalType() {
+      if (!isInterfaceType()) return null;
+      Collection<JcompSymbol> syms = getAbstractMethods(this);
+      if (syms.size() > 1) return null;
+      if (interface_types != null) {
+	 for (JcompType jt : interface_types) {
+	    Collection<JcompSymbol> ssyms = getAbstractMethods(jt);
+	    if (ssyms.size() > 0) {
+	       if (syms.size() == 0 && ssyms.size() == 1) syms = ssyms;
+	       else return null;
+	     }
+	  }
+       }
+      for (JcompSymbol js : syms) {
+	 return js.getType();
+       }
+      return null;
+    }
+
+
+
+
 }	// end of innerclass ClassInterfaceType
 
 
@@ -1343,9 +1492,10 @@ private static abstract class ClassInterfaceType extends JcompType {
 
 private static abstract class KnownClassInterfaceType extends ClassInterfaceType {
 
-   KnownClassInterfaceType(String nm) {
+   KnownClassInterfaceType(String nm,String sgn) {
       super(nm);
       setScope(new JcompScopeFixed());
+      setSignature(sgn);
     }
 
    @Override JcompSymbol lookupField(JcompTyper typs,String id,int lvl) {
@@ -1414,13 +1564,13 @@ private static abstract class UnknownClassInterfaceType extends ClassInterfaceTy
     @Override protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,JcompType basetype) {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
       if (js == null && basetype == this) {
-         Set<JcompType> args = method_names.get(id);
-         if (args == null) {
-            args = new HashSet<JcompType>();
-            method_names.put(id,args);
-          }
-         atyps = typer.fixJavaType(atyps);
-         args.add(atyps);
+	 Set<JcompType> args = method_names.get(id);
+	 if (args == null) {
+	    args = new HashSet<JcompType>();
+	    method_names.put(id,args);
+	  }
+	 atyps = typer.fixJavaType(atyps);
+	 args.add(atyps);
        }
       return js;
     }
@@ -1468,8 +1618,8 @@ private static class UnknownType extends UnknownClassInterfaceType {
 
 private static class KnownType extends KnownClassInterfaceType {
 
-   KnownType(String nm) {
-      super(nm);
+   KnownType(String nm,String sgn) {
+      super(nm,sgn);
     }
 
 }	// end of subclass KnownType
@@ -1497,8 +1647,8 @@ private static class UnknownInterfaceType extends UnknownClassInterfaceType {
 
 private static class KnownInterfaceType extends KnownClassInterfaceType {
 
-   KnownInterfaceType(String nm) {
-      super(nm);
+   KnownInterfaceType(String nm,String sgn) {
+      super(nm,sgn);
     }
 
    @Override public boolean isInterfaceType()	{ return true; }
@@ -1528,8 +1678,8 @@ private static class UnknownAnnotationType extends UnknownClassInterfaceType {
 
 private static class KnownAnnotationType extends KnownClassInterfaceType {
 
-   KnownAnnotationType(String nm) {
-      super(nm);
+   KnownAnnotationType(String nm,String sgn) {
+      super(nm,sgn);
     }
 
    @Override public boolean isAnnotationType()	{ return true; }
@@ -1561,7 +1711,7 @@ private static class EnumType extends UnknownClassInterfaceType {
       if (id.equals("values") && atyps.getComponents().size() == 0) {
 	 if (values_method == null) {
 	    JcompType typ1 = JcompType.createArrayType(this);
-	    JcompType typ2 = JcompType.createMethodType(typ1,new ArrayList<JcompType>(),false);
+	    JcompType typ2 = JcompType.createMethodType(typ1,new ArrayList<JcompType>(),false,null);
 	    int acc = Modifier.PUBLIC | Modifier.STATIC;
 	    values_method = JcompSymbol.createKnownMethod("values",typ2,this,acc,null,false);
 	  }
@@ -1580,17 +1730,17 @@ private static class EnumType extends UnknownClassInterfaceType {
 /*										*/
 /********************************************************************************/
 
-private static class ParamType extends JcompType {
+private static class ParamType extends ClassInterfaceType {
 
    private JcompType base_type;
    private List<JcompType> type_params;
+   private JcompScope local_scope;
 
    ParamType(JcompType b,Collection<JcompType> pl) {
       super(buildParamName(b,pl));
       base_type = b;
       type_params = new ArrayList<JcompType>(pl);
-      JcompScope js = new JcompScopeFixed();
-      setScope(js);
+      local_scope = new JcompScopeFixed();
     }
 
    @Override public boolean isParameterizedType()	{ return true; }
@@ -1606,7 +1756,7 @@ private static class ParamType extends JcompType {
     }
    @Override public boolean needsOuterClass()		{ return base_type.needsOuterClass(); }
    @Override public JcompType getOuterType()		{ return base_type.getOuterType(); }
-
+   @Override public boolean isInterfaceType()		{ return base_type.isInterfaceType(); }
    @Override public List<JcompType> getComponents()	{ return type_params; }
 
    private static String buildParamName(JcompType b,Collection<JcompType> pl) {
@@ -1639,16 +1789,19 @@ private static class ParamType extends JcompType {
     }
 
    @Override JcompSymbol lookupField(JcompTyper typs,String id,int lvl) {
-      JcompSymbol js = super.lookupField(typs,id,lvl+1);
+      JcompSymbol js = local_scope.lookupVariable(id);
+      if (js != null) return js;
+      js = super.lookupField(typs,id,lvl+1);
       if (js != null) return js;
       return base_type.lookupField(typs,id,lvl+1);
     }
 
    @Override protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,JcompType basetype) {
-      JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
+      JcompSymbol js = local_scope.lookupMethod(id,atyps);
+      if (js != null) return js;
+      js = super.lookupMethod(typer,id,atyps,basetype);
       if (js != null) return js;
       js = base_type.lookupMethod(typer,id,atyps,basetype);
-      // TODO: if js has parameters, then we need set them to the settings for this type
       return js;
     }
 
@@ -1711,7 +1864,48 @@ private static class ParamType extends JcompType {
 	 ptyps.add(njt);
        }
       if (!chng) return this;
-      return new ParamType(nbase,ptyps);
+
+      return createParameterizedType(nbase,ptyps,typer);
+    }
+
+   @Override public JcompType getFunctionalType() {
+      if (!isInterfaceType()) return null;
+      Collection<JcompSymbol> syms = local_scope.lookupAbstracts(null);
+      if (getInterfaces() != null) {
+	 for (JcompType jt : getInterfaces()) {
+	    Collection<JcompSymbol> ssyms = getAbstractMethods(jt);
+	    if (ssyms.size() > 0) {
+	       if (syms.size() == 0 && ssyms.size() == 1) syms = ssyms;
+	       else return null;
+	     }
+	  }
+       }
+      if (syms.size() == 1) {
+	 for (JcompSymbol js : syms) {
+	    return js.getType();
+	  }
+       }
+      return base_type.getFunctionalType();
+    }
+
+   void applyParameters(JcompTyper typer) {
+      JcompType nsup = JcompGenerics.deriveSupertype(typer,base_type,type_params);
+      setSuperType(nsup);
+      Collection<JcompType> nint = JcompGenerics.deriveInterfaceTypes(typer,base_type,type_params);
+      if (nint != null) {
+	 for (JcompType nty : nint) {
+	    addInterface(nty);
+	  }
+       }
+
+      base_type.defineAll(typer);
+      if (base_type.getScope() != null && base_type.getScope().getDefinedMethods() != null) {
+	 for (JcompSymbol js : base_type.getScope().getDefinedMethods()) {
+	    if (js.getClassType() != base_type) continue;
+	    js = js.parameterize(typer,type_params);
+	    local_scope.defineMethod(js);
+	  }
+       }
     }
 
 }	// end of subclase ParamType
@@ -1748,6 +1942,10 @@ private static class VarType extends ClassInterfaceType {
       return this;
     }
 
+   @Override public boolean isCompatibleWith(JcompType jt) {
+      return true;
+    }
+
 }	// end of subclass VarType
 
 
@@ -1764,12 +1962,13 @@ private static class MethodType extends JcompType {
    private List<JcompType> param_types;
    private boolean is_varargs;
 
-   MethodType(JcompType rt,Collection<JcompType> atyps,boolean varargs) {
+   MethodType(JcompType rt,Collection<JcompType> atyps,boolean varargs,String sgn) {
       super(buildMethodTypeName(rt,atyps,varargs));
       return_type = rt;
       param_types = new ArrayList<JcompType>();
       if (atyps != null) param_types.addAll(atyps);
       is_varargs = varargs;
+      setSignature(sgn);
     }
 
    @Override public boolean isMethodType()	       { return true; }
@@ -1822,6 +2021,10 @@ private static class MethodType extends JcompType {
 	       isok &= param_types.get(i).isCompatibleWith(rt);
 	     }
 	  }
+		   }
+      else {
+	 JcompType mt = jt.getFunctionalType();
+	 if (mt != null) return isCompatibleWith(mt);
        }
       return isok;
     }
@@ -1848,7 +2051,7 @@ private static class MethodType extends JcompType {
 	 nargs.add(njt);
        }
       if (!chng) return this;
-      return new MethodType(nret,nargs,is_varargs);
+      return new MethodType(nret,nargs,is_varargs,getSignature());
     }
 
 }	// end of subclase MethodType
@@ -1871,11 +2074,12 @@ private static class AnyClassType extends JcompType {
    @Override public boolean isInterfaceType()		{ return true; }
    @Override public boolean isAnyType() 		{ return true; }
    @Override boolean isBaseKnown()			{ return true; }
+   @Override public JcompType getFunctionalType()	{ return this; }
 
    @Override public boolean isCompatibleWith(JcompType jt) {
       if (this == jt) return true;
       if (jt.isClassType() || jt.isInterfaceType() || jt.isEnumType() || jt.isArrayType() || jt.isParameterizedType())
-         return true;
+	 return true;
       return false;
     }
 
@@ -1965,8 +2169,102 @@ private static class UnionType extends JcompType {
 
 
 
+/********************************************************************************/
+/*										*/
+/*	Intersection Types							*/
+/*										*/
+/********************************************************************************/
+
+private static class IntersectionType extends JcompType {
+
+   private List<JcompType> base_types;
+
+   protected IntersectionType(String nm,List<JcompType> typs) {
+      super(nm);
+      base_types = new ArrayList<JcompType>(typs);
+    }
+
+   @Override public boolean isIntersectionType()	 { return true; }
+   @Override public List<JcompType> getComponents()	 { return base_types; }
+
+   @Override public boolean isCompatibleWith(JcompType jt) {
+      for (JcompType bt : base_types) {
+	 if (!bt.isCompatibleWith(jt)) return false;
+       }
+      return true;
+    }
+
+   @Override public String getJavaTypeName() {
+      return null;
+    }
+
+   @Override protected JcompSymbol lookupMethod(JcompTyper typer,
+	 String id,JcompType atyps,JcompType basetype) {
+      JcompType jt = findCommonParent(typer,base_types);
+      return jt.lookupMethod(typer,id,atyps,basetype);
+    }
+
+   @Override public JcompType resetType(JcompTyper typer) {
+      boolean chng = false;
+      List<JcompType> nbase = new ArrayList<JcompType>();
+      for (JcompType jt : base_types) {
+	 JcompType njt = jt.resetType(typer);
+	 chng |= jt != njt;
+	 nbase.add(njt);
+       }
+      if (!chng) return this;
+      return new IntersectionType(getName(),nbase);
+    }
+
+}	// end of inner class UnionType
 
 
+
+private static class FunctionRefType extends JcompType {
+
+   private MethodType method_type;
+   private MethodType nonstatic_type;
+   private JcompSymbol method_symbol;
+   private JcompSymbol ref_symbol;
+
+   FunctionRefType(JcompType ref,JcompType nsref,JcompSymbol sym,JcompSymbol rsym) {
+      super("REF$" + ref.getName());
+      method_type = (MethodType) ref;
+      nonstatic_type = (MethodType) nsref;
+      method_symbol = sym;
+      ref_symbol = rsym;
+    }
+
+   @Override public String getJavaTypeName()		{ return null; }
+   @Override public MethodType	getFunctionalType() {
+      return method_type;
+    }
+   @Override public boolean isFunctionRef()		{ return true; }
+
+   @Override public JcompType getBaseType() {
+      if (ref_symbol != null) return method_type;
+      else return ref_symbol.getType();
+   }
+
+   @Override public boolean isCompatibleWith(JcompType jt) {
+      JcompType mt = jt.getFunctionalType();
+      if (mt == null) return false;
+      if (mt.isCompatibleWith(method_type)) return true;
+      if (nonstatic_type != null && mt.isCompatibleWith(nonstatic_type)) return true;
+      return false;
+    }
+
+   @Override public JcompSymbol lookupMethod(JcompTyper typer,String name,JcompType typ,JcompType base) {
+      if (method_symbol != null && method_type.isCompatibleWith(typ)) {
+	 return method_symbol;
+       }
+      if (method_symbol != null && nonstatic_type != null && nonstatic_type.isCompatibleWith(typ)) {
+	 return method_symbol;
+       }
+      return super.lookupMethod(typer,name,typ,base);
+    }
+
+}	// end of inner class FunctionRefType
 
 
 

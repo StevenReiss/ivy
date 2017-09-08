@@ -31,11 +31,14 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/stdlib/src/ivy_file.H,v 1.5 2013/11/08 01:32:18 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/stdlib/src/ivy_file.H,v 1.6 2017/09/08 18:26:07 spr Exp $ */
 
 /************************************************************************
  *
  * $Log: ivy_file.H,v $
+ * Revision 1.6  2017/09/08 18:26:07  spr
+ * Updates for new version of gcc
+ *
  * Revision 1.5  2013/11/08 01:32:18  spr
  * Updates for newer g++ on mac.
  *
@@ -377,12 +380,7 @@ private:
       cur_entry.resize(0);
       cur_tail.resize(0);
       if (dir_handle == NULL) return;
-#ifdef _REENTRANT
-      readdir_r(dir_handle,(struct dirent *) dir_buf,&dp);
-      if (dp == NULL) {
-#else
       if ((dp = readdir(dir_handle)) == NULL) {
-#endif
 	 closedir(dir_handle);
 	 dir_handle = NULL;
 	 return;
