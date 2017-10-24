@@ -1212,9 +1212,9 @@ private static class NodeIterator implements Iterable<Element>, Iterator<Element
       if (isElement(xml)) cur_child = xml.getFirstChild();
       else cur_child = null;
       element_type = et;
-   
+
       while (cur_child != null && !isElement(cur_child,element_type)) {
-         cur_child = cur_child.getNextSibling();
+	 cur_child = cur_child.getNextSibling();
        }
     }
 
@@ -1434,6 +1434,8 @@ static public byte [] getBytesElement(Node xml,String elt)
 
    return stringToByteArray(s);
 }
+
+
 
 
 /********************************************************************************/

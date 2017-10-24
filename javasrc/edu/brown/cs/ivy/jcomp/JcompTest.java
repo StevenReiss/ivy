@@ -1,11 +1,14 @@
 package edu.brown.cs.ivy.jcomp;
 
 import edu.brown.cs.ivy.file.IvyFile;
+import edu.brown.cs.ivy.jcode.JcodeFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import org.junit.Assert;
+import org.junit.Test;
 
 public class JcompTest {
 
@@ -17,6 +20,7 @@ public class JcompTest {
 /*										*/
 /********************************************************************************/
 
+private JcompControl     jcomp_control;
 
 private static String test1 = "class Simple {\n" +
 	"static void main() {\n" +
@@ -165,204 +169,28 @@ private static String test5 = "public class TwoTypePair<T1, T2>\n" +
 
 
 /********************************************************************************/
-/*										*/
-/*	Main program								*/
-/*										*/
+/*                                                                              */
+/*      Constructors                                                            */
+/*                                                                              */
 /********************************************************************************/
 
-public static void main(String [] args)
+public JcompTest()
 {
-   JcompControl ctrl = new JcompControl();
-
-   StringSource s1 = new StringSource("test1",test1);
-
-   List<JcompSource> srcs = new ArrayList<JcompSource>();
-   srcs.add(s1);
-   JcompProject proj = ctrl.getProject(srcs);
-   showMessages("test1",proj);
-
-   srcs.clear();
-   StringSource s2 = new StringSource("test2",test2);
-   srcs.add(s2);
-   proj = ctrl.getProject("/pro/ivy/jcomp/src/test.jar",srcs);
-   showMessages("test2",proj);
-
-   srcs.clear();
-   StringSource s3 = new StringSource("test3",test3);
-   srcs.add(s3);
-   proj = ctrl.getProject(srcs);
-   showMessages("test3",proj);
-
-   srcs.clear();
-   StringSource s4 = new StringSource("test4",test4);
-   srcs.add(s4);
-   proj = ctrl.getProject(srcs);
-   showMessages("test4",proj);
-
-   srcs.clear();
-   StringSource s5 = new StringSource("test5",test5);
-   srcs.add(s5);
-   proj = ctrl.getProject(srcs);
-   showMessages("test5",proj);
-
-   srcs.clear();
-   try {
-      File f6 = new File("/pro/ivy/jcomp/src/test6");
-      String cnts = IvyFile.loadFile(f6);
-      StringSource s6 = new StringSource("test6",cnts);
-      srcs.add(s6);
-      proj = ctrl.getProject(srcs);
-      showMessages("test6",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test6");
-    }
-
-   srcs.clear();
-   try {
-      File f7 = new File("/pro/ivy/jcomp/src/test7");
-      String cnts = IvyFile.loadFile(f7);
-      StringSource s7 = new StringSource("test7",cnts);
-      srcs.add(s7);
-      String jar = "/pro/ivy/jcomp/src/test7.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test7",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test7");
-    }
-
-   srcs.clear();
-   try {
-      File f8 = new File("/pro/ivy/jcomp/src/test8");
-      String cnts = IvyFile.loadFile(f8);
-      StringSource s8 = new StringSource("test8",cnts);
-      srcs.add(s8);
-      String jar = "/pro/ivy/jcomp/src/test8.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test8",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test8");
-    }
-
-   srcs.clear();
-   try {
-      File f9 = new File("/pro/ivy/jcomp/src/test9");
-      String cnts = IvyFile.loadFile(f9);
-      StringSource s9 = new StringSource("test9",cnts);
-      srcs.add(s9);
-      String jar = "/pro/ivy/jcomp/src/test9.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test9",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test9");
-    }
-
-   srcs.clear();
-   try {
-      File f10 = new File("/pro/ivy/jcomp/src/test10");
-      String cnts = IvyFile.loadFile(f10);
-      StringSource s10 = new StringSource("test10",cnts);
-      srcs.add(s10);
-      String jar = "/pro/ivy/jcomp/src/test10.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test10",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test10");
-    }
-
-   srcs.clear();
-   try {
-      File f11 = new File("/pro/ivy/jcomp/src/test11");
-      String cnts = IvyFile.loadFile(f11);
-      StringSource s11 = new StringSource("test11",cnts);
-      srcs.add(s11);
-      String jar = "/pro/ivy/jcomp/src/test11.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test11",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test11");
-    }
-
-   srcs.clear();
-   try {
-      File f12 = new File("/pro/ivy/jcomp/src/test12");
-      String cnts = IvyFile.loadFile(f12);
-      StringSource s12 = new StringSource("test12",cnts);
-      srcs.add(s12);
-      String jar = "/pro/ivy/jcomp/src/test12.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test12",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test12");
-    }
-
-   srcs.clear();
-   try {
-      File f13 = new File("/pro/ivy/jcomp/src/test13");
-      String cnts = IvyFile.loadFile(f13);
-      StringSource s13 = new StringSource("test13",cnts);
-      srcs.add(s13);
-      String jar = "/pro/ivy/jcomp/src/test13.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test13",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test13");
-    }
-
-   srcs.clear();
-   try {
-      File f14 = new File("/pro/ivy/jcomp/src/test14");
-      String cnts = IvyFile.loadFile(f14);
-      StringSource s14 = new StringSource("test14",cnts);
-      srcs.add(s14);
-      String jar = "/pro/ivy/jcomp/src/test14.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test14",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test14");
-    }
-
-   srcs.clear();
-   try {
-      File f15 = new File("/pro/ivy/jcomp/src/test15");
-      String cnts = IvyFile.loadFile(f15);
-      StringSource s15 = new StringSource("test15",cnts);
-      srcs.add(s15);
-      String jar = "/pro/ivy/jcomp/src/test15.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test15",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test15");
-    }
-
-   srcs.clear();
-   try {
-      File f16 = new File("/pro/ivy/jcomp/src/test16");
-      String cnts = IvyFile.loadFile(f16);
-      StringSource s16 = new StringSource("test16",cnts);
-      srcs.add(s16);
-      String jar = "/pro/ivy/jcomp/src/test16.jar";
-      proj = ctrl.getProject(jar,srcs);
-      showMessages("test16",proj);
-    }
-   catch (IOException e) {
-      System.err.println("Problem loading test16");
-    }
+   jcomp_control = new JcompControl();
 }
 
 
 
-private static void showMessages(String what,JcompProject proj)
+/********************************************************************************/
+/*                                                                              */
+/*      Common test code                                                        */
+/*                                                                              */
+/********************************************************************************/
+
+private static int showMessages(String what,JcompProject proj)
 {
+   int ct = 0;
+   
    System.err.println("FOR TEST " + what);
    proj.resolve();
    for (JcompMessage msg : proj.getMessages()) {
@@ -370,12 +198,267 @@ private static void showMessages(String what,JcompProject proj)
 			    msg.getLineNumber() + " (" +
 			    msg.getStartOffset() + "-" + msg.getEndOffset() + ") " +
 			    msg.getText());
+      ++ct;
     }
+   
+   return ct;
+}
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Actual test cases                                                       */
+/*                                                                              */
+/********************************************************************************/
+
+@Test
+public void jcompTest1()
+{
+   StringSource s1 = new StringSource("test1",test1);
+   List<JcompSource> srcs = Collections.singletonList(s1);
+   JcompProject proj = jcomp_control.getProject(srcs);
+   int ct = showMessages("test1",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest2()
+{
+   StringSource s2 = new StringSource("test2",test2);
+   List<JcompSource> srcs = Collections.singletonList(s2);
+   JcompProject proj = jcomp_control.getProject("/pro/ivy/jcomp/src/test.jar",srcs);
+   int ct = showMessages("test2",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest3()
+{
+   StringSource s3 = new StringSource("test3",test3);
+   List<JcompSource> srcs = Collections.singletonList(s3);
+   JcompProject proj = jcomp_control.getProject(srcs);
+   int ct = showMessages("test3",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest4()
+{
+   StringSource s4 = new StringSource("test4",test4);
+   List<JcompSource> srcs = Collections.singletonList(s4);
+   JcompProject proj = jcomp_control.getProject(srcs);
+   int ct = showMessages("test4",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest5()
+{
+   StringSource s5 = new StringSource("test5",test5);
+   List<JcompSource> srcs = Collections.singletonList(s5);
+   JcompProject proj = jcomp_control.getProject(srcs);
+   int ct = showMessages("test5",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest6() throws Exception
+{
+   File f6 = new File("/pro/ivy/jcomp/src/test6");
+   String cnts = IvyFile.loadFile(f6);
+   StringSource s6 = new StringSource("test6",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s6); 
+   JcompProject proj = jcomp_control.getProject(srcs);
+   int ct = showMessages("test6",proj);
+   Assert.assertEquals(ct,72);
 }
 
 
 
 
+@Test
+public void jcompTest7() throws Exception
+{
+   File f7 = new File("/pro/ivy/jcomp/src/test7");
+   String cnts = IvyFile.loadFile(f7);
+   StringSource s7 = new StringSource("test7",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s7);
+   String jar = "/pro/ivy/jcomp/src/test7.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test7",proj);
+   Assert.assertEquals(ct,16);
+}
+
+
+
+@Test
+public void jcompTest8() throws Exception
+{
+   File f8 = new File("/pro/ivy/jcomp/src/test8");
+   String cnts = IvyFile.loadFile(f8);
+   StringSource s8 = new StringSource("test8",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s8);
+   String jar = "/pro/ivy/jcomp/src/test8.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test8",proj);
+   Assert.assertEquals(ct,1);
+}
+
+
+
+@Test
+public void jcompTest9() throws Exception
+{
+   File f9 = new File("/pro/ivy/jcomp/src/test9");
+   String cnts = IvyFile.loadFile(f9);
+   StringSource s9 = new StringSource("test9",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s9);
+   String jar = "/pro/ivy/jcomp/src/test9.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test9",proj);
+   Assert.assertEquals(ct,2);
+}
+
+
+
+@Test
+public void jcompTest10() throws Exception
+{
+   File f10 = new File("/pro/ivy/jcomp/src/test10");
+   String cnts = IvyFile.loadFile(f10);
+   StringSource s10 = new StringSource("test10",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s10);
+   String jar = "/pro/ivy/jcomp/src/test10.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test10",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest11() throws Exception
+{
+   File f11 = new File("/pro/ivy/jcomp/src/test11");
+   String cnts = IvyFile.loadFile(f11);
+   StringSource s11 = new StringSource("test11",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s11);
+   String jar = "/pro/ivy/jcomp/src/test11.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test11",proj);
+   Assert.assertEquals(ct,1);
+}
+
+
+
+@Test
+public void jcompTest12() throws Exception
+{
+   File f12 = new File("/pro/ivy/jcomp/src/test12");
+   String cnts = IvyFile.loadFile(f12);
+   StringSource s12 = new StringSource("test12",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s12);
+   String jar = "/pro/ivy/jcomp/src/test12.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test12",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest13() throws Exception
+{
+   File f13 = new File("/pro/ivy/jcomp/src/test13");
+   String cnts = IvyFile.loadFile(f13);
+   StringSource s13 = new StringSource("test13",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s13);
+   String jar = "/pro/ivy/jcomp/src/test13.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test13",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest14() throws Exception
+{
+   File f14 = new File("/pro/ivy/jcomp/src/test14");
+   String cnts = IvyFile.loadFile(f14);
+   StringSource s14 = new StringSource("test14",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s14);
+   String jar = "/pro/ivy/jcomp/src/test14.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test14",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest15() throws Exception
+{
+   File f15 = new File("/pro/ivy/jcomp/src/test15");
+   String cnts = IvyFile.loadFile(f15);
+   StringSource s15 = new StringSource("test15",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s15);
+   String jar = "/pro/ivy/jcomp/src/test15.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test15",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+@Test
+public void jcompTest16() throws Exception
+{
+   File f16 = new File("/pro/ivy/jcomp/src/test16");
+   String cnts = IvyFile.loadFile(f16);
+   StringSource s16 = new StringSource("test16",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s16);
+   String jar = "/pro/ivy/jcomp/src/test16.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test16",proj);
+   Assert.assertEquals(ct,1);
+}
+
+
+@Test
+public void jcompTest17() throws Exception
+{
+   File f15 = new File("/pro/ivy/jcomp/src/test15");
+   String cnts = IvyFile.loadFile(f15);
+   StringSource s15 = new StringSource("test15",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s15);
+   String jar = "/pro/ivy/jcomp/src/test15.jar";
+   JcodeFactory jf = new JcodeFactory();
+   jf.addToClassPath(jar);
+   JcompProject proj = jcomp_control.getProject(jf,srcs);
+   int ct = showMessages("test17",proj);
+   Assert.assertEquals(ct,0);
+}
+
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Source from a string                                                    */
+/*                                                                              */
+/********************************************************************************/
 
 private static class StringSource implements JcompSource {
 

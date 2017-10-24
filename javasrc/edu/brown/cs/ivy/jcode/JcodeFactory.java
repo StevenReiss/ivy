@@ -421,7 +421,7 @@ public JcodeMethod findMethod(String nm,String cls,String mnm,String desc)
 }
 
 
-public Iterable<JcodeMethod> findAllMethods(JcodeDataType cls,String mnm,String desc)
+public Collection<JcodeMethod> findAllMethods(JcodeDataType cls,String mnm,String desc)
 {
    JcodeClass fc = known_classes.get(cls.getName());
    if (fc == null) return null;
@@ -597,7 +597,7 @@ private class LoadTask implements Runnable {
        }
        
       if (fi == null) {
-         System.err.println("JCODE: Can't find class " + load_class);
+         // System.err.println("JCODE: Can't find class " + load_class);
          return;
        }
       // System.err.println("JCODE: Load class " + load_class);

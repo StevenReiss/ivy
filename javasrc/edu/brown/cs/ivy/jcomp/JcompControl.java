@@ -25,6 +25,8 @@
 package edu.brown.cs.ivy.jcomp;
 
 import edu.brown.cs.ivy.file.IvyFile;
+import edu.brown.cs.ivy.jcode.JcodeDataType;
+import edu.brown.cs.ivy.jcode.JcodeFactory;
 
 import java.io.File;
 import java.util.*;
@@ -68,10 +70,11 @@ private JcompContext android_context;
 public JcompControl()
 {
    semantic_map = new WeakHashMap<JcompSource,JcompFile>();
-   base_context = new JcompContext(null);
+   base_context = new JcompContextAsm(null);
    system_typer = new JcompTyper(base_context);
    android_context = null;
 }
+
 
 
 
@@ -88,7 +91,7 @@ public synchronized void addBaseJars(Iterable<String> jars)
    for (String s : jars) if (s != null) ++ct;
    if (ct == 0) return;
 
-   base_context = new JcompContext(base_context,jars);
+   base_context = new JcompContextAsm(base_context,jars);
 }
 
 
@@ -142,6 +145,17 @@ public JcompTyper getSystemTyper()
 public JcompType getSystemType(String name)
 {
    return system_typer.findSystemType(name);
+}
+
+
+public static JcompType convertType(JcompTyper typer,JcodeDataType cty)
+{
+   if (cty == null) return null;
+   String tnm = cty.getName();
+   JcompType rslt = typer.findType(tnm);
+   if (rslt != null) return rslt;
+   rslt = typer.findSystemType(tnm);
+   return rslt;
 }
 
 
@@ -218,14 +232,14 @@ public synchronized JcompProject getProject(Collection<String> jars,
 		}
 	     }
 	  }
-	 android_context = new JcompContext(ctx,androidjar);
+	 android_context = new JcompContextAsm(ctx,androidjar);
        }
       ctx = android_context;
     }
 
    if (jars != null) {
       for (String jarnm : jars) {
-	 if (jarnm != null) ctx = new JcompContext(ctx,jarnm);
+	 if (jarnm != null) ctx = new JcompContextAsm(ctx,jarnm);
        }
     }
 
@@ -241,6 +255,25 @@ public synchronized JcompProject getProject(Collection<String> jars,
 
    return root;
 }
+
+
+
+public synchronized JcompProject getProject(JcodeFactory jf,Collection<JcompSource> rfs)
+{
+   JcompContext ctx = new JcompContextCode(jf);
+   JcompProjectImpl root = new JcompProjectImpl(ctx);
+   for (JcompSource rf : rfs) {
+      JcompFile rjf = semantic_map.get(rf);
+      if (rjf == null) {
+	 rjf = new JcompFile(rf);
+	 semantic_map.put(rf,rjf);
+       }
+      root.addFile(rjf);
+    }
+   
+   return root; 
+}
+
 
 
 
@@ -310,12 +343,12 @@ public synchronized JcompTyper getTyper(Collection<String> jars,boolean android)
 	     }
 	  }
        }
-      ctx = new JcompContext(ctx,androidjar);
+      ctx = new JcompContextAsm(ctx,androidjar);
     }
 
    if (jars != null) {
       for (String s : jars) {
-	 if (s != null) ctx = new JcompContext(ctx,s);
+	 if (s != null) ctx = new JcompContextAsm(ctx,s);
        }
     }
 

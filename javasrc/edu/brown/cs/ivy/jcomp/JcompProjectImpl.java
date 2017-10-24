@@ -43,6 +43,7 @@ private List<JcompFile>   file_nodes;
 private JcompContext	  base_context;
 private boolean 	  is_resolved;
 private Set<JcompType>	  all_types;
+private JcompTyper        resolve_typer;
 
 
 
@@ -58,6 +59,7 @@ JcompProjectImpl(JcompContext ctx)
    file_nodes = new ArrayList<JcompFile>();
    base_context = ctx;
    is_resolved = false;
+   resolve_typer = null;
    all_types = null;
 }
 
@@ -68,6 +70,7 @@ void clear()
    file_nodes.clear();
    is_resolved = false;
    all_types = null;
+   resolve_typer = null;
 }
 
 
@@ -153,19 +156,25 @@ synchronized boolean isResolved()
 
 @Override synchronized public void resolve()
 {
-   if (isResolved()) return;
+   if (isResolved()) {
+      if (resolve_typer == null) resolve_typer = new JcompTyper(base_context);
+      return;
+    }
 
    clearResolve();
 
-   JcompTyper jt = new JcompTyper(base_context);
-   JcompResolver jr = new JcompResolver(jt);
-   jt.assignTypes(this);
+   resolve_typer = new JcompTyper(base_context);
+   JcompResolver jr = new JcompResolver(resolve_typer);
+   resolve_typer.assignTypes(this);
    jr.resolveNames(this);
 
-   all_types = new HashSet<JcompType>(jt.getAllTypes());
+   all_types = new HashSet<JcompType>(resolve_typer.getAllTypes());
 
-   setResolved(true,jt);
+   setResolved(true,resolve_typer);
 }
+
+
+public JcompTyper getResolveTyper()             { return resolve_typer; }
 
 
 

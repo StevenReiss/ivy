@@ -145,7 +145,7 @@ private static class TypeVarFinder extends SignatureVisitor {
    @Override public void visitFormalTypeParameter(String name) {
       if (cur_index >= 0) {
          if (cur_index >= input_parms.size()) {
-            System.err.println("PROBLEM");
+            System.err.println("PROBLEM with the number of formal generic parameters");
           }
          else {
             type_map.put(name,input_parms.get(cur_index++));

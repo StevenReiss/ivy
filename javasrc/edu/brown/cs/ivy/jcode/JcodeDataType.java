@@ -37,6 +37,7 @@ package edu.brown.cs.ivy.jcode;
 
 import org.objectweb.asm.*;
 
+import java.lang.reflect.Modifier;
 import java.util.*;
 
 
@@ -100,6 +101,13 @@ public boolean isAbstract()
 {
    return (modifier_values & Opcodes.ACC_ABSTRACT) != 0;
 }
+
+
+public boolean isStatic()
+{
+   return Modifier.isStatic(modifier_values);
+}
+
 
 public boolean isCategory2()
 {
@@ -426,7 +434,7 @@ private JcodeDataType computeCommonParent(JcodeDataType t2)
    else if (t2.isInterface()) return findCommonClassInterface(t2);
 
    if (isArray() && t2.isArray()) return findCommonArray(t2);
-   else if (isArray() || t2.isArray()) return bcode_factory.findJavaType("Ljava/lang/Object;");
+   else if (isArray() || t2.isArray()) return bcode_factory.findJavaType("java.lang.Object");
 
    if (isDerivedFrom(t2)) return t2;
    else if (t2.isDerivedFrom(this)) return this;
@@ -436,10 +444,10 @@ private JcodeDataType computeCommonParent(JcodeDataType t2)
     }
 
    for (JcodeDataType bdt = t2.super_type; bdt != null; bdt = bdt.super_type) {
-      if (bdt == this || t2.isDerivedFrom(bdt)) return bdt;
+      if (bdt == this || isDerivedFrom(bdt)) return bdt;
     }
 
-   return bcode_factory.findJavaType("Ljava/lang/Object;");
+   return bcode_factory.findJavaType("java.lang.Object");
 }
 
 
@@ -466,7 +474,7 @@ private JcodeDataType findCommonInterface(JcodeDataType i2,Set<JcodeDataType> do
        }
     }
 
-   return bcode_factory.findJavaType("Ljava/lang/Object;");
+   return bcode_factory.findJavaType("java.lang.Object");
 }
 
 

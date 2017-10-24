@@ -8,10 +8,12 @@
 	 <pathelement location='${IVY}/java' />
 	 <fileset dir='${IVY}/lib/eclipsejar/' includes='*.jar' />
 	 <pathelement location='${IVY}/lib/asm5.jar' />
+	 <pathelement location='${IVY}/lib/junit.jar' />
       </path>
       <path id='test.classpath'>
 	 <pathelement location='${IVY}/java' />
 	 <fileset dir='${IVY}/lib/' includes='org*.jar' />
+	 <pathelement location='${IVY}/lib/junit.jar' />
       </path>
    </target>
 
@@ -21,6 +23,16 @@
 	 <classpath refid='ivy.classpath' />
       </javac>
    </target>
+
+   <target name='test' depends='compile'>
+      <junit fork='yes' printsummary='true' haltonerror='true' >
+	 <classpath refid='ivy.classpath' />
+	 <assertions><enable/></assertions>
+	 <formatter type='xml' usefile='true' />
+	 <test name='edu.brown.cs.ivy.jcomp.JcompTest' outfile='test.out' />
+      </junit>
+   </target>
+
 
 </project>
 

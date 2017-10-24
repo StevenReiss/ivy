@@ -15,9 +15,12 @@ SFILES= \
 	JcompAstCleaner.java \
 	JcompConstants.java \
 	JcompContext.java \
+	JcompContextAsm.java \
+	JcompContextCode.java \
 	JcompControl.java \
 	JcompExtendedSource.java \
 	JcompFile.java \
+	JcompGenerics.java \
 	JcompMessage.java \
 	JcompMessageSeverity.java \
 	JcompProject.java \

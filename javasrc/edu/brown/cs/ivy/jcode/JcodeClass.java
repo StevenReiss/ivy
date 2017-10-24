@@ -158,6 +158,21 @@ public boolean isInterface()
    return Modifier.isInterface(access);
 }
 
+public boolean isAnnotation()
+{
+   return (access & Opcodes.ACC_ANNOTATION) != 0;
+}
+
+public boolean isAbstract()
+{
+   return Modifier.isAbstract(access);
+}
+
+public boolean isStatic()
+{
+   return Modifier.isStatic(access);
+}
+
 
 public Collection<JcodeMethod> getMethods()
 {

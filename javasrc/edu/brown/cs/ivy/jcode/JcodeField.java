@@ -36,7 +36,6 @@
 package edu.brown.cs.ivy.jcode;
 
 import org.objectweb.asm.tree.*;
-import org.objectweb.asm.Opcodes;
 import java.lang.reflect.*;
 
 
@@ -64,7 +63,7 @@ private JcodeClass	in_class;
 
 JcodeField(JcodeClass cls,int a,String n,String d,String s,Object val)
 {
-   super(Opcodes.ASM5,a,n,d,s,val);
+   super(ASM5,a,n,d,s,val);
 
    in_class = cls;
 }
@@ -77,7 +76,9 @@ JcodeField(JcodeClass cls,int a,String n,String d,String s,Object val)
 /*										*/
 /********************************************************************************/
 
-public String getName() 	      { return name; }
+public String getName() 	        { return name; }
+public String getFullName()             { return in_class.getName() + "." + getName(); }
+
 
 public JcodeDataType getType() {
    return in_class.getFactory().findJavaType(desc);
@@ -97,6 +98,12 @@ public boolean isStatic()
 {
    if (Modifier.isStatic(this.access)) return true;
    return false;
+}
+
+
+public boolean isFinal()
+{
+   return Modifier.isFinal(this.access);
 }
 
 

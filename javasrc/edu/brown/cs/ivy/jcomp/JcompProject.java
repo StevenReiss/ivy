@@ -57,6 +57,9 @@ public interface JcompProject extends JcompConstants
 void resolve();
 
 
+JcompTyper getResolveTyper();
+
+
 
 /**
  *      Search for all symbols of a given kind (TYPE, CLAS, ENUM, INTERFACE, CLASS&ENUM, CLASS&INTERFACE,

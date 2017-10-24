@@ -168,9 +168,9 @@ static JcompSymbol createSymbol(JcompType type)
 }
 
 
-static JcompSymbol createKnownField(String id,JcompType typ,JcompType cls,boolean stat,boolean fnl)
+static JcompSymbol createKnownField(String id,JcompType typ,JcompType cls,int acc)
 {
-   return new KnownField(id,typ,cls,stat,fnl);
+   return new KnownField(id,typ,cls,acc);
 }
 
 
@@ -347,6 +347,8 @@ public boolean isStatic()			{ return true; }
  **/
 
 public boolean isPrivate()			{ return false; }
+
+public boolean isVolatile()                     { return false; }
 
 
 /**
@@ -534,23 +536,22 @@ private static class KnownField extends JcompSymbol {
    private JcompType class_type;
    private String field_name;
    private JcompType field_type;
-   private boolean is_static;
-   private boolean is_final;
-
-   KnownField(String id,JcompType fty,JcompType cls,boolean stat,boolean fnl) {
+   private int access_info;
+   
+   KnownField(String id,JcompType fty,JcompType cls,int access) {
       field_name = id;
       field_type = fty;
       class_type = cls;
-      is_static = stat;
-      is_final = fnl;
+      access_info = access;
     }
 
    @Override public String getName()		{ return field_name; }
    @Override public JcompType getType() 	{ return field_type; }
    @Override public boolean isKnown()		{ return true; }
    @Override public boolean isFieldSymbol()	{ return true; }
-   @Override public boolean isStatic()		{ return is_static; }
-   @Override public boolean isFinal()		{ return is_final; }
+   @Override public boolean isStatic()		{ return Modifier.isStatic(access_info); }
+   @Override public boolean isFinal()		{ return Modifier.isFinal(access_info); }
+   @Override public boolean isVolatile()        { return Modifier.isVolatile(access_info); }
    @Override public JcompType getClassType()	{ return class_type; }
 
    @Override public String getFullName() {

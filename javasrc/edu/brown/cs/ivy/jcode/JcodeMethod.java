@@ -151,6 +151,12 @@ public boolean isNative()
 }
 
 
+public boolean isVarArgs() 
+{
+   return (access & Opcodes.ACC_VARARGS) != 0;
+}
+
+
 public boolean isPrivate()
 {
    return Modifier.isPrivate(access);

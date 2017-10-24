@@ -41,7 +41,7 @@ import org.objectweb.asm.tree.*;
 import java.util.*;
 
 
-public class JcodeInstruction implements JcodeConstants, Opcodes
+public class JcodeInstruction implements JcodeConstants
 {
 
 
@@ -567,10 +567,10 @@ public JcodeMethod getMethodReference()
    else if (for_inst instanceof InvokeDynamicInsnNode) {
       InvokeDynamicInsnNode dins = (InvokeDynamicInsnNode) for_inst;
       if (dins.bsm.getName().equals("metafactory")) {
-         Handle h = (Handle) dins.bsmArgs[1];
-         JcodeClass cls = in_method.getFactory().findClass(h.getOwner());
-         JcodeMethod mthd = cls.findMethod(h.getName(),h.getDesc());
-         return mthd;
+	 Handle h = (Handle) dins.bsmArgs[1];
+	 JcodeClass cls = in_method.getFactory().findClass(h.getOwner());
+	 JcodeMethod mthd = cls.findMethod(h.getName(),h.getDesc());
+	 return mthd;
        }
     }
    return null;
@@ -585,20 +585,20 @@ public String [] getDynamicReference()
       int ct = 0;
       rslt[ct++] = dins.name;
       rslt[ct++] = dins.desc;
-      rslt[ct++] = dins.bsm.getOwner() + "." + 
-        dins.bsm.getName() + dins.bsm.getDesc();
+      rslt[ct++] = dins.bsm.getOwner() + "." +
+	dins.bsm.getName() + dins.bsm.getDesc();
       for (int i = 0; i < dins.bsmArgs.length; ++i) {
-         if (dins.bsmArgs[i] instanceof Handle) {
-            Handle h = (Handle) dins.bsmArgs[i];
-            rslt[ct++] = h.getOwner() + "." + h.getName() + h.getDesc();
-          }
-         else {
-            rslt[ct++] = dins.bsmArgs[i].toString();
-          }
+	 if (dins.bsmArgs[i] instanceof Handle) {
+	    Handle h = (Handle) dins.bsmArgs[i];
+	    rslt[ct++] = h.getOwner() + "." + h.getName() + h.getDesc();
+	  }
+	 else {
+	    rslt[ct++] = dins.bsmArgs[i].toString();
+	  }
        }
       return rslt;
     }
-   
+
    return null;
 }
 

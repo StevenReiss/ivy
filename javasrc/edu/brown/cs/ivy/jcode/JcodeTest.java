@@ -80,19 +80,19 @@ public JcodeTest()
 
 @Test public void loadClasses()
 {
-   bcode_factory.findJavaType("Lspr/onsets/OnsetMain;");
+   bcode_factory.findJavaType("spr.onsets.OnsetMain");
 }
 
 
 
 @Test public void lookupClass()
 {
-   JcodeDataType t1 = bcode_factory.findJavaType("Ljava/lang/Object;");
-   JcodeDataType t2 = bcode_factory.findJavaType("Ljava/lang/Object;");
-   JcodeDataType t3 = bcode_factory.findJavaType("[Ljava.lang.Object;");
-   JcodeDataType t4 = bcode_factory.findJavaType("I");
-   JcodeDataType t5 = bcode_factory.findJavaType("V");
-   JcodeDataType t6 = bcode_factory.findJavaType("[C");
+   JcodeDataType t1 = bcode_factory.findJavaType("java.lang.Object");
+   JcodeDataType t2 = bcode_factory.findJavaType("java.lang.Object");
+   JcodeDataType t3 = bcode_factory.findJavaType("java.lang.Object[]");
+   JcodeDataType t4 = bcode_factory.findJavaType("int");
+   JcodeDataType t5 = bcode_factory.findJavaType("void");
+   JcodeDataType t6 = bcode_factory.findJavaType("char[]");
    Assert.assertNotNull(t1);
    Assert.assertEquals(t1,t2);
    Assert.assertNotNull(t3);

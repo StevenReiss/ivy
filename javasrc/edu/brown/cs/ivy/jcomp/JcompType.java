@@ -210,6 +210,7 @@ private boolean is_abstract;
 private boolean inner_nonstatic;
 private String type_signature;
 private Map<String,JcompType> parameterized_types;
+private Map<JcompType,JcompType> parent_map;
 
 
 
@@ -230,6 +231,7 @@ protected JcompType(String s)
    inner_nonstatic = false;
    type_signature = null;
    parameterized_types = null;
+   parent_map = null;
 }
 
 
@@ -269,11 +271,20 @@ public boolean isBooleanType()		{ return false; }
 public boolean isNumericType()		{ return false; }
 
 
+public boolean isFloatingType()         { return false; }
+public boolean isInt()                  { return false; }
+public boolean isCategory2()            { return false; }
+public boolean isBroaderType(JcompType t) { return false; }
+
+
 /**
  *	Return true if this is the type void
  **/
 
 public boolean isVoidType()			{ return false; }
+
+
+public boolean isJavaLangObject()               { return false; }
 
 
 /**
@@ -666,6 +677,30 @@ List<JcompSymbol> isConformableTo(JcompTyper typer,JcompType typ)
 }
 
 
+public boolean isDerivedFrom(JcompType jt)
+{
+   if (jt == null) return false;
+   if (jt == this) return true;
+   if (isPrimitiveType()) {
+      if (!jt.isPrimitiveType()) return false;
+      if (jt.isCompatibleWith(this)) return true;
+      return false;
+    }
+   
+   if (getSuperType() != null && getSuperType().isDerivedFrom(jt)) return true;
+   if (getInterfaces() != null) {
+      for (JcompType ity : getInterfaces()) {
+         if (ity.isDerivedFrom(jt)) return true;
+       }
+    }
+   
+   if (isArrayType() && jt.isArrayType()) {
+      if (getBaseType().isDerivedFrom(jt.getBaseType())) return true;
+    }
+   
+   return false;
+}
+      
 
 public boolean definesAllNeededMethods(JcompTyper typer)	{ return true; }
 
@@ -729,6 +764,125 @@ private static JcompType findCommonParent(JcompTyper typer,List<JcompType> base)
 
 
 
+public JcompType getCommonParent(JcompTyper typer,JcompType t2)
+{
+   if (t2 == this) return t2;
+   
+   synchronized (this) {
+      if (parent_map == null) parent_map = new HashMap<>();
+    }
+   
+   boolean setother = false;
+   JcompType jt = null;
+   synchronized (parent_map) {
+      jt = parent_map.get(t2);
+      if (jt == null) {
+         jt = computeCommonParent(typer,t2);
+         parent_map.put(t2,jt);
+         setother = true;
+       }
+    }
+   
+   if (setother) {
+      t2.setCommonParent(this,jt);
+    }
+   
+   return jt;
+}
+
+
+
+private void setCommonParent(JcompType dt,JcompType rslt)
+{
+   synchronized (this) {
+      if (parent_map == null) parent_map = new HashMap<>();
+    }
+   synchronized (parent_map) {
+      parent_map.put(dt,rslt);
+    }
+}
+
+
+private JcompType computeCommonParent(JcompTyper typer,JcompType t2)
+{
+   if (this == t2) return this;
+   
+   if (isInterfaceType() && t2.isInterfaceType()) return findCommonInterface(typer,t2,null);
+   else if (isInterfaceType()) return t2.findCommonClassInterface(this);
+   else if (t2.isInterfaceType()) return findCommonClassInterface(t2);
+   
+   if (isArrayType() && t2.isArrayType()) return findCommonArray(typer,t2);
+   else if (isArrayType() || t2.isArrayType()) 
+      return typer.findSystemType("java.lang.Object");
+   
+   if (isDerivedFrom(t2)) return t2;
+   else if (t2.isDerivedFrom(this)) return this;
+   
+   for (JcompType st = getSuperType(); st != null; st = st.getSuperType()) {
+      if (st == t2 || t2.isDerivedFrom(st)) return st;
+    }
+   for (JcompType st = t2.getSuperType(); st != null; st = st.getSuperType()) {
+      if (st == this || isDerivedFrom(st)) return st;
+    }
+   
+   return typer.findSystemType("java.lang.Object");
+}
+
+
+private JcompType findCommonInterface(JcompTyper typer,JcompType t2,Set<JcompType> done)
+{
+   if (isDerivedFrom(t2)) return t2;
+   else if (t2.isDerivedFrom(this)) return this;
+   
+   if (done == null) done = new HashSet<>();
+   
+   JcompType st = getSuperType();
+   if (st != null) {
+      if (!done.contains(st)) {
+         done.add(st);
+         JcompType c = st.findCommonInterface(typer,t2,done);
+         if (c.isInterfaceType()) return c;
+       }
+    }
+   if (getInterfaces() != null) {
+      for (JcompType it : getInterfaces()) {
+         if (done.contains(it)) continue;
+         done.add(it);
+         JcompType c = it.findCommonInterface(typer,t2,done);
+         if (c.isInterfaceType()) return c;
+       }
+    }
+   
+   return typer.findSystemType("java.lang.Object");
+}
+
+
+private JcompType findCommonClassInterface(JcompType typ)
+{
+   return this;
+}
+
+
+private JcompType findCommonArray(JcompTyper typer,JcompType t2)
+{
+   if (this == t2) return this;
+   
+   JcompType rslt = null;
+   
+   JcompType ac1 = getBaseType();
+   JcompType ac2 = t2.getBaseType();
+   
+   if (isDerivedFrom(t2)) return t2;
+   else if (t2.isDerivedFrom(this)) rslt = this;
+   else if (ac1.isDerivedFrom(ac2)) rslt = t2;
+   else if (ac2.isDerivedFrom(ac1)) rslt = this;
+   else {
+      JcompType fdt = ac1.getCommonParent(typer,ac2);
+      rslt = typer.findArrayType(fdt);             
+    }
+   
+   return rslt;
+}
 
 /********************************************************************************/
 /*										*/
@@ -830,6 +984,37 @@ protected Set<JcompSymbol> lookupKnownAbstracts(JcompTyper typer)
 
 
 
+/********************************************************************************/
+/*                                                                              */
+/*      Child type methods                                                      */
+/*                                                                              */
+/********************************************************************************/
+
+public Collection<JcompType> getChildTypes()            { return null; }
+
+void addChild(JcompType chld)                           { }
+
+public JcompType findChildForInterface(JcompType ity)
+{
+   JcompType fdt0 = null;
+   
+   if (getChildTypes() != null) {
+      for (JcompType k : getChildTypes()) {
+	 JcompType r = k.findChildForInterface(ity);
+	 if (r != null) {
+	    if (fdt0 == null) fdt0 = r;
+	    else return ity;	// if more than one candidate, return the interface type
+	  }
+       }
+    }
+   
+   if (fdt0 == null) {
+      if (!isAbstract() && isDerivedFrom(ity)) fdt0 = this;
+    }
+   
+   return fdt0;
+}
+
 
 /********************************************************************************/
 /*										*/
@@ -918,6 +1103,37 @@ private static class PrimType extends JcompType {
       if (type_code == PrimitiveType.VOID) return false;
       return true;
     }
+   
+   @Override public boolean isFloatingType() {
+      if (type_code == PrimitiveType.FLOAT) return true;
+      if (type_code == PrimitiveType.DOUBLE) return true;
+      return false;
+    }
+    
+   @Override public boolean isInt() {
+      return type_code == PrimitiveType.INT;
+    }
+   
+   @Override public boolean isCategory2() {
+      if (type_code == PrimitiveType.LONG) return true;
+      if (type_code == PrimitiveType.DOUBLE) return true;
+      return false;
+    }
+   
+   @Override public boolean isBroaderType(JcompType jt) {
+      if (jt == this) return true;
+      if (!jt.isPrimitiveType()) return false;
+      PrimType pt = (PrimType) jt;
+      if (isBooleanType()) return false;
+      if (jt.isBooleanType()) return true;
+      if (type_code == PrimitiveType.CHAR) return false;
+      if (pt.type_code == PrimitiveType.CHAR) return true;
+      int ln0 = classLength();
+      int ln1 = pt.classLength();
+      return ln0 >= ln1;
+    }
+   
+   
    @Override public boolean isVoidType()		{ return type_code == PrimitiveType.VOID; }
    @Override boolean isBaseKnown()			{ return true; }
    @Override JcompType getKnownType(JcompTyper t)	{ return this; }
@@ -991,6 +1207,17 @@ private static class PrimType extends JcompType {
       return "V";
     }
 
+   private int classLength() {
+      if (type_code == PrimitiveType.BOOLEAN || type_code == PrimitiveType.BYTE) 
+         return 1;
+      if (type_code == PrimitiveType.CHAR || type_code == PrimitiveType.SHORT)
+         return 2;
+      if (type_code == PrimitiveType.INT || type_code == PrimitiveType.FLOAT)
+         return 4;
+      if (type_code == PrimitiveType.LONG || type_code == PrimitiveType.DOUBLE)
+         return 8;
+      return 0;
+    }
 }	// end of subclass PrimType
 
 
@@ -1081,6 +1308,7 @@ private static abstract class ClassInterfaceType extends JcompType {
    private JcompType outer_type;
    private List<JcompType> interface_types;
    private boolean is_context;
+   private List<JcompType> child_types;
 
    protected ClassInterfaceType(String nm) {
       super(nm);
@@ -1088,11 +1316,15 @@ private static abstract class ClassInterfaceType extends JcompType {
       outer_type = null;
       interface_types = null;
       is_context = false;
+      child_types = null;
     }
 
    @Override void setSuperType(JcompType t) {
-      if (t != this) super_type = t;
-   }
+      if (t != this && t != null) {
+         super_type = t;
+         t.addChild(this);
+       }  
+    }
 
    @Override void setOuterType(JcompType t)		{ outer_type = t; }
 
@@ -1104,6 +1336,7 @@ private static abstract class ClassInterfaceType extends JcompType {
       else if (interface_types.contains(t)) return;
       else if (t == this) return;
       interface_types.add(t);
+      t.addChild(this);
     }
 
    @Override public Collection<JcompType> getInterfaces()	{ return interface_types; }
@@ -1113,6 +1346,10 @@ private static abstract class ClassInterfaceType extends JcompType {
    @Override boolean isBaseKnown()				{ return isKnownType(); }
 
    @Override public JcompType getSuperType()			{ return super_type; }
+   
+   @Override public boolean isJavaLangObject() {
+      return getName().equals("java.lang.Object");
+    }
 
    @Override public boolean isCompatibleWith(JcompType jt) {
       if (jt == null) return false;
@@ -1153,19 +1390,19 @@ private static abstract class ClassInterfaceType extends JcompType {
    @Override public List<JcompSymbol> isConformableFrom(JcompTyper typer,JcompType typ)
    {
       if (isCompatibleWith(typ)) return null;
-
+   
       List<JcompSymbol> rslt = typ.isConformableTo(typer,this);
-
+   
       List<JcompType> prms = new ArrayList<JcompType>();
       prms.add(typ);
       JcompType atyp = createMethodType(null,prms,false,null);
       JcompSymbol sym = lookupMethod(typer,"<init>",atyp);
-
+   
       if (sym != null && !sym.isPrivate()) {
-	 if (rslt == null) rslt = new ArrayList<JcompSymbol>();
-	 rslt.add(sym);
+         if (rslt == null) rslt = new ArrayList<JcompSymbol>();
+         rslt.add(sym);
        }
-
+   
       return rslt;
     }
 
@@ -1482,9 +1719,13 @@ private static abstract class ClassInterfaceType extends JcompType {
       return null;
     }
 
-
-
-
+   synchronized void addChild(JcompType jt) {
+      if (child_types == null) child_types = new ArrayList<>();
+      child_types.add(jt);
+    }
+   
+   public Collection<JcompType> getChildTypes()                 { return child_types; }
+   
 }	// end of innerclass ClassInterfaceType
 
 
@@ -1564,13 +1805,13 @@ private static abstract class UnknownClassInterfaceType extends ClassInterfaceTy
     @Override protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,JcompType basetype) {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
       if (js == null && basetype == this) {
-	 Set<JcompType> args = method_names.get(id);
-	 if (args == null) {
-	    args = new HashSet<JcompType>();
-	    method_names.put(id,args);
-	  }
-	 atyps = typer.fixJavaType(atyps);
-	 args.add(atyps);
+         Set<JcompType> args = method_names.get(id);
+         if (args == null) {
+            args = new HashSet<JcompType>();
+            method_names.put(id,args);
+          }
+         atyps = typer.fixJavaType(atyps);
+         args.add(atyps);
        }
       return js;
     }
