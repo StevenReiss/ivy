@@ -197,7 +197,10 @@ public JcodeMethod findMethod(String nm,String desc)
    for (Object o : methods) {
       JcodeMethod bm = (JcodeMethod) o;
       if (bm.getName().equals(nm)) {
-	 if (desc == null || bm.getDescription().equals(desc)) return bm;
+         if (desc == null) return bm;
+         String bmd = bm.getDescription();
+         if (bmd.equals(desc)) return bm;
+         if (desc.endsWith(")") && bmd.startsWith(desc)) return bm;
        }
     }
 

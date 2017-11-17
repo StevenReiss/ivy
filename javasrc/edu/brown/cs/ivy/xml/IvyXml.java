@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.73 2017/08/04 12:43:13 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.74 2017/10/24 12:46:54 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyXml.java,v $
+ * Revision 1.74  2017/10/24 12:46:54  spr
+ * Clean up.
+ *
  * Revision 1.73  2017/08/04 12:43:13  spr
  * Add ant capability.
  *

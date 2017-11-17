@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowMethodData.java,v 1.4 2007-01-03 14:04:57 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowMethodData.java,v 1.5 2017/10/24 12:46:21 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: JflowMethodData.java,v $
+ * Revision 1.5  2017/10/24 12:46:21  spr
+ * Clean up.
+ *
  * Revision 1.4  2007-01-03 14:04:57  spr
  * Fix imports
  *

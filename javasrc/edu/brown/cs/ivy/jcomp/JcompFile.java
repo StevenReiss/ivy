@@ -175,22 +175,22 @@ private class ErrorVisitor extends ASTVisitor {
       boolean fg = error_stack.pop();
       have_error |= fg;
       if (!have_error) {
-	 JcompType jt = JcompAst.getExprType(n);
-	 if (jt != null && jt.isErrorType()) {
-	    if (n instanceof MethodInvocation) {
-	       MethodInvocation mi = (MethodInvocation) n;
-	       String mnm = "";
-	       if (mi.getExpression() != null) {
-		  mnm = JcompAst.getExprType(mi.getExpression()).getName() + ".";
-		}
-	       mnm += mi.getName().getIdentifier();
-	       addError("Undefined method " + mnm,IProblem.UndefinedMethod,n);
-	     }
-	    else {
-	       addError("Expression error",IProblem.InvalidOperator,n);
-	     }
-	    have_error = true;
-	  }
+         JcompType jt = JcompAst.getExprType(n);
+         if (jt != null && jt.isErrorType()) {
+            if (n instanceof MethodInvocation) {
+               MethodInvocation mi = (MethodInvocation) n;
+               String mnm = "";
+               if (mi.getExpression() != null) {
+                  mnm = JcompAst.getExprType(mi.getExpression()).getName() + ".";
+                }
+               mnm += mi.getName().getIdentifier();
+               addError("Undefined method " + mnm,IProblem.UndefinedMethod,n);
+             }
+            else {
+               addError("Expression error",IProblem.InvalidOperator,n);
+             }
+            have_error = true;
+          }
        }
     }
 

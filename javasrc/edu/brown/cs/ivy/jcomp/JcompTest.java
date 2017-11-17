@@ -20,7 +20,7 @@ public class JcompTest {
 /*										*/
 /********************************************************************************/
 
-private JcompControl     jcomp_control;
+private JcompControl	 jcomp_control;
 
 private static String test1 = "class Simple {\n" +
 	"static void main() {\n" +
@@ -169,9 +169,9 @@ private static String test5 = "public class TwoTypePair<T1, T2>\n" +
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Constructors                                                            */
-/*                                                                              */
+/*										*/
+/*	Constructors								*/
+/*										*/
 /********************************************************************************/
 
 public JcompTest()
@@ -182,15 +182,15 @@ public JcompTest()
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Common test code                                                        */
-/*                                                                              */
+/*										*/
+/*	Common test code							*/
+/*										*/
 /********************************************************************************/
 
 private static int showMessages(String what,JcompProject proj)
 {
    int ct = 0;
-   
+
    System.err.println("FOR TEST " + what);
    proj.resolve();
    for (JcompMessage msg : proj.getMessages()) {
@@ -200,16 +200,16 @@ private static int showMessages(String what,JcompProject proj)
 			    msg.getText());
       ++ct;
     }
-   
+
    return ct;
 }
 
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Actual test cases                                                       */
-/*                                                                              */
+/*										*/
+/*	Actual test cases							*/
+/*										*/
 /********************************************************************************/
 
 @Test
@@ -219,7 +219,7 @@ public void jcompTest1()
    List<JcompSource> srcs = Collections.singletonList(s1);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test1",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -231,7 +231,7 @@ public void jcompTest2()
    List<JcompSource> srcs = Collections.singletonList(s2);
    JcompProject proj = jcomp_control.getProject("/pro/ivy/jcomp/src/test.jar",srcs);
    int ct = showMessages("test2",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -243,7 +243,7 @@ public void jcompTest3()
    List<JcompSource> srcs = Collections.singletonList(s3);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test3",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -255,7 +255,7 @@ public void jcompTest4()
    List<JcompSource> srcs = Collections.singletonList(s4);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test4",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -267,7 +267,7 @@ public void jcompTest5()
    List<JcompSource> srcs = Collections.singletonList(s5);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test5",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -278,10 +278,10 @@ public void jcompTest6() throws Exception
    File f6 = new File("/pro/ivy/jcomp/src/test6");
    String cnts = IvyFile.loadFile(f6);
    StringSource s6 = new StringSource("test6",cnts);
-   List<JcompSource> srcs = Collections.singletonList(s6); 
+   List<JcompSource> srcs = Collections.singletonList(s6);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test6",proj);
-   Assert.assertEquals(ct,72);
+   Assert.assertEquals(72,ct);
 }
 
 
@@ -297,7 +297,7 @@ public void jcompTest7() throws Exception
    String jar = "/pro/ivy/jcomp/src/test7.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test7",proj);
-   Assert.assertEquals(ct,16);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -357,7 +357,7 @@ public void jcompTest11() throws Exception
    String jar = "/pro/ivy/jcomp/src/test11.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test11",proj);
-   Assert.assertEquals(ct,1);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -372,7 +372,7 @@ public void jcompTest12() throws Exception
    String jar = "/pro/ivy/jcomp/src/test12.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test12",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -387,7 +387,7 @@ public void jcompTest13() throws Exception
    String jar = "/pro/ivy/jcomp/src/test13.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test13",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -402,7 +402,7 @@ public void jcompTest14() throws Exception
    String jar = "/pro/ivy/jcomp/src/test14.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test14",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -417,7 +417,7 @@ public void jcompTest15() throws Exception
    String jar = "/pro/ivy/jcomp/src/test15.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test15",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -432,7 +432,7 @@ public void jcompTest16() throws Exception
    String jar = "/pro/ivy/jcomp/src/test16.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test16",proj);
-   Assert.assertEquals(ct,1);
+   Assert.assertEquals(1,ct);
 }
 
 
@@ -448,16 +448,59 @@ public void jcompTest17() throws Exception
    jf.addToClassPath(jar);
    JcompProject proj = jcomp_control.getProject(jf,srcs);
    int ct = showMessages("test17",proj);
-   Assert.assertEquals(ct,0);
+   Assert.assertEquals(0,ct);
 }
 
 
 
+@Test
+public void jcompTest20() throws Exception
+{
+   File f20 = new File("/pro/ivy/jcomp/src/test20");
+   String cnts = IvyFile.loadFile(f20);
+   StringSource s20 = new StringSource("test20",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s20);
+   String jar = "/pro/ivy/jcomp/src/test20.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test20",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
+@Test
+public void jcompTest21() throws Exception
+{
+   File f21 = new File("/pro/ivy/jcomp/src/test21");
+   String cnts = IvyFile.loadFile(f21);
+   StringSource s21 = new StringSource("test21",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s21);
+   String jar = "/pro/ivy/jcomp/src/test21.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test21",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
+
+@Test
+public void jcompTest22() throws Exception
+{
+   File f22 = new File("/pro/ivy/jcomp/src/test22");
+   String cnts = IvyFile.loadFile(f22);
+   StringSource s22 = new StringSource("test22",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s22);
+   String jar = "/pro/ivy/jcomp/src/test22.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test22",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
 
 /********************************************************************************/
-/*                                                                              */
-/*      Source from a string                                                    */
-/*                                                                              */
+/*										*/
+/*	Source from a string							*/
+/*										*/
 /********************************************************************************/
 
 private static class StringSource implements JcompSource {

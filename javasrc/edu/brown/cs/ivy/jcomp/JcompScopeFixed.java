@@ -64,8 +64,8 @@ private Map<String,Collection<JcompSymbol>> method_names;
 
 JcompScopeFixed()
 {
-   var_names = new HashMap<String,JcompSymbol>();
-   method_names = new HashMap<String,Collection<JcompSymbol>>();
+   var_names = new HashMap<>();
+   method_names = new HashMap<>();
 }
 
 
@@ -141,13 +141,19 @@ JcompScopeFixed()
    if (ljs != null) ljs = new ArrayList<JcompSymbol>(ljs);
 
    if (ljs != null) {
+      JcompSymbol bestms = null;
       for (JcompSymbol js : ljs) {
 	 if (js == null) {
 	    System.err.println("NULL SYMBOL IN METHOD LIST");
 	    continue;
 	  }
-	 if (aty.isCompatibleWith(js.getType())) return js;
+	 if (aty.isCompatibleWith(js.getType())) {
+            if (bestms == null) bestms = js;
+            else if (isBetterMethod(aty,js.getType(),bestms.getType())) 
+               bestms = js;
+          }       
        }
+      if (bestms != null) return bestms;
     }
 
    return null;

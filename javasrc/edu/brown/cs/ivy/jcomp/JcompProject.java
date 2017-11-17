@@ -56,6 +56,7 @@ public interface JcompProject extends JcompConstants
    
 void resolve();
 
+boolean isResolved();
 
 JcompTyper getResolveTyper();
 

@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/SourceSetFactory.java,v 1.3 2007-01-03 03:24:18 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/SourceSetFactory.java,v 1.4 2017/10/24 12:46:27 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SourceSetFactory.java,v $
+ * Revision 1.4  2017/10/24 12:46:27  spr
+ * Clean up.
+ *
  * Revision 1.3  2007-01-03 03:24:18  spr
  * Modifications to handle incremental update.
  *

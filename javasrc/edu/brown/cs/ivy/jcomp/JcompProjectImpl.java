@@ -18,7 +18,7 @@
  *										 *
  ********************************************************************************/
 
-/* SVN: $Id: JcompProjectImpl.java,v 1.8 2017/03/14 14:01:52 spr Exp $ */
+/* SVN: $Id: JcompProjectImpl.java,v 1.9 2017/10/24 12:47:04 spr Exp $ */
 
 
 
@@ -131,7 +131,7 @@ synchronized void setResolved(boolean fg,JcompTyper typer)
 
 
 
-synchronized boolean isResolved()
+synchronized public boolean isResolved()
 {
    if (!is_resolved) {
       boolean done = true;

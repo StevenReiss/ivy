@@ -497,19 +497,17 @@ public Statement createDeclaration(AST ast)
 /*										*/
 /********************************************************************************/
 
-JcompSymbol parameterize(JcompTyper typer,List<JcompType> parms)
+JcompSymbol parameterize(JcompTyper typer,JcompType ptype,List<JcompType> parms)
 {
    return this;
 }
 
 
 
-
-
-
-
-
-
+public JcompSymbol getBaseSymbol(JcompTyper typer)
+{
+   return this;
+}
 
 
 
@@ -665,7 +663,7 @@ private static class VariableSymbol extends JcompSymbol {
    @Override public boolean isFinal() {
       return Modifier.isFinal(getModifiers());
     }
-
+   
    @Override public String getHandle(String proj) {
       String pfx = proj + "#";
       JcompType jt = getType();
@@ -884,13 +882,23 @@ private static class KnownMethod extends JcompSymbol {
    @Override public boolean isGenericReturn()		{ return is_generic; }
    @Override public boolean isConstructorSymbol()	{ return method_name.equals("<init>"); }
 
-   @Override JcompSymbol parameterize(JcompTyper typer,List<JcompType> params) {
+   @Override JcompSymbol parameterize(JcompTyper typer,JcompType ptype,List<JcompType> params) {
       JcompType jty = JcompGenerics.deriveMethodType(typer,method_type,class_type,params);
       if (jty == null || jty == method_type) return this;
-      KnownMethod km = new KnownMethod(method_name,jty,class_type,access_flags,declared_exceptions,is_generic);
+      KnownMethod km = new KnownMethod(method_name,jty,ptype,access_flags,declared_exceptions,is_generic);
       return km;
     }
 
+   @Override public JcompSymbol getBaseSymbol(JcompTyper typer) {
+      if (class_type.isParameterizedType()) {
+         JcompType cty = class_type.getBaseType();
+         while (cty.isParameterizedType()) cty = cty.getBaseType();
+         JcompSymbol js = cty.lookupMethod(typer,method_name,method_type);
+         if (js != null) return js;
+       }
+      return this;
+    }
+   
 }	// end of subclass KnownMethod
 
 

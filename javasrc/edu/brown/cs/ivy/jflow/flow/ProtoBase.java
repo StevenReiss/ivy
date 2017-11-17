@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ProtoBase.java,v 1.11 2011-04-13 21:03:14 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ProtoBase.java,v 1.12 2017/10/24 12:46:27 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: ProtoBase.java,v $
+ * Revision 1.12  2017/10/24 12:46:27  spr
+ * Clean up.
+ *
  * Revision 1.11  2011-04-13 21:03:14  spr
  * Fix bugs in flow analysis.
  *

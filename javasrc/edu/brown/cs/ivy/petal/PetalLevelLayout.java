@@ -260,7 +260,7 @@ public void setWhiteSpace(double v)			{ white_space = v; }
 /*										*/
 /********************************************************************************/
 
-@Override public void doLayout(PetalModel m)
+@Override public synchronized void doLayout(PetalModel m)
 {
    graph_id = new Graph(m);
 

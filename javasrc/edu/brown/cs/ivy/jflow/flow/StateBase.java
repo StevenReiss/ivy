@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/StateBase.java,v 1.6 2007-02-27 18:53:29 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/StateBase.java,v 1.7 2017/10/24 12:46:27 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: StateBase.java,v $
+ * Revision 1.7  2017/10/24 12:46:27  spr
+ * Clean up.
+ *
  * Revision 1.6  2007-02-27 18:53:29  spr
  * Add check direct option.  Get a better null/non-null approximation.
  *

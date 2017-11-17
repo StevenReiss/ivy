@@ -183,7 +183,7 @@ JcompSymbol lookupMethod(String id,JcompType aty,JcompScope js)
 	    for (JcompSymbol ms : me.getMethods()) {
 	       if (aty.isCompatibleWith(ms.getType())) {
 		  if (bestms == null) bestms = ms;
-		  else if (isBetterMethod(aty,ms.getType(),bestms.getType()))
+		  else if (JcompScope.isBetterMethod(aty,ms.getType(),bestms.getType()))
 		     bestms = ms;
 		}
 	     }
@@ -197,27 +197,7 @@ JcompSymbol lookupMethod(String id,JcompType aty,JcompScope js)
 }
 
 
-private static boolean isBetterMethod(JcompType ctyp,JcompType m1,JcompType m2)
-{
-   List<JcompType> args = ctyp.getComponents();
-   List<JcompType> m1args = m1.getComponents();
-   List<JcompType> m2args = m2.getComponents();
-   if (m1args.size() != m2args.size()) {
-      if (m1args.size() == args.size()) return true;
-      else return false;
-    }
-   if (m1args.size() != args.size()) return false;
-   for (int i = 0; i < args.size(); ++i) {
-      JcompType t0 = args.get(i);
-      JcompType t1 = m1args.get(i);
-      JcompType t2 = m2args.get(i);
-      if (t1 == t2) continue;
-      if (t0 == t1) return true;
-      if (t0 == t2) return false;
-      // should check subtypes here as well
-    }
-   return false;
-}
+
 
 
 
