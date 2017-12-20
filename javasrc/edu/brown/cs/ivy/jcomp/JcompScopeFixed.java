@@ -85,7 +85,7 @@ JcompScopeFixed()
 @Override synchronized void defineDupVar(JcompSymbol s)
 {
    if (var_names.get(s.getFullName()) != null) return;
-   
+
    var_names.put(s.getFullName(),s);
 }
 
@@ -143,15 +143,11 @@ JcompScopeFixed()
    if (ljs != null) {
       JcompSymbol bestms = null;
       for (JcompSymbol js : ljs) {
-	 if (js == null) {
-	    System.err.println("NULL SYMBOL IN METHOD LIST");
-	    continue;
-	  }
 	 if (aty.isCompatibleWith(js.getType())) {
-            if (bestms == null) bestms = js;
-            else if (isBetterMethod(aty,js.getType(),bestms.getType())) 
-               bestms = js;
-          }       
+	    if (bestms == null) bestms = js;
+	    else if (isBetterMethod(aty,js.getType(),bestms.getType()))
+	       bestms = js;
+	  }
        }
       if (bestms != null) return bestms;
     }

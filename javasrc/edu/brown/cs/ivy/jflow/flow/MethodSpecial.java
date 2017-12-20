@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/MethodSpecial.java,v 1.9 2010-07-01 21:54:44 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/MethodSpecial.java,v 1.10 2017/12/20 20:36:49 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MethodSpecial.java,v $
+ * Revision 1.10  2017/12/20 20:36:49  spr
+ * Formatting
+ *
  * Revision 1.9  2010-07-01 21:54:44  spr
  * Check for null.
  *

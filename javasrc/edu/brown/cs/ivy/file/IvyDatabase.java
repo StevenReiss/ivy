@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyDatabase.java,v 1.14 2015/03/31 02:19:14 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyDatabase.java,v 1.15 2017/12/20 20:36:23 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyDatabase.java,v $
+ * Revision 1.15  2017/12/20 20:36:23  spr
+ * Formating
+ *
  * Revision 1.14  2015/03/31 02:19:14  spr
  * Formatting cleanup
  *
@@ -458,10 +461,10 @@ public static String getIdDefType()
    switch (dbms_type) {
       case UNKNOWN :
       case MYSQL :
-         return "int AUTO_INCREMENT";
+	 return "int AUTO_INCREMENT";
       case DERBY :
       case DERBY_EMBED :
-         return "INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)";
+	 return "INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1)";
       case POSTGRESQL :
 	 return "serial";
     }

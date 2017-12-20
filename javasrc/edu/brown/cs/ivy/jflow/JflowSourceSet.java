@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowSourceSet.java,v 1.3 2010-02-12 00:33:07 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowSourceSet.java,v 1.4 2017/12/20 20:36:41 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: JflowSourceSet.java,v $
+ * Revision 1.4  2017/12/20 20:36:41  spr
+ * Formatting
+ *
  * Revision 1.3  2010-02-12 00:33:07  spr
  * Headers changed.
  *

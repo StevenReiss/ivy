@@ -172,51 +172,52 @@ protected int compatiblityScore(JcompType argtyp,JcompType [] margs,
       boolean varargs,boolean innerinit)
 {
    if (argtyp == null) return 0;
-   
+
    List<JcompType> args = argtyp.getComponents();
-   
+
    boolean isok = false;
    int score = 0;
    if (margs.length == args.size()) {
       isok = true;
       for (int i = 0; i < margs.length; ++i) {
-         JcompType jt0 = margs[i];
-         JcompType jt1 = args.get(i);
-         if (!jt1.isCompatibleWith(jt0)) isok = false;
-         else score += score(jt0,jt1);
+	 JcompType jt0 = margs[i];
+	 JcompType jt1 = args.get(i);
+	 if (!jt1.isCompatibleWith(jt0)) isok = false;
+	 else score += score(jt0,jt1);
        }
     }
-   
+
    if (!isok && varargs && args.size() >= margs.length-1) {
       isok = true;
       score = 0;
       for (int i = 0; i < margs.length-1; ++i) {
-         JcompType jt0 = margs[i];
-         JcompType jt1 = args.get(i);
-         if (!jt1.isCompatibleWith(jt0)) isok = false;
-         else score += score(jt0,jt1);
+	 JcompType jt0 = margs[i];
+	 JcompType jt1 = args.get(i);
+	 if (!jt1.isCompatibleWith(jt0)) isok = false;
+	 else score += score(jt0,jt1);
        }
       score += 5;
       JcompType rjt0 = margs[margs.length-1];
+      // checking for array shouldn't be required here
       if (rjt0.isArrayType()) rjt0 = rjt0.getBaseType();
       for (int i = margs.length-1; i < args.size(); ++i) {
-         JcompType jt1 = args.get(i);
-         if (!jt1.isCompatibleWith(rjt0)) isok = false;
+	 JcompType jt1 = args.get(i);
+	 if (!jt1.isCompatibleWith(rjt0)) isok = false;
        }
     }
-   
+
    if (!isok && innerinit) {
       if (margs.length == args.size() + 1) {
-         isok = true;
-         for (int i = 0; i < args.size(); ++i) {
-            JcompType jt0 = margs[i];
-            JcompType jt1 = args.get(i);
-            if (!jt1.isCompatibleWith(jt0)) isok = false;
-            else score += score(jt0,jt1);
-          }
+	 isok = true;
+	 for (int i = 0; i < args.size(); ++i) {
+	    JcompType jt0 = margs[i];
+	    JcompType jt1 = args.get(i);
+	    if (!jt1.isCompatibleWith(jt0)) isok = false;
+	    else score += score(jt0,jt1);
+	  }
        }
     }
-   
+
    if (!isok) score = -1;
    return score;
 }

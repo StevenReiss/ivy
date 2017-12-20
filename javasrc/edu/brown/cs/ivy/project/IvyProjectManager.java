@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/project/IvyProjectManager.java,v 1.2 2009-10-02 00:18:29 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/project/IvyProjectManager.java,v 1.3 2017/12/20 20:36:53 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyProjectManager.java,v $
+ * Revision 1.3  2017/12/20 20:36:53  spr
+ * Formatting
+ *
  * Revision 1.2  2009-10-02 00:18:29  spr
  * Import clean up.
  *

@@ -65,6 +65,8 @@ private Map<String,JcodeDataType> jname_map;
 
 private int			num_threads;
 
+private static int              thread_counter = 0;
+
 
 
 /********************************************************************************/
@@ -144,6 +146,8 @@ public void load()
 
 public JcodeClass findClass(String name)
 {
+   if (name == null) return null; 
+   
    JcodeClass jdt = known_classes.get(name);
    if (jdt != null) return jdt;
    for (String anm = name; anm.contains("."); ) {
@@ -153,9 +157,41 @@ public JcodeClass findClass(String name)
       if (jdt != null) return jdt;
     }
 
-   work_list.add(name);
+   synchronized (this) {
+      work_list.add(name);
+    }
    loadClasses();
+   
+   return known_classes.get(name);
+}
 
+
+
+
+public JcodeClass findKnownClass(String name)
+{
+   if (name == null) return null; 
+   String ldname = null;
+   
+   JcodeClass jdt = known_classes.get(name);
+   if (jdt != null) return jdt;
+   if (class_map.containsKey(name)) ldname = name;
+   
+   for (String anm = name; anm.contains("."); ) {
+      int idx = anm.lastIndexOf(".");
+      anm = anm.substring(0,idx) + "$" +  anm.substring(idx+1);
+      jdt = known_classes.get(anm);
+      if (jdt != null) return jdt;
+      if (ldname == null && class_map.containsKey(anm)) ldname = anm;
+    }
+   
+   if (ldname == null) return null;
+   
+   synchronized (this) {
+      work_list.add(ldname);
+    }
+   loadClasses();
+   
    return known_classes.get(name);
 }
 
@@ -513,39 +549,43 @@ private synchronized void loadClasses()
 	 lt.run();
        }
     }
+   else if (work_list.isEmpty()) return;
    else {
-      work_holder = new LoadExecutor(num_threads);
+      if (work_holder == null) {
+         work_holder = new LoadExecutor(num_threads);
+       }
       for (String s : work_list) work_holder.workOnClass(s);
       work_list.clear();
       synchronized (work_holder) {
-	 try {
-	    work_holder.wait(1000);
-	  }
-	 catch (InterruptedException e) { }
 	 while (!work_holder.isDone()) {
 	    try {
 	       work_holder.wait(10000);
 	     }
 	    catch (InterruptedException e) { }
 	  }
+         work_holder.reset();
        }
-      work_holder.shutdown();
-      work_holder = null;
+      // work_holder.shutdown();
+      // work_holder = null;
     }
 }
 
 
 
 
-private class LoadExecutor extends ThreadPoolExecutor {
+private class LoadExecutor extends ThreadPoolExecutor implements ThreadFactory {
 
    private int num_active;
+   private boolean work_pending;
    private ConcurrentMap<String,Object> work_items;
+   
 
    LoadExecutor(int nth) {
       super(nth,nth,10,TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>());
       num_active = 0;
+      work_pending = true;
       work_items = new ConcurrentHashMap<String,Object>();
+      setThreadFactory(this);
     }
 
    void workOnClass(String c) {
@@ -558,6 +598,7 @@ private class LoadExecutor extends ThreadPoolExecutor {
 
    @Override synchronized protected void beforeExecute(Thread t,Runnable r) {
       ++num_active;
+      work_pending = false;
     }
 
    @Override synchronized protected void afterExecute(Runnable r,Throwable t) {
@@ -567,8 +608,19 @@ private class LoadExecutor extends ThreadPoolExecutor {
        }
     }
 
+   void reset() {
+      work_items.clear();
+      work_pending = true;
+    }
+   
    synchronized boolean isDone() {
-      return num_active == 0 && getQueue().size() == 0;
+      return !work_pending && num_active == 0 && getQueue().size() == 0;
+    }
+   
+   @Override public Thread newThread(Runnable r) {
+      Thread t= new Thread(r,"JCODE_" + (++thread_counter));
+      t.setDaemon(true);
+      return t;
     }
 
 }	// end of class LoadExecutor
@@ -600,13 +652,6 @@ private class LoadTask implements Runnable {
          // System.err.println("JCODE: Can't find class " + load_class);
          return;
        }
-      // System.err.println("JCODE: Load class " + load_class);
-      InputStream ins = fi.getInputStream();
-      if (ins == null) {
-         System.err.println("JCODE: Can't open file for class " + load_class);
-         return;
-       }
-   
       try {
          JcodeClass bc = null;
          synchronized (known_classes) {
@@ -627,11 +672,17 @@ private class LoadTask implements Runnable {
           }
    
          if (bc != null) {
-            ClassReader cr = new ClassReader(ins)      ;
-            cr.accept(bc,0);
+            // System.err.println("JCODE: Load class " + load_class);
+            InputStream ins = fi.getInputStream();
+            if (ins == null) {
+               System.err.println("JCODE: Can't open file for class " + load_class);
+             }
+            else {
+               ClassReader cr = new ClassReader(ins)      ;
+               cr.accept(bc,0);
+               ins.close();
+             }
           }
-   
-         ins.close();
        }
       catch (IOException e) {
          System.err.println("JCODE: Problem reading class " + load_class);

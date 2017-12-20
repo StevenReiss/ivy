@@ -32,6 +32,7 @@ private static String test1 = "class Simple {\n" +
 private static String test2 = "public class A {\n" +
 	"   int x = 3;\n" +
 	"   B b;\n" +
+	"   double x = Math.PI;\n" +
 	"}\n";
 
 
@@ -312,7 +313,7 @@ public void jcompTest8() throws Exception
    String jar = "/pro/ivy/jcomp/src/test8.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test8",proj);
-   Assert.assertEquals(ct,1);
+   Assert.assertEquals(ct,0);
 }
 
 
@@ -327,7 +328,7 @@ public void jcompTest9() throws Exception
    String jar = "/pro/ivy/jcomp/src/test9.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test9",proj);
-   Assert.assertEquals(ct,2);
+   Assert.assertEquals(ct,0);
 }
 
 
@@ -432,7 +433,7 @@ public void jcompTest16() throws Exception
    String jar = "/pro/ivy/jcomp/src/test16.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test16",proj);
-   Assert.assertEquals(1,ct);
+   Assert.assertEquals(0,ct);
 }
 
 
@@ -492,6 +493,82 @@ public void jcompTest22() throws Exception
    String jar = "/pro/ivy/jcomp/src/test22.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test22",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
+
+@Test
+public void jcompTest23() throws Exception
+{
+   File f23 = new File("/pro/ivy/jcomp/src/test23");
+   String cnts = IvyFile.loadFile(f23);
+   StringSource s23 = new StringSource("test23",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s23);
+   String jar = "/pro/ivy/jcomp/src/test23.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test23",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
+
+@Test
+public void jcompTest24() throws Exception
+{
+   File f24 = new File("/pro/ivy/jcomp/src/test24");
+   String cnts = IvyFile.loadFile(f24);
+   StringSource s24 = new StringSource("test24",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s24);
+   String jar = "/pro/ivy/jcomp/src/test24.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test24",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
+
+@Test
+public void jcompTest25() throws Exception
+{
+   File f25 = new File("/pro/ivy/jcomp/src/test25");
+   String cnts = IvyFile.loadFile(f25);
+   StringSource s25 = new StringSource("test25",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s25);
+   String jar = "/pro/ivy/jcomp/src/test25.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test25",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
+
+@Test
+public void jcompTest26() throws Exception
+{
+   File f26 = new File("/pro/ivy/jcomp/src/test26");
+   String cnts = IvyFile.loadFile(f26);
+   StringSource s26 = new StringSource("test26",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s26);
+   String jar = "/pro/ivy/jcomp/src/test26.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test26",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
+
+
+@Test
+public void jcompTest27() throws Exception
+{
+   File f27 = new File("/pro/ivy/jcomp/src/test27");
+   String cnts = IvyFile.loadFile(f27);
+   StringSource s27 = new StringSource("test27",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s27);
+   String jar = "/pro/ivy/jcomp/src/test27.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test27",proj);
    Assert.assertEquals(0,ct);
 }
 

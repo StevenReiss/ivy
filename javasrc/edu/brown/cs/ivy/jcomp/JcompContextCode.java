@@ -66,7 +66,7 @@ JcompContextCode(JcodeFactory jf)
 {
    if (name == null) return null;
 
-   JcodeClass jc = jcode_control.findClass(name);
+   JcodeClass jc = jcode_control.findKnownClass(name);
    if (jc == null) {
       if (parent_context != null) return parent_context.defineKnownType(typer,name);
       return null;
@@ -170,9 +170,22 @@ private int compatiblityScore(JcompTyper typer,JcompType argtyp,JcodeMethod jm)
 	 if (js.isStatic()) rslt.add(js);
        }
     }
-   JcompSymbol js = defineKnownField(typer,cls,id);
-   if (js != null && js.isStatic()) rslt.add(js);
-
+   if (id == null) {
+      Iterable<JcodeField> flds = jcode_control.findAllFields(jdt,id);
+      if (flds != null) {
+         for (JcodeField jcf : flds) {
+            if (jcf.isStatic()) {
+               JcompSymbol js = createField(typer,jcf);
+               rslt.add(js);
+             }
+          }
+       }
+    }
+   else {
+      JcompSymbol js = defineKnownField(typer,cls,id);
+      if (js != null && js.isStatic()) rslt.add(js);
+    }
+   
    if (rslt.isEmpty()) return null;
 
    return rslt;
@@ -269,6 +282,10 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
 	 jt = JcompType.createKnownAnnotationType(jnm,jc.signature);
 	 if (jc.isAbstract()) jt.setAbstract(true);
        }
+      else if (jc.isEnum()) {
+         jt = JcompType.createKnownEnumType(jnm,jc.signature);
+         if (jc.isAbstract()) jt.setAbstract(true);
+       }
       else {
 	 jt = JcompType.createKnownType(jnm,jc.signature);
 	 if (jc.isAbstract()) jt.setAbstract(true);
@@ -280,9 +297,6 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
       if (idx1 > 0) {
 	 String ojtnm = xnm.substring(0,idx1);
 	 JcompType oty = getAsmTypeName(typer,ojtnm);
-	 if (oty == null || !oty.isKnownType()) {
-	    System.err.println("OUTER TYPE IS UNKNOWN");
-	  }
 	 if (oty != null) jt.setOuterType(oty);
 	 if (!jc.isStatic() && oty != null && !oty.isInterfaceType()) {
 	    jt.setInnerNonStatic(true);
@@ -291,7 +305,7 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
       jt.setContextType(false);
       if (jc.superName != null) {
 	 JcompType sty = getAsmTypeName(typer,jc.superName);
-	 if (sty == null || !sty.isKnownType()) {
+	 if (sty == null) {
 	    System.err.println("SUPER TYPE IS UNKNOWN");
 	  }
 	 if (sty != null) jt.setSuperType(sty);
@@ -323,13 +337,14 @@ private JcompSymbol createField(JcompTyper typer,JcodeField jf)
 private JcompSymbol createMethod(JcompTyper typer,JcodeMethod jm)
 {
    if (jm == null) return null;
-
    JcompType rt = JcompControl.convertType(typer,jm.getReturnType());
    boolean gen = false;
+   String gsgn = jm.getSignature();
+   if (gsgn != null) gen = true;
+   JcompType ct = JcompControl.convertType(typer,jm.getDeclaringClass());
    // handle generics
 
    JcompType mt = getMethodType(typer,jm,rt);
-   JcompType ct = JcompControl.convertType(typer,jm.getDeclaringClass());
 
    List<JcompType> excs = new ArrayList<JcompType>();
    for (JcodeDataType jdt : jm.getExceptionTypes()) {

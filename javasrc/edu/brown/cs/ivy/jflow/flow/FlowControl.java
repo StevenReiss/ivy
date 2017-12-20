@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowControl.java,v 1.15 2015/11/20 15:09:13 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowControl.java,v 1.16 2017/12/20 20:36:49 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: FlowControl.java,v $
+ * Revision 1.16  2017/12/20 20:36:49  spr
+ * Formatting
+ *
  * Revision 1.15  2015/11/20 15:09:13  spr
  * Reformatting.
  *
@@ -1050,6 +1053,7 @@ private void handleException(ValueBase s0,MethodBase cm)
 
 private boolean checkExceptions(FlowQueue wq)
 {
+   // TODO : make this independent of BYTE CODE
    MethodBase cm = wq.getMethod();
    BT_CodeAttribute code = cm.getCode();
    BT_ExceptionTableEntryVector exv = code.exceptions;

@@ -32,12 +32,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderPatchType.java,v 1.4 2009-09-17 01:54:51 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderPatchType.java,v 1.5 2017/12/20 20:36:05 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: CinderPatchType.java,v $
+ * Revision 1.5  2017/12/20 20:36:05  spr
+ * Formatting
+ *
  * Revision 1.4  2009-09-17 01:54:51  spr
  * Enable patching at line number level.
  *

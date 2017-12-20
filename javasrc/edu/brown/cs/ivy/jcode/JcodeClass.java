@@ -163,6 +163,11 @@ public boolean isAnnotation()
    return (access & Opcodes.ACC_ANNOTATION) != 0;
 }
 
+public boolean isEnum()
+{
+   return (access & Opcodes.ACC_ENUM) != 0;
+}
+
 public boolean isAbstract()
 {
    return Modifier.isAbstract(access);
@@ -194,13 +199,19 @@ public Collection<JcodeMethod> getMethods()
 
 public JcodeMethod findMethod(String nm,String desc)
 {
+   String argdesc = desc;
+   if (desc != null) {
+      int idx = desc.lastIndexOf(")");
+      if (idx > 0) argdesc = desc.substring(0,idx+1);
+    }
    for (Object o : methods) {
       JcodeMethod bm = (JcodeMethod) o;
       if (bm.getName().equals(nm)) {
          if (desc == null) return bm;
          String bmd = bm.getDescription();
          if (bmd.equals(desc)) return bm;
-         if (desc.endsWith(")") && bmd.startsWith(desc)) return bm;
+         if (bmd.startsWith(argdesc)) return bm;
+         // if (desc.endsWith(")") && bmd.startsWith(desc)) return bm;
        }
     }
 
@@ -413,6 +424,9 @@ public Collection<JcodeMethod> findChildMethods(String nm,String desc,boolean ch
 {
    bcode_factory.noteClass(cname);
    super.visitInnerClass(cname,oname,iname,acc);
+   if (cname.equals(this.name)) {
+      access |= acc;
+    }
 }
 
 

@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ProtoFactory.java,v 1.6 2008-11-12 13:45:39 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ProtoFactory.java,v 1.7 2017/12/20 20:36:49 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: ProtoFactory.java,v $
+ * Revision 1.7  2017/12/20 20:36:49  spr
+ * Formatting
+ *
  * Revision 1.6  2008-11-12 13:45:39  spr
  * Eclipse fixups.
  *

@@ -246,6 +246,11 @@ public int getIndexOf(JcodeInstruction ins)
 }
 
 
+public String getSignature()                    { return signature; }
+
+public String getClassSignature()               { return in_class.signature; }
+
+
 
 /********************************************************************************/
 /*										*/
@@ -357,8 +362,6 @@ JcodeInstruction findInstruction(Label l)
    if (idx == null) return null;
    return ins_list.get(idx);
 }
-
-
 
 
 

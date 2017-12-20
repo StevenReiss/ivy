@@ -39,12 +39,15 @@
 
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalLevelLayout.java,v 1.21 2017/08/04 12:42:56 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalLevelLayout.java,v 1.22 2017/11/17 14:24:34 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalLevelLayout.java,v $
+ * Revision 1.22  2017/11/17 14:24:34  spr
+ * Formatting change.
+ *
  * Revision 1.21  2017/08/04 12:42:56  spr
  * Clean up
  *

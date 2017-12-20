@@ -197,8 +197,8 @@ private class ErrorVisitor extends ASTVisitor {
    @Override public boolean visit(SimpleName n) {
       JcompType jt = JcompAst.getExprType(n);
       if (jt != null && jt.isErrorType()) {
-	 addError("Undefined name: " + n.getIdentifier(),IProblem.UndefinedName,n);
-	 have_error = true;
+         addError("Undefined name: " + n.getIdentifier(),IProblem.UndefinedName,n);
+         have_error = true;
        }
       return true;
     }
@@ -314,6 +314,22 @@ private AbstractTypeDeclaration findTypeDecl(String cls,List<?> typs)
 
    return rslt;
 }
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Debugging methods                                                       */
+/*                                                                              */
+/********************************************************************************/
+
+@Override public String toString()
+{
+   return "FILE:" + for_file.getFileName();
+}
+
+
+
 
 }	// end of class JcompFile
 

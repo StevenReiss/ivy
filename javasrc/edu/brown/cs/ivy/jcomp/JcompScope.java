@@ -142,6 +142,10 @@ static boolean isBetterMethod(JcompType ctyp,JcompType m1,JcompType m2)
       else return false;
     }
    if (m1args.size() != args.size()) return false;
+   
+   int ct1 = 0;
+   int ct2 = 0;
+   
    for (int i = 0; i < args.size(); ++i) {
       JcompType t0 = args.get(i);
       JcompType t1 = m1args.get(i);
@@ -149,9 +153,31 @@ static boolean isBetterMethod(JcompType ctyp,JcompType m1,JcompType m2)
       if (t1 == t2) continue;
       if (t0 == t1) return true;
       if (t0 == t2) return false;
-      // should check subtypes here as well
+      ct1 += typeComparison(t1,t0);
+      ct2 += typeComparison(t2,t0);
     }
+   if (ct1 < ct2) return true;
    return false;
+}
+
+
+
+private static int typeComparison(JcompType tto,JcompType tfrom)
+{
+   if (tto == tfrom) return 0;
+   if (tto.isNumericType()) {
+      if (!tfrom.isNumericType()) return 20;
+      if (tto.isFloatingType()) {
+         if (tfrom.isFloatingType()) return 5;
+         else return 10;
+       }
+      else return 5;
+    }
+   else if (tfrom.isNumericType()) return 10;
+   
+   // might want to check subtype depth here
+   
+   return 20;
 }
 
 

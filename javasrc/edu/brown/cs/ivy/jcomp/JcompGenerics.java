@@ -109,21 +109,77 @@ static Collection<JcompType> deriveInterfaceTypes(JcompTyper typer,JcompType cty
 /*										*/
 /********************************************************************************/
 
-static JcompType deriveReturnType(JcompTyper typer,JcompType mty,JcompType bty,List<JcompType> argtypes)
+static JcompType deriveReturnType(JcompTyper typer,JcompType mty,JcompType bty,
+      List<JcompType> argtypes,JcompType ctyp,List<JcompType> typargs)
 {
    JcompType rty = mty.getBaseType();
    String msgn = mty.getSignature();
    if (msgn == null) return rty;
+   if (mty.isVarArgs()) {
+      boolean fixvar = true;
+      int csz = mty.getComponents().size();
+      if (argtypes.size() == csz) {
+         JcompType ltyp = argtypes.get(argtypes.size()-1);
+         if (ltyp.isArrayType()) fixvar = false;
+       }
+      if (fixvar) {
+         int ct = argtypes.size() - csz+1;
+         int ct0 = argtypes.size() - ct;
+         JcompType rtype = null;
+         if (ct == 0) rtype = mty.getComponents().get(csz-1).getBaseType();
+         else {
+            for (int i = ct0; i < argtypes.size(); ++i) {
+               if (rtype == null) rtype = argtypes.get(i);
+               else rtype = rtype.getCommonParent(typer,argtypes.get(i));
+             }
+          }
+         rtype = typer.findArrayType(rtype);
+         List<JcompType> nargs = new ArrayList<>();
+         for (int i = 0; i < ct0; ++i) nargs.add(argtypes.get(i));
+         nargs.add(rtype);
+         argtypes = nargs;
+       }
+    }
    
    Map<String,JcompType> typemap = new HashMap<>();
-   if (bty.isParameterizedType()) {
-      TypeVarFinder tvf = new TypeVarFinder(bty.getComponents());
+   
+   if (bty.isParameterizedType() || (bty.getSignature() != null && bty.getSignature().startsWith("<"))) {
+      List<JcompType> comps = bty.getComponents();
+      TypeVarFinder tvf = new TypeVarFinder(comps);
       SignatureReader sr = new SignatureReader(bty.getSignature());
       sr.accept(tvf);
       typemap.putAll(tvf.getTypeMap());
     }
+   
+   if (bty != ctyp) {
+      JcompType nsty;
+      for (JcompType sty = bty; sty != null; sty = nsty) {
+         List<JcompType> comps = null;
+         if (sty.isParameterizedType()) comps = sty.getComponents();
+         nsty = sty.getSuperType();
+         if (nsty == null) break;
+         if (sty.getSignature() != null) {
+            SuperParamDeriver spd = new SuperParamDeriver(typer,comps);
+            SignatureReader sr = new SignatureReader(sty.getSignature());
+            sr.accept(spd);
+            nsty = spd.getSuperType();
+          }
+         JcompType nbtyp = nsty;
+         if (nsty.isParameterizedType()) nbtyp = nsty.getBaseType(); 
+         if (nsty == ctyp || nbtyp == ctyp) {
+            if (nsty.isParameterizedType()) {
+               TypeVarFinder tvf = new TypeVarFinder(nsty.getComponents());
+               SignatureReader sr = new SignatureReader(nsty.getSignature());
+               sr.accept(tvf);
+               typemap.putAll(tvf.getTypeMap());
+             }
+            break;
+          }
+       }
+    }
+   
    if (msgn.startsWith("<")) {
-      MethodVarFinder mvf = new MethodVarFinder(argtypes);
+      MethodVarFinder mvf = new MethodVarFinder(argtypes,typargs);
       SignatureReader msr = new SignatureReader(msgn);
       msr.accept(mvf);
       typemap.putAll(mvf.getTypeMap());
@@ -169,7 +225,7 @@ private static class TypeVarFinder extends SignatureVisitor {
    Map<String,JcompType> getTypeMap()			{ return type_map; }
 
    @Override public void visitFormalTypeParameter(String name) {
-      if (cur_index >= 0) {
+      if (cur_index >= 0 && input_parms != null) {
          if (cur_index >= input_parms.size()) {
             System.err.println("PROBLEM with the number of formal generic parameters");
           }
@@ -194,18 +250,28 @@ private static class MethodVarFinder extends SignatureVisitor {
    
    private Map<String,JcompType> type_map;
    private List<JcompType> input_parms;
+   private List<JcompType> arg_types;
+   private int type_index;
    private int cur_index;
    private int array_depth;
    
-   MethodVarFinder(List<JcompType> parms) {
+   MethodVarFinder(List<JcompType> parms,List<JcompType> argtyps) {
       super(Opcodes.ASM5);
       type_map = new HashMap<>();
       input_parms = parms;
+      arg_types = argtyps;
       cur_index = -1;
       array_depth = 0;
+      type_index = 0;
     }
    
    Map<String,JcompType> getTypeMap()                   { return type_map; }
+   
+   @Override public void visitFormalTypeParameter(String name) {
+      if (arg_types != null && type_index < arg_types.size()) {
+         type_map.put(name,arg_types.get(type_index++));
+       }
+    }
    
    @Override public SignatureVisitor visitParameterType() {
       ++cur_index;
@@ -449,7 +515,7 @@ private static class TypeDeriver extends SignatureVisitor {
    private List<TypeDeriver> param_types;
    private boolean is_changed;
 
-   TypeDeriver(JcompTyper typer,Map<String,JcompType> tmap, JcompType bty,SignatureVisitor writer) {
+   TypeDeriver(JcompTyper typer,Map<String,JcompType> tmap,JcompType bty,SignatureVisitor writer) {
       super(Opcodes.ASM5);
       type_data = typer;
       type_map = tmap;
@@ -462,41 +528,49 @@ private static class TypeDeriver extends SignatureVisitor {
 
    JcompType getResultType() {
       if (new_type == null) new_type = original_type;
-      if (param_types == null) return fixResultType(new_type);
+      else {
+         for (int i = 0; i < array_count; ++i) {
+            new_type = type_data.findArrayType(new_type);
+          }
+       }
+      if (param_types == null) return new_type;
       List<JcompType> ptys = new ArrayList<>();
       int nvar = 0;
       for (TypeDeriver tdv : param_types) {
          if (tdv.isChanged()) is_changed = true;
          JcompType jty = tdv.getResultType();
          if (jty == null || jty.isTypeVariable()) ++nvar;
-         if (jty == null)
-            return fixResultType(new_type);
+         if (jty == null) return new_type;
          ptys.add(jty);
        }
+      if (ptys.size() > 0 && !new_type.isParameterizedType()) is_changed = true;
+      if (original_type == null) is_changed = true;
+     
       if (!is_changed) {
-         if (original_type == null) return fixResultType(new_type);
+         if (original_type == null) return new_type;
          return original_type;
        }
-      if (nvar != 0) {
-         if (nvar == param_types.size()) return fixResultType(new_type);
+      
+      int act = 0;
+      while (new_type.isArrayType()) {
+         ++act;
+         new_type = new_type.getBaseType();
        }
-      if (ptys.size() > 0){
+       
+      if (nvar != 0 && nvar != param_types.size()) ;
+      else if (ptys.size() > 0){
          JcompType jty = new_type;
          if (jty.isParameterizedType()) jty = jty.getBaseType();
-         return JcompType.createParameterizedType(jty,ptys,type_data);
+         new_type = JcompType.createParameterizedType(jty,ptys,type_data);
        }
-      return fixResultType(new_type);
+      
+      for (int i = 0; i < act; ++i) {
+         new_type = type_data.findArrayType(new_type);
+       }
+      
+      return new_type;
     }
    
-   
-   private JcompType fixResultType(JcompType typ)
-   {
-      for (int i = 0; i < array_count; ++i) {
-         typ = JcompType.createArrayType(typ);
-       }
-      return typ;
-   }
-
    boolean isChanged()				{ return is_changed; }
 
    @Override public SignatureVisitor visitArrayType() {
@@ -572,6 +646,54 @@ private static class TypeDeriver extends SignatureVisitor {
 
 }	// end of inner class TypeDeriver
 
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Derive type parameters from a type                                      */
+/*                                                                              */
+/********************************************************************************/
+
+private static class SuperParamDeriver extends SignatureVisitor {
+   
+   private JcompTyper type_base;
+   private List<JcompType> input_parms;
+   private Map<String,JcompType> local_map;
+   private TypeDeriver super_deriver;
+   private List<TypeDeriver> iface_derivers;
+   
+   SuperParamDeriver(JcompTyper typer,List<JcompType> parms) {
+      super(Opcodes.ASM5);
+      type_base = typer;
+      local_map = new HashMap<>();
+      if (parms != null) input_parms = parms;
+      else input_parms = new ArrayList<>();
+      super_deriver = null;
+      iface_derivers = null;
+    }
+   
+   JcompType getSuperType() {
+      return super_deriver.getResultType();
+    }
+   
+   @Override public void visitFormalTypeParameter(String name) {
+      int idx = local_map.size();
+      if (idx < input_parms.size()) local_map.put(name,input_parms.get(idx));
+    }
+   
+   @Override public SignatureVisitor visitSuperclass() {
+      super_deriver = new TypeDeriver(type_base,local_map,null,null);
+      return super_deriver;
+    }
+   
+   @Override public SignatureVisitor visitInterface() {
+      TypeDeriver td = new TypeDeriver(type_base,local_map,null,null);
+      if (iface_derivers == null) iface_derivers = new ArrayList<TypeDeriver>();
+      iface_derivers.add(td);
+      return td;
+    }
+      
+}       // end of inner class SuperParamDeriver
 
 
 

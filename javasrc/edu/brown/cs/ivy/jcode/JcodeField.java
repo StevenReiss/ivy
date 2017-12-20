@@ -78,7 +78,7 @@ JcodeField(JcodeClass cls,int a,String n,String d,String s,Object val)
 
 public String getName() 	        { return name; }
 public String getFullName()             { return in_class.getName() + "." + getName(); }
-
+public Object getConstantValue()        { return value; }
 
 public JcodeDataType getType() {
    return in_class.getFactory().findJavaType(desc);

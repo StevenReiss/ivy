@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.74 2017/10/24 12:46:54 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.75 2017/12/20 20:36:57 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyXml.java,v $
+ * Revision 1.75  2017/12/20 20:36:57  spr
+ * Formatting
+ *
  * Revision 1.74  2017/10/24 12:46:54  spr
  * Clean up.
  *
@@ -503,7 +506,7 @@ public static void outputXmlString(String s,boolean field,boolean html,Writer pw
 	       pw.write("&quot;");
 	       break;
 	    case '\'' :
-	       if (html) pw.write("&#39");
+	       if (html) pw.write("&#39;");
 	       else pw.write("&apos;");
 	       break;
 	    case '\034' :

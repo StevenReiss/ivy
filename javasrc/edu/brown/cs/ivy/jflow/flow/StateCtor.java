@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/StateCtor.java,v 1.4 2009-06-04 18:50:27 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/StateCtor.java,v 1.5 2017/12/20 20:36:49 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: StateCtor.java,v $
+ * Revision 1.5  2017/12/20 20:36:49  spr
+ * Formatting
+ *
  * Revision 1.4  2009-06-04 18:50:27  spr
  * Handle special cased methods correctly.
  *

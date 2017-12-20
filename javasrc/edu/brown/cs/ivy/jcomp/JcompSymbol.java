@@ -37,10 +37,11 @@ package edu.brown.cs.ivy.jcomp;
 
 import org.eclipse.jdt.core.dom.*;
 
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.objectweb.asm.Opcodes;
 
 
 /**
@@ -65,7 +66,8 @@ static JcompSymbol createSymbol(SingleVariableDeclaration n,JcompTyper typer)
    JcompType jt = JcompAst.getJavaType(n.getType());
    if (jt == null) System.err.println("NULL TYPE FOR: " + n);
    for (int i = 0; i < n.getExtraDimensions(); ++i) jt = typer.findArrayType(jt);
-   if (n.isVarargs()) jt = typer.findArrayType(jt);
+   if (n.isVarargs()) 
+      jt = typer.findArrayType(jt);
 
    return new VariableSymbol(n,jt,n.getModifiers(),null);
 }
@@ -214,7 +216,7 @@ public abstract String getName();
  *	getName()
  **/
 
-public String getReportName()		{ return getName(); }
+public String getReportName()		        { return getName(); }
 
 
 
@@ -224,6 +226,7 @@ public String getReportName()		{ return getName(); }
 
 public abstract JcompType getType();
 public void setType(JcompType typ)			{ }
+public JcompType getDeclaredType()              { return getType(); }
 
 
 
@@ -551,6 +554,7 @@ private static class KnownField extends JcompSymbol {
    @Override public boolean isFinal()		{ return Modifier.isFinal(access_info); }
    @Override public boolean isVolatile()        { return Modifier.isVolatile(access_info); }
    @Override public JcompType getClassType()	{ return class_type; }
+   @Override public boolean isEnumSymbol()      { return (access_info & Opcodes.ACC_ENUM) != 0; }
 
    @Override public String getFullName() {
       return class_type.getName() + "." + field_name;
@@ -594,15 +598,15 @@ private static class VariableSymbol extends JcompSymbol {
 
    @Override public ASTNode getDefinitionNode() {
       for (ASTNode p = ast_node; p != null; p = p.getParent()) {
-	 switch (p.getNodeType()) {
-	    case ASTNode.FIELD_DECLARATION :
-	       return p;
-	    case ASTNode.SINGLE_VARIABLE_DECLARATION :
-	    case ASTNode.VARIABLE_DECLARATION_EXPRESSION :
-	    case ASTNode.VARIABLE_DECLARATION_STATEMENT :
-	    case ASTNode.LAMBDA_EXPRESSION :
-	       return p;
-	  }
+         switch (p.getNodeType()) {
+            case ASTNode.FIELD_DECLARATION :
+               return p;
+            case ASTNode.SINGLE_VARIABLE_DECLARATION :
+            case ASTNode.VARIABLE_DECLARATION_EXPRESSION :
+            case ASTNode.VARIABLE_DECLARATION_STATEMENT :
+            case ASTNode.LAMBDA_EXPRESSION :
+               return p;
+          }
        }
       return null;
     }
@@ -623,6 +627,28 @@ private static class VariableSymbol extends JcompSymbol {
        }
       return false;
     }
+   
+   @Override public JcompType getClassType() {
+      boolean isfld = false;
+      for (ASTNode p = ast_node; p != null; p = p.getParent()) {
+         switch (p.getNodeType()) {
+            case ASTNode.FIELD_DECLARATION :
+               isfld = true;
+               break;
+            case ASTNode.METHOD_DECLARATION :
+               if (!isfld) return null;
+               break;
+            case ASTNode.CATCH_CLAUSE :
+               return null;
+            case ASTNode.LAMBDA_EXPRESSION :
+               return null;
+            case ASTNode.TYPE_DECLARATION :
+               if (!isfld) return null;
+               return JcompAst.getJavaType(p);
+          }
+       }
+      return null;
+    }
 
    @Override public JcompSymbolKind getSymbolKind() {
       if (isFieldSymbol()) return JcompSymbolKind.FIELD;
@@ -630,22 +656,35 @@ private static class VariableSymbol extends JcompSymbol {
     }
 
    @Override public int getModifiers() {
+      int mods = 0;
+      boolean done = false;
       for (ASTNode p = ast_node; p != null; p = p.getParent()) {
-	 switch (p.getNodeType()) {
-	    case ASTNode.SINGLE_VARIABLE_DECLARATION :
-	       SingleVariableDeclaration svd = (SingleVariableDeclaration) p;
-	       return svd.getModifiers();
-	    case ASTNode.VARIABLE_DECLARATION_STATEMENT :
-	       VariableDeclarationStatement vds = (VariableDeclarationStatement) p;
-	       return vds.getModifiers();
-	    case ASTNode.FOR_STATEMENT :
-	       return 0;
-	    case ASTNode.FIELD_DECLARATION :
-	       FieldDeclaration fd = (FieldDeclaration) p;
-	       return fd.getModifiers();
-	  }
+         done = true;
+         switch (p.getNodeType()) {
+            case ASTNode.SINGLE_VARIABLE_DECLARATION :
+               SingleVariableDeclaration svd = (SingleVariableDeclaration) p;
+               mods = svd.getModifiers();
+               break;
+            case ASTNode.VARIABLE_DECLARATION_STATEMENT :
+               VariableDeclarationStatement vds = (VariableDeclarationStatement) p;
+               mods = vds.getModifiers();
+               break;
+            case ASTNode.FOR_STATEMENT :
+               break;
+            case ASTNode.FIELD_DECLARATION :
+               FieldDeclaration fd = (FieldDeclaration) p;
+               mods = fd.getModifiers();
+               JcompType jt = getClassType();
+               if (jt.isInterfaceType()) mods |= Modifier.STATIC | Modifier.FINAL;
+               break;
+            default :
+               done = false;
+               break;
+          }
+         if (done) break;
        }
-      return 0;
+      
+      return mods;
     }
 
    @Override public boolean isStatic() {
@@ -687,6 +726,9 @@ private static class NestedThisSymbol extends JcompSymbol {
     }
 
    @Override public String getName()		{ return "this$0"; }
+   @Override public String getFullName() {
+      return class_type.getName() + ".this$0";
+    }
    @Override public JcompType getType() 	{ return java_type; }
 
    @Override public boolean isFieldSymbol()	{ return true; }
@@ -725,6 +767,8 @@ private static class NestedThisSymbol extends JcompSymbol {
     }
 
 }	// end of subclass NestedThisSymbol
+
+
 
 
 
@@ -841,6 +885,19 @@ private static class MethodSymbol extends JcompSymbol {
       return proj + "#" + getFullName() + getType().getJavaTypeName();
     }
 
+   @Override public JcompType getDeclaredType() {
+      JcompType jt = getType();
+      if (isConstructorSymbol()) {
+         JcompType ct = getClassType();
+         if (ct != null && ct.needsOuterClass()) {
+            List<JcompType> atys = new ArrayList<>(jt.getComponents());
+            atys.remove(0);
+            JcompType njt = JcompType.createMethodType(jt.getBaseType(),atys,jt.isVarArgs(),jt.getSignature());
+            return njt;
+          }
+       }
+      return jt;
+    }
 }	// end of subclass MethodSymbol
 
 
@@ -859,6 +916,8 @@ private static class KnownMethod extends JcompSymbol {
       method_type = typ;
       access_flags = acc;
       if (excs == null) excs = Collections.emptyList();
+      if (nm.startsWith("<cl") && (cls.isUnknown() || cls.isUndefined()))
+         System.err.println("KNOWN METHOD IN UNKNOWN CLASS");
       declared_exceptions = excs;
       class_type = cls;
       is_generic = gen;
@@ -888,7 +947,7 @@ private static class KnownMethod extends JcompSymbol {
       KnownMethod km = new KnownMethod(method_name,jty,ptype,access_flags,declared_exceptions,is_generic);
       return km;
     }
-
+   
    @Override public JcompSymbol getBaseSymbol(JcompTyper typer) {
       if (class_type.isParameterizedType()) {
          JcompType cty = class_type.getBaseType();

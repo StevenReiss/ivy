@@ -66,7 +66,7 @@ import org.apache.commons.lang3.Validate;
  * @author Gary Gregory
  * @author Nikolay Metchev
  * @since 2.0
- * @version $Id$
+ * @version $Id: test20,v 1.1 2017/11/17 14:24:43 spr Exp $
  */
 public class FastDateFormat extends Format {
     // A lot of the speed in this class comes from caching, but some comes

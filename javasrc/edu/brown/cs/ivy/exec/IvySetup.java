@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvySetup.java,v 1.11 2017/08/04 02:02:57 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvySetup.java,v 1.12 2017/12/20 20:36:15 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvySetup.java,v $
+ * Revision 1.12  2017/12/20 20:36:15  spr
+ * Make setup work without user intervention.
+ *
  * Revision 1.11  2017/08/04 02:02:57  spr
  * Remove excess at end of file.
  *
@@ -92,6 +95,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 
 
@@ -107,30 +111,31 @@ public class IvySetup {
 
 public static void main(String [] args)
 {
-   boolean nohost = false;
    String dir = System.getProperty("user.dir");
+   boolean nohost = false;
 
-   for (int i = 0; i < args.length; ++i) {
-      if (args[i].startsWith("-d") && i+1 < args.length) {      // -d <directory>
-	 dir = args[++i];
-       }
-      else if (args[i].startsWith("-l")) {                      // -local
-	 nohost = true;
-       }
-      else {
-	 System.err.println("IVYSETUP: ivysetup [-d directory]");
-	 System.exit(1);
+   if (args != null) {
+      for (int i = 0; i < args.length; ++i) {
+         if (args[i].startsWith("-d") && i+1 < args.length) {      // -d <directory>
+            dir = args[++i];
+          }
+         else if (args[i].startsWith("-l")) {                      // -local
+            nohost = true;
+          }
+         else {
+            System.err.println("IVYSETUP: ivysetup [-d directory]");
+            System.exit(1);
+          }
        }
     }
 
-   File jarf = new File(dir,"ivyfull.jar");
-   if (!jarf.exists()) {
-      File dirf = new File(dir,"IVY");
-      jarf = new File(dirf,"ivyfull.jar");
-    }
+   if (dir == null) dir = findIvyDirectory();
+   
+   File libdir = new File(dir,"lib");
+   File jarf = new File(libdir,"ivyfull.jar");
    boolean installok = jarf.exists();
    if (!installok) {
-      jarf = new File(dir,"ivy.jar");
+      jarf = new File(libdir,"ivy.jar");
       if (jarf.exists()) installok = true;
     }
    if (!installok) {
@@ -145,7 +150,7 @@ public static void main(String [] args)
     }
 
    if (!installok) {
-      System.err.println("IVYSETUP: Please run in the installation directory");
+      System.err.println("IVYSETUP: Please run in the top level ivy directory");
       System.exit(1);
     }
 
@@ -170,7 +175,7 @@ public static void main(String [] args)
 	 System.err.println("IVYSETUP: Problem loading old properties: " + e);
        }
     }
-
+   
    if (!nohost) {
       try {
 	 Registry rmireg = LocateRegistry.getRegistry("valerie");
@@ -232,6 +237,10 @@ public static void setup()
    File ivv = new File(System.getProperty("user.home"),".ivy");
 
    if (!setup(ivv)) {
+      if (findIvyDirectory() != null) {
+         main(new String [] { "-local" });
+         if (setup(ivv)) return;
+       }
       System.err.println("IVY: setup file ~/.ivy/Props missing, unreadable or incomplete");
       System.err.println("IVY: try running IvySetup");
       System.exit(1);
@@ -276,6 +285,43 @@ public static boolean setup(File ivv)
 
 
 
+/********************************************************************************/
+/*                                                                              */
+/*      Find Ivy Directory                                                      */
+/*                                                                              */
+/********************************************************************************/
+
+private static String findIvyDirectory()
+{
+   String s = System.getProperty("java.class.path");
+   if (s == null) return null;
+   StringTokenizer tok = new StringTokenizer(s,File.pathSeparator);
+   while (tok.hasMoreTokens()) {
+      String pe = tok.nextToken().trim();
+      if (pe.endsWith("ivy.jar") || pe.endsWith("ivyfull.jar")) {
+         File f = new File(pe);
+         File f1 = f.getParentFile();
+         if (f1.getName().equals("lib")) f1 = f1.getParentFile();
+         return f1.getPath();
+       }
+      else if (pe.endsWith(".jar")) continue;
+      else if (pe.endsWith("java")) {
+         File f1 = new File(pe);
+         File f2 = new File(f1,"edu");
+         File f3 = new File(f2,"brown");
+         File f4 = new File(f3,"cs");
+         File f5 = new File(f4,"ivy");
+         File f6 = new File(f5,"exec");
+         File f7 = new File(f6,"IvySetup.class");
+         if (f7.exists()) {
+            File f8 = f1.getParentFile();
+            return f8.getPath();
+          }
+       }
+    }
+   return null;
+}
+
 
 }	// end of class IvySetup
 
@@ -283,4 +329,83 @@ public static boolean setup(File ivv)
 
 /* end of IvySetup.java */
 
-												
+										
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
