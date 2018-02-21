@@ -284,7 +284,7 @@ private void findSymbols(JcompSearch search,String pattern,String kind)
       if (!sym.isTypeSymbol()) {
 	 isok = false;
 	 JcompType jt = sym.getType();
-	 if (!jt.isUndefined() && jt.isUnknown()) typs.add(jt);
+	 if (!jt.isUndefined() && jt.isCompiledType()) typs.add(jt);
        }
     }
    if (isok) return rs;

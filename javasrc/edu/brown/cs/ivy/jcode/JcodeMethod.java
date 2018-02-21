@@ -219,6 +219,86 @@ public int getNumArguments()
 }
 
 
+public List<JcodeAnnotation> getReturnAnnotations()
+{
+   List<JcodeAnnotation> rslt = null;
+   
+   rslt = addReturnAnnotations(visibleTypeAnnotations,rslt);
+   rslt = addReturnAnnotations(invisibleTypeAnnotations,rslt);
+   return rslt;
+}
+
+private List<JcodeAnnotation> addReturnAnnotations(List<TypeAnnotationNode> v,
+      List<JcodeAnnotation> rslt)
+{
+   if (v == null || v.isEmpty()) return rslt;
+   for (TypeAnnotationNode tn : v) {
+      if (tn.typeRef == TypeReference.METHOD_RETURN) {
+         if (rslt == null) rslt = new ArrayList<>();
+         rslt.add(new JcodeAnnotation(tn,bcode_factory));
+       }
+    }
+   
+   return rslt;
+}
+
+public List<JcodeAnnotation> getArgumentAnnotations(int arg)
+{
+   List<JcodeAnnotation> rslt = null;
+   rslt = addAnnotations(visibleParameterAnnotations[arg],rslt);
+   rslt = addAnnotations(invisibleParameterAnnotations[arg],rslt);
+   return rslt;
+}
+
+
+public List<JcodeAnnotation> getLocalAnnotations(JcodeLocalVariable lv)
+{
+   if (lv == null) return null;
+   
+   List<JcodeAnnotation> rslt = null;
+   rslt = addLocalAnnotations(visibleLocalVariableAnnotations,lv,rslt);
+   rslt = addLocalAnnotations(invisibleLocalVariableAnnotations,lv,rslt);
+   return rslt;
+}
+
+
+
+private List<JcodeAnnotation> addLocalAnnotations(List<LocalVariableAnnotationNode> ans,
+      JcodeLocalVariable lv,List<JcodeAnnotation> rslt)
+{
+   if (ans == null) return rslt;
+   LocalVariableNode lvn = lv.getLocal();
+   for (LocalVariableAnnotationNode lvan : ans) {
+      if (lvan.index == null) continue;
+      boolean fnd = false;
+      for (int i = 0; i < lvan.index.size(); ++i) {
+         if (lvan.index.get(i) == lvn.index &&
+               lvan.start.get(i) == lvn.start) {
+            fnd = true;
+            break;
+          }
+       }
+      if (fnd) {
+         if (rslt == null) rslt = new ArrayList<>();
+         rslt.add(new JcodeAnnotation(lvan,bcode_factory));
+       }
+    }
+   return rslt;
+}
+
+private List<JcodeAnnotation> addAnnotations(List<? extends AnnotationNode> v,
+      List<JcodeAnnotation> rslt)
+{
+   if (v == null || v.isEmpty()) return rslt;
+   
+   if (rslt == null) rslt = new ArrayList<>();
+   for (AnnotationNode an : v) {
+      rslt.add(new JcodeAnnotation(an,bcode_factory));
+    }
+   
+   return rslt;
+}
+
 
 public int getLocalSize()
 {
@@ -448,6 +528,22 @@ public Collection<JcodeTryCatchBlock> getTryCatchBlocks()
 }
 
 
+public JcodeLocalVariable getLocalVariable(int slot,JcodeInstruction ins)
+{
+   if (ins == null || localVariables == null) return null;
+   
+   for (LocalVariableNode lvn : localVariables) {
+      if (lvn.index == slot) {
+         int s0 = instructions.indexOf(lvn.start);
+         int s1 = instructions.indexOf(lvn.end);
+         int i0 = ins.getIndex();
+         if (i0 >= s0 && i0 <= s1) {
+            return new JcodeLocalVariable(lvn,bcode_factory);
+          }
+       }
+    }
+   return null;
+}
 
 /********************************************************************************/
 /*										*/

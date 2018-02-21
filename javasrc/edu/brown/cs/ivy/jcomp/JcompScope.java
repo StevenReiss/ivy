@@ -117,6 +117,7 @@ JcompSymbol defineReference(MethodReference n)
 abstract void defineMethod(JcompSymbol js);
 
 abstract JcompSymbol lookupMethod(String id,JcompType aty);
+abstract JcompSymbol lookupExactMethod(String id,JcompType aty);
 abstract List<JcompSymbol> lookupStatics(String id);
 abstract void getFields(Map<String,JcompType> flds);
 abstract Set<JcompSymbol> lookupAbstracts(JcompTyper typer);
@@ -151,8 +152,8 @@ static boolean isBetterMethod(JcompType ctyp,JcompType m1,JcompType m2)
       JcompType t1 = m1args.get(i);
       JcompType t2 = m2args.get(i);
       if (t1 == t2) continue;
-      if (t0 == t1) return true;
-      if (t0 == t2) return false;
+      // if (t0 == t1) return true;
+      // if (t0 == t2) return false;
       ct1 += typeComparison(t1,t0);
       ct2 += typeComparison(t2,t0);
     }

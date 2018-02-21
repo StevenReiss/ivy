@@ -185,7 +185,7 @@ JcompSymbol defineKnownMethod(JcompTyper typer,String cls,String id,JcompType ar
    String cnm = best.for_class.getJavaName();
    JcompType kty = typer.findType(cnm);
 
-   if (kty != null && !kty.isKnownType()) {
+   if (kty != null && !kty.isBinaryType()) {
       JcompSymbol js1 = kty.lookupMethod(typer,id,argtype,ctyp);
       if (js1 != null) return js1;
     }
@@ -264,6 +264,9 @@ void defineAll(JcompTyper typer,String cls,JcompScope scp)
    if (scp == null) return;
    AsmClass ac = findKnownType(typer,cls);
    if (ac == null) return;
+   
+   if (cls.contains("Assert"))
+      System.err.println("CHECK ASSERT");
 
    ac.defineAll(typer,scp);
 }
@@ -434,22 +437,22 @@ private class AsmClass {
          String jnm = class_name.replace('/','.');
          jnm = jnm.replace('$','.');
          if ((access_info & Opcodes.ACC_INTERFACE) != 0) {
-            base_type = JcompType.createKnownInterfaceType(jnm,generic_signature);
+            base_type = JcompType.createBinaryInterfaceType(jnm,generic_signature);
           }
          else if ((access_info & Opcodes.ACC_ANNOTATION) != 0) {
-            base_type = JcompType.createKnownAnnotationType(jnm,generic_signature);
+            base_type = JcompType.createBinaryAnnotationType(jnm,generic_signature);
             if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
                base_type.setAbstract(true);
              }
           }
          else if ((access_info & Opcodes.ACC_ENUM) != 0) {
-            base_type = JcompType.createKnownEnumType(jnm,generic_signature);
+            base_type = JcompType.createBinaryEnumType(jnm,generic_signature);
             if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
                base_type.setAbstract(true);
              }
           }
          else {
-            base_type = JcompType.createKnownType(jnm,generic_signature);
+            base_type = JcompType.createBinaryClassType(jnm,generic_signature);
             if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
                base_type.setAbstract(true);
              }
@@ -637,7 +640,7 @@ private class AsmClass {
        }
       if (super_name != null) {
 	 JcompType styp = findExistingType(typer,super_name);
-	 if (styp == null || styp.isKnownType()) {
+	 if (styp == null || styp.isBinaryType()) {
 	    AsmClass scl = findKnownType(typer,super_name);
 	    if (scl != null) scl.defineAll(typer,scp);
 	  }
@@ -645,7 +648,7 @@ private class AsmClass {
       if (iface_names != null) {
 	 for (String inm : iface_names) {
 	    JcompType styp =  findExistingType(typer,inm);
-	    if (styp == null || styp.isKnownType()) {
+	    if (styp == null || styp.isBinaryType()) {
 	       AsmClass icl = findKnownType(typer,inm);
 	       if (icl != null) {
 		  icl.defineAll(typer,scp);

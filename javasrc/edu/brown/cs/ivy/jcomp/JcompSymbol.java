@@ -515,6 +515,93 @@ public JcompSymbol getBaseSymbol(JcompTyper typer)
 
 
 /********************************************************************************/
+/*                                                                              */
+/*      Annotation methods                                                      */
+/*                                                                              */
+/********************************************************************************/
+
+public List<JcompAnnotation> getAnnotations()
+{
+   ASTNode def = getDefinitionNode();
+   if (def == null) return null;
+   ASTNode par = def.getParent();
+   
+   List<?> mods = null;
+   if (def instanceof SingleVariableDeclaration) {
+      SingleVariableDeclaration svd = (SingleVariableDeclaration) def;
+      mods = svd.modifiers();
+    }
+   else if (par instanceof VariableDeclarationStatement) {
+      VariableDeclarationStatement vdf = (VariableDeclarationStatement) par;
+      mods = vdf.modifiers();
+    }
+   else if (par instanceof VariableDeclarationExpression) {
+      VariableDeclarationExpression vdf = (VariableDeclarationExpression) par;
+      mods = vdf.modifiers();
+    }
+   else if (def instanceof MethodDeclaration) {
+      MethodDeclaration md = (MethodDeclaration) def;
+      mods = md.modifiers();
+    }
+   else if (def instanceof EnumConstantDeclaration) {
+      EnumConstantDeclaration ecd = (EnumConstantDeclaration) def;
+      mods = ecd.modifiers();
+    }
+   else return null;
+   
+   if (mods == null || mods.size() == 0) return null;
+   
+   List<JcompAnnotation> rslt = null;
+   for (Object o : mods) {
+      IExtendedModifier iem = (IExtendedModifier) o;
+      if (iem.isAnnotation()) {
+         Annotation an = (Annotation) iem;
+         JcompType jt = JcompAst.getJavaType(an.getTypeName());
+         if (jt == null) continue;
+         if (rslt == null) rslt = new ArrayList<>();
+         JcompAnnotation jan = new JcompAnnotation(jt);
+         rslt.add(jan);
+         if (an.isNormalAnnotation()) {
+            NormalAnnotation na = (NormalAnnotation) an;
+            for (Object o1 : na.values()) {
+               MemberValuePair mvp = (MemberValuePair) o1;
+               String key = mvp.getName().getIdentifier();
+               Object ev = getValue(mvp.getValue());
+               jan.addValue(key,ev);
+             }
+          }
+       }
+    }
+   
+   return rslt;
+}
+
+
+
+private Object getValue(Expression e)
+{
+   switch (e.getNodeType()) {
+      case ASTNode.NULL_LITERAL :
+         return null;
+      case ASTNode.NUMBER_LITERAL :
+         NumberLiteral nlit = (NumberLiteral) e;
+         return nlit.getToken();
+      case ASTNode.BOOLEAN_LITERAL :
+         BooleanLiteral blit = (BooleanLiteral) e;
+         return blit.booleanValue();
+      case ASTNode.STRING_LITERAL :
+         StringLiteral slit = (StringLiteral) e;
+         return slit.getLiteralValue();
+      case ASTNode.QUALIFIED_NAME :
+      case ASTNode.SIMPLE_NAME :
+         Name snam = (Name) e;
+         return snam.getFullyQualifiedName();
+    }
+   return e;
+}
+
+
+/********************************************************************************/
 /*										*/
 /*	Output methods								*/
 /*										*/
@@ -643,6 +730,7 @@ private static class VariableSymbol extends JcompSymbol {
             case ASTNode.LAMBDA_EXPRESSION :
                return null;
             case ASTNode.TYPE_DECLARATION :
+            case ASTNode.ENUM_DECLARATION :
                if (!isfld) return null;
                return JcompAst.getJavaType(p);
           }
@@ -794,6 +882,7 @@ private static class EnumSymbol extends JcompSymbol {
    @Override public ASTNode getNameNode()		{ return ast_node; }
    @Override public JcompSymbolKind getSymbolKind()	{ return JcompSymbolKind.FIELD; }
    @Override public int getModifiers()			{ return ast_node.getModifiers(); }
+   @Override public JcompType getClassType()            { return java_type; }
 
    @Override public String getHandle(String proj) {
       return proj + "#" + getFullName() + getType().getJavaTypeName();
@@ -916,7 +1005,7 @@ private static class KnownMethod extends JcompSymbol {
       method_type = typ;
       access_flags = acc;
       if (excs == null) excs = Collections.emptyList();
-      if (nm.startsWith("<cl") && (cls.isUnknown() || cls.isUndefined()))
+      if (nm.startsWith("<cl") && (cls.isCompiledType() || cls.isUndefined()))
          System.err.println("KNOWN METHOD IN UNKNOWN CLASS");
       declared_exceptions = excs;
       class_type = cls;

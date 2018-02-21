@@ -110,6 +110,12 @@ private JcompScopeLookup getLookupScope()		{ return lookup_scope; }
    return lookup_scope.lookupMethod(id,aty,this);
 }
 
+
+@Override JcompSymbol lookupExactMethod(String id,JcompType aty)
+{
+   return lookup_scope.lookupExactMethod(id,aty,this);
+}
+
 @Override public Collection<JcompSymbol> getDefinedMethods()
 {
    return lookup_scope.getDefinedMethods(this);

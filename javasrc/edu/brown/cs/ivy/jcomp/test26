@@ -1,0 +1,1786 @@
+/********************************************************************************/
+/*										*/
+/*		FlowScannerAst.java						*/
+/*										*/
+/*	Flow scanner for AST scanning						*/
+/*										*/
+/********************************************************************************/
+/*	Copyright 2011 Brown University -- Steven P. Reiss		      */
+/*********************************************************************************
+ *  Copyright 2011, Brown University, Providence, RI.				 *
+ *										 *
+ *			  All Rights Reserved					 *
+ *										 *
+ *  Permission to use, copy, modify, and distribute this software and its	 *
+ *  documentation for any purpose other than its incorporation into a		 *
+ *  commercial product is hereby granted without fee, provided that the 	 *
+ *  above copyright notice appear in all copies and that both that		 *
+ *  copyright notice and this permission notice appear in supporting		 *
+ *  documentation, and that the name of Brown University not be used in 	 *
+ *  advertising or publicity pertaining to distribution of the software 	 *
+ *  without specific, written prior permission. 				 *
+ *										 *
+ *  BROWN UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS		 *
+ *  SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND		 *
+ *  FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL BROWN UNIVERSITY	 *
+ *  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY 	 *
+ *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,		 *
+ *  WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS		 *
+ *  ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 	 *
+ *  OF THIS SOFTWARE.								 *
+ *										 *
+ ********************************************************************************/
+
+
+
+package edu.brown.cs.fait.flow;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ArrayAccess;
+import org.eclipse.jdt.core.dom.ArrayCreation;
+import org.eclipse.jdt.core.dom.ArrayInitializer;
+import org.eclipse.jdt.core.dom.AssertStatement;
+import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.BooleanLiteral;
+import org.eclipse.jdt.core.dom.BreakStatement;
+import org.eclipse.jdt.core.dom.CastExpression;
+import org.eclipse.jdt.core.dom.CatchClause;
+import org.eclipse.jdt.core.dom.CharacterLiteral;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.ConditionalExpression;
+import org.eclipse.jdt.core.dom.ConstructorInvocation;
+import org.eclipse.jdt.core.dom.ContinueStatement;
+import org.eclipse.jdt.core.dom.CreationReference;
+import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.EnhancedForStatement;
+import org.eclipse.jdt.core.dom.ExpressionMethodReference;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.FieldAccess;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.InfixExpression;
+import org.eclipse.jdt.core.dom.InstanceofExpression;
+import org.eclipse.jdt.core.dom.LabeledStatement;
+import org.eclipse.jdt.core.dom.LambdaExpression;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.NullLiteral;
+import org.eclipse.jdt.core.dom.NumberLiteral;
+import org.eclipse.jdt.core.dom.ParenthesizedExpression;
+import org.eclipse.jdt.core.dom.PostfixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression;
+import org.eclipse.jdt.core.dom.QualifiedName;
+import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.StructuralPropertyDescriptor;
+import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
+import org.eclipse.jdt.core.dom.SuperFieldAccess;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
+import org.eclipse.jdt.core.dom.SuperMethodReference;
+import org.eclipse.jdt.core.dom.SwitchCase;
+import org.eclipse.jdt.core.dom.SwitchStatement;
+import org.eclipse.jdt.core.dom.SynchronizedStatement;
+import org.eclipse.jdt.core.dom.ThisExpression;
+import org.eclipse.jdt.core.dom.ThrowStatement;
+import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.TypeLiteral;
+import org.eclipse.jdt.core.dom.TypeMethodReference;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.WhileStatement;
+
+import edu.brown.cs.fait.iface.FaitLog;
+import edu.brown.cs.fait.iface.IfaceAstReference;
+import edu.brown.cs.fait.iface.IfaceAstStatus;
+import edu.brown.cs.fait.iface.IfaceControl;
+import edu.brown.cs.fait.iface.IfaceEntity;
+import edu.brown.cs.fait.iface.IfaceField;
+import edu.brown.cs.fait.iface.IfaceProgramPoint;
+import edu.brown.cs.fait.iface.IfaceState;
+import edu.brown.cs.fait.iface.IfaceType;
+import edu.brown.cs.fait.iface.IfaceValue;
+import edu.brown.cs.fait.iface.IfaceAstStatus.Reason;
+import edu.brown.cs.ivy.jcode.JcodeConstants;
+import edu.brown.cs.ivy.jcomp.JcompAst;
+import edu.brown.cs.ivy.jcomp.JcompSymbol;
+import edu.brown.cs.ivy.jcomp.JcompType;
+import static edu.brown.cs.fait.iface.FaitTypes.*;
+
+class FlowScannerAst extends FlowScanner implements FlowConstants, JcodeConstants
+{
+
+
+/********************************************************************************/
+/*										*/
+/*	Private Storage 							*/
+/*										*/
+/********************************************************************************/
+
+private FlowQueueInstanceAst		work_queue;
+private IfaceAstReference		ast_where;
+private ASTNode 			after_node;
+private FlowLocation			here_location;
+private IfaceState			cur_state;
+
+private static Map<Object,FaitOperator>      op_map;
+
+static {
+   op_map = new HashMap<>();
+   op_map.put(InfixExpression.Operator.AND,FaitOperator.AND);
+   op_map.put(InfixExpression.Operator.DIVIDE,FaitOperator.DIV);
+   op_map.put(InfixExpression.Operator.EQUALS,FaitOperator.EQL);
+   op_map.put(InfixExpression.Operator.GREATER,FaitOperator.GTR);
+   op_map.put(InfixExpression.Operator.GREATER_EQUALS,FaitOperator.GEQ);
+   op_map.put(InfixExpression.Operator.LEFT_SHIFT,FaitOperator.LSH);
+   op_map.put(InfixExpression.Operator.LESS,FaitOperator.LSS);
+   op_map.put(InfixExpression.Operator.LESS_EQUALS,FaitOperator.LEQ);
+   op_map.put(InfixExpression.Operator.MINUS,FaitOperator.SUB);
+   op_map.put(InfixExpression.Operator.NOT_EQUALS,FaitOperator.NEQ);
+   op_map.put(InfixExpression.Operator.OR,FaitOperator.OR);
+   op_map.put(InfixExpression.Operator.PLUS,FaitOperator.ADD);
+   op_map.put(InfixExpression.Operator.REMAINDER,FaitOperator.MOD);
+   op_map.put(InfixExpression.Operator.RIGHT_SHIFT_SIGNED,FaitOperator.RSH);
+   op_map.put(InfixExpression.Operator.RIGHT_SHIFT_UNSIGNED,FaitOperator.RSHU);
+   op_map.put(InfixExpression.Operator.TIMES,FaitOperator.MUL);
+   op_map.put(InfixExpression.Operator.XOR,FaitOperator.XOR);
+   op_map.put(PrefixExpression.Operator.COMPLEMENT,FaitOperator.COMP);
+   op_map.put(PrefixExpression.Operator.MINUS,FaitOperator.NEG);
+   op_map.put(PrefixExpression.Operator.PLUS,FaitOperator.NOP);
+   op_map.put(PrefixExpression.Operator.NOT,FaitOperator.NOT);
+   op_map.put(Assignment.Operator.ASSIGN,FaitOperator.ASG);
+   op_map.put(Assignment.Operator.BIT_AND_ASSIGN,FaitOperator.AND);
+   op_map.put(Assignment.Operator.BIT_OR_ASSIGN,FaitOperator.OR);
+   op_map.put(Assignment.Operator.BIT_XOR_ASSIGN,FaitOperator.XOR);
+   op_map.put(Assignment.Operator.DIVIDE_ASSIGN,FaitOperator.DIV);
+   op_map.put(Assignment.Operator.LEFT_SHIFT_ASSIGN,FaitOperator.LSH);
+   op_map.put(Assignment.Operator.MINUS_ASSIGN,FaitOperator.SUB);
+   op_map.put(Assignment.Operator.PLUS_ASSIGN,FaitOperator.ADD);
+   op_map.put(Assignment.Operator.REMAINDER_ASSIGN,FaitOperator.MOD);
+   op_map.put(Assignment.Operator.RIGHT_SHIFT_SIGNED_ASSIGN,FaitOperator.RSH);
+   op_map.put(Assignment.Operator.RIGHT_SHIFT_UNSIGNED_ASSIGN,FaitOperator.RSHU);
+   op_map.put(Assignment.Operator.TIMES_ASSIGN,FaitOperator.MUL);
+   op_map.put(InfixExpression.Operator.CONDITIONAL_AND,FaitOperator.AND);
+   op_map.put(InfixExpression.Operator.CONDITIONAL_OR,FaitOperator.OR);
+}
+
+
+private static Object NO_NEXT = new Object();
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Constructors								*/
+/*										*/
+/********************************************************************************/
+
+FlowScannerAst(IfaceControl fc,FlowQueue fq,FlowQueueInstanceAst wq)
+{
+   super(fc,fq);
+   work_queue = wq;
+   ast_where = null;
+   after_node = null;
+   cur_state = null;
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Main processing loop							*/
+/*										*/
+/********************************************************************************/
+
+@Override void scanCode()
+{
+   while (!work_queue.isEmpty()) {
+      IfaceProgramPoint ar = work_queue.getNext();
+      try {
+	 ast_where = ar.getAstReference();
+	 processAstNode();
+       }
+      catch (Throwable t) {
+	 FaitLog.logE("Problem ast processing " + work_queue.getCall().getLogName(),t);
+       }
+    }
+}
+
+
+/********************************************************************************/
+/*										*/
+/*	Actual processing							*/
+/*										*/
+/********************************************************************************/
+
+private void processAstNode()
+{
+   IfaceAstReference nar = null;
+   ASTNode nextnode = null;
+   FlowAstStatus nextsts = null;
+
+   cur_state = work_queue.getState(ast_where);
+   cur_state = cur_state.cloneState();
+   ASTNode node = ast_where.getAstNode();
+   after_node = ast_where.getAfterChild();
+   IfaceAstStatus sts = ast_where.getStatus();
+   here_location = null;
+   Object rslt = null;
+   
+   String cls = node.getClass().getName();
+   int idx = cls.lastIndexOf(".");
+   cls = cls.substring(idx+1);
+   String aft = (after_node == null ? "" : "*");
+   FaitLog.logD("EVAL " + aft + cls + " " + node.getStartPosition());
+         
+   if (sts == null) {
+      switch (node.getNodeType()) {
+	 case ASTNode.ANNOTATION_TYPE_DECLARATION :
+	 case ASTNode.ANNOTATION_TYPE_MEMBER_DECLARATION :
+	 case ASTNode.ANONYMOUS_CLASS_DECLARATION :
+	 case ASTNode.ARRAY_TYPE :
+	 case ASTNode.BLOCK_COMMENT :
+	 case ASTNode.COMPILATION_UNIT :
+	 case ASTNode.EMPTY_STATEMENT :
+	 case ASTNode.ENUM_CONSTANT_DECLARATION :
+	 case ASTNode.ENUM_DECLARATION :
+	 case ASTNode.IMPORT_DECLARATION :
+	 case ASTNode.JAVADOC :
+	 case ASTNode.LINE_COMMENT :
+	 case ASTNode.MARKER_ANNOTATION :
+	 case ASTNode.MEMBER_REF :
+	 case ASTNode.MEMBER_VALUE_PAIR :
+	 case ASTNode.METHOD_REF :
+	 case ASTNode.METHOD_REF_PARAMETER :
+	 case ASTNode.MODIFIER :
+	 case ASTNode.NORMAL_ANNOTATION :
+	 case ASTNode.PACKAGE_DECLARATION :
+	 case ASTNode.PARAMETERIZED_TYPE :
+	 case ASTNode.PRIMITIVE_TYPE :
+	 case ASTNode.QUALIFIED_TYPE :
+	 case ASTNode.SIMPLE_TYPE :
+	 case ASTNode.SINGLE_MEMBER_ANNOTATION :
+	 case ASTNode.TAG_ELEMENT :
+	 case ASTNode.TEXT_ELEMENT :
+	 case ASTNode.TYPE_DECLARATION :
+	 case ASTNode.TYPE_DECLARATION_STATEMENT :
+	 case ASTNode.TYPE_PARAMETER :
+	 case ASTNode.UNION_TYPE :
+	 case ASTNode.WILDCARD_TYPE :
+	    break;
+	 case ASTNode.ARRAY_ACCESS :
+	    rslt = visit((ArrayAccess) node);
+	    break;
+	 case ASTNode.ARRAY_CREATION :
+	    rslt = visit((ArrayCreation) node);
+	    break;
+	 case ASTNode.ARRAY_INITIALIZER :
+	    rslt = visit((ArrayInitializer) node);
+	    break;
+	 case ASTNode.ASSERT_STATEMENT :
+	    rslt = visit((AssertStatement) node);
+	    break;
+	 case ASTNode.ASSIGNMENT :
+	    rslt = visit((Assignment) node);
+	    break;
+	 case ASTNode.BLOCK :
+	    rslt = visit((Block) node);
+	    break;
+	 case ASTNode.BOOLEAN_LITERAL :
+	    rslt = visit((BooleanLiteral) node);
+	    break;
+	 case ASTNode.BREAK_STATEMENT :
+	    rslt = visit((BreakStatement) node);
+	    break;
+	 case ASTNode.CAST_EXPRESSION :
+	    rslt = visit((CastExpression) node);
+	    break;
+	 case ASTNode.CHARACTER_LITERAL :
+	    rslt = visit((CharacterLiteral) node);
+	    break;
+	 case ASTNode.CLASS_INSTANCE_CREATION :
+	    rslt = visit((ClassInstanceCreation) node);
+	    break;
+	 case ASTNode.CONDITIONAL_EXPRESSION :
+	    rslt = visit((ConditionalExpression) node);
+	    break;
+	 case ASTNode.CONSTRUCTOR_INVOCATION :
+	    rslt = visit((ConstructorInvocation) node);
+	    break;
+	 case ASTNode.CONTINUE_STATEMENT :
+	    rslt = visit((ContinueStatement) node);
+	    break;
+	 case ASTNode.CREATION_REFERENCE :
+	    rslt = visit((CreationReference) node);
+	    break;
+	 case ASTNode.DO_STATEMENT :
+	    rslt = visit((DoStatement) node);
+	    break;
+	 case ASTNode.ENHANCED_FOR_STATEMENT :
+	    rslt = visit((EnhancedForStatement) node);
+	    break;
+	 case ASTNode.EXPRESSION_METHOD_REFERENCE :
+	    rslt = visit((ExpressionMethodReference) node);
+	    break;
+	 case ASTNode.EXPRESSION_STATEMENT :
+	    rslt = visit((ExpressionStatement) node);
+	    break;
+	 case ASTNode.FIELD_ACCESS :
+	    rslt = visit((FieldAccess) node);
+	    break;
+	 case ASTNode.FIELD_DECLARATION :
+	    rslt = visit((FieldDeclaration) node);
+	    break;
+	 case ASTNode.FOR_STATEMENT :
+	    rslt = visit((ForStatement) node);
+	    break;
+	 case ASTNode.IF_STATEMENT :
+	    rslt = visit((IfStatement) node);
+	    break;
+	 case ASTNode.INFIX_EXPRESSION :
+	    rslt = visit((InfixExpression) node);
+	    break;
+	 case ASTNode.INSTANCEOF_EXPRESSION :
+	    rslt = visit((InstanceofExpression) node);
+	    break;
+	 case ASTNode.LABELED_STATEMENT :
+	    rslt = visit((LabeledStatement) node);
+	    break;
+	 case ASTNode.LAMBDA_EXPRESSION :
+	    rslt = visit((LambdaExpression) node);
+	    break;
+	 case ASTNode.METHOD_DECLARATION :
+	    rslt = visit((MethodDeclaration) node);
+	    break;
+	 case ASTNode.METHOD_INVOCATION :
+	    rslt = visit((MethodInvocation) node);
+	    break;
+	 case ASTNode.NULL_LITERAL :
+	    rslt = visit((NullLiteral) node);
+	    break;
+	 case ASTNode.NUMBER_LITERAL :
+	    rslt = visit((NumberLiteral) node);
+	    break;
+	 case ASTNode.PARENTHESIZED_EXPRESSION :
+	    rslt = visit((ParenthesizedExpression) node);
+	    break;
+	 case ASTNode.POSTFIX_EXPRESSION :
+	    rslt = visit((PostfixExpression) node);
+	    break;
+	 case ASTNode.PREFIX_EXPRESSION :
+	    rslt = visit((PrefixExpression) node);
+	    break;
+	 case ASTNode.QUALIFIED_NAME :
+	    rslt = visit((QualifiedName) node);
+	    break;
+	 case ASTNode.RETURN_STATEMENT :
+	    rslt = visit((ReturnStatement) node);
+	    break;
+	 case ASTNode.SIMPLE_NAME :
+	    rslt = visit((SimpleName) node);
+	    break;
+	 case ASTNode.SINGLE_VARIABLE_DECLARATION :
+	    rslt = visit((SingleVariableDeclaration) node);
+	    break;
+	 case ASTNode.STRING_LITERAL :
+	    rslt = visit((StringLiteral) node);
+	    break;
+	 case ASTNode.SUPER_CONSTRUCTOR_INVOCATION :
+	    rslt = visit((SuperConstructorInvocation) node);
+	    break;
+	 case ASTNode.SUPER_METHOD_INVOCATION :
+	    rslt = visit((SuperMethodInvocation) node);
+	    break;
+	 case ASTNode.SUPER_FIELD_ACCESS :
+	    rslt = visit((SuperFieldAccess) node);
+	    break;
+	 case ASTNode.SUPER_METHOD_REFERENCE :
+	    rslt = visit((SuperMethodReference) node);
+	    break;
+	 case ASTNode.SWITCH_STATEMENT :
+	    rslt = visit((SwitchStatement) node);
+	    break;
+	 case ASTNode.SWITCH_CASE :
+	    rslt = visit((SwitchCase) node);
+	    break;
+	 case ASTNode.SYNCHRONIZED_STATEMENT :
+	    rslt = visit((SynchronizedStatement) node);
+	    break;
+	 case ASTNode.THIS_EXPRESSION :
+	    rslt = visit((ThisExpression) node);
+	    break;
+	 case ASTNode.THROW_STATEMENT :
+	    rslt = visit((ThrowStatement) node);
+	    break;
+	 case ASTNode.TRY_STATEMENT :
+	    rslt = visit((TryStatement) node);
+	    break;
+	 case ASTNode.TYPE_LITERAL :
+	    rslt = visit((TypeLiteral) node);
+	    break;
+	 case ASTNode.TYPE_METHOD_REFERENCE :
+	    rslt = visit((TypeMethodReference) node);
+	    break;
+	 case ASTNode.VARIABLE_DECLARATION_EXPRESSION :
+	    rslt = visit((VariableDeclarationExpression) node);
+	    break;
+	 case ASTNode.VARIABLE_DECLARATION_FRAGMENT :
+	    rslt = visit((VariableDeclarationFragment) node);
+	    break;	
+	 case ASTNode.VARIABLE_DECLARATION_STATEMENT :
+	    rslt = visit((VariableDeclarationStatement) node);
+	    break;
+	 case ASTNode.WHILE_STATEMENT :
+	    rslt = visit((WhileStatement) node);
+       }
+    }
+   else {
+      switch (node.getNodeType()) {
+	 case ASTNode.DO_STATEMENT :
+	    rslt = visitThrow((DoStatement) node,sts);
+	    break;
+	 case ASTNode.ENHANCED_FOR_STATEMENT :
+	    rslt = visitThrow((EnhancedForStatement) node,sts);
+	    break;
+	 case ASTNode.FOR_STATEMENT :
+	    rslt = visitThrow((ForStatement) node,sts);
+	    break;
+	 case ASTNode.SWITCH_STATEMENT :
+	    rslt = visitThrow((SwitchStatement) node,sts);
+	    break;
+	 default :
+	    rslt = sts;
+	    break;
+       }
+    }
+
+   if (rslt != null) {
+      if (rslt instanceof FlowAstStatus) {
+	 nextsts = (FlowAstStatus) rslt;
+       }
+      else if (rslt instanceof ASTNode) {
+	 nextnode = (ASTNode) rslt;
+       }
+      else if (rslt instanceof IfaceAstReference) {
+	 nar = (IfaceAstReference) rslt;
+       }
+      else if (rslt == NO_NEXT) {
+	 return;
+       }
+    }
+   if (nar == null) {
+      if (nextnode != null) {
+	 nar = fait_control.getAstReference(nextnode);
+       }
+      else if (nextsts != null) {
+	 nar = fait_control.getAstReference(node,nextsts);
+       }
+      else {
+	 ASTNode par = node.getParent();
+	 if (node instanceof MethodDeclaration) {
+	    IfaceAstReference sar = work_queue.getCall().getMethod().getStart().getAstReference();
+	    if (node == sar.getAstNode()) return;
+	  }
+	 nar = fait_control.getAstReference(par,node);
+       }
+    }
+   if (nar != null) {
+      if (cur_state != null) work_queue.mergeState(cur_state,nar);
+    }
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Starting a method							*/
+/*										*/
+/********************************************************************************/
+
+private Object visit(MethodDeclaration md)
+{
+   if (after_node == null) return md.getBody();
+   
+   return new FlowAstStatus(Reason.RETURN,(IfaceValue) null);
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Constant handling							*/
+/*										*/
+/********************************************************************************/
+
+private Object visit(BooleanLiteral v)
+{
+   int val = (v.booleanValue() ? 1 : 0);
+   IfaceValue v0 = fait_control.findRangeValue(BOOLEAN_TYPE,val,val);
+   pushValue(v0);
+   return null;
+}
+
+
+private Object visit(CharacterLiteral v)
+{
+   int val = v.charValue();
+   IfaceValue v0 = fait_control.findRangeValue(CHAR_TYPE,val,val);
+   pushValue(v0);
+   return null;
+}
+
+
+private Object visit(NullLiteral v)
+{
+   pushValue(fait_control.findNullValue());
+   return null;
+}
+
+
+private Object visit(NumberLiteral v)
+{
+   IfaceType jt = convertType(JcompAst.getExprType(v));
+   IfaceValue v0 = null;
+   switch (jt.getName()) {
+      case "float" :
+	 v0 = fait_control.findAnyValue(FLOAT_TYPE);
+	 break;
+      case "double" :
+	 v0 = fait_control.findAnyValue(DOUBLE_TYPE);
+	 break;
+      default :
+	 String sv = v.getToken();
+	 long lv = 0;
+	 if (sv.startsWith("0x") && sv.length() > 2) {
+	    sv = sv.substring(2);
+	    lv = Long.parseLong(sv,16);
+	  }
+	 else if (sv.startsWith("0X") && sv.length() > 2) {
+	    sv = sv.substring(2);
+	    lv = Long.parseLong(sv,16);
+	  }
+	 if (sv.startsWith("0b") && sv.length() > 2) {
+	    sv = sv.substring(2);
+	    lv = Long.parseLong(sv,2);
+	  }
+	 else if (sv.startsWith("0B") && sv.length() > 2) {
+	    sv = sv.substring(2);
+	    lv = Long.parseLong(sv,2);
+	  }
+	 else if (sv.startsWith("0") && sv.length() > 1) {
+	    sv = sv.substring(1);
+	    lv = Long.parseLong(sv,8);
+	  }
+	 else lv = Long.parseLong(sv);
+	 v0 = fait_control.findRangeValue(jt,lv,lv);
+	 break;
+    }
+
+   pushValue(v0);
+
+   return null;
+}
+
+
+private Object visit(StringLiteral v)
+{
+   pushValue(fait_control.findConstantStringValue(v.getLiteralValue()));
+   return null;
+}
+
+
+
+private Object visit(TypeLiteral v)
+{
+   IfaceValue v0 = fait_control.findNativeValue(CLASS_TYPE);
+   v0 = v0.forceNonNull();
+   pushValue(v0);
+   return null;
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Expression management							*/
+/*										*/
+/********************************************************************************/
+
+private Object visit(ArrayAccess v)
+{
+   if (after_node == null) return v.getArray();
+   else if (after_node == v.getArray()) return v.getIndex();
+   else {
+      IfaceValue vidx = popActual();
+      handleAccess(v.getArray());
+      IfaceValue varr = popActual();
+      IfaceType rtyp = convertType(JcompAst.getExprType(v));
+      IfaceValue vrslt = fait_control.findRefValue(rtyp,varr,vidx);
+      pushValue(vrslt);
+    }
+
+   return null;
+}
+
+
+private Object visit(ArrayCreation v)
+{
+   List<?> dims = v.dimensions();
+   if (after_node == null || after_node != v.getInitializer()) {
+      int idx = 0;
+      if (after_node != null) idx = dims.indexOf(after_node) + 1;
+      if (idx < dims.size()) return dims.get(idx);
+    }
+   if (v.getInitializer() != null && after_node != v.getInitializer()) {
+      return v.getInitializer();
+    }
+
+   IfaceType atyp = convertType(JcompAst.getExprType(v));
+   int jsize = 0;
+   IfaceType base = null;
+   for (base = atyp; base.isArrayType(); base = base.getBaseType()) ++jsize;
+
+   if (v.getInitializer() != null) popActual();
+   IfaceValue sz = null;
+   for (int i = 0; i < jsize; ++i) {
+      sz = popActual();
+    }
+   if (jsize > 1) sz = null;
+   IfaceValue rslt = flow_queue.handleNewArraySet(getHere(),atyp,jsize,sz);
+   pushValue(rslt);
+
+   return null;
+}
+
+
+private Object visit(Assignment v)
+{
+   if (after_node == null) return v.getLeftHandSide();
+   else if (after_node == v.getLeftHandSide()) return v.getRightHandSide();
+   else  {
+      IfaceValue v2 = popActual();
+      IfaceValue v1 = popValue();
+      FaitOperator fop = op_map.get(v.getOperator());
+      if (fop != FaitOperator.ASG) {
+	 IfaceValue v1v = getActualValue(v1);
+	 v2 = performOperation(v1v,v2,v1v.getDataType(),fop);
+       }
+      assignValue(v1,v2);
+      pushValue(v2);
+    }
+   return null;
+}
+
+
+private Object visit(CastExpression v)
+{
+   if (after_node == null) return v.getExpression();
+   else {
+      IfaceValue v0 = popActual();
+      IfaceType ctyp = convertType(JcompAst.getJavaType(v.getType()));
+      boolean pfg = ctyp.isInProject();
+      if (pfg && fait_control.isProjectClass(v0.getDataType())) pfg = false;
+      if (pfg && v0.getDataType().isJavaLangObject()) pfg = false;
+      if (pfg && v0.getDataType().isInterfaceType()) pfg = false;
+      v0 = castValue(ctyp,v0,pfg);
+      if (v0.mustBeNull()) v0 = fait_control.findNullValue(ctyp);
+      if (!v0.mustBeNull() && v0.isEmptyEntitySet()) return NO_NEXT;
+      pushValue(v0);
+    }
+
+   return null;
+}
+
+
+
+private Object visit(ConditionalExpression v)
+{
+   if (after_node == null) return v.getExpression();
+   else if (after_node == v.getExpression()) {
+      IfaceValue v0 = popActual();
+      TestBranch brslt = getTestResult(v0,null);
+      // flow_queue.handleImplications(work_queue,ast_where,cur_state,brslt);
+      if (brslt == TestBranch.NEVER) {
+	 return v.getElseExpression();
+       }
+      else if (brslt == TestBranch.ALWAYS) {
+	 return v.getThenExpression();
+       }
+      else {
+	 workOn(v.getElseExpression());
+	 return v.getThenExpression();
+       }
+    }
+
+   return null;
+}
+
+
+private Object visit(FieldAccess v)
+{
+   if (after_node == null) return v.getExpression();
+   else {
+      handleAccess(v.getExpression());
+      JcompSymbol sym = JcompAst.getReference(v.getName());
+      IfaceField fld = getField(sym);
+      IfaceValue v0 = popActual();
+      IfaceType rcls = convertType(JcompAst.getExprType(v));
+      IfaceValue ref = fait_control.findRefValue(rcls,v0,fld);
+      pushValue(ref);
+    }
+
+   return null;
+}
+
+
+private Object visit(SuperFieldAccess v)
+{
+   // handleAccess() ...
+   String var = "this";
+   if (v.getQualifier() != null) {
+      JcompType qtyp = JcompAst.getExprType(v.getQualifier());
+      var = qtyp.getName() + ".this";
+    }
+   JcompSymbol fld = JcompAst.getReference(v.getName());
+   IfaceField ifld = getField(fld);
+   IfaceValue vlhs = cur_state.getLocal(getSlot(var));
+   IfaceType rcls = convertType(JcompAst.getExprType(v));
+   IfaceValue ref = fait_control.findRefValue(rcls,vlhs,ifld);
+   pushValue(ref);
+
+   return null;
+}
+
+
+private Object visit(InfixExpression v)
+{
+   if (after_node == null) return v.getLeftOperand();
+   else if (after_node == v.getLeftOperand()) {
+      if (v.getOperator() == InfixExpression.Operator.CONDITIONAL_AND) {
+	 IfaceValue v1 = popActual();
+	 TestBranch tb = getTestResult(v1,null);
+	 if (tb == TestBranch.NEVER) {
+	    pushValue(v1);
+	    return null;
+	  }
+	 else {
+	    pushValue(v1);
+	    return v.getRightOperand();
+	  }
+       }
+      else if (v.getOperator() == InfixExpression.Operator.CONDITIONAL_OR) {
+	 IfaceValue v1 = popActual();
+	 TestBranch tb = getTestResult(v1,null);
+	 if (tb == TestBranch.ALWAYS) {
+	    pushValue(v1);
+	    return null;
+	  }
+	 else {
+	    pushValue(v1);
+	    return v.getRightOperand();
+	  }
+       }
+      else return v.getRightOperand();
+    }
+   else {
+      IfaceValue v0 = popActual();
+      IfaceValue v1 = popActual();
+      FaitOperator op = op_map.get(v.getOperator());
+      IfaceType rtyp = convertType(JcompAst.getExprType(v));
+      IfaceValue v2 = performOperation(v1,v0,rtyp,op);
+      pushValue(v2);
+      if (v.hasExtendedOperands()) {
+	 List<?> ext = v.extendedOperands();
+	 int idx = ext.indexOf(after_node) + 1;
+	 if (idx < ext.size()) return ext.get(idx);
+       }
+    }
+   return null;
+}
+
+
+
+private Object visit(InstanceofExpression v)
+{
+   if (after_node == null) return v.getLeftOperand();
+   else {
+      IfaceType rt = convertType(JcompAst.getJavaType(v.getRightOperand()));
+      IfaceValue v0 = popActual();
+      IfaceValue v2 = fait_control.findAnyValue(rt);
+      IfaceValue v1 = performOperation(v0,v2,INT_TYPE,FaitOperator.INSTANCEOF);
+      pushValue(v1);
+    }
+   return null;
+}
+
+
+
+private Object visit(SimpleName v)
+{
+   JcompSymbol js = JcompAst.getReference(v);
+   IfaceType rcls = convertType(JcompAst.getExprType(v));
+   if (js != null && js.isFieldSymbol()) {
+      IfaceField fld = getField(js);
+      IfaceValue ref = null;
+      if (js.isStatic()) {
+	 ref = fait_control.findRefValue(rcls,null,fld);
+       }
+      else {
+	 IfaceValue thisv = getLocal("this");
+	 while (!thisv.getDataType().equals(fld.getDeclaringClass())) {
+	    IfaceField xfld = fait_control.findField(thisv.getDataType(),"this$0");
+	    IfaceValue	r1 = fait_control.findRefValue(xfld.getType(),thisv,xfld);
+	    thisv = getActualValue(r1);
+	  }
+	 ref = fait_control.findRefValue(rcls,thisv,fld);
+       }
+      pushValue(ref);
+    }
+   else {
+      int slot = getSlot(js);
+      IfaceValue ref = fait_control.findRefValue(rcls,slot);
+      pushValue(ref);
+    }
+
+   return null;
+}
+
+
+
+private Object visit(QualifiedName v)
+{
+   JcompSymbol sym = JcompAst.getReference(v.getName());
+   if (after_node == null) {
+      if (sym != null && sym.isFieldSymbol() && !sym.isStatic()) {
+	 return v.getQualifier();
+       }
+      else if (sym == null && v.getName().getIdentifier().equals("length")) {
+	 return v.getQualifier();
+       }
+      else return v.getName();
+    }
+   handleAccess(v.getQualifier());
+   if (after_node == v.getQualifier() && sym != null) {
+      IfaceValue v0 = popActual();
+      IfaceType rtyp = convertType(JcompAst.getExprType(v));
+      IfaceField fld = getField(sym);
+      IfaceValue v1 = fait_control.findRefValue(rtyp,v0,fld);
+      pushValue(v1);
+    }
+   else if (after_node == v.getQualifier() && sym == null) {
+      IfaceValue v0 = popActual();
+      setAssociation(AssociationType.THISREF,v0);
+      IfaceValue v1 = fait_control.findAnyValue(INT_TYPE);
+      pushValue(v1);
+    }
+
+   return null; 
+}
+
+
+
+private Object visit(ParenthesizedExpression v)
+{
+   if (after_node == null) return v.getExpression();
+
+   return null;
+}
+
+
+private Object visit(PostfixExpression v)
+{ 
+   if (after_node == null) return v.getOperand();
+
+   int i0 = 1;
+   FaitOperator op = FaitOperator.ADD;
+   if (v.getOperator() == PostfixExpression.Operator.DECREMENT) {
+      i0 = -1;
+      op = FaitOperator.SUB;
+    }
+   IfaceType rtyp = convertType(JcompAst.getExprType(v));
+   IfaceValue v1 = popValue();
+   IfaceValue v2 = getActualValue(v1);
+   IfaceValue v3 = fait_control.findRangeValue(rtyp,i0,i0);
+   IfaceValue v4 = performOperation(v3,v2,rtyp,op);
+   assignValue(v1,v4);
+   pushValue(v2);
+   return null;
+}
+
+
+private Object visit(PrefixExpression v)
+{
+   if (after_node == null) return v.getOperand();
+
+   IfaceType rtyp = convertType(JcompAst.getExprType(v));
+   FaitOperator op = op_map.get(v.getOperator());
+   if (op == null) {
+      int i0 = 1;
+      op = FaitOperator.ADD;
+      if (v.getOperator() == PrefixExpression.Operator.DECREMENT) {
+	 i0 = -1;
+	 op = FaitOperator.SUB;
+       }
+      IfaceValue v1 = popValue();
+      IfaceValue v2 = getActualValue(v1);
+      IfaceValue v3 = fait_control.findRangeValue(rtyp,i0,i0);
+      IfaceValue v4 = performOperation(v3,v2,rtyp,op);
+      assignValue(v1,v4);
+      pushValue(v4);
+    }
+   else {
+      IfaceValue v1 = popActual();
+      IfaceValue v2 = performOperation(v1,v1,rtyp,op);
+      pushValue(v2);
+    }
+
+   return null;
+}
+
+
+
+private Object visit(ThisExpression v)
+{
+   JcompType base = null;
+   if (v.getQualifier() != null) {
+      base = JcompAst.getExprType(v.getQualifier());
+    }
+   IfaceValue v0 = getLocal("this");
+   if (base != null) {
+      // handle Type.this expressions
+    }
+   pushValue(v0);
+
+   return null;
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Call methods								*/
+/*										*/
+/********************************************************************************/
+
+private Object visit(ClassInstanceCreation v)
+{
+   if (after_node == null) {
+      JcompType rty = JcompAst.getJavaType(v.getType());
+      IfaceType irty = convertType(rty);
+      flow_queue.initialize(irty);
+      IfaceEntity ent = getLocalEntity(work_queue.getCall(),ast_where);
+      IfaceValue v0 = fait_control.findObjectValue(irty,
+            fait_control.createSingletonSet(ent),NullFlags.NON_NULL);
+      setAssociation(AssociationType.NEW,v0);
+      cur_state.pushStack(v0);
+    }
+   
+   int idx = 0;
+   List<?> args = v.arguments();
+   if (after_node != null) idx = args.indexOf(after_node) + 1; 
+   if (idx < args.size()) return args.get(idx);
+   
+   if (!processCall(v,args.size())) return NO_NEXT;
+   
+   return null;
+}
+
+
+private Object visit(ConstructorInvocation v)
+{
+   if (after_node == null) {
+      IfaceValue v0 = cur_state.getLocal(0);
+      cur_state.pushStack(v0);
+    }
+   int idx = 0;
+   List<?> args = v.arguments();
+   if (after_node != null) idx = args.indexOf(after_node) + 1;
+   if (idx < args.size()) return args.get(idx);
+   
+   if (!processCall(v,args.size())) return NO_NEXT;
+      
+   return null;
+}
+
+
+private Object visit(MethodInvocation v)
+{
+   if (after_node == null && v.getExpression() == null) {
+      JcompSymbol js = JcompAst.getReference(v.getName());
+      if (!js.isStatic()) {
+         IfaceValue v0 = cur_state.getLocal(0);
+         cur_state.pushStack(v0);
+       }
+    }
+   else if (after_node == null && v.getExpression() != null) {
+      return v.getExpression();
+    }
+   
+   int idx = 0;
+   List <?> args = v.arguments();
+   if (after_node != null && after_node != v.getExpression()) idx = args.indexOf(after_node) + 1;
+   if (idx < args.size()) return args.get(idx);
+     
+   if (!processCall(v,args.size())) return NO_NEXT;
+   
+   return null;
+}
+
+
+private Object visit(SuperConstructorInvocation v)
+{
+   if (after_node == null) {
+      IfaceValue v0 = cur_state.getLocal(0);
+      cur_state.pushStack(v0);
+    }
+   int idx = 0;
+   List<?> args = v.arguments();
+   if (after_node != null) idx = args.indexOf(after_node) + 1;
+   if (idx < args.size()) return args.get(idx);
+   
+   if (!processCall(v,args.size())) return NO_NEXT;
+   
+   return null;
+}
+
+
+private Object visit(SuperMethodInvocation v)
+{
+   if (after_node == null) {
+      JcompSymbol js = JcompAst.getReference(v.getName());
+      if (!js.isStatic()) {
+         IfaceValue v0 = cur_state.getLocal(0);
+         cur_state.pushStack(v0);
+       }
+    }
+   
+   int idx = 0;
+   List <?> args = v.arguments();
+   if (after_node != null) idx = args.indexOf(after_node) + 1;
+   if (idx < args.size()) return args.get(idx);
+   
+   if (!processCall(v,args.size())) return NO_NEXT;
+   
+   return null;
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Statement handling							*/
+/*										*/
+/********************************************************************************/
+
+private Object visit(AssertStatement s)
+{
+   if (after_node == null) return s.getExpression();
+   popValue();
+   return null;
+}
+
+
+
+private Object visit(Block s)
+{
+   int idx = 0;
+   List<?> stmts = s.statements();
+   if (after_node != null) idx = stmts.indexOf(after_node) + 1;
+   if (idx < stmts.size()) return stmts.get(idx);
+   return null;
+}
+
+
+
+private Object visit(BreakStatement s)
+{
+   if (s.getLabel() != null) {
+      return new FlowAstStatus(Reason.BREAK,s.getLabel().getIdentifier());
+    }
+   return new FlowAstStatus(Reason.BREAK,"");
+}
+
+
+
+private Object visit(ContinueStatement s)
+{
+   if (s.getLabel() != null) {
+      return new FlowAstStatus(Reason.CONTINUE,s.getLabel().getIdentifier());
+    }
+   return new FlowAstStatus(Reason.CONTINUE,"");
+}
+
+
+
+private Object visit(DoStatement s)
+{
+   if (after_node == null) return s.getBody();
+   else if (after_node == s.getBody()) return s.getExpression();
+   else {
+      IfaceValue v = popActual();
+      TestBranch tb = getTestResult(v,null);
+      if (tb != TestBranch.NEVER) {
+	 workOn(s);
+       }
+      if (tb == TestBranch.ALWAYS) {
+	 workOn(s);
+	 return NO_NEXT;
+       }
+    }
+
+   return null;
+}
+
+private Object visitThrow(DoStatement s,IfaceAstStatus sts)
+{
+   String lbl = sts.getMessage();
+   switch (sts.getReason()) {
+      case BREAK :
+	 if (checkLabel(s,lbl)) break;
+	 else return sts;
+      case CONTINUE :
+	 if (checkLabel(s,lbl)) return s.getExpression();
+	 else return sts;
+      default :
+	 return sts;
+    }
+
+   return null;
+}
+
+
+
+private Object visit(ExpressionStatement s)
+{
+   if (after_node == null) return s.getExpression();
+   else {
+      JcompType typ =JcompAst.getExprType(s.getExpression());
+      if (typ != null && !typ.isVoidType()) popValue();
+    }
+   return null;
+}
+
+
+
+private Object visit(ForStatement s)
+{
+   StructuralPropertyDescriptor spd = null;
+   if (after_node != null) spd = after_node.getLocationInParent();
+   if (after_node != null && after_node == s.getExpression()) {
+      IfaceValue bf = popActual();
+      TestBranch tb = getTestResult(bf,null);
+      if (tb != TestBranch.NEVER) {
+	 workOn(s.getBody());
+       }
+      if (tb == TestBranch.ALWAYS) return NO_NEXT;
+      return null;
+    }
+
+   if (after_node == null || spd == ForStatement.INITIALIZERS_PROPERTY) {
+      int idx = 0;
+      List<?> inits = s.initializers();
+      if (after_node != null) {
+	 idx = inits.indexOf(after_node) + 1;
+       }
+      if (idx < inits.size()) return inits.get(idx);
+    }
+
+   if (after_node == s.getBody() || spd == ForStatement.UPDATERS_PROPERTY) {
+      List<?> upds = s.updaters();
+      int idx = 0;
+      if (after_node != s.getBody()) idx = upds.indexOf(after_node) + 1;
+      if (idx < upds.size()) return upds.get(idx);
+    }
+
+   if (s.getExpression() == null) return s.getBody();
+   else return s.getExpression();
+}
+
+
+private Object visitThrow(ForStatement s,IfaceAstStatus sts)
+{
+   String lbl = sts.getMessage();
+   switch (sts.getReason()) {
+      case BREAK :
+	 if (checkLabel(s,lbl)) break;
+	 else return sts;
+      case CONTINUE :
+	 if (checkLabel(s,lbl)) return s.getExpression();
+	 else return sts;
+      default :
+	 return sts;
+    }
+
+   return null;
+}
+
+
+
+private Object visit(IfStatement s)
+{
+   if (after_node == null) return s.getExpression();
+   else if (after_node == s.getExpression()) {
+      IfaceValue v = popActual();
+      TestBranch tb = getTestResult(v,null);
+      if (tb != TestBranch.NEVER) {
+	 workOn(s.getThenStatement());
+       }
+      if (tb != TestBranch.ALWAYS) {
+	 workOn(s.getElseStatement());
+       }
+    }
+   return null;
+}
+
+
+private Object visit(LabeledStatement s)
+{
+   if (after_node == null) return s.getBody();
+   return null;
+}
+
+
+private Object visit(ReturnStatement s)
+{
+   if (after_node == null && s.getExpression() != null) return s.getExpression();
+
+   IfaceValue rval = null;
+   if (s.getExpression() != null) {
+      rval = popActual();
+    }
+
+   return new FlowAstStatus(Reason.RETURN,rval);
+}
+
+
+
+private Object visit(SwitchStatement s)
+{
+   if (after_node == null) return s.getExpression();
+   else if (after_node == s.getExpression()) {
+      popValue();
+      List<?> stmts = s.statements();
+      boolean sw = false;
+      for (Object o : stmts) {
+	 Statement st = (Statement) o;
+	 if (st instanceof SwitchCase) {
+	    sw = true;
+	    continue;
+	  }
+	 else if (sw) {
+	    workOn(s);
+	    sw = false;
+	  }
+       }
+    }
+   else {
+      List<?> stmts = s.statements();
+      int idx = stmts.indexOf(after_node) + 1;
+      if (idx < stmts.size()) return stmts.get(idx);
+    }
+
+   return null;
+}
+
+
+
+private Object visitThrow(SwitchStatement s,IfaceAstStatus sts)
+{
+   String lbl = sts.getMessage();
+   switch (sts.getReason()) {
+      case BREAK :
+	 if (checkLabel(s,lbl)) return null;
+	 else return sts;
+      default :
+	 return sts;
+    }
+}
+
+
+private Object visit(SwitchCase s)
+{
+   return null;
+}
+
+
+private Object visit(SynchronizedStatement s)
+{
+   if (after_node == null) return s.getExpression();
+   else if (after_node == s.getExpression()) {
+      handleAccess(s.getExpression());
+      if (cur_state != null) {
+	 IfaceValue v0 = popActual();
+	 setAssociation(AssociationType.SYNC,v0);
+	 pushValue(v0);
+       }
+      return s.getBody();
+    }
+   else {
+      popValue();
+      cur_state.discardFields();
+    }
+
+   return null;
+}
+
+
+private Object visit(ThrowStatement s)
+{
+   if (after_node == null) return s.getExpression();
+   handleAccess(s.getExpression());
+   IfaceValue v = popActual();
+   flow_queue.handleThrow(work_queue,getHere(),v,cur_state);
+   return NO_NEXT;
+}
+
+
+private Object visit(TryStatement s)
+{
+   if (after_node == null) {
+      return s.getBody();
+    }
+   else if (after_node == s.getBody()) {
+      return null;
+    }
+   // need to handle catch and finally
+   return null;
+}
+
+
+private Object visit(WhileStatement s)
+{
+   if (after_node != s.getExpression()) return s.getExpression();
+   else {
+      IfaceValue iv = popActual();
+      TestBranch tb = getTestResult(iv,null);
+      if (tb != TestBranch.NEVER) workOn(s.getBody());
+      if (tb == TestBranch.ALWAYS) return NO_NEXT;
+    }
+   return null;
+}
+
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Enhanced for statement code						*/
+/*										*/
+/********************************************************************************/
+
+private Object visit(EnhancedForStatement s)
+{
+   // TODO: make this work
+   return null;
+}
+
+
+private Object visitThrow(EnhancedForStatement s,IfaceAstStatus sts)
+{
+   // TOOD: make this work
+   return null;
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Declaration handling							*/
+/*										*/
+/********************************************************************************/
+
+private Object visit(ArrayInitializer n)
+{
+   List<?> exprs = n.expressions();
+   int idx = 0;
+   if (after_node != null) idx = exprs.indexOf(after_node) + 1;
+   if (idx < exprs.size()) return exprs.get(idx);
+
+   int dim = exprs.size();
+   IfaceType rtyp = convertType(JcompAst.getExprType(n)).getBaseType();
+   IfaceValue dv = fait_control.findRangeValue(INT_TYPE,dim,dim);
+   IfaceValue av = flow_queue.handleNewArraySet(getHere(),rtyp,1,dv);
+   for (int i = dim - 1; i >= 0; --i) {
+      IfaceValue iv = popActual();
+      IfaceValue idxv = fait_control.findRangeValue(INT_TYPE,i,i);
+      flow_queue.handleArraySet(getHere(),av,iv,idxv);
+    }
+   pushValue(av);
+
+   return null;
+}
+
+
+
+private Object visit(FieldDeclaration n)
+{
+   int idx = 0;
+   List<?> frags = n.fragments();
+   if (after_node != null) idx = frags.indexOf(after_node) + 1;
+   if (idx < frags.size()) return frags.get(idx);
+   return null;
+}
+
+
+private Object visit(SingleVariableDeclaration n)
+{
+   if (after_node == null && n.getInitializer() != null) return n.getInitializer();
+
+   ASTNode par = n.getParent();
+   if (par instanceof MethodDeclaration) {
+      // handle formal parameters
+    }
+   else if (par instanceof CatchClause) {
+      // handle exception
+    }
+   else {
+      JcompSymbol js = JcompAst.getDefinition(n.getName());
+      handleInitialization(js,n.getInitializer());
+    }
+
+   return null;
+}
+
+
+private Object visit(VariableDeclarationExpression v)
+{
+   List<?> frags = v.fragments();
+   int idx = 0;
+   if (after_node != null) idx = frags.indexOf(after_node) + 1;
+   if (idx < frags.size()) return frags.get(idx);
+   return null;
+}
+
+
+private Object visit(VariableDeclarationStatement v)
+{
+   List<?> frags = v.fragments();
+   int idx = 0;
+   if (after_node != null) idx = frags.indexOf(after_node) + 1;
+   if (idx < frags.size()) return frags.get(idx);
+   return null;
+}
+
+
+private Object visit(VariableDeclarationFragment v)
+{
+    if (after_node == null && v.getInitializer() != null) return v.getInitializer();
+    JcompSymbol js = JcompAst.getDefinition(v.getName());
+    handleInitialization(js,v.getInitializer());
+    return null;
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Lambda and reference management 					*/
+/*										*/
+/********************************************************************************/
+
+private Object visit(LambdaExpression v)
+{
+   return null;
+}
+
+
+private Object visit(CreationReference v)
+{
+   return null;
+}
+
+private Object visit(ExpressionMethodReference v)
+{
+   return null;
+}
+
+
+private Object visit(SuperMethodReference v)
+{
+   return null;
+}
+
+private Object visit(TypeMethodReference v)
+{
+   return null;
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Reference management							*/
+/*										*/
+/********************************************************************************/
+
+private IfaceValue getActualValue(IfaceValue ref)
+{
+   if (ref == null) return null;
+   if (!ref.isReference()) return ref;
+
+   IfaceValue base = ref.getRefBase();
+   if (base != null) {
+      FlowLocation here = new FlowLocation(flow_queue,work_queue.getCall(),ast_where);
+      IfaceValue idx = ref.getRefIndex();
+      if (idx != null) {
+	 setAssociation(AssociationType.THISREF,base);
+	 IfaceValue vrslt = flow_queue.handleArrayAccess(here,base,idx);
+	 return vrslt;
+       }
+      else if (ref.getRefField() != null) {
+	 setAssociation(AssociationType.THISREF,base);
+	 boolean oref = false;		// set to true if base == this
+	 IfaceValue vrslt = flow_queue.handleFieldGet(here,cur_state,oref,base);
+	 return vrslt;
+       }
+    }
+   else if (ref.getRefSlot() >= 0) {
+      IfaceValue vrslt = getLocal(ref.getRefSlot());
+      return vrslt;
+    }
+   
+   return ref;
+}
+
+
+private void assignValue(IfaceValue ref,IfaceValue v)
+{
+   IfaceValue v1 = castValue(ref.getDataType(),v,false);
+   
+   IfaceValue base = ref.getRefBase();
+   boolean thisref = false;             // need to set
+   IfaceField fld = ref.getRefField();
+   IfaceValue idx = ref.getRefIndex();
+   int slot = ref.getRefSlot();
+   if (fld != null) {
+      fait_control.setFieldValue(cur_state,fld,v1,base,thisref,getHere());
+    }
+   else if (idx != null) {
+      setAssociation(AssociationType.THISREF,base);
+      flow_queue.handleArraySet(getHere(),base,v1,idx);
+    }
+   else if (slot >= 0) {
+      cur_state.setLocal(slot,v1);
+    }
+   else {
+      System.err.println("Bad assignment");
+    }
+}
+
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Support methods 							*/
+/*										*/
+/********************************************************************************/
+
+private void pushValue(IfaceValue v)
+{
+   cur_state.pushStack(v);
+}
+
+private IfaceValue popValue()
+{
+   return cur_state.popStack();
+}
+
+
+private IfaceValue popActual()
+{
+   return getActualValue(popValue());
+}
+
+
+
+private void setAssociation(AssociationType at,IfaceValue v)
+{
+   work_queue.getCall().setAssociation(at,ast_where,v);
+}
+
+private IfaceType convertType(JcompType jt)
+{
+   return fait_control.findDataType(jt.getName());
+}
+
+private FlowLocation getHere()
+{
+   if (here_location == null) {
+      here_location =  new FlowLocation(flow_queue,work_queue.getCall(),ast_where);
+    }
+   return here_location;
+}
+
+private void workOn(ASTNode n)
+{
+   work_queue.mergeState(cur_state,fait_control.getAstReference(n));
+}
+
+
+private boolean checkLabel(Statement s,String lbl)
+{
+   if (lbl == null || lbl.length() == 0) return true;
+   if (s.getParent() instanceof LabeledStatement) {
+      LabeledStatement lbs = (LabeledStatement) s.getParent();
+      if (lbs.getLabel().getIdentifier().equals(lbl)) return true;
+    }
+   return false;
+}
+
+
+private int getSlot(Object o)
+{
+   return work_queue.getCall().getMethod().getLocalOffset(o);
+}
+
+private IfaceValue getLocal(int i)
+{
+   if (i < 0) return null;
+   return cur_state.getLocal(i);
+}
+
+private IfaceValue getLocal(Object o)
+{
+   return getLocal(getSlot(o));
+}
+
+private IfaceField getField(JcompSymbol sym)
+{  
+   IfaceType fcls = convertType(sym.getClassType());
+   IfaceField fld = fait_control.findField(fcls,sym.getFullName());
+   return fld;
+}
+
+
+
+private TestBranch getTestResult(IfaceValue v1,IfaceValue v2)
+{
+   FaitOperator op = FaitOperator.EQL;
+   if (v2 == null) {			// handle boolean (true is non-zero)
+      op = FaitOperator.NEQ_ZERO;
+      v2 = v1;
+    }
+   else if (v1.getDataType() == STRING_TYPE) {
+      // do string equality
+    }
+   TestBranch tb = v1.branchTest(v2,op);
+   return tb;
+}
+
+
+
+private boolean processCall(ASTNode v,int act)
+{
+   JcompSymbol js = JcompAst.getReference(v);
+   JcompType jt = js.getType();
+   if (jt.isVarArgs()) {
+      int ct = jt.getComponents().size();
+      JcompType vtyp = jt.getComponents().get(ct-1);
+      IfaceType vityp = fait_control.findDataType(vtyp.getName());
+      vityp = vityp.getArrayType();
+      boolean dovar = true;
+      if (act == ct) {
+         IfaceValue varg = popActual();
+         pushValue(varg);
+         if (varg.getDataType().isCompatibleWith(vityp)) {
+            dovar = false;
+          }
+       }
+      if (dovar) {
+         IfaceType btyp = vityp.getBaseType();
+         int sz = act-ct+1;
+         IfaceValue szv = fait_control.findRangeValue(INT_TYPE,sz,sz);
+         IfaceValue rslt = flow_queue.handleNewArraySet(getHere(),btyp,1,szv);
+         for (int i = 0; i < sz; ++i) {
+            IfaceValue iv = popActual();
+            IfaceValue idxv = fait_control.findRangeValue(INT_TYPE,i,i);
+            flow_queue.handleArraySet(getHere(),rslt,iv,idxv);
+          } 
+         pushValue(rslt);
+       }
+    }
+   handleAccess(v);
+   if (cur_state == null) return false;
+   if (!flow_queue.handleCall(getHere(),cur_state,work_queue)) {
+      FaitLog.logD("Unknown RETURN value");
+      return false;
+    }
+   
+   return true;
+}
+
+
+
+/********************************************************************************/
+/*										*/
+/*	Operation methods							*/
+/*										*/
+/********************************************************************************/
+
+private IfaceValue performOperation(IfaceValue v1,IfaceValue v2,IfaceType rtyp,
+      FaitOperator op)
+{
+   // check for unboxing v1 and v2
+
+   IfaceValue v = v1.performOperation(rtyp,v2,op,getHere());
+
+   return v;
+}
+
+
+private IfaceValue castValue(IfaceType rtyp,IfaceValue v0,boolean pfg)
+{
+   // handle unboxing as needed
+   // handle boxing as needed
+   IfaceValue v1 = v0.restrictByType(rtyp,pfg,getHere());
+
+   return v1;
+}
+
+/********************************************************************************/
+/*										*/
+/*	Backward flow methods							*/
+/*										*/
+/********************************************************************************/
+
+private void handleAccess(ASTNode where)
+{
+   // top of stack derived from where must be non-null
+
+   // flow_queue handle access for ASTs
+}
+
+
+private void handleInitialization(JcompSymbol js,ASTNode init)
+{
+   IfaceValue iv = null;
+   if (init != null) iv = popActual();
+   // else iv = default value
+   int slot = getSlot(js);
+   if (slot >= 0 && iv != null) {
+      IfaceValue ref = fait_control.findRefValue(convertType(js.getType()),slot);
+      assignValue(ref,iv);
+    }
+}
+
+
+
+}	// end of class FlowScannerAst
+
+
+
+
+/* end of FlowScannerAst.java */
+

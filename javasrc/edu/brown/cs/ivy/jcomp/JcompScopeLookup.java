@@ -198,6 +198,30 @@ JcompSymbol lookupMethod(String id,JcompType aty,JcompScope js)
 
 
 
+JcompSymbol lookupExactMethod(String id,JcompType aty,JcompScope js)
+{
+   List<MethodElement> lme = method_names.get(id);
+   if (lme == null) {
+      return null;
+    }
+   
+   while (js != null) {
+      for (MethodElement me : lme) {
+	 if (me.getScope() == js) {
+	    for (JcompSymbol ms : me.getMethods()) {
+	       if (aty.equals(ms.getType())) {
+                  return ms;
+		}
+	     }
+	  }
+       }
+    }
+   
+   return null;
+}
+
+
+
 
 
 

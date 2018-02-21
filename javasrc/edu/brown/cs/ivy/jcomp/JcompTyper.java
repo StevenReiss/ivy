@@ -161,7 +161,10 @@ private JcompType definePrimitive(PrimitiveType.Code pt,String sys)
 	 ty = JcompType.createPrimitiveType(pt,jt);
 	 system_types.put(nm,ty);
        }
-      if (jt != null) jt.setAssociatedType(ty);
+      if (jt != null) {
+         jt.setAssociatedType(ty);
+         ty.setAssociatedType(jt);
+       }
       type_map.put(nm,ty);
     }
    return ty;
@@ -264,7 +267,7 @@ private JcompType findParameterizedSystemType(String t0,String args)
 
 
 
-Collection<JcompType> getAllTypes()
+public Collection<JcompType> getAllTypes()
 {
    return type_map.values();
 }
@@ -309,7 +312,7 @@ public JcompType defineUserType(String nm,boolean iface,boolean etype,boolean fo
 public JcompType defineUserType(String nm,boolean iface,boolean etype,boolean atype,boolean force)
 {
    JcompType jt = type_map.get(nm);
-   if (jt != null && jt.isKnownType() && force)
+   if (jt != null && jt.isBinaryType() && force)
       jt = null;
 
    if (jt != null) return jt;
@@ -327,14 +330,14 @@ public JcompType defineUserType(String nm,boolean iface,boolean etype,boolean at
       if (jt != null) return jt;
     }
 
-   if (iface) jt = JcompType.createUnknownInterfaceType(nm);
+   if (iface) jt = JcompType.createCompiledInterfaceType(nm);
    else if (etype) {
       jt = JcompType.createEnumType(nm);
-      JcompType par = findSystemType("java.lang.Enum");
-      jt.setSuperType(par);
+      JcompType par1 = findParameterizedSystemType("java.lang.Enum",nm);
+      jt.setSuperType(par1);
     }
-   else if (atype) jt = JcompType.createUnknownAnnotationType(nm);
-   else jt = JcompType.createUnknownType(nm);
+   else if (atype) jt = JcompType.createCompiledAnnotationType(nm);
+   else jt = JcompType.createCompiledClassType(nm);
 
    type_map.put(nm,jt);
 
@@ -1083,31 +1086,31 @@ private class TypeSetter extends ASTVisitor {
       canbe_type = false;
       visitList(t.parameters());
       if (t.isConstructor())
-	 canbe_type = true;
+         canbe_type = true;
       visitItem(t.getName());
       canbe_type = false;
       visitItem(t.getBody());
       visitList(t.modifiers());
-
+   
       JcompType jt = JcompAst.getJavaType(t.getReturnType2());
       List<JcompType> ljt = new ArrayList<JcompType>();
       for (Iterator<?> it = t.parameters().iterator(); it.hasNext(); ) {
-	 SingleVariableDeclaration svd = (SingleVariableDeclaration) it.next();
-	 JcompType pjt = JcompAst.getJavaType(svd);
-	 if (pjt == null) pjt = type_map.get(TYPE_ERROR);
-	 ljt.add(pjt);
+         SingleVariableDeclaration svd = (SingleVariableDeclaration) it.next();
+         JcompType pjt = JcompAst.getJavaType(svd);
+         if (pjt == null) pjt = type_map.get(TYPE_ERROR);
+         ljt.add(pjt);
        }
       JcompType clstyp = JcompAst.getJavaType(t.getParent());
       if (clstyp != null && clstyp.needsOuterClass() && t.isConstructor()) {
-	 JcompType outer = clstyp.getOuterType();
-	 if (outer != null) ljt.add(0,outer);
+         JcompType outer = clstyp.getOuterType();
+         if (outer != null) ljt.add(0,outer);
        }
-
+   
       //TODO:  if T is parameterized, need to create a generic signature here
       JcompType mt = JcompType.createMethodType(jt,ljt,t.isVarargs(),null);
       mt = fixJavaType(mt);
       setJavaType(t,mt);
-
+   
       return false;
     }
 
@@ -1284,7 +1287,7 @@ private class TypeSetter extends ASTVisitor {
        }
 
       if (jt == null) {
-	 jt = fixJavaType(JcompType.createUnknownType(nm));
+	 jt = fixJavaType(JcompType.createCompiledClassType(nm));
 	 jt.setUndefined(true);
 	 jt.setSuperType(type_map.get("java.lang.Object"));
        }

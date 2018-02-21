@@ -37,6 +37,8 @@ package edu.brown.cs.ivy.jcode;
 
 import org.objectweb.asm.tree.*;
 import java.lang.reflect.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class JcodeField extends FieldNode implements JcodeConstants
@@ -105,6 +107,34 @@ public boolean isFinal()
 {
    return Modifier.isFinal(this.access);
 }
+
+public List<JcodeAnnotation> getAnnotations()
+{
+   List<JcodeAnnotation> rslt = null;
+   rslt = addAnnotations(visibleAnnotations,rslt);
+   rslt = addAnnotations(invisibleAnnotations,rslt);
+   rslt = addAnnotations(visibleTypeAnnotations,rslt);
+   rslt = addAnnotations(invisibleTypeAnnotations,rslt);
+   
+   return rslt;
+}
+
+
+private List<JcodeAnnotation> addAnnotations(List<? extends AnnotationNode> v,
+      List<JcodeAnnotation> rslt)
+{
+   if (v == null || v.isEmpty()) return rslt;
+   
+   if (rslt == null) rslt = new ArrayList<>();
+   for (AnnotationNode an : v) {
+      rslt.add(new JcodeAnnotation(an,in_class.getFactory()));
+    }
+   
+   return rslt;
+}
+
+
+
 
 
 

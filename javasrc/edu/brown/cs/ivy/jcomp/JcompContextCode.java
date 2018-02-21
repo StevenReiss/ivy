@@ -248,7 +248,7 @@ private int compatiblityScore(JcompTyper typer,JcompType argtyp,JcodeMethod jm)
     }
    for (JcodeMethod jm : jc.findAllMethods(null,null)) {
       JcompType atyp = getMethodType(typer,jm,null);
-      if (scp.lookupMethod(jm.getName(),atyp) == null) {
+      if (scp.lookupExactMethod(jm.getName(),atyp) == null) {
 	 JcompSymbol js = createMethod(typer,jm);
 	 scp.defineMethod(js);
        }
@@ -276,18 +276,18 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
       jnm = jnm.replace("/",".");
       jnm = jnm.replace("$",".");
       if (jc.isInterface()) {
-	 jt = JcompType.createKnownInterfaceType(jnm,jc.signature);
+	 jt = JcompType.createBinaryInterfaceType(jnm,jc.signature);
        }
       else if (jc.isAnnotation()) {
-	 jt = JcompType.createKnownAnnotationType(jnm,jc.signature);
+	 jt = JcompType.createBinaryAnnotationType(jnm,jc.signature);
 	 if (jc.isAbstract()) jt.setAbstract(true);
        }
       else if (jc.isEnum()) {
-         jt = JcompType.createKnownEnumType(jnm,jc.signature);
+         jt = JcompType.createBinaryEnumType(jnm,jc.signature);
          if (jc.isAbstract()) jt.setAbstract(true);
        }
       else {
-	 jt = JcompType.createKnownType(jnm,jc.signature);
+	 jt = JcompType.createBinaryClassType(jnm,jc.signature);
 	 if (jc.isAbstract()) jt.setAbstract(true);
        }
       String xnm = jc.getName();

@@ -156,6 +156,23 @@ JcompScopeFixed()
 }
 
 
+@Override JcompSymbol lookupExactMethod(String id,JcompType aty)
+{
+   Collection<JcompSymbol> ljs;
+   
+   ljs = method_names.get(id);
+   if (ljs != null) ljs = new ArrayList<JcompSymbol>(ljs);
+   
+   if (ljs != null) {
+      for (JcompSymbol js : ljs) {
+	 if (aty.equals(js.getType())) return js;
+       }
+    }
+   
+   return null;
+}
+
+
 @Override synchronized List<JcompSymbol> lookupStatics(String id)
 {
    List<JcompSymbol> rslt = null;
