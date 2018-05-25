@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.75 2017/12/20 20:36:57 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.76 2018/05/25 17:57:38 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyXml.java,v $
+ * Revision 1.76  2018/05/25 17:57:38  spr
+ * Formatting.
+ *
  * Revision 1.75  2017/12/20 20:36:57  spr
  * Formatting
  *

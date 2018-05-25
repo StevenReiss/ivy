@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/LocalType.java,v 1.6 2010-02-12 00:34:14 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/LocalType.java,v 1.7 2018/05/25 17:56:39 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: LocalType.java,v $
+ * Revision 1.7  2018/05/25 17:56:39  spr
+ * Formatting.
+ *
  * Revision 1.6  2010-02-12 00:34:14  spr
  * Add some fixups for eclipse.
  *

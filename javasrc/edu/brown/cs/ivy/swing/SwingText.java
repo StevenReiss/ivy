@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.19 2017/06/20 00:53:17 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.20 2018/05/25 17:57:16 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingText.java,v $
+ * Revision 1.20  2018/05/25 17:57:16  spr
+ * Clean up a little.
+ *
  * Revision 1.19  2017/06/20 00:53:17  spr
  * Add DPI getting routine.
  *

@@ -44,12 +44,15 @@
  * @version 1.0
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingComboBox.java,v 1.21 2016/12/20 21:31:18 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingComboBox.java,v 1.22 2018/05/25 17:57:16 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingComboBox.java,v $
+ * Revision 1.22  2018/05/25 17:57:16  spr
+ * Clean up a little.
+ *
  * Revision 1.21  2016/12/20 21:31:18  spr
  * Formating changes.
  *
