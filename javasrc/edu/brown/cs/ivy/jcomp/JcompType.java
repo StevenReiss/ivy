@@ -219,6 +219,7 @@ private Map<JcompType,JcompType> parent_map;
 
 
 
+
 /********************************************************************************/
 /*										*/
 /*	Constructors								*/
@@ -374,7 +375,7 @@ public boolean isErrorType()			{ return false; }
  **/
 
 public boolean isBinaryType()			{ return false; }
-public boolean isKnownType()                    { return isBinaryType(); }
+public boolean isKnownType()			{ return isBinaryType(); }
 
 
 /**
@@ -401,8 +402,8 @@ public boolean isIntersectionType()		{ return false; }
  *	Return true if this type is not known.
  **/
 
-public boolean isCompiledType()                 { return false; }
-public boolean isUnknown()                      { return isCompiledType(); }
+public boolean isCompiledType() 		{ return false; }
+public boolean isUnknown()			{ return isCompiledType(); }
 
 
 /**
@@ -568,6 +569,9 @@ public JcompType resetType(JcompTyper typer)
    if (ntyp != null) return ntyp;
    return this;
 }
+
+
+
 
 
 
@@ -960,6 +964,7 @@ protected JcompSymbol lookupKnownField(JcompTyper typs,String id)
 protected JcompSymbol lookupKnownMethod(JcompTyper typs,String id,JcompType mtyp,JcompType basetype)
 {
    JcompSymbol js = null;
+   JcompSymbol checkjs = null;
 
    if (assoc_scope != null) {
       js = assoc_scope.lookupMethod(id,mtyp);
@@ -970,8 +975,12 @@ protected JcompSymbol lookupKnownMethod(JcompTyper typs,String id,JcompType mtyp
 	 if (jargs.size() != margs.size()) js = null;
 	 else {
 	    for (int i = 0; i < jargs.size(); ++i) {
-	       if (!margs.get(i).equals(jargs.get(i))) js = null;
-	     }
+	       if (!margs.get(i).equals(jargs.get(i)) && !margs.get(i).isErrorType()) {
+                  checkjs = js;
+                  js = null;
+                  break;
+                }	    
+             }
 	  }
        }
       if (js != null) return js;
@@ -979,23 +988,37 @@ protected JcompSymbol lookupKnownMethod(JcompTyper typs,String id,JcompType mtyp
 
    if (js == null) {
       js = typs.lookupKnownMethod(getName(),id,mtyp,basetype);
+      if (js != null && checkjs != null) {
+	 List<JcompType> jargs = js.getType().getComponents();
+	 List<JcompType> cargs = checkjs.getType().getComponents();
+         if (jargs.size() == cargs.size()) {
+            boolean fnd = true;
+            for (int i = 0; i < jargs.size(); ++i) {
+               if (!jargs.get(i).equals(cargs.get(i))) {
+                  fnd = false;
+                }
+             }
+            if (fnd) return checkjs;
+          }
+       }
       if (js != null && !js.isGenericReturn()) {
-	 boolean known = true;
-	 for (JcompType xjt : js.getType().getComponents()) {
-	    if (!xjt.isBaseKnown())
-	       known = false;
-	  }
-	 if (!js.getType().getBaseType().isBaseKnown())
-	    known = false;
-	 if (known) {
-	    if (basetype == this || basetype == null || basetype.getScope() == null) {
-	       // this is an unsafe optimization
-	       assoc_scope.defineMethod(js);
-	     }
-	    else {
-	       basetype.getScope().defineMethod(js);
-	     }
-	 }
+         // this is an unsafe optimization and can be non-optimizing at times
+         // boolean known = true;
+	 // for (JcompType xjt : js.getType().getComponents()) {
+	    // if (!xjt.isBaseKnown())
+	       // known = false;
+	  // }
+	 // if (!js.getType().getBaseType().isBaseKnown())
+	    // known = false;
+            
+         // if (known) {
+	    // if (basetype == this || basetype == null || basetype.getScope() == null) {
+               // assoc_scope.defineMethod(js);
+	     // }
+	    // else {
+	       // basetype.getScope().defineMethod(js);
+	     // }
+          // }
        }
     }
 
@@ -1039,17 +1062,19 @@ protected Set<JcompSymbol> lookupKnownAbstracts(JcompTyper typer)
 /*										*/
 /********************************************************************************/
 
-public Collection<JcompType> getChildTypes()		{ return null; }
+public Collection<String> getChildTypes()		{ return null; }
 
 void addChild(JcompType chld)				{ }
 
-public JcompType findChildForInterface(JcompType ity)
+public JcompType findChildForInterface(JcompTyper typer,JcompType ity)
 {
    JcompType fdt0 = null;
-
+   
    if (getChildTypes() != null) {
-      for (JcompType k : getChildTypes()) {
-	 JcompType r = k.findChildForInterface(ity);
+      for (String knm : getChildTypes()) {
+         JcompType k = typer.findType(knm);
+         if (k == null) continue;
+	 JcompType r = k.findChildForInterface(typer,ity);
 	 if (r != null) {
 	    if (fdt0 == null) fdt0 = r;
 	    else return ity;	// if more than one candidate, return the interface type
@@ -1199,43 +1224,43 @@ private static class PrimType extends JcompType {
       if (jt == this) return true;
       if (jt == null) return false;
       if (jt.isPrimitiveType()) {
-         PrimType pt = (PrimType) jt;
-         if (type_code == PrimitiveType.BYTE) {
-            if (pt.type_code == PrimitiveType.BYTE || pt.type_code == PrimitiveType.SHORT ||
-        	   pt.type_code == PrimitiveType.CHAR || pt.type_code == PrimitiveType.INT ||
-        	   pt.type_code == PrimitiveType.LONG ||
-        	   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-               return true;
-          }
-         else if (type_code == PrimitiveType.SHORT || type_code == PrimitiveType.CHAR) {
-            if (pt.type_code == PrimitiveType.SHORT ||
-        	   pt.type_code == PrimitiveType.CHAR || pt.type_code == PrimitiveType.INT ||
-        	   pt.type_code == PrimitiveType.LONG ||
-        	   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-               return true;
-          }
-         else if (type_code == PrimitiveType.INT) {
-            if (pt.type_code == PrimitiveType.INT ||
-        	   pt.type_code == PrimitiveType.LONG ||
-        	   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-               return true;
-          }
-         else if (type_code == PrimitiveType.LONG) {
-            if (pt.type_code == PrimitiveType.LONG ||
-        	   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-               return true;
-          }
-         else if (type_code == PrimitiveType.FLOAT) {
-            if (pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-               return true;
-          }
+	 PrimType pt = (PrimType) jt;
+	 if (type_code == PrimitiveType.BYTE) {
+	    if (pt.type_code == PrimitiveType.BYTE || pt.type_code == PrimitiveType.SHORT ||
+		   pt.type_code == PrimitiveType.CHAR || pt.type_code == PrimitiveType.INT ||
+		   pt.type_code == PrimitiveType.LONG ||
+		   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+	       return true;
+	  }
+	 else if (type_code == PrimitiveType.SHORT || type_code == PrimitiveType.CHAR) {
+	    if (pt.type_code == PrimitiveType.SHORT ||
+		   pt.type_code == PrimitiveType.CHAR || pt.type_code == PrimitiveType.INT ||
+		   pt.type_code == PrimitiveType.LONG ||
+		   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+	       return true;
+	  }
+	 else if (type_code == PrimitiveType.INT) {
+	    if (pt.type_code == PrimitiveType.INT ||
+		   pt.type_code == PrimitiveType.LONG ||
+		   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+	       return true;
+	  }
+	 else if (type_code == PrimitiveType.LONG) {
+	    if (pt.type_code == PrimitiveType.LONG ||
+		   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+	       return true;
+	  }
+	 else if (type_code == PrimitiveType.FLOAT) {
+	    if (pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+	       return true;
+	  }
        }
       else if (jt.getAssociatedType() != null) {
-         JcompType assoctype = jt.getAssociatedType();
-         if (isCompatibleWith(assoctype)) return true;
+	 JcompType assoctype = jt.getAssociatedType();
+	 if (isCompatibleWith(assoctype)) return true;
        }
       else if (object_type != null && jt.getName().startsWith("java.lang.")) {
-         return object_type.isCompatibleWith(jt);
+	 return object_type.isCompatibleWith(jt);
        }
       return false;
     }
@@ -1321,18 +1346,30 @@ private static class ArrayType extends JcompType {
       return jt.lookupMethod(typer,id,atyps,basetype);
     }
 
+   @SuppressWarnings("unchecked") 
    @Override public Type createAstNode(AST ast) {
-      return ast.newArrayType(base_type.createAstNode(ast));
+      int ndim = 1;
+      JcompType bt = base_type;
+      while (bt.isArrayType()) {
+         bt = bt.getBaseType();
+         ++ndim;
+       }
+      org.eclipse.jdt.core.dom.ArrayType at = ast.newArrayType(bt.createAstNode(ast)); 
+      while (at.getDimensions() < ndim) {
+         at.dimensions().add(ast.newDimension());
+       }
+      return at;
+      // return ast.newArrayType(base_type.createAstNode(ast));
     }
 
    @Override public Expression createDefaultValue(AST ast) {
       Expression e1 = ast.newNullLiteral();
       if (base_type.isBinaryType() || base_type.isPrimitiveType()) {
-	 Type asttyp = createAstNode(ast);
-	 CastExpression e2 = ast.newCastExpression();
-	 e2.setExpression(e1);
-	 e2.setType(asttyp);
-	 e1 = e2;
+         Type asttyp = createAstNode(ast);
+         CastExpression e2 = ast.newCastExpression();
+         e2.setExpression(e1);
+         e2.setType(asttyp);
+         e1 = e2;
        }
       return e1;
     }
@@ -1364,7 +1401,7 @@ private static abstract class ClassInterfaceType extends JcompType {
    private JcompType outer_type;
    private List<JcompType> interface_types;
    private boolean is_context;
-   private List<JcompType> child_types;
+   private List<String> child_types;
 
    protected ClassInterfaceType(String nm) {
       super(nm);
@@ -1419,30 +1456,30 @@ private static abstract class ClassInterfaceType extends JcompType {
       if (jt == this) return true;
       if (jt.isTypeVariable()) return true;
       if (jt.isUnionType()) {
-         for (JcompType uty : jt.getComponents()) {
-            if (isCompatibleWith(uty)) return true;
-          }
-         return false;
+	 for (JcompType uty : jt.getComponents()) {
+	    if (isCompatibleWith(uty)) return true;
+	  }
+	 return false;
        }
       if (jt.isIntersectionType()) {
-         for (JcompType uty : jt.getComponents()) {
-            if (!isCompatibleWith(uty)) return false;
-          }
-         return true;
+	 for (JcompType uty : jt.getComponents()) {
+	    if (!isCompatibleWith(uty)) return false;
+	  }
+	 return true;
        }
       if (jt.isInterfaceType() && interface_types != null) {
-         for (JcompType ity : interface_types) {
-            if (ity.isCompatibleWith(jt)) return true;
-          }
+	 for (JcompType ity : interface_types) {
+	    if (ity.isCompatibleWith(jt)) return true;
+	  }
        }
       if (jt.getName().equals(getName()))
-         return true;
+	 return true;
       if (super_type != null) {
-         if (super_type.isCompatibleWith(jt)) return true;
+	 if (super_type.isCompatibleWith(jt)) return true;
        }
       if (jt.isPrimitiveType()) {
-         JcompType at = getAssociatedType();
-         if (at != null) return at.isCompatibleWith(jt);
+	 JcompType at = getAssociatedType();
+	 if (at != null) return at.isCompatibleWith(jt);
        }
       return false;
     }
@@ -1530,48 +1567,48 @@ private static abstract class ClassInterfaceType extends JcompType {
    @Override protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,JcompType basetype) {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
       if (js != null && id.equals("<init>") && basetype != js.getClassType()) {
-         js = null;
+	 js = null;
        }
       if (js != null && !js.isStatic() && js.getClassType() != this && getOuterType() != null &&
-            !needsOuterClass()) {
-         js = null;
+	    !needsOuterClass()) {
+	 js = null;
        }
-   
+
       if (js != null) return js;
       if (super_type != null && super_type != this) {
-         if (id == null || !id.equals("<init>"))
-            js = super_type.lookupMethod(typer,id,atyps,basetype);
+	 if (id == null || !id.equals("<init>"))
+	    js = super_type.lookupMethod(typer,id,atyps,basetype);
        }
       else if (!getName().equals("java.lang.Object") && !id.equals("<init>")) {
-         JcompType ot = typer.findType("java.lang.Object");
-         js = ot.lookupMethod(typer,id,atyps,basetype);
+	 JcompType ot = typer.findType("java.lang.Object");
+	 js = ot.lookupMethod(typer,id,atyps,basetype);
        }
       if (js != null) return js;
       if (interface_types != null) {
-         if (!isAbstract()) {
-            for (JcompType it : interface_types) {
-               js = it.lookupMethod(typer,id,atyps,basetype);
-               if (js != null) return js;
-             }
-          }
-         else {
-            for (JcompType it : interface_types) {
-               js = it.lookupMethod(typer,id,atyps,basetype);
-               if (js != null && !js.isAbstract()) return js;
-               else if (js != null) {
-        	  return js;
-        	}
-             }
-          }
+	 if (!isAbstract()) {
+	    for (JcompType it : interface_types) {
+	       js = it.lookupMethod(typer,id,atyps,basetype);
+	       if (js != null) return js;
+	     }
+	  }
+	 else {
+	    for (JcompType it : interface_types) {
+	       js = it.lookupMethod(typer,id,atyps,basetype);
+	       if (js != null && !js.isAbstract()) return js;
+	       else if (js != null) {
+		  return js;
+		}
+	     }
+	  }
        }
       if (outer_type != null && (id == null || !id.equals("<init>"))) {
-         js = outer_type.lookupMethod(typer,id,atyps,basetype);
-         if (js != null) return js;
+	 js = outer_type.lookupMethod(typer,id,atyps,basetype);
+	 if (js != null) return js;
        }
       return null;
     }
 
-      @Override protected List<JcompSymbol> lookupStatics(JcompTyper typer,String id,JcompType basetype) {
+   @Override protected List<JcompSymbol> lookupStatics(JcompTyper typer,String id,JcompType basetype) {
       List<JcompSymbol> rslt = super.lookupStatics(typer,id,basetype);
       if (super_type != null) {
 	 List<JcompSymbol> r1 = super_type.lookupStatics(typer,id,basetype);
@@ -1788,10 +1825,10 @@ private static abstract class ClassInterfaceType extends JcompType {
 
    synchronized void addChild(JcompType jt) {
       if (child_types == null) child_types = new ArrayList<>();
-      child_types.add(jt);
+      child_types.add(jt.getName());
     }
 
-   @Override public Collection<JcompType> getChildTypes()	{ return child_types; }
+   @Override public Collection<String> getChildTypes()	{ return child_types; }
 
 }	// end of innerclass ClassInterfaceType
 
@@ -1872,13 +1909,13 @@ private static abstract class CompiledClassInterfaceType extends ClassInterfaceT
     @Override protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,JcompType basetype) {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
       if (js == null && basetype == this) {
-         Set<JcompType> args = method_names.get(id);
-         if (args == null) {
-            args = new HashSet<JcompType>();
-            method_names.put(id,args);
-          }
-         atyps = typer.fixJavaType(atyps);
-         args.add(atyps);
+	 Set<JcompType> args = method_names.get(id);
+	 if (args == null) {
+	    args = new HashSet<JcompType>();
+	    method_names.put(id,args);
+	  }
+	 atyps = typer.fixJavaType(atyps);
+	 args.add(atyps);
        }
       return js;
     }
@@ -1891,7 +1928,7 @@ private static abstract class CompiledClassInterfaceType extends ClassInterfaceT
      }
 
 
-   @Override public boolean isCompiledType() 		{ return true; }
+   @Override public boolean isCompiledType()		{ return true; }
 
    @Override public JcompType resetType(JcompTyper typer) {
       JcompType ntyp = typer.findType(getName());
@@ -2023,7 +2060,7 @@ private static class EnumType extends CompiledClassInterfaceType {
 	    JcompType typ1 = JcompType.createArrayType(this);
 	    JcompType typ2 = JcompType.createMethodType(typ1,new ArrayList<JcompType>(),false,null);
 	    int acc = Modifier.PUBLIC | Modifier.STATIC;
-	    values_method = JcompSymbol.createKnownMethod("values",typ2,this,acc,null,false);
+	    values_method = JcompSymbol.createBinaryMethod("values",typ2,this,acc,null,false);
 	  }
 	 return values_method;
        }
@@ -2033,7 +2070,7 @@ private static class EnumType extends CompiledClassInterfaceType {
 	    types.add(typer.findSystemType("java.lang.String"));
 	    JcompType typ2 = JcompType.createMethodType(this,types,false,null);
 	    int acc = Modifier.PUBLIC | Modifier.STATIC;
-	    valueof_method = JcompSymbol.createKnownMethod("valueOf",typ2,this,acc,null,false);
+	    valueof_method = JcompSymbol.createBinaryMethod("valueOf",typ2,this,acc,null,false);
 	  }
 	 return valueof_method;
        }
@@ -2111,17 +2148,17 @@ private static class ParamType extends ClassInterfaceType {
    @Override public boolean isCompatibleWith(JcompType jt) {
       if (jt == this) return true;
       if (jt.isParameterizedType()) {
-         if (!getBaseType().isCompatibleWith(jt.getBaseType())) return false;
-         ParamType pt = (ParamType) jt;
-         if (type_params.equals(pt.type_params)) return true;
-         if (type_params.isEmpty()) return true;
-         if (type_params.size() != pt.type_params.size()) return false;
-         for (int i = 0; i < type_params.size(); ++i) {
-            JcompType pt1 = type_params.get(i);
-            JcompType pt2 = pt.type_params.get(i);
-            if (!pt1.isCompatibleWith(pt2)) return false;
-          }
-         return true;
+	 if (!getBaseType().isCompatibleWith(jt.getBaseType())) return false;
+	 ParamType pt = (ParamType) jt;
+	 if (type_params.equals(pt.type_params)) return true;
+	 if (type_params.isEmpty()) return true;
+	 if (type_params.size() != pt.type_params.size()) return false;
+	 for (int i = 0; i < type_params.size(); ++i) {
+	    JcompType pt1 = type_params.get(i);
+	    JcompType pt2 = pt.type_params.get(i);
+	    if (!pt1.isCompatibleWith(pt2)) return false;
+	  }
+	 return true;
        }
       return getBaseType().isCompatibleWith(jt);
     }
@@ -2250,19 +2287,19 @@ private static class ParamType extends ClassInterfaceType {
       setSuperType(nsup);
       Collection<JcompType> nint = JcompGenerics.deriveInterfaceTypes(typer,base_type,type_params);
       if (nint != null) {
-	 for (JcompType nty : nint) {
-	    addInterface(nty);
-	  }
+         for (JcompType nty : nint) {
+            addInterface(nty);
+          }
        }
-
+   
       base_type.defineAll(typer);
       if (base_type.getScope() != null && base_type.getScope().getDefinedMethods() != null) {
-	 for (JcompSymbol js : base_type.getScope().getDefinedMethods()) {
-	    if (js.getClassType() != base_type) continue;
-	    if (js.getName().equals("<clinit>")) continue;
-	    js = js.parameterize(typer,this,type_params);
-	    local_scope.defineMethod(js);
-	  }
+         for (JcompSymbol js : base_type.getScope().getDefinedMethods()) {
+            if (js.getClassType() != base_type) continue;
+            if (js.getName().equals("<clinit>")) continue;
+            js = js.parameterize(typer,this,type_params);
+            local_scope.defineMethod(js);
+          }
        }
     }
 
@@ -2439,11 +2476,13 @@ private static class AnyClassType extends JcompType {
    @Override public boolean isCompatibleWith(JcompType jt) {
       if (this == jt) return true;
       if (jt.isClassType() || jt.isInterfaceType() || jt.isEnumType() || jt.isArrayType() || jt.isParameterizedType())
-         return true;
+	 return true;
       return false;
     }
 
-   @Override public Type createAstNode(AST ast) 	{ return null; }
+   @Override public Type createAstNode(AST ast) {
+      return ast.newSimpleType(JcompAst.getQualifiedName(ast,"java.lang.Object"));
+    }
 
    @Override public String getJavaTypeName()		{ return "Ljava/lang/Object;"; }
 

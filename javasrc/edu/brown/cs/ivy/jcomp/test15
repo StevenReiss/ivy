@@ -24,7 +24,7 @@ public class LinkedQueue<E> implements Queue<E> {
       back = node;
     }
   }
-  
+
   public boolean isEmpty() {
     return front == null;
   }
@@ -37,5 +37,14 @@ public class LinkedQueue<E> implements Queue<E> {
     front = front.getNext();
     return result;
   }
-  
+
+  public static void testMethod() { }
+
+  public static void testMethod(Object o) { }
+
+  public void tryMethod() {
+    ch.LinkedQueue.testMethod();
+    ch.LinkedQueue.testMethod(null);
+  }
+
 }

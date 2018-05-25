@@ -228,6 +228,22 @@ JcompSymbol lookupExactMethod(String id,JcompType aty,JcompScope js)
 List<JcompSymbol> lookupStatics(String id,JcompScope jscp)
 {
    List<JcompSymbol> rslt = null;
+   
+   if (id == null) {
+      Set<JcompSymbol> r2 = new HashSet<>();
+      for (String s : method_names.keySet()) {
+         List<JcompSymbol> r1 = lookupStatics(s,jscp);
+         if (r1 != null) r2.addAll(r1);
+       }
+      for (String s : var_names.keySet()) {
+         List<JcompSymbol> r1 = lookupStatics(s,jscp);
+         if (r1 != null) r2.addAll(r1);
+       }
+      if (r2.size() == 0) return null;
+      rslt = new ArrayList<>(r2);
+      return rslt;
+    }
+   
    List<MethodElement> lme = method_names.get(id);
    if (lme != null) {
       for (MethodElement me : lme) {

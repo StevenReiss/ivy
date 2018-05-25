@@ -983,8 +983,8 @@ private class TypeSetter extends ASTVisitor {
    @Override public void endVisit(ArrayType t) {
       JcompType jt = JcompAst.getJavaType(t.getElementType());
       for (int i = 0; i < t.getDimensions(); ++i) {
-	 jt = JcompType.createArrayType(jt);
-	 jt = fixJavaType(jt);
+         jt = JcompType.createArrayType(jt);
+         jt = fixJavaType(jt);
        }
       setJavaType(t,jt);
     }
@@ -1260,9 +1260,9 @@ private class TypeSetter extends ASTVisitor {
 
    private void visitItem(ASTNode n) {
       if (n != null) {
-	 boolean cbt = canbe_type;
-	 n.accept(this);
-	 canbe_type = cbt;
+         boolean cbt = canbe_type;
+         n.accept(this);
+         canbe_type = cbt;
        }
     }
 

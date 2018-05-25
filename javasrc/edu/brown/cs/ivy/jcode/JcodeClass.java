@@ -178,6 +178,11 @@ public boolean isStatic()
    return Modifier.isStatic(access);
 }
 
+public boolean isPublic()
+{
+   return Modifier.isPublic(access);
+}
+
 
 public Collection<JcodeMethod> getMethods()
 {
@@ -428,6 +433,21 @@ public Collection<JcodeMethod> findChildMethods(String nm,String desc,boolean ch
       access |= acc;
     }
 }
+
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Debugging methods                                                       */
+/*                                                                              */
+/********************************************************************************/
+
+@Override public String toString()
+{
+   return getName();
+}
+
 
 
 

@@ -279,6 +279,8 @@ public synchronized JcompProject getProject(JcodeFactory jf,Collection<JcompSour
 
 public void freeProject(JcompProject proj)
 {
+   if (proj == null) return;
+   
    for (JcompSemantics sem : proj.getSources()) {
       JcompSource src = sem.getFile();
       semantic_map.remove(src);

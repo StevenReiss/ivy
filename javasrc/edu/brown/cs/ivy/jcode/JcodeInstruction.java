@@ -803,6 +803,42 @@ public int getStackDiff()
    return opcode_stack_height[opc][1] - opcode_stack_height[opc][0];
 }
 
+public int getStackPop()
+{
+   int opc = getOpcode();
+   switch (opc) {
+      case INVOKESTATIC :
+      case INVOKEDYNAMIC :
+      case INVOKEVIRTUAL :
+      case INVOKESPECIAL :
+      case INVOKEINTERFACE :
+	 JcodeMethod fm = getMethodReference();
+	 int ct = fm.getNumArguments();
+	 if (!fm.isStatic()) ++ct;
+	 return ct;
+    }
+   
+   return opcode_stack_height[opc][0];
+}
+
+
+public int getStackPush()
+{
+   int opc = getOpcode();
+   switch (opc) {
+      case INVOKESTATIC :
+      case INVOKEDYNAMIC :
+      case INVOKEVIRTUAL :
+      case INVOKESPECIAL :
+      case INVOKEINTERFACE :
+	 JcodeMethod fm = getMethodReference();
+	 if (!fm.getReturnType().isVoid()) return 1;
+	 return 0;
+    }
+   
+   return opcode_stack_height[opc][1];
+}
+
 
 public int getPoppedStackDiff()
 {

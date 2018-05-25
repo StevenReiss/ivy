@@ -170,17 +170,17 @@ static JcompSymbol createSymbol(JcompType type)
 }
 
 
-static JcompSymbol createKnownField(String id,JcompType typ,JcompType cls,int acc)
+static JcompSymbol createBinaryField(String id,JcompType typ,JcompType cls,int acc)
 {
-   return new KnownField(id,typ,cls,acc);
+   return new BinaryField(id,typ,cls,acc);
 }
 
 
 
-static JcompSymbol createKnownMethod(String id,JcompType typ,JcompType cls,int access,
+static JcompSymbol createBinaryMethod(String id,JcompType typ,JcompType cls,int access,
 				       List<JcompType> excs,boolean gen)
 {
-   return new KnownMethod(id,typ,cls,access,excs,gen);
+   return new BinaryMethod(id,typ,cls,access,excs,gen);
 }
 
 
@@ -249,7 +249,8 @@ public ASTNode getNameNode()			{ return null; }
  *	Java or the provided compilation context.
  **/
 
-public boolean isKnown()			{ return false; }
+public boolean isKnown()			{ return isBinarySymbol(); }
+public boolean isBinarySymbol()                 { return false; }
 
 
 
@@ -619,14 +620,14 @@ private Object getValue(Expression e)
 /*										*/
 /********************************************************************************/
 
-private static class KnownField extends JcompSymbol {
+private static class BinaryField extends JcompSymbol {
 
    private JcompType class_type;
    private String field_name;
    private JcompType field_type;
    private int access_info;
    
-   KnownField(String id,JcompType fty,JcompType cls,int access) {
+   BinaryField(String id,JcompType fty,JcompType cls,int access) {
       field_name = id;
       field_type = fty;
       class_type = cls;
@@ -635,7 +636,7 @@ private static class KnownField extends JcompSymbol {
 
    @Override public String getName()		{ return field_name; }
    @Override public JcompType getType() 	{ return field_type; }
-   @Override public boolean isKnown()		{ return true; }
+   @Override public boolean isBinarySymbol()	{ return true; }
    @Override public boolean isFieldSymbol()	{ return true; }
    @Override public boolean isStatic()		{ return Modifier.isStatic(access_info); }
    @Override public boolean isFinal()		{ return Modifier.isFinal(access_info); }
@@ -933,8 +934,8 @@ private static class MethodSymbol extends JcompSymbol {
       is_used = false;
       symbol_mods = ast_node.getModifiers();
       if (JcompAst.isInInterface(n)) {
-	 symbol_mods |= Modifier.PUBLIC;
-	 if (n.getBody() == null) symbol_mods |= Modifier.ABSTRACT;
+         symbol_mods |= Modifier.PUBLIC;
+         if (n.getBody() == null) symbol_mods |= Modifier.ABSTRACT;
        }
     }
 
@@ -991,7 +992,7 @@ private static class MethodSymbol extends JcompSymbol {
 
 
 
-private static class KnownMethod extends JcompSymbol {
+private static class BinaryMethod extends JcompSymbol {
 
    private String method_name;
    private JcompType method_type;
@@ -1000,13 +1001,11 @@ private static class KnownMethod extends JcompSymbol {
    private JcompType class_type;
    private boolean is_generic;
 
-   KnownMethod(String nm,JcompType typ,JcompType cls,int acc,List<JcompType> excs,boolean gen) {
+   BinaryMethod(String nm,JcompType typ,JcompType cls,int acc,List<JcompType> excs,boolean gen) {
       method_name = nm;
       method_type = typ;
       access_flags = acc;
       if (excs == null) excs = Collections.emptyList();
-      if (nm.startsWith("<cl") && (cls.isCompiledType() || cls.isUndefined()))
-         System.err.println("KNOWN METHOD IN UNKNOWN CLASS");
       declared_exceptions = excs;
       class_type = cls;
       is_generic = gen;
@@ -1017,7 +1016,7 @@ private static class KnownMethod extends JcompSymbol {
       return class_type.getName() + "." + method_name;
    }
    @Override public JcompType getType() 		{ return method_type; }
-   @Override public boolean isKnown()			{ return true; }
+   @Override public boolean isBinarySymbol()		{ return true; }
    @Override public boolean isMethodSymbol()		{ return true; }
    @Override public boolean isStatic()			{ return (access_flags & Modifier.STATIC) != 0; }
    @Override public boolean isAbstract()		{ return (access_flags & Modifier.ABSTRACT) != 0; }
@@ -1033,7 +1032,7 @@ private static class KnownMethod extends JcompSymbol {
    @Override JcompSymbol parameterize(JcompTyper typer,JcompType ptype,List<JcompType> params) {
       JcompType jty = JcompGenerics.deriveMethodType(typer,method_type,class_type,params);
       if (jty == null || jty == method_type) return this;
-      KnownMethod km = new KnownMethod(method_name,jty,ptype,access_flags,declared_exceptions,is_generic);
+      BinaryMethod km = new BinaryMethod(method_name,jty,ptype,access_flags,declared_exceptions,is_generic);
       return km;
     }
    

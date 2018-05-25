@@ -18,7 +18,7 @@
  *										 *
  ********************************************************************************/
 
-/* SVN: $Id: JcompProjectImpl.java,v 1.11 2017/12/20 20:37:09 spr Exp $ */
+/* SVN: $Id: JcompProjectImpl.java,v 1.12 2018/02/21 16:19:07 spr Exp $ */
 
 
 
@@ -74,6 +74,7 @@ void clear()
    all_types = null;
    resolve_typer = null;
    is_sorted = false;
+   base_context = null;
 }
 
 

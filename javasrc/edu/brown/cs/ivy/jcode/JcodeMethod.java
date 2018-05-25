@@ -162,6 +162,11 @@ public boolean isPrivate()
    return Modifier.isPrivate(access);
 }
 
+public boolean isPublic()
+{
+   return Modifier.isPublic(access);
+}
+
 
 public boolean isSynchronized()
 {

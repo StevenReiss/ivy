@@ -159,7 +159,7 @@ protected JcompType getAsmType(JcompTyper typer,Type t)
       njt = typer.findSystemType("java.lang.Object");
     }
 
-   return typer.findSystemType(tnm);
+   return njt;
 }
 
 

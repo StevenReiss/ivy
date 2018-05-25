@@ -175,6 +175,34 @@ public static void drawText(String lbl,Graphics2D g,Rectangle2D box)
 
 
 
+public static void drawTextRight(String lbl,Graphics2D g,Rectangle2D box)
+{
+   if (lbl == null) return;
+   
+   Font f = g.getFont();
+   
+   FontRenderContext ctx = g.getFontRenderContext();
+   LineMetrics lm = f.getLineMetrics(lbl,ctx);
+   Rectangle2D rc = f.getStringBounds(lbl,ctx);
+   
+   double s0 = box.getWidth() / rc.getWidth();
+   double s1 = box.getHeight() / rc.getHeight();
+   if (s0 > s1) s0 = s1;
+   if (s0 > 1) s0 = 1;
+   if (s0 < 0.01) return;
+   float fz = f.getSize2D() * ((float) s0);
+   Font f1 = f.deriveFont(fz);
+   
+   double xp = box.getX() + (box.getWidth() - rc.getWidth() * s0);
+   double yp = box.getY() + (box.getHeight() - rc.getHeight() * s0) / 2 + lm.getAscent() * s0;
+   
+   g.setFont(f1);
+   g.drawString(lbl,(float) xp,(float) yp);
+   g.setFont(f);
+}
+
+
+
 public static void drawText(String lbl,Graphics2D g,double x,double y,double w,double h)
 {
    drawText(lbl,g,new Rectangle2D.Double(x,y,w,h));

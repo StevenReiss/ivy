@@ -128,6 +128,13 @@ JcompScopeFixed()
       ms = new ArrayList<JcompSymbol>();
       method_names.put(js.getName(),ms);
     }
+   if (ms.size() > 200) {
+      System.err.println("Number of methods for " + js.getName() + " = " + ms.size());
+      if (js.getDefinitionNode() != null) {
+	 System.err.println("   FOR: " + js.getDefinitionNode());
+       }
+    }
+
    ms.add(js);
 }
 
@@ -159,16 +166,16 @@ JcompScopeFixed()
 @Override JcompSymbol lookupExactMethod(String id,JcompType aty)
 {
    Collection<JcompSymbol> ljs;
-   
+
    ljs = method_names.get(id);
    if (ljs != null) ljs = new ArrayList<JcompSymbol>(ljs);
-   
+
    if (ljs != null) {
       for (JcompSymbol js : ljs) {
 	 if (aty.equals(js.getType())) return js;
        }
     }
-   
+
    return null;
 }
 
@@ -177,11 +184,26 @@ JcompScopeFixed()
 {
    List<JcompSymbol> rslt = null;
 
+   if (id == null) {
+      Set<JcompSymbol> r2 = new HashSet<>();
+      for (String s : method_names.keySet()) {
+	 List<JcompSymbol> r1 = lookupStatics(s);
+	 if (r1 != null) r2.addAll(r1);
+       }
+      for (String s : var_names.keySet()) {
+	 List<JcompSymbol> r1 = lookupStatics(s);
+	 if (r1 != null) r2.addAll(r1);
+       }
+      if (r2.size() == 0) return null;
+      rslt = new ArrayList<>(r2);
+      return rslt;
+    }
+
    Collection<JcompSymbol> ljs = method_names.get(id);
    if (ljs != null) {
       for (JcompSymbol js : ljs) {
 	 if (js != null && js.isStatic()) {
-	    if (rslt == null) rslt = new ArrayList<JcompSymbol>();
+	    if (rslt == null) rslt = new ArrayList<>();
 	    rslt.add(js);
 	  }
        }
@@ -189,7 +211,7 @@ JcompScopeFixed()
 
    JcompSymbol js = var_names.get(id);
    if (js != null && js.isStatic()) {
-      if (rslt == null) rslt = new ArrayList<JcompSymbol>();
+      if (rslt == null) rslt = new ArrayList<>();
       rslt.add(js);
     }
 

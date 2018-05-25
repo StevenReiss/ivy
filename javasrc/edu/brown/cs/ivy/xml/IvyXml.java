@@ -1559,27 +1559,27 @@ private static class XmlParser {
    XmlParser(boolean ns) throws Exception {
       DocumentBuilderFactory dbf = null;
       try {
-	 dbf = DocumentBuilderFactory.newInstance();
+         dbf = DocumentBuilderFactory.newInstance();
        }
       catch (Exception e) {
-	 System.err.println("IVY XML: Problem creating document builder factory: " + e);
-	 throw e;
+         System.err.println("IVY XML: Problem creating document builder factory: " + e);
+         throw e;
        }
       dbf.setValidating(false);
       // dbf.setXIncludeAware(false);
       dbf.setNamespaceAware(ns);
       dbf.setIgnoringElementContentWhitespace(true);
-
+   
       try {
-	 System.setProperty("entityExpansionLimit","100000000");
+         System.setProperty("entityExpansionLimit","100000000");
        }
       catch (Throwable e) { }
       try {
-	 parser_object = dbf.newDocumentBuilder();
+         parser_object = dbf.newDocumentBuilder();
        }
       catch (ParserConfigurationException e) {
-	 System.err.println("IvyXML: Problem creating java xml parser: " + e.getMessage());
-	 System.exit(1);
+         System.err.println("IvyXML: Problem creating java xml parser: " + e.getMessage());
+         System.exit(1);
        }
     }
 

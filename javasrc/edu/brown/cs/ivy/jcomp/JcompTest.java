@@ -574,6 +574,7 @@ public void jcompTest27() throws Exception
 
 
 
+
 /********************************************************************************/
 /*										*/
 /*	Source from a string							*/

@@ -1053,7 +1053,6 @@ private void handleException(ValueBase s0,MethodBase cm)
 
 private boolean checkExceptions(FlowQueue wq)
 {
-   // TODO : make this independent of BYTE CODE
    MethodBase cm = wq.getMethod();
    BT_CodeAttribute code = cm.getCode();
    BT_ExceptionTableEntryVector exv = code.exceptions;

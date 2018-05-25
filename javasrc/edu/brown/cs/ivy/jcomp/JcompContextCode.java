@@ -306,7 +306,7 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
       if (jc.superName != null) {
 	 JcompType sty = getAsmTypeName(typer,jc.superName);
 	 if (sty == null) {
-	    System.err.println("SUPER TYPE IS UNKNOWN");
+	    System.err.println("SUPER TYPE IS UNKNOWN IN CODE: " + jc.superName);
 	  }
 	 if (sty != null) jt.setSuperType(sty);
        }
@@ -329,7 +329,7 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
 private JcompSymbol createField(JcompTyper typer,JcodeField jf)
 {
    JcompType fty = getAsmType(typer,jf.desc);
-   return JcompSymbol.createKnownField(jf.getName(),fty,
+   return JcompSymbol.createBinaryField(jf.getName(),fty,
 	 JcompControl.convertType(typer,jf.getDeclaringClass()),jf.access);
 }
 
@@ -351,7 +351,7 @@ private JcompSymbol createMethod(JcompTyper typer,JcodeMethod jm)
       excs.add(JcompControl.convertType(typer,jdt));
     }
 
-   return JcompSymbol.createKnownMethod(jm.getName(),mt,ct,jm.access,excs,gen);
+   return JcompSymbol.createBinaryMethod(jm.getName(),mt,ct,jm.access,excs,gen);
 }
 
 

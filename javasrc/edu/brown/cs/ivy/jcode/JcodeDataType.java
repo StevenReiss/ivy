@@ -330,9 +330,11 @@ public boolean isDerivedFrom(JcodeDataType bdt)
 
 
 
-Collection<JcodeDataType> getChildTypes()
+synchronized Collection<JcodeDataType> getChildTypes()
 {
-   return child_types;
+   if (child_types == null) return null;
+   
+   return new ArrayList<JcodeDataType>(child_types);
 }
 
 

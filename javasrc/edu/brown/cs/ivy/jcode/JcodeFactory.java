@@ -40,6 +40,7 @@ import java.util.*;
 import java.io.*;
 import java.util.jar.*;
 import java.util.concurrent.*;
+import java.util.function.Predicate;
 
 
 public class JcodeFactory implements JcodeConstants
@@ -77,7 +78,7 @@ private static int              thread_counter = 0;
 
 public JcodeFactory()
 {
-   this(2);
+   this(Math.max(1,Runtime.getRuntime().availableProcessors()/2));
 }
 
 
@@ -87,8 +88,8 @@ public JcodeFactory(int nth)
    known_classes = new HashMap<String,JcodeClass>();
    known_methods = new HashMap<String,JcodeMethod>();
    known_fields = new HashMap<String,JcodeField>();
-   static_map = new HashMap<Type,JcodeDataType>();
-   name_map = new HashMap<String,JcodeDataType>();
+   static_map = new ConcurrentHashMap<Type,JcodeDataType>();
+   name_map = new ConcurrentHashMap<String,JcodeDataType>();
    jname_map = new HashMap<String,JcodeDataType>();
    path_set = new HashSet<String>();
 
@@ -109,6 +110,23 @@ public JcodeFactory(int nth)
 }
 
 
+public void shutDown()
+{
+   if (work_holder != null) {
+      work_holder.shutdownNow();
+      work_holder.reset();
+      work_holder = null;
+    }
+   class_map = null;
+   known_classes = null;
+   known_methods = null;
+   known_fields = null;
+   work_list = null;
+   path_set = null;
+   static_map = null;
+   name_map = null;
+   jname_map = null;
+}
 
 private void definePrimitive(String j,String n,Type t)
 {
@@ -200,7 +218,32 @@ public JcodeClass findKnownClass(String name)
 
 public Collection<JcodeClass> getAllClasses()
 {
-   HashSet<JcodeClass> rslt = new HashSet<JcodeClass>(known_classes.values());
+   HashSet<JcodeClass> rslt = new HashSet<>(known_classes.values());
+   return rslt;
+}
+
+
+public Collection<JcodeClass> getAllPossibleClasses(String filter)
+{
+   HashSet<JcodeClass> rslt = new HashSet<>();
+   for (String s : class_map.keySet()) {
+      if (filter != null && !s.startsWith(filter)) continue;
+      JcodeClass jc = findKnownClass(s);
+      if (jc != null) rslt.add(jc);
+    }
+   return rslt;
+}
+
+
+
+public Collection<JcodeClass> getAllPossibleClasses(Predicate<String> filter)
+{
+   HashSet<JcodeClass> rslt = new HashSet<>();
+   for (String s : class_map.keySet()) {
+      if (!filter.test(s)) continue;
+      JcodeClass jc = findKnownClass(s);
+      if (jc != null) rslt.add(jc);
+    }
    return rslt;
 }
 
@@ -334,18 +377,16 @@ public JcodeDataType findNamedType(String s)
 {
    JcodeDataType bdt = null;
 
-   synchronized (static_map) {
-      bdt = name_map.get(s);
-      if (bdt != null) return bdt;
-      if (s.endsWith("[]")) {
-	 s = s.substring(0,s.length()-2);
-	 bdt = findNamedType(s);
-	 bdt = bdt.getArrayType();
-       }
-      else {
-	 Type t = Type.getObjectType(s);
-	 if (t != null) bdt = createDataType(t);
-       }
+   bdt = name_map.get(s);
+   if (bdt != null) return bdt;
+   if (s.endsWith("[]")) {
+      s = s.substring(0,s.length()-2);
+      bdt = findNamedType(s);
+      bdt = bdt.getArrayType();
+    }
+   else {
+      Type t = Type.getObjectType(s);
+      if (t != null) bdt = createDataType(t);
     }
 
    return bdt;
@@ -356,12 +397,10 @@ public JcodeDataType findJavaType(String s)
 {
    JcodeDataType bdt = null;
 
-   synchronized (static_map) {
-      bdt = jname_map.get(s);
-      if (bdt != null) return bdt;
-      Type t = Type.getType(s);
-      if (t != null) bdt = createDataType(t);
-    }
+   bdt = jname_map.get(s);
+   if (bdt != null) return bdt;
+   Type t = Type.getType(s);
+   if (t != null) bdt = createDataType(t);
 
    return bdt;
 }
@@ -382,11 +421,9 @@ JcodeDataType findDataType(Type t)
 {
    JcodeDataType bdt = null;
 
-   synchronized (static_map) {
-      bdt = static_map.get(t);
-      if (bdt == null) {
-	 bdt = createDataType(t);
-       }
+   bdt = static_map.get(t);
+   if (bdt == null) {
+      bdt = createDataType(t);
     }
 
    return bdt;
@@ -396,13 +433,11 @@ JcodeDataType findDataType(Type t)
 
 private JcodeDataType createDataType(Type t)
 {
-   synchronized (static_map) {
-      JcodeDataType bdt = new JcodeDataType(t,this);
-      static_map.put(t,bdt);
-      jname_map.put(t.getDescriptor(),bdt);
-      name_map.put(t.getClassName(),bdt);
-      return bdt;
-    }
+   JcodeDataType bdt = new JcodeDataType(t,this);
+   JcodeDataType obdt = static_map.putIfAbsent(t,bdt);
+   if (obdt != null) return obdt;
+   if (t.getClassName() != null) name_map.put(t.getClassName(),bdt);
+   return bdt;
 }
 
 

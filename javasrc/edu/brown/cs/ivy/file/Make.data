@@ -11,11 +11,12 @@ PACKAGE= file
 
 
 SFILES= \
+	ConcurrentHashSet.java \
 	IvyDatabase.java \
 	IvyElapsedTime.java \
 	IvyFile.java \
 	IvyFormat.java \
-
-
-
+	IdentityHashSet.java \
+	IvyFileLocker.java \
+	Pair.java \
 

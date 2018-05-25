@@ -721,7 +721,7 @@ private static class Attribute implements AutomataProperty {
    if (!IvyXml.isElement(root,rootname)) root = IvyXml.getElementByTag(root,rootname);
    if (root == null) return false;
 
-   /* XXX we need to do this such that we can recover from failure */
+   /* we need to do this such that we can recover from failure */
    pe.getEditModel().clearValues();
    pe.getEditModel().clear();
 
