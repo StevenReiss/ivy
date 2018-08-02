@@ -75,7 +75,11 @@ import edu.brown.cs.ivy.xml.IvyXmlWriter;
 import com.ibm.jikesbt.BT_Class;
 import com.ibm.jikesbt.BT_Field;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class SourceFactory implements JflowConstants
@@ -99,7 +103,7 @@ private Map<BT_Class,SourceBase> mutable_map;
 private Map<BT_Class,List<SourceLocal>> local_map;
 
 
-private static Map<BT_Class,Map<BT_Class,Boolean>> compat_map = new HashMap<BT_Class,Map<BT_Class,Boolean>>();
+private static Map<BT_Class,Map<BT_Class,Boolean>> compat_map = new HashMap<>();
 
 
 
@@ -113,12 +117,12 @@ public SourceFactory(FlowMaster jm)
 {
    jflow_master = jm;
    program_return = null;
-   thread_map = new HashMap<String,SourceBase>();
-   proto_map = new HashMap<ProtoBase,SourceProto>();
-   string_map = new HashMap<String,SourceBase>();
-   fixed_map = new HashMap<BT_Class,SourceBase>();
-   mutable_map = new HashMap<BT_Class,SourceBase>();
-   local_map = new HashMap<BT_Class,List<SourceLocal>>();
+   thread_map = new HashMap<>();
+   proto_map = new HashMap<>();
+   string_map = new HashMap<>();
+   fixed_map = new HashMap<>();
+   mutable_map = new HashMap<>();
+   local_map = new HashMap<>();
 }
 
 

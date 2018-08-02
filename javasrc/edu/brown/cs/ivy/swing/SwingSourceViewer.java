@@ -98,7 +98,23 @@
 package edu.brown.cs.ivy.swing;
 
 import javax.swing.JTextPane;
-import javax.swing.text.*;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.BoxView;
+import javax.swing.text.ComponentView;
+import javax.swing.text.EditorKit;
+import javax.swing.text.Element;
+import javax.swing.text.IconView;
+import javax.swing.text.LabelView;
+import javax.swing.text.ParagraphView;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+import javax.swing.text.StyledEditorKit;
+import javax.swing.text.TabSet;
+import javax.swing.text.TabStop;
+import javax.swing.text.View;
+import javax.swing.text.ViewFactory;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -106,7 +122,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class SwingSourceViewer extends JTextPane implements SwingColors
@@ -261,7 +279,7 @@ public int getLineEndOffset(int ln) throws BadLocationException
 
 public int getLineAt(int pos)
 {
-   int v = Collections.binarySearch(line_map,new Integer(pos));
+   int v = Collections.binarySearch(line_map,Integer.valueOf(pos));
    if (v < 0) v = -v-2;
    return v;
 }
@@ -289,13 +307,13 @@ private void setupLineMap()
 {
    line_map = new ArrayList<Integer>();
    String s = getText();
-   line_map.add(new Integer(0));
+   line_map.add(Integer.valueOf(0));
    CharacterIterator ci = new StringCharacterIterator(s);
 
    int delta = 0;
    for (char c = ci.first(); c != CharacterIterator.DONE; c = ci.next()) {
       if (c == '\n') {
-	 line_map.add(new Integer(ci.getIndex()+1-delta));
+	 line_map.add(Integer.valueOf(ci.getIndex()+1-delta));
        }
       else if (c == '\r') ++delta;
     }

@@ -64,9 +64,18 @@ package edu.brown.cs.ivy.jflow.flow;
 import edu.brown.cs.ivy.jflow.JflowConstants;
 import edu.brown.cs.ivy.jflow.JflowValue;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_Opcodes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 
@@ -159,7 +168,7 @@ void mergeState(StateBase st,int ino)
       if (ost == null) return;			     // no change
     }
    state_map.put(ins,ost);
-   work_list.addFirst(new Integer(ino));
+   work_list.addFirst(Integer.valueOf(ino));
 }
 
 
@@ -168,7 +177,7 @@ void mergeState(StateBase st,int ino)
 void lookAt(BT_Ins ins) 		{ lookAt(ins_vector.indexOf(ins)); }
 
 void lookAt(int ino) {
-   if (ino >= 0 && getState(ino) != null) work_list.addLast(new Integer(ino));
+   if (ino >= 0 && getState(ino) != null) work_list.addLast(Integer.valueOf(ino));
 }
 
 

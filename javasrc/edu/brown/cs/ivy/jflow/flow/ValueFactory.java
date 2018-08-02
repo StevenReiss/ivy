@@ -65,12 +65,18 @@
 package edu.brown.cs.ivy.jflow.flow;
 
 
-import edu.brown.cs.ivy.jflow.*;
+import edu.brown.cs.ivy.jflow.JflowConstants;
+import edu.brown.cs.ivy.jflow.JflowFlags;
+import edu.brown.cs.ivy.jflow.JflowValue;
 
 import com.ibm.jikesbt.BT_Class;
 import com.ibm.jikesbt.BT_Field;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+import java.util.WeakHashMap;
 
 
 

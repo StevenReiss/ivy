@@ -77,7 +77,9 @@ package edu.brown.cs.ivy.petal;
 
 import edu.brown.cs.ivy.swing.SwingEventListenerList;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 

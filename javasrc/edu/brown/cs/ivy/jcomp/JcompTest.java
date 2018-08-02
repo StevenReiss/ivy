@@ -3,12 +3,12 @@ package edu.brown.cs.ivy.jcomp;
 import edu.brown.cs.ivy.file.IvyFile;
 import edu.brown.cs.ivy.jcode.JcodeFactory;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class JcompTest {
 
@@ -570,6 +570,22 @@ public void jcompTest27() throws Exception
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test27",proj);
    Assert.assertEquals(0,ct);
+}
+
+
+
+
+@Test
+public void jcompTest28() throws Exception
+{
+   File f28 = new File("/pro/ivy/jcomp/src/test28");
+   String cnts = IvyFile.loadFile(f28);
+   StringSource s28 = new StringSource("test28",cnts);
+   List<JcompSource> srcs = Collections.singletonList(s28);
+   String jar = "/pro/ivy/jcomp/src/test28.jar";
+   JcompProject proj = jcomp_control.getProject(jar,srcs);
+   int ct = showMessages("test28",proj);
+   Assert.assertEquals(8,ct);
 }
 
 

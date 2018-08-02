@@ -29,7 +29,12 @@ import edu.brown.cs.ivy.jcode.JcodeDataType;
 import edu.brown.cs.ivy.jcode.JcodeFactory;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 
 
@@ -71,6 +76,15 @@ public JcompControl()
 {
    semantic_map = new WeakHashMap<JcompSource,JcompFile>();
    base_context = new JcompContextAsm(null);
+   system_typer = new JcompTyper(base_context);
+   android_context = null;
+}
+
+
+public JcompControl(JcodeFactory jf)
+{
+   semantic_map = new WeakHashMap<JcompSource,JcompFile>();
+   base_context = new JcompContextCode(jf);
    system_typer = new JcompTyper(base_context);
    android_context = null;
 }

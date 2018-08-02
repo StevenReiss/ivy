@@ -34,13 +34,35 @@
 
 package edu.brown.cs.ivy.jcode;
 
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Type;
 
-import java.util.*;
-import java.io.*;
-import java.util.jar.*;
-import java.util.concurrent.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 
 public class JcodeFactory implements JcodeConstants
@@ -66,7 +88,7 @@ private Map<String,JcodeDataType> jname_map;
 
 private int			num_threads;
 
-private static int              thread_counter = 0;
+private static int		thread_counter = 0;
 
 
 
@@ -128,12 +150,16 @@ public void shutDown()
    jname_map = null;
 }
 
+
+
 private void definePrimitive(String j,String n,Type t)
 {
    JcodeDataType jdt = new JcodeDataType(t,this);
    if (j != null) jname_map.put(j,jdt);
    if (n != null) name_map.put(n,jdt);
 }
+
+
 
 
 /********************************************************************************/
@@ -164,8 +190,8 @@ public void load()
 
 public JcodeClass findClass(String name)
 {
-   if (name == null) return null; 
-   
+   if (name == null) return null;
+
    JcodeClass jdt = known_classes.get(name);
    if (jdt != null) return jdt;
    for (String anm = name; anm.contains("."); ) {
@@ -179,7 +205,7 @@ public JcodeClass findClass(String name)
       work_list.add(name);
     }
    loadClasses();
-   
+
    return known_classes.get(name);
 }
 
@@ -188,13 +214,13 @@ public JcodeClass findClass(String name)
 
 public JcodeClass findKnownClass(String name)
 {
-   if (name == null) return null; 
+   if (name == null) return null;
    String ldname = null;
-   
+
    JcodeClass jdt = known_classes.get(name);
    if (jdt != null) return jdt;
    if (class_map.containsKey(name)) ldname = name;
-   
+
    for (String anm = name; anm.contains("."); ) {
       int idx = anm.lastIndexOf(".");
       anm = anm.substring(0,idx) + "$" +  anm.substring(idx+1);
@@ -202,14 +228,14 @@ public JcodeClass findKnownClass(String name)
       if (jdt != null) return jdt;
       if (ldname == null && class_map.containsKey(anm)) ldname = anm;
     }
-   
+
    if (ldname == null) return null;
-   
+
    synchronized (this) {
       work_list.add(ldname);
     }
    loadClasses();
-   
+
    return known_classes.get(name);
 }
 
@@ -276,12 +302,18 @@ private void setupClassPath()
    File jf = new File(jh);
    File jf1 = new File(jf,"lib");
    File jf3 = new File(jf,"jre");
+   File jf4 = new File(jf,"jmods");
+
    if (jf3.exists()) {
-      File jf4 = new File(jf,"lib");
-      if (jf4.exists()) jf1 = jf4;
-   }
+      File jf5 = new File(jf,"lib");
+      if (jf5.exists()) jf1 = jf5;
+    }
 
    addJavaJars(jf1);
+
+   if (jf4.exists()) {
+      addJavaJars(jf4);
+    }
 }
 
 
@@ -292,6 +324,7 @@ private void addJavaJars(File f)
    for (File f1 : f.listFiles()) {
       if (f1.isDirectory()) addJavaJars(f1);
       else if (f1.getPath().endsWith(".jar")) addClassPathEntry(f1.getPath());
+      else if (f1.getPath().endsWith(".jmod")) addClassPathModule(f1.getPath());
    }
 }
 
@@ -337,6 +370,44 @@ private void addClassPathEntry(String cpe)
        }
       catch (IOException e) { }
     }
+}
+
+
+
+private void addClassPathModule(String cpe)
+{
+   try {
+      File f = new File(cpe);
+      ZipFile zf = new ZipFile(f);
+      for (Enumeration<? extends ZipEntry> e = zf.entries(); e.hasMoreElements(); ) {
+	 ZipEntry ze = e.nextElement();
+	 String cn = ze.getName();
+	 String en = cn;
+	 if (cn.endsWith(".class")) en = cn.substring(0,cn.length()-6);
+	 else continue;
+	 if (cn.contains("module-info")) continue;
+	 if (!en.startsWith("classes/")) continue;
+	 en = en.substring(8);
+	 en = en.replace("/",".");
+	 if (!class_map.containsKey(en)) {
+	    InputStream jis = zf.getInputStream(ze);
+	    int sz = (int) ze.getSize();
+	    byte [] buf = null;
+	    if (sz > 0) {
+	       buf = new byte[sz];
+	       int ln = 0;
+	       while (ln < sz) {
+		  int ct = jis.read(buf,ln,sz-ln);
+		  ln += ct;
+		}
+	     }
+	    JcodeFileInfo fi = new JcodeFileInfo(f,cn,buf);
+	    class_map.put(en,fi);
+	  }
+       }
+      zf.close();
+    }
+   catch (IOException e) { }
 }
 
 
@@ -436,7 +507,8 @@ private JcodeDataType createDataType(Type t)
    JcodeDataType bdt = new JcodeDataType(t,this);
    JcodeDataType obdt = static_map.putIfAbsent(t,bdt);
    if (obdt != null) return obdt;
-   if (t.getClassName() != null) name_map.put(t.getClassName(),bdt);
+   if (t.getSort() != Type.METHOD && t.getClassName() != null)
+      name_map.put(t.getClassName(),bdt);
    return bdt;
 }
 
@@ -587,7 +659,7 @@ private synchronized void loadClasses()
    else if (work_list.isEmpty()) return;
    else {
       if (work_holder == null) {
-         work_holder = new LoadExecutor(num_threads);
+	 work_holder = new LoadExecutor(num_threads);
        }
       for (String s : work_list) work_holder.workOnClass(s);
       work_list.clear();
@@ -598,7 +670,7 @@ private synchronized void loadClasses()
 	     }
 	    catch (InterruptedException e) { }
 	  }
-         work_holder.reset();
+	 work_holder.reset();
        }
       // work_holder.shutdown();
       // work_holder = null;
@@ -613,7 +685,7 @@ private class LoadExecutor extends ThreadPoolExecutor implements ThreadFactory {
    private int num_active;
    private boolean work_pending;
    private ConcurrentMap<String,Object> work_items;
-   
+
 
    LoadExecutor(int nth) {
       super(nth,nth,10,TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>());
@@ -625,7 +697,7 @@ private class LoadExecutor extends ThreadPoolExecutor implements ThreadFactory {
 
    void workOnClass(String c) {
       if (work_items.putIfAbsent(c,Boolean.TRUE) != null) return;
-   
+
       LoadTask task = new LoadTask(c);
       execute(task);
     }
@@ -647,11 +719,11 @@ private class LoadExecutor extends ThreadPoolExecutor implements ThreadFactory {
       work_items.clear();
       work_pending = true;
     }
-   
+
    synchronized boolean isDone() {
       return !work_pending && num_active == 0 && getQueue().size() == 0;
     }
-   
+
    @Override public Thread newThread(Runnable r) {
       Thread t= new Thread(r,"JCODE_" + (++thread_counter));
       t.setDaemon(true);
@@ -675,52 +747,52 @@ private class LoadTask implements Runnable {
       JcodeFileInfo fi = class_map.get(load_class);
       String altname = load_class;
       if (fi == null) {
-         while (altname.contains(".")) {
-            int idx = altname.lastIndexOf(".");
-            altname = altname.substring(0,idx) + "$" + altname.substring(idx+1);
-            fi = class_map.get(altname);
-            if (fi != null) break;
-          }
+	 while (altname.contains(".")) {
+	    int idx = altname.lastIndexOf(".");
+	    altname = altname.substring(0,idx) + "$" + altname.substring(idx+1);
+	    fi = class_map.get(altname);
+	    if (fi != null) break;
+	  }
        }
-       
+
       if (fi == null) {
-         // System.err.println("JCODE: Can't find class " + load_class);
-         return;
+	 // System.err.println("JCODE: Can't find class " + load_class);
+	 return;
        }
       try {
-         JcodeClass bc = null;
-         synchronized (known_classes) {
-            if (known_classes.get(load_class) == null) {
-               bc = new JcodeClass(JcodeFactory.this,fi,true);
-               known_classes.put(load_class,bc);
-               String c1 = load_class.replace('.','/');
-               known_classes.put(c1,bc);
-               String c2 = "L" + c1 + ";";
-               known_classes.put(c2,bc);
-               if (c1.contains("$")) {
-                  String c3 = c1.replace('$','.');
-                  known_classes.put(c3,bc);
-                  String c4 = load_class.replace('$','.');
-                  known_classes.put(c4,bc);
-                }
-             }
-          }
-   
-         if (bc != null) {
-            // System.err.println("JCODE: Load class " + load_class);
-            InputStream ins = fi.getInputStream();
-            if (ins == null) {
-               System.err.println("JCODE: Can't open file for class " + load_class);
-             }
-            else {
-               ClassReader cr = new ClassReader(ins)      ;
-               cr.accept(bc,0);
-               ins.close();
-             }
-          }
+	 JcodeClass bc = null;
+	 synchronized (known_classes) {
+	    if (known_classes.get(load_class) == null) {
+	       bc = new JcodeClass(JcodeFactory.this,fi,true);
+	       known_classes.put(load_class,bc);
+	       String c1 = load_class.replace('.','/');
+	       known_classes.put(c1,bc);
+	       String c2 = "L" + c1 + ";";
+	       known_classes.put(c2,bc);
+	       if (c1.contains("$")) {
+		  String c3 = c1.replace('$','.');
+		  known_classes.put(c3,bc);
+		  String c4 = load_class.replace('$','.');
+		  known_classes.put(c4,bc);
+		}
+	     }
+	  }
+
+	 if (bc != null) {
+	    // System.err.println("JCODE: Load class " + load_class);
+	    InputStream ins = fi.getInputStream();
+	    if (ins == null) {
+	       System.err.println("JCODE: Can't open file for class " + load_class);
+	     }
+	    else {
+	       ClassReader cr = new ClassReader(ins)	  ;
+	       cr.accept(bc,0);
+	       ins.close();
+	     }
+	  }
        }
       catch (IOException e) {
-         System.err.println("JCODE: Problem reading class " + load_class);
+	 System.err.println("JCODE: Problem reading class " + load_class);
        }
     }
 
@@ -764,7 +836,7 @@ void noteClass(String nm)
       noteType(nm);
       return;
     }
-   
+
    if (work_holder != null) {
       work_holder.workOnClass(nm);
     }

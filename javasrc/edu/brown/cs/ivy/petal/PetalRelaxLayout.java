@@ -122,7 +122,9 @@ package edu.brown.cs.ivy.petal;
 
 
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -229,7 +231,7 @@ public void setDistance(double v)		{ push_distance = v; }
 	    ytot += d.height;
 	  }
 	 node_set[ct] = new Node(pnds[i]);
-	 node_map.put(pnds[i],new Integer(ct));
+	 node_map.put(pnds[i],Integer.valueOf(ct));
 	 ++ct;
        }
     }

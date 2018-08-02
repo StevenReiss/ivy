@@ -1,0 +1,15 @@
+<FAIT>
+   <METHOD NAME="edu.brown.cs.ivy.xml.IvyXml$XmlParser.parse"
+	   ARETURN="org.w3c.dom.Document"
+	   RETURN="com.sun.org.apache.xerces.internal.dom.DocumentImpl" />
+
+   <CLASS NAME="edu.brown.cs.ivy.mint.MintConstants$HostPort" />
+   <CLASS NAME='edu.brown.cs.ivy.xml.IvyXml' />
+   <CLASS NAME='edu.brown.cs.ivy.xml.IvyXmlWriter' />
+
+   <METHOD NAME="org.eclipse.jdt.core.dom.ASTParser.createAST"
+	RETURN="org.eclipse.jdt.core.dom.CompilationUnit" />
+
+</FAIT>
+
+

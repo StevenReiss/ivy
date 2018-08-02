@@ -82,10 +82,15 @@ package edu.brown.cs.ivy.jflow.flow;
 import edu.brown.cs.ivy.jflow.JflowConstants;
 import edu.brown.cs.ivy.jflow.JflowValue;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Method;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 abstract class ProtoBase implements JflowConstants

@@ -78,12 +78,23 @@ import edu.brown.cs.ivy.jflow.JflowConstants;
 import edu.brown.cs.ivy.jflow.JflowFlags;
 import edu.brown.cs.ivy.xml.IvyXml;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_Repository;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 
@@ -120,9 +131,9 @@ private List<When>	when_cases;
 private boolean 	does_exit;
 
 
-private static Map<BT_Method,MethodSpecial> special_methods = new HashMap<BT_Method,MethodSpecial>();
-private static Set<String>		    callback_names = new HashSet<String>();
-private static Set<BT_Class>		    full_classes = new HashSet<BT_Class>();
+private static Map<BT_Method,MethodSpecial> special_methods = new HashMap<>();
+private static Set<String>		    callback_names = new HashSet<>();
+private static Set<BT_Class>		    full_classes = new HashSet<>();
 
 
 
@@ -369,7 +380,7 @@ private void setupFields(CinderManager cm,Node xml)
       for (StringTokenizer tok = new StringTokenizer(ags); tok.hasMoreTokens(); ) {
 	 try {
 	    int i = Integer.parseInt(tok.nextToken());
-	    call_args.add(new Integer(i));
+	    call_args.add(Integer.valueOf(i));
 	  }
 	 catch (NumberFormatException _e) {
 	    System.err.println("JFLOW: Args contains bad value for " + method_name);

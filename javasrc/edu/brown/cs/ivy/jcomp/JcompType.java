@@ -35,10 +35,27 @@
 package edu.brown.cs.ivy.jcomp;
 
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.CastExpression;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.ParameterizedType;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.Type;
 
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -732,6 +749,7 @@ public boolean isDerivedFrom(JcompType jt)
       return false;
     }
    if (getSuperType() != null && getSuperType().isDerivedFrom(jt)) return true;
+   else if (getSuperType() == null && jt.isJavaLangObject()) return true;
    if (getInterfaces() != null) {
       for (JcompType ity : getInterfaces()) {
 	 if (ity.isDerivedFrom(jt)) return true;
@@ -1033,7 +1051,7 @@ protected List<JcompSymbol> lookupKnownStatics(JcompTyper typs,String id,JcompTy
 
    if (assoc_scope != null) rslt = assoc_scope.lookupStatics(id);
 
-   List<JcompSymbol> r1 = typs.lookupKnownStatics(getName(),id,basetype);
+   List<JcompSymbol> r1 = typs.lookupKnownStatics(getJavaTypeName(),id,basetype);
 
    if (rslt == null) rslt = r1;
    else if (r1 != null) rslt.addAll(r1);
@@ -1567,43 +1585,52 @@ private static abstract class ClassInterfaceType extends JcompType {
    @Override protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,JcompType basetype) {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
       if (js != null && id.equals("<init>") && basetype != js.getClassType()) {
-	 js = null;
+         js = null;
        }
       if (js != null && !js.isStatic() && js.getClassType() != this && getOuterType() != null &&
-	    !needsOuterClass()) {
-	 js = null;
+            !needsOuterClass()) {
+         js = null;
        }
-
+      if (js != null && !js.isStatic() && js.getClassType() != this && needsOuterClass() && getOuterType() != null) {
+         if (super_type != null && super_type != this) {
+            JcompSymbol sjs = super_type.lookupMethod(typer,id,atyps,basetype);
+            if (sjs != null) {
+               // prefer supertype method over outer method
+               js = sjs;
+             }
+          }
+       }
+   
       if (js != null) return js;
       if (super_type != null && super_type != this) {
-	 if (id == null || !id.equals("<init>"))
-	    js = super_type.lookupMethod(typer,id,atyps,basetype);
+         if (id == null || !id.equals("<init>"))
+            js = super_type.lookupMethod(typer,id,atyps,basetype);
        }
       else if (!getName().equals("java.lang.Object") && !id.equals("<init>")) {
-	 JcompType ot = typer.findType("java.lang.Object");
-	 js = ot.lookupMethod(typer,id,atyps,basetype);
+         JcompType ot = typer.findType("java.lang.Object");
+         js = ot.lookupMethod(typer,id,atyps,basetype);
        }
       if (js != null) return js;
       if (interface_types != null) {
-	 if (!isAbstract()) {
-	    for (JcompType it : interface_types) {
-	       js = it.lookupMethod(typer,id,atyps,basetype);
-	       if (js != null) return js;
-	     }
-	  }
-	 else {
-	    for (JcompType it : interface_types) {
-	       js = it.lookupMethod(typer,id,atyps,basetype);
-	       if (js != null && !js.isAbstract()) return js;
-	       else if (js != null) {
-		  return js;
-		}
-	     }
-	  }
+         if (!isAbstract()) {
+            for (JcompType it : interface_types) {
+               js = it.lookupMethod(typer,id,atyps,basetype);
+               if (js != null) return js;
+             }
+          }
+         else {
+            for (JcompType it : interface_types) {
+               js = it.lookupMethod(typer,id,atyps,basetype);
+               if (js != null && !js.isAbstract()) return js;
+               else if (js != null) {
+        	  return js;
+        	}
+             }
+          }
        }
       if (outer_type != null && (id == null || !id.equals("<init>"))) {
-	 js = outer_type.lookupMethod(typer,id,atyps,basetype);
-	 if (js != null) return js;
+         js = outer_type.lookupMethod(typer,id,atyps,basetype);
+         if (js != null) return js;
        }
       return null;
     }
@@ -1635,18 +1662,18 @@ private static abstract class ClassInterfaceType extends JcompType {
       Map<String,JcompType> rslt = super.getFields();
       Map<String,JcompType> toadd = new HashMap<String,JcompType>();
       if (super_type != null) {
-	 Map<String,JcompType> nf = super_type.getFields();
-	 if (nf != null) toadd.putAll(nf);
+         Map<String,JcompType> nf = super_type.getFields();
+         if (nf != null) toadd.putAll(nf);
        }
       if (interface_types != null) {
-	 for (JcompType jt : interface_types) {
-	    Map<String,JcompType> ntypes = jt.getFields();
-	    if (ntypes != null) toadd.putAll(ntypes);
-	  }
+         for (JcompType jt : interface_types) {
+            Map<String,JcompType> ntypes = jt.getFields();
+            if (ntypes != null) toadd.putAll(ntypes);
+          }
        }
       for (Map.Entry<String,JcompType> ent : toadd.entrySet()) {
-	 String fnm = ent.getKey();
-	 if (!rslt.containsKey(fnm)) rslt.put(fnm,ent.getValue());
+         String fnm = ent.getKey();
+         if (!rslt.containsKey(fnm)) rslt.put(fnm,ent.getValue());
        }
       return rslt;
     }
@@ -1909,13 +1936,13 @@ private static abstract class CompiledClassInterfaceType extends ClassInterfaceT
     @Override protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,JcompType basetype) {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
       if (js == null && basetype == this) {
-	 Set<JcompType> args = method_names.get(id);
-	 if (args == null) {
-	    args = new HashSet<JcompType>();
-	    method_names.put(id,args);
-	  }
-	 atyps = typer.fixJavaType(atyps);
-	 args.add(atyps);
+         Set<JcompType> args = method_names.get(id);
+         if (args == null) {
+            args = new HashSet<JcompType>();
+            method_names.put(id,args);
+          }
+         atyps = typer.fixJavaType(atyps);
+         args.add(atyps);
        }
       return js;
     }
@@ -2056,25 +2083,25 @@ private static class EnumType extends CompiledClassInterfaceType {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype);
       if (js != null) return js;
       if (id.equals("values") && atyps.getComponents().size() == 0) {
-	 if (values_method == null) {
-	    JcompType typ1 = JcompType.createArrayType(this);
-	    JcompType typ2 = JcompType.createMethodType(typ1,new ArrayList<JcompType>(),false,null);
-	    int acc = Modifier.PUBLIC | Modifier.STATIC;
-	    values_method = JcompSymbol.createBinaryMethod("values",typ2,this,acc,null,false);
-	  }
-	 return values_method;
+         if (values_method == null) {
+            JcompType typ1 = JcompType.createArrayType(this);
+            JcompType typ2 = JcompType.createMethodType(typ1,new ArrayList<JcompType>(),false,null);
+            int acc = Modifier.PUBLIC | Modifier.STATIC;
+            values_method = JcompSymbol.createBinaryMethod("values",typ2,this,acc,null,false);
+          }
+         return values_method;
        }
       else if (id.equals("valueOf")) {
-	 if (valueof_method == null) {
-	    List<JcompType> types = new ArrayList<>();
-	    types.add(typer.findSystemType("java.lang.String"));
-	    JcompType typ2 = JcompType.createMethodType(this,types,false,null);
-	    int acc = Modifier.PUBLIC | Modifier.STATIC;
-	    valueof_method = JcompSymbol.createBinaryMethod("valueOf",typ2,this,acc,null,false);
-	  }
-	 return valueof_method;
+         if (valueof_method == null) {
+            List<JcompType> types = new ArrayList<>();
+            types.add(typer.findSystemType("java.lang.String"));
+            JcompType typ2 = JcompType.createMethodType(this,types,false,null);
+            int acc = Modifier.PUBLIC | Modifier.STATIC;
+            valueof_method = JcompSymbol.createBinaryMethod("valueOf",typ2,this,acc,null,false);
+          }
+         return valueof_method;
        }
-
+   
       return null;
     }
 

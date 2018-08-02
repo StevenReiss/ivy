@@ -95,11 +95,52 @@
 package edu.brown.cs.ivy.jflow.flow;
 
 import edu.brown.cs.ivy.cinder.CinderInstrumenter;
-import edu.brown.cs.ivy.jflow.*;
+import edu.brown.cs.ivy.jflow.JflowConstants;
+import edu.brown.cs.ivy.jflow.JflowFlags;
+import edu.brown.cs.ivy.jflow.JflowMethod;
+import edu.brown.cs.ivy.jflow.JflowModelSource;
+import edu.brown.cs.ivy.jflow.JflowValue;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_ClassRefIns;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_ConstantClassIns;
+import com.ibm.jikesbt.BT_ConstantDoubleIns;
+import com.ibm.jikesbt.BT_ConstantFloatIns;
+import com.ibm.jikesbt.BT_ConstantIntegerIns;
+import com.ibm.jikesbt.BT_ConstantLongIns;
+import com.ibm.jikesbt.BT_ConstantStringIns;
+import com.ibm.jikesbt.BT_ExceptionTableEntry;
+import com.ibm.jikesbt.BT_ExceptionTableEntryVector;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_FieldRefIns;
+import com.ibm.jikesbt.BT_IIncIns;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_JumpOffsetIns;
+import com.ibm.jikesbt.BT_LoadLocalIns;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodCallSite;
+import com.ibm.jikesbt.BT_MethodRefIns;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_MethodVector;
+import com.ibm.jikesbt.BT_MultiANewArrayIns;
+import com.ibm.jikesbt.BT_NewArrayIns;
+import com.ibm.jikesbt.BT_Opcodes;
+import com.ibm.jikesbt.BT_StoreLocalIns;
+import com.ibm.jikesbt.BT_SwitchIns;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 
 
@@ -158,12 +199,12 @@ FlowControl(FlowMaster cm)
 
    start_methods = new HashSet<BT_Method>();
 
-   imethod_queue = new LinkedHashMap<MethodBase,Set<BT_Ins>>();
-   imethod_map = new HashMap<MethodBase,FlowQueue>();
+   imethod_queue = new LinkedHashMap<>();
+   imethod_map = new HashMap<>();
 
-   bad_calls = new HashSet<BT_Ins>();
+   bad_calls = new HashSet<>();
 
-   class_setup = new HashSet<BT_Class>();
+   class_setup = new HashSet<>();
    class_setup.add(BT_Class.forName("java.lang.Object"));
    class_setup.add(BT_Class.forName("java.lang.String"));
    class_setup.add(BT_Class.forName("java.lang.Thread"));
@@ -197,15 +238,15 @@ FlowControl(FlowMaster cm)
    class_setup.add(BT_Class.forName("sun.awt.X11GraphicsEnvironment"));
    class_setup.add(BT_Class.forName("sun.java2d.SunGraphicsEnvironment"));
 
-   classsetup_map = new HashMap<BT_Class,Collection<MethodBase>>();
+   classsetup_map = new HashMap<>();
 
-   staticinit_set = new HashSet<BT_Class>();
+   staticinit_set = new HashSet<>();
    staticinit_set.add(BT_Class.forName("java.lang.System"));
    staticinit_set.add(BT_Class.forName("java.lang.Class"));
-   staticinit_ran = new HashSet<BT_Class>(staticinit_set);
-   staticinit_started = new HashSet<BT_Class>(staticinit_ran);
-   static_inits = new Vector<MethodBase>();
-   staticinit_queue = new HashMap<BT_Class,Set<MethodBase>>();
+   staticinit_ran = new HashSet<>(staticinit_set);
+   staticinit_started = new HashSet<>(staticinit_ran);
+   static_inits = new Vector<>();
+   staticinit_queue = new HashMap<>();
 
    field_handler = new FlowField(jflow_master,this);
    cond_handler = new FlowConditional(jflow_master,this,field_handler);
@@ -216,7 +257,7 @@ FlowControl(FlowMaster cm)
 
    main_thread = null;
 
-   callback_set = new HashMap<String,Set<MethodBase>>();
+   callback_set = new HashMap<>();
 }
 
 

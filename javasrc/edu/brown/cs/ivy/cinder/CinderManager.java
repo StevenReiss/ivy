@@ -115,10 +115,27 @@ package edu.brown.cs.ivy.cinder;
 
 import edu.brown.cs.ivy.file.IvyFile;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_Factory;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Item;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_Repository;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 
 
@@ -209,7 +226,7 @@ public static void setClassPath(String bp,String cp)
 
 public void clear()
 {
-   class_files = new HashMap<BT_Class,String>();
+   class_files = new HashMap<>();
    BT_Repository.empty();
 }
 

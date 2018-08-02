@@ -119,12 +119,36 @@ package edu.brown.cs.ivy.cinder;
 import edu.brown.cs.ivy.xml.IvyXml;
 import edu.brown.cs.ivy.xml.IvyXmlWriter;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_ANewArrayIns;
+import com.ibm.jikesbt.BT_AttributeVector;
+import com.ibm.jikesbt.BT_BasicBlockMarkerIns;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_ClassVector;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_Item;
+import com.ibm.jikesbt.BT_LineNumberAttribute;
+import com.ibm.jikesbt.BT_Local;
+import com.ibm.jikesbt.BT_LocalVariableAttribute;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_MultiANewArrayIns;
+import com.ibm.jikesbt.BT_NewArrayIns;
+import com.ibm.jikesbt.BT_NewIns;
+import com.ibm.jikesbt.BT_Opcodes;
 
 import org.w3c.dom.Node;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 
@@ -673,9 +697,9 @@ final void setLineTable(BT_LineNumberAttribute lns)
       current_lines = null;
     }
    else  {
-      current_lines = new HashMap<BT_Ins,Integer>();
+      current_lines = new HashMap<>();
       for (int i = 0; i < lns.pcRanges.length; ++i) {
-	 current_lines.put(lns.pcRanges[i].startIns,new Integer(lns.pcRanges[i].lineNumber));
+	 current_lines.put(lns.pcRanges[i].startIns,Integer.valueOf(lns.pcRanges[i].lineNumber));
        }
     }
 }
@@ -793,7 +817,7 @@ public int findMethodId(BT_Method bm)
 
    Integer ivl = method_table.get(bm);
    if (ivl == null) {
-      ivl = new Integer(getNewId());
+      ivl = Integer.valueOf(getNewId());
       method_table.put(bm,ivl);
     }
 
@@ -812,11 +836,11 @@ public int findClassId()
 public int findClassId(BT_Class bc)
 {
    if (bc == null) return 0;
-   if (class_table == null) class_table = new HashMap<BT_Class,Integer>();
+   if (class_table == null) class_table = new HashMap<>();
 
    Integer ivl = class_table.get(bc);
    if (ivl == null) {
-      ivl = new Integer(getNewId());
+      ivl = Integer.valueOf(getNewId());
       class_table.put(bc,ivl);
     }
 
@@ -832,7 +856,7 @@ public int findBlockId(BT_Ins ins)
 
    Integer ivl = block_table.get(ins);
    if (ivl == null) {
-      ivl = new Integer(getNewId());
+      ivl = Integer.valueOf(getNewId());
       block_table.put(ins,ivl);
     }
 

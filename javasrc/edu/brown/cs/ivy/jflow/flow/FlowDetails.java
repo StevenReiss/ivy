@@ -69,12 +69,22 @@ import edu.brown.cs.ivy.jflow.JflowConstants;
 import edu.brown.cs.ivy.jflow.JflowException;
 import edu.brown.cs.ivy.xml.IvyXml;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodSignature;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 
 

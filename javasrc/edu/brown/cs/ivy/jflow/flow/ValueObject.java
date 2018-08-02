@@ -69,7 +69,11 @@ import edu.brown.cs.ivy.jflow.JflowFlags;
 import com.ibm.jikesbt.BT_Class;
 import com.ibm.jikesbt.BT_ClassVector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 
 
@@ -91,7 +95,7 @@ private Map<BT_Class,ValueBase> remove_map;
 private ValueBase	nonnull_value;
 private ValueBase	testnull_value;
 
-static private Map<BT_Class,Map<BT_Class,BT_Class>> parent_map = new HashMap<BT_Class,Map<BT_Class,BT_Class>>();
+static private Map<BT_Class,Map<BT_Class,BT_Class>> parent_map = new HashMap<>();
 
 
 

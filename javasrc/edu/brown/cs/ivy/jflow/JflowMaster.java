@@ -72,7 +72,10 @@ package edu.brown.cs.ivy.jflow;
 
 
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_Method;
 
 import java.io.File;
 import java.util.Collection;

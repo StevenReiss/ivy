@@ -63,7 +63,9 @@ import edu.brown.cs.ivy.jflow.JflowConstants;
 
 import com.ibm.jikesbt.BT_Class;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 
 

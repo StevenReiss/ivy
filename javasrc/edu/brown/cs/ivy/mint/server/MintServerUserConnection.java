@@ -73,11 +73,26 @@
 package edu.brown.cs.ivy.mint.server;
 
 
-import edu.brown.cs.ivy.mint.*;
+import edu.brown.cs.ivy.mint.MintConnect;
+import edu.brown.cs.ivy.mint.MintConstants;
+import edu.brown.cs.ivy.mint.MintLogger;
+import edu.brown.cs.ivy.mint.MintSelector;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 
 
@@ -239,11 +254,11 @@ private synchronized void processInput(String cmd,String body)
        }
       else if (c.equals(MINT_HEADER_REGISTER) && body != null) {
 	 int pid = Integer.parseInt(tok.nextToken());
-	 active_patterns.put(new Integer(pid),MintConnect.createSelector(body));
+	 active_patterns.put(Integer.valueOf(pid),MintConnect.createSelector(body));
        }
       else if (c.equals(MINT_HEADER_UNREGISTER)) {
 	 int pid = Integer.parseInt(tok.nextToken());
-	 active_patterns.remove(new Integer(pid));
+	 active_patterns.remove(Integer.valueOf(pid));
        }
       else if (c.equals(MINT_HEADER_REPLY)) {
 	 int rid = Integer.parseInt(tok.nextToken());

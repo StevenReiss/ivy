@@ -76,7 +76,9 @@ import edu.brown.cs.ivy.xml.IvyXmlWriter;
 
 import com.ibm.jikesbt.BT_Class;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 
 

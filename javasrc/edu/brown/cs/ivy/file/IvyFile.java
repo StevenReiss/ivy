@@ -126,10 +126,26 @@ package edu.brown.cs.ivy.file;
 import edu.brown.cs.ivy.exec.IvyExecQuery;
 import edu.brown.cs.ivy.exec.IvySetup;
 
-import java.io.*;
-import java.nio.file.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 public class IvyFile {
@@ -405,6 +421,21 @@ public static String loadFile(Reader fr) throws IOException
 public static void copyFile(File sf,File df) throws IOException
 {
    FileInputStream r = new FileInputStream(sf);
+   FileOutputStream w = new FileOutputStream(df);
+   byte [] buf = new byte[8192];
+   for ( ; ; ) {
+      int ln = r.read(buf);
+      if (ln <= 0) break;
+      w.write(buf,0,ln);
+    }
+   w.close();
+   r.close();
+}
+
+
+
+public static void copyFile(InputStream r,File df) throws IOException
+{
    FileOutputStream w = new FileOutputStream(df);
    byte [] buf = new byte[8192];
    for ( ; ; ) {

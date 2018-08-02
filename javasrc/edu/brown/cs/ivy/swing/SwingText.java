@@ -114,10 +114,20 @@ package edu.brown.cs.ivy.swing;
 
 
 
-import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.Action;
+import javax.swing.InputMap;
+import javax.swing.KeyStroke;
+import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.JTextComponent;
+import javax.swing.text.Keymap;
+import javax.swing.text.TextAction;
 
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.font.FontRenderContext;
@@ -262,7 +272,7 @@ public static void fixKeyBindings(JTextComponent tc)
 {
    int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-   if (mask != Event.META_MASK) return;
+   if (mask != InputEvent.META_MASK && mask != InputEvent.META_DOWN_MASK) return;
 
    Keymap k = tc.getKeymap();
    fixKeyBindings(k);
@@ -275,7 +285,7 @@ public static void fixKeyBindings(Keymap k)
 {
    int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-   if (mask != Event.META_MASK) return;
+   if (mask != InputEvent.META_MASK && mask != InputEvent.META_DOWN_MASK) return;
    
    for (KeyStroke ks : k.getBoundKeyStrokes()) {
       if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK || ks.getModifiers() == InputEvent.CTRL_MASK) {
@@ -297,7 +307,7 @@ public static void fixKeyBindings(InputMap m)
 {
    int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
-   if (mask != Event.META_MASK) return;
+   if (mask != InputEvent.META_MASK && mask != InputEvent.META_DOWN_MASK) return;
 
    for (KeyStroke ks : m.keys()) {
       if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK || ks.getModifiers() == InputEvent.CTRL_MASK) {

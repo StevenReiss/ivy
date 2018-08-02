@@ -58,7 +58,11 @@ package edu.brown.cs.ivy.jflow;
 
 
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_Method;
 
 import java.util.Set;
 

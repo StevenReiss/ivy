@@ -93,9 +93,27 @@ package edu.brown.cs.ivy.cinder;
 
 
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_AttributeVector;
+import com.ibm.jikesbt.BT_BasicBlockMarkerIns;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_FieldRefIns;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_JumpIns;
+import com.ibm.jikesbt.BT_LineNumberAttribute;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodRefIns;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_NewArrayIns;
+import com.ibm.jikesbt.BT_NewIns;
+import com.ibm.jikesbt.BT_Opcodes;
+import com.ibm.jikesbt.BT_SwitchIns;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 
 
 

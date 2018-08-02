@@ -35,12 +35,18 @@
 
 package edu.brown.cs.ivy.jcode;
 
-import org.objectweb.asm.tree.*;
-import org.objectweb.asm.*;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.tree.ClassNode;
 
 import java.io.File;
 import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 
 
@@ -67,7 +73,7 @@ private JcodeFileInfo from_file;
 
 JcodeClass(JcodeFactory bf,JcodeFileInfo fi,boolean proj)
 {
-   super(Opcodes.ASM5);
+   super(Opcodes.ASM6);
    bcode_factory = bf;
    from_file = fi;
    base_type = null;
@@ -183,6 +189,10 @@ public boolean isPublic()
    return Modifier.isPublic(access);
 }
 
+public int getModifiers()
+{
+   return access; 
+}
 
 public Collection<JcodeMethod> getMethods()
 {
@@ -353,7 +363,8 @@ public Collection<JcodeMethod> findChildMethods(String nm,String desc,boolean ch
 					    Collection<JcodeMethod> rslt)
 {
    if (rslt == null) rslt = new HashSet<JcodeMethod>();
-
+   int sz0 = rslt.size();
+   
    if (check) {
       JcodeMethod bm = findMethod(nm,desc);
       if (bm != null) rslt.add(bm);
@@ -361,11 +372,24 @@ public Collection<JcodeMethod> findChildMethods(String nm,String desc,boolean ch
 
    JcodeDataType xdt = getDataType();
    Collection<JcodeDataType> ctyps = xdt.getChildTypes();
-   if (ctyps == null) return rslt;
-
-   for (JcodeDataType dt : ctyps) {
-      JcodeClass bc = bcode_factory.findClassNode(dt.getDescriptor());
-      if (bc != null) bc.findChildMethods(nm,desc,true,rslt);
+   if (ctyps != null) {
+      for (JcodeDataType dt : ctyps) {
+         JcodeClass bc = bcode_factory.findClassNode(dt.getDescriptor());
+         if (bc != null) bc.findChildMethods(nm,desc,true,rslt);
+       }
+    }
+   
+   if (check && rslt.size() == sz0) {
+      JcodeClass sc = this;
+      while (sc.superName != null) {
+         sc = bcode_factory.findClassNode(sc.superName);
+         if (sc == null) break;
+         JcodeMethod bm = sc.findMethod(nm,desc);
+         if (bm != null) {
+            rslt.add(bm);
+            break;
+          }
+       }
     }
 
    return rslt;

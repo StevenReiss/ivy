@@ -86,13 +86,23 @@
 package edu.brown.cs.ivy.jflow;
 
 
+import edu.brown.cs.ivy.cinder.CinderManager;
 import edu.brown.cs.ivy.xml.IvyXmlWriter;
-import edu.brown.cs.ivy.cinder.*;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_ClassRefIns;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_Opcodes;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class JflowTest implements JflowConstants

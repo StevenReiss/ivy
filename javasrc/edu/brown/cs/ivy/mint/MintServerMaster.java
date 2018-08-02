@@ -126,13 +126,28 @@
 
 package edu.brown.cs.ivy.mint;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 
 
@@ -358,14 +373,6 @@ private class SocketThread extends Thread {
       MintLogger.log("MASTER: No server socket");
     }
 
-   @Override public void finalize() {
-      if (server_socket != null) {
-	 try {
-	    server_socket.close();
-	  }
-	 catch (IOException e) { }
-       }
-    }
 }	// end of subclass SocketThread
 
 

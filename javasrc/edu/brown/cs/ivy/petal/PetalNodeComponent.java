@@ -10,15 +10,22 @@
 
 package edu.brown.cs.ivy.petal;
 
-import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
+import edu.brown.cs.ivy.swing.SwingText;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import edu.brown.cs.ivy.swing.SwingText;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Polygon;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 
 public class PetalNodeComponent extends JPanel implements PetalConstants
 {

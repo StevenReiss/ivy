@@ -71,9 +71,15 @@
 
 package edu.brown.cs.ivy.petal;
 
-import edu.brown.cs.ivy.swing.*;
+import edu.brown.cs.ivy.swing.SwingMenuBar;
+import edu.brown.cs.ivy.swing.SwingRootMonitor;
+import edu.brown.cs.ivy.swing.SwingSetup;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JRootPane;
+import javax.swing.JScrollPane;
 
 import java.awt.GridLayout;
 import java.awt.Point;

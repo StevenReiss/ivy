@@ -71,7 +71,15 @@ import edu.brown.cs.ivy.jflow.JflowValue;
 import com.ibm.jikesbt.BT_Class;
 import com.ibm.jikesbt.BT_Field;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Stack;
+import java.util.Vector;
 
 
 
@@ -107,8 +115,8 @@ private ValueBase	active_thread;
 StateBase(int numlocal)
 {
    local_values = new ValueBase[numlocal];
-   stack_values = new Stack<ValueBase>();
-   field_map = new HashMap<BT_Field,ValueBase>(4);
+   stack_values = new Stack<>();
+   field_map = new HashMap<>(4);
    base_fields = null;
    state_set = null;
    return_stack = null;
@@ -144,7 +152,7 @@ StateBase cloneState()
    ns.state_set = null;
 
    ns.base_fields = base_fields;
-   ns.field_map = new HashMap<BT_Field,ValueBase>(field_map);
+   ns.field_map = new HashMap<>(field_map);
    ns.current_inits = current_inits;
    ns.active_thread = active_thread;
 
@@ -380,7 +388,7 @@ Iterator<BT_Class> getInitializations()
 void pushReturn(int nino)
 {
    if (return_stack == null) return_stack = new Stack<Integer>();
-   return_stack.push(new Integer(nino));
+   return_stack.push(Integer.valueOf(nino));
 }
 
 

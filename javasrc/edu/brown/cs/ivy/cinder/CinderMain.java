@@ -75,7 +75,14 @@ package edu.brown.cs.ivy.cinder;
 
 
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.StringTokenizer;
@@ -264,7 +271,7 @@ private void process()
 
    try {
       Class<?> c = Class.forName(patch_class);
-      CinderInstrumenter ci = (CinderInstrumenter) c.newInstance();
+      CinderInstrumenter ci = (CinderInstrumenter) c.getDeclaredConstructor().newInstance();
       if (patch_args != null) ci.setArguments(patch_args);
       patch_type.setInstrumenter(ci);
     }

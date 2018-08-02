@@ -67,9 +67,19 @@ package edu.brown.cs.ivy.jflow.flow;
 import edu.brown.cs.ivy.jflow.JflowConstants;
 import edu.brown.cs.ivy.jflow.JflowFlags;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Accessor;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_JumpOffsetIns;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_Opcodes;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 
@@ -141,7 +151,7 @@ private void trackField(BT_InsVector iv,int ino,int stkoff,BT_Method bm,ValueBas
    while (ino >= 0) {
       BT_Ins ins = iv.elementAt(ino);
 
-      Integer inov = new Integer(ino);
+      Integer inov = Integer.valueOf(ino);
       Set<Integer> offs = done.get(ins);
       if (offs == null) {
 	 offs = new HashSet<Integer>(4);

@@ -35,10 +35,27 @@
 
 package edu.brown.cs.ivy.jcode;
 
-import org.objectweb.asm.*;
-import org.objectweb.asm.tree.*;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.TypeReference;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.IincInsnNode;
+import org.objectweb.asm.tree.IntInsnNode;
+import org.objectweb.asm.tree.InvokeDynamicInsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LookupSwitchInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
+import org.objectweb.asm.tree.MultiANewArrayInsnNode;
+import org.objectweb.asm.tree.TableSwitchInsnNode;
+import org.objectweb.asm.tree.TypeAnnotationNode;
+import org.objectweb.asm.tree.TypeInsnNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 public class JcodeInstruction implements JcodeConstants
@@ -838,6 +855,32 @@ public int getStackPush()
    
    return opcode_stack_height[opc][1];
 }
+
+public List<JcodeAnnotation> getAnnotations()
+{
+   List<JcodeAnnotation> rslt = null;
+   rslt = addInstructionAnnotations(in_method.visibleTypeAnnotations,rslt);
+   rslt = addInstructionAnnotations(in_method.invisibleTypeAnnotations,rslt);
+   return rslt;
+}
+
+
+private List<JcodeAnnotation> addInstructionAnnotations(List<TypeAnnotationNode> v,
+      List<JcodeAnnotation> rslt)
+{
+   if (v == null || v.isEmpty()) return rslt;
+   for (TypeAnnotationNode tn : v) {
+      switch (tn.typeRef) {
+         case TypeReference.CAST :
+         case TypeReference.NEW :
+            break;
+         default :
+            break;
+       }
+    }
+   return rslt;
+}
+
 
 
 public int getPoppedStackDiff()

@@ -85,7 +85,10 @@ import edu.brown.cs.ivy.jflow.JflowValue;
 import com.ibm.jikesbt.BT_Class;
 import com.ibm.jikesbt.BT_Method;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 
 public class ProtoMap extends ProtoBase

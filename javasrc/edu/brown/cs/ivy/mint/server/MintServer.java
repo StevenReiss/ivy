@@ -95,12 +95,20 @@ package edu.brown.cs.ivy.mint.server;
 
 
 import edu.brown.cs.ivy.file.IvyFile;
-import edu.brown.cs.ivy.mint.*;
+import edu.brown.cs.ivy.mint.MintConnect;
+import edu.brown.cs.ivy.mint.MintConstants;
+import edu.brown.cs.ivy.mint.MintLogger;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 
 
@@ -289,7 +297,7 @@ synchronized void handleMessage(MintServerMessage msg)
    if (context_manager != null && !context_manager.handleMessage(msg)) return;
 
    int id = msg.getReplyId();
-   if (id > 0) active_messages.put(new Integer(id),msg);
+   if (id > 0) active_messages.put(Integer.valueOf(id),msg);
 
    for (MintServerConnection msc : active_connections) {
       msc.queueMessage(msg);
@@ -305,7 +313,7 @@ synchronized void handleMessage(MintServerMessage msg)
 synchronized void removeMessage(MintServerMessage msg)
 {
    int id = msg.getReplyId();
-   if (id > 0) active_messages.remove(new Integer(id));
+   if (id > 0) active_messages.remove(Integer.valueOf(id));
 }
 
 
@@ -337,7 +345,7 @@ void handleReply(int rid,String rply)
 
 private synchronized MintServerMessage getMessage(int rid)
 {
-   return active_messages.get(new Integer(rid));
+   return active_messages.get(Integer.valueOf(rid));
 }
 
 
@@ -380,17 +388,8 @@ private class SocketThread extends Thread {
 	  }
 	 catch (IOException e) { }
        }
-      System.out.println("MINT: No server socket");
     }
-
-   @Override public void finalize() {
-      if (server_socket != null) {
-	 try {
-	    server_socket.close();
-	  }
-	 catch (IOException e) { }
-       }
-    }
+   
 }	// end of subclass SocketThread
 
 

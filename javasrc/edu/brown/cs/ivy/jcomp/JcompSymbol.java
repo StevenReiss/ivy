@@ -35,13 +35,36 @@
 
 package edu.brown.cs.ivy.jcomp;
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.BooleanLiteral;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.LabeledStatement;
+import org.eclipse.jdt.core.dom.LambdaExpression;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodReference;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.NumberLiteral;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.objectweb.asm.Opcodes;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.objectweb.asm.Opcodes;
 
 
 /**
@@ -164,9 +187,9 @@ static JcompSymbol createSymbol(AbstractTypeDeclaration n)
 }
 
 
-static JcompSymbol createSymbol(JcompType type)
+static JcompSymbol createSymbol(JcompType type,int acc)
 {
-   return new AsmTypeSymbol(type);
+   return new AsmTypeSymbol(type,acc);
 }
 
 
@@ -552,34 +575,14 @@ public List<JcompAnnotation> getAnnotations()
    
    if (mods == null || mods.size() == 0) return null;
    
-   List<JcompAnnotation> rslt = null;
-   for (Object o : mods) {
-      IExtendedModifier iem = (IExtendedModifier) o;
-      if (iem.isAnnotation()) {
-         Annotation an = (Annotation) iem;
-         JcompType jt = JcompAst.getJavaType(an.getTypeName());
-         if (jt == null) continue;
-         if (rslt == null) rslt = new ArrayList<>();
-         JcompAnnotation jan = new JcompAnnotation(jt);
-         rslt.add(jan);
-         if (an.isNormalAnnotation()) {
-            NormalAnnotation na = (NormalAnnotation) an;
-            for (Object o1 : na.values()) {
-               MemberValuePair mvp = (MemberValuePair) o1;
-               String key = mvp.getName().getIdentifier();
-               Object ev = getValue(mvp.getValue());
-               jan.addValue(key,ev);
-             }
-          }
-       }
-    }
+   List<JcompAnnotation> rslt = JcompAnnotation.getAnnotations(mods);
    
    return rslt;
 }
 
 
 
-private Object getValue(Expression e)
+static Object getValue(Expression e)
 {
    switch (e.getNodeType()) {
       case ASTNode.NULL_LITERAL :
@@ -643,6 +646,7 @@ private static class BinaryField extends JcompSymbol {
    @Override public boolean isVolatile()        { return Modifier.isVolatile(access_info); }
    @Override public JcompType getClassType()	{ return class_type; }
    @Override public boolean isEnumSymbol()      { return (access_info & Opcodes.ACC_ENUM) != 0; }
+   @Override public int getModifiers()          { return access_info; }
 
    @Override public String getFullName() {
       return class_type.getName() + "." + field_name;
@@ -1092,9 +1096,11 @@ private static class TypeSymbol extends JcompSymbol {
 private static class AsmTypeSymbol extends JcompSymbol {
 
    private JcompType for_type;
+   private int access_info;
 
-   AsmTypeSymbol(JcompType type) {
+   AsmTypeSymbol(JcompType type,int acc) {
       for_type = type;
+      access_info = acc;
     }
 
    @Override public String getName() {
@@ -1111,6 +1117,7 @@ private static class AsmTypeSymbol extends JcompSymbol {
    @Override public ASTNode getDefinitionNode() 	{ return null; }
    @Override public ASTNode getNameNode()		{ return null; }
    @Override public boolean isTypeSymbol()		{ return true; }
+   @Override public int getModifiers()                  { return access_info; }
 
    @Override public String getFullName() {
       return for_type.getName();

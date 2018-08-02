@@ -35,13 +35,31 @@
 package edu.brown.cs.ivy.jcomp;
 
 import edu.brown.cs.ivy.exec.IvyExecQuery;
-import org.objectweb.asm.*;
 
-import java.io.*;
-import java.util.*;
+import org.objectweb.asm.AnnotationVisitor;
+import org.objectweb.asm.Attribute;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
 
 
 class JcompContextAsm extends JcompContext implements JcompConstants {
@@ -480,7 +498,7 @@ private class AsmClass {
                if (ijt != null) base_type.addInterface(ijt);
              }
           }
-         base_type.setDefinition(JcompSymbol.createSymbol(base_type));
+         base_type.setDefinition(JcompSymbol.createSymbol(base_type,access_info));
        }
       base_type = typer.fixJavaType(base_type);
       return base_type;
@@ -873,6 +891,9 @@ private void addClassPathEntry(File f) throws IOException
    if (f.isDirectory()) {
       base_files.add(new DirClassPathEntry(f));
     }
+   else if (f.getName().endsWith(".jmod")) {
+      base_files.add(new JmodClassPathEntry(new ZipFile(f)));
+    }
    else {
       base_files.add(new JarClassPathEntry(new JarFile(f)));
     }
@@ -917,6 +938,42 @@ private static class JarClassPathEntry extends ClassPathEntry {
       return null;
     }
 
+}	// end of inner class JarClassPathEntry
+
+
+
+private static class JmodClassPathEntry extends ClassPathEntry {
+
+   private ZipFile jmod_file;
+   
+   JmodClassPathEntry(ZipFile jf) {
+      jmod_file = jf;
+      // might want to add implied dependencies here
+    }
+   
+   @Override boolean contains(String name) {
+      String usename = "classes/" + name;
+      if (jmod_file.getEntry(usename) != null) return true;
+      return false;
+    }
+   
+   @Override InputStream getInputStream(String name) {
+      String usename = "classes/" + name;
+      ZipEntry ent = jmod_file.getEntry(usename);
+      if (ent != null) {
+         try {
+            return jmod_file.getInputStream(ent);
+          }
+         catch (ZipException e) {
+            System.err.println("JCOMP: Problem with system zip file: " + e);
+          }
+         catch (IOException e) {
+            System.err.println("JCOMP: Problem opening system jmod entry: " + e);
+          }
+       }
+      return null;
+    }
+   
 }	// end of inner class JarClassPathEntry
 
 

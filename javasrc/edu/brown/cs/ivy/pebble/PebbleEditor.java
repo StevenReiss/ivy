@@ -92,17 +92,41 @@
 package edu.brown.cs.ivy.pebble;
 
 
-import edu.brown.cs.ivy.petal.*;
-import edu.brown.cs.ivy.swing.*;
+import edu.brown.cs.ivy.petal.PetalEditor;
+import edu.brown.cs.ivy.petal.PetalLayoutMethod;
+import edu.brown.cs.ivy.petal.PetalLevelLayout;
+import edu.brown.cs.ivy.petal.PetalRelaxLayout;
+import edu.brown.cs.ivy.swing.SwingGridPanel;
+import edu.brown.cs.ivy.swing.SwingMenuBar;
+import edu.brown.cs.ivy.swing.SwingMonitoredWindow;
+import edu.brown.cs.ivy.swing.SwingRootMonitor;
+import edu.brown.cs.ivy.swing.SwingSetup;
 
-import javax.swing.*;
+import javax.swing.JCheckBox;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.text.JTextComponent;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 public class PebbleEditor implements PebbleConstants, SwingMonitoredWindow {

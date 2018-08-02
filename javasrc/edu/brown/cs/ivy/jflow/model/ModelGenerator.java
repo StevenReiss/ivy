@@ -60,13 +60,32 @@
 
 package edu.brown.cs.ivy.jflow.model;
 
-import edu.brown.cs.ivy.jflow.*;
+import edu.brown.cs.ivy.jflow.JflowConstants;
+import edu.brown.cs.ivy.jflow.JflowEvent;
+import edu.brown.cs.ivy.jflow.JflowMaster;
+import edu.brown.cs.ivy.jflow.JflowMethod;
+import edu.brown.cs.ivy.jflow.JflowModel;
+import edu.brown.cs.ivy.jflow.JflowSource;
 import edu.brown.cs.ivy.xml.IvyXmlWriter;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_ClassVector;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_Opcodes;
 
 import java.io.OutputStreamWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 
 
 

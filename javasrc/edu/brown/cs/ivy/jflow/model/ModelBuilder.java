@@ -64,11 +64,50 @@
 
 package edu.brown.cs.ivy.jflow.model;
 
-import edu.brown.cs.ivy.jflow.*;
+import edu.brown.cs.ivy.jflow.JflowConstants;
+import edu.brown.cs.ivy.jflow.JflowEvent;
+import edu.brown.cs.ivy.jflow.JflowMethod;
+import edu.brown.cs.ivy.jflow.JflowSource;
+import edu.brown.cs.ivy.jflow.JflowValue;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_ANewArrayIns;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_ClassRefIns;
+import com.ibm.jikesbt.BT_ClassVector;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_ConstantClassIns;
+import com.ibm.jikesbt.BT_ConstantDoubleIns;
+import com.ibm.jikesbt.BT_ConstantFloatIns;
+import com.ibm.jikesbt.BT_ConstantIntegerIns;
+import com.ibm.jikesbt.BT_ConstantLongIns;
+import com.ibm.jikesbt.BT_ConstantStringIns;
+import com.ibm.jikesbt.BT_ExceptionTableEntry;
+import com.ibm.jikesbt.BT_ExceptionTableEntryVector;
+import com.ibm.jikesbt.BT_FieldRefIns;
+import com.ibm.jikesbt.BT_IIncIns;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_JumpOffsetIns;
+import com.ibm.jikesbt.BT_LoadLocalIns;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodRefIns;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_MultiANewArrayIns;
+import com.ibm.jikesbt.BT_NewArrayIns;
+import com.ibm.jikesbt.BT_Opcodes;
+import com.ibm.jikesbt.BT_StoreLocalIns;
+import com.ibm.jikesbt.BT_SwitchIns;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
+import java.util.Vector;
 
 
 
@@ -373,7 +412,7 @@ void processInstruction(InsState ist)
       case opc_jsr : case opc_jsr_w :
 	 BT_JumpOffsetIns joins = (BT_JumpOffsetIns) ins;
 	 jsrs = cloneStack(jsrs);
-	 jsrs.push(new Integer(nino));
+	 jsrs.push(Integer.valueOf(nino));
 	 nino = ins_vector.indexOf(joins.target);
 	 break;
       case opc_ret :

@@ -77,7 +77,12 @@ import edu.brown.cs.ivy.jflow.JflowConstants;
 
 import com.ibm.jikesbt.BT_Class;
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 
 

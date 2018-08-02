@@ -37,9 +37,57 @@ package edu.brown.cs.ivy.jcomp;
 
 
 
-import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.CastExpression;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.ExpressionMethodReference;
+import org.eclipse.jdt.core.dom.FieldAccess;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.InstanceofExpression;
+import org.eclipse.jdt.core.dom.IntersectionType;
+import org.eclipse.jdt.core.dom.MarkerAnnotation;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.NameQualifiedType;
+import org.eclipse.jdt.core.dom.NormalAnnotation;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.ParameterizedType;
+import org.eclipse.jdt.core.dom.PrimitiveType;
+import org.eclipse.jdt.core.dom.QualifiedName;
+import org.eclipse.jdt.core.dom.QualifiedType;
+import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.SuperFieldAccess;
+import org.eclipse.jdt.core.dom.SuperMethodInvocation;
+import org.eclipse.jdt.core.dom.ThisExpression;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.TypeLiteral;
+import org.eclipse.jdt.core.dom.TypeParameter;
+import org.eclipse.jdt.core.dom.UnionType;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.WildcardType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -791,74 +839,74 @@ private class TypeSetter extends ASTVisitor {
       JcompType out = outer_type;
       JcompType jt = JcompAst.getJavaType(t);
       outer_type = jt;
-
+   
       canbe_type = true;
       visitItem(t.getSuperclassType());
       visitList(t.typeParameters());
       visitList(t.superInterfaceTypes());
       visitItem(t.getName());
       canbe_type = false;
-      if (t.modifiers().contains(Modifier.ABSTRACT)) {
-	 jt.setAbstract(true);
+      if ((t.getModifiers() & Modifier.ABSTRACT) != 0) {
+         jt.setAbstract(true); 
        }
       if (out != null && (t.getModifiers() & Modifier.STATIC) == 0 && !out.isInterfaceType()) {
-	 jt.setInnerNonStatic(true);
+         jt.setInnerNonStatic(true);
        }
-
+   
       if (type_prefix != null) nm = type_prefix + "." + nm;
       Type sty = t.getSuperclassType();
       if (sty != null) {
-	 JcompType suptyp = JcompAst.getJavaType(sty);
-	 jt.setSuperType(suptyp);
+         JcompType suptyp = JcompAst.getJavaType(sty);
+         jt.setSuperType(suptyp);
        }
       for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-	 Type ity = (Type) it.next();
-	 if (ity != null) {
-	    JcompType inttyp = JcompAst.getJavaType(ity);
-	    jt.addInterface(inttyp);
-	  }
+         Type ity = (Type) it.next();
+         if (ity != null) {
+            JcompType inttyp = JcompAst.getJavaType(ity);
+            jt.addInterface(inttyp);
+          }
        }
-
+   
       StringBuffer buf = new StringBuffer();
       if (t.typeParameters().size() > 0) {
-	 buf.append("<");
-	 for (Object o : t.typeParameters()) {
-	    TypeParameter tp = (TypeParameter) o;
-	    buf.append(tp.getName().getIdentifier());
-	    buf.append(":");
-	    if (tp.typeBounds().size() == 0) {
-	       buf.append("Ljava/lang/Object;");
-	     }
-	    else {
-	       for (Object o1 : tp.typeBounds()) {
-		  Type t1 = (Type) o1;
-		  JcompType jt1 = JcompAst.getJavaType(t1);
-		  buf.append(jt1.getJavaTypeName());
-		}
-	     }
-	  }
-	 buf.append(">");
+         buf.append("<");
+         for (Object o : t.typeParameters()) {
+            TypeParameter tp = (TypeParameter) o;
+            buf.append(tp.getName().getIdentifier());
+            buf.append(":");
+            if (tp.typeBounds().size() == 0) {
+               buf.append("Ljava/lang/Object;");
+             }
+            else {
+               for (Object o1 : tp.typeBounds()) {
+        	  Type t1 = (Type) o1;
+        	  JcompType jt1 = JcompAst.getJavaType(t1);
+        	  buf.append(jt1.getJavaTypeName());
+        	}
+             }
+          }
+         buf.append(">");
        }
       if (jt.getSuperType() != null) {
-	 buf.append(jt.getSuperType().getJavaTypeName());
+         buf.append(jt.getSuperType().getJavaTypeName());
        }
       else buf.append("Ljava/lang/Object;");
       if (jt.getInterfaces() != null) {
-	 for (JcompType ity : jt.getInterfaces()) {
-	    buf.append(ity.getJavaTypeName());
-	  }
+         for (JcompType ity : jt.getInterfaces()) {
+            buf.append(ity.getJavaTypeName());
+          }
        }
       jt.setSignature(buf.toString());
-
+   
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
-
+   
       outer_type = out;
-
+   
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-
+   
       return false;
     }
 
@@ -936,7 +984,7 @@ private class TypeSetter extends ASTVisitor {
       String nm = t.getPrimitiveTypeCode().toString().toLowerCase();
       JcompType jt = type_map.get(nm);
       if (jt == null)
-	  System.err.println("PRIMITIVE TYPE " + nm + " NOT FOUND");
+          System.err.println("PRIMITIVE TYPE " + nm + " NOT FOUND");
       setJavaType(t,jt);
     }
 
@@ -945,19 +993,19 @@ private class TypeSetter extends ASTVisitor {
       visitItem(t.getType());
       visitList(t.typeArguments());
       canbe_type = false;
-
+   
       JcompType jt0 = JcompAst.getJavaType(t.getType());
       List<JcompType> ljt = new ArrayList<JcompType>();
       for (Iterator<?> it = t.typeArguments().iterator(); it.hasNext(); ) {
-	 Type t1 = (Type) it.next();
-	 JcompType jt2 = JcompAst.getJavaType(t1);
-	 if (jt2 == null) jt2 = JcompType.createErrorType();
-	 ljt.add(jt2);
+         Type t1 = (Type) it.next();
+         JcompType jt2 = JcompAst.getJavaType(t1);
+         if (jt2 == null) jt2 = JcompType.createErrorType();
+         ljt.add(jt2);
        }
-
+   
       JcompType jt1 = jt0;
       if (ljt.size() > 0) {
-	 jt1 = JcompType.createParameterizedType(jt0,ljt,JcompTyper.this);
+         jt1 = JcompType.createParameterizedType(jt0,ljt,JcompTyper.this);
        }
       setJavaType(t,jt1);
       return false;
@@ -1032,6 +1080,7 @@ private class TypeSetter extends ASTVisitor {
       canbe_type = false;
       JcompType jt = forceType(t.getName());
       setJavaType(t,jt);
+      visitList(t.annotations());
       return false;
     }
 
@@ -1058,9 +1107,12 @@ private class TypeSetter extends ASTVisitor {
       String s = t.getName().getFullyQualifiedName();
       JcompType jt = lookupType(s);
       if (jt != null) {
-	 setJavaType(t,jt);
-	 setJavaType(t.getName(),jt);
+         setJavaType(t,jt);
+         setJavaType(t.getName(),jt);
        }
+      
+      visitList(t.annotations());
+      
       return false;
     }
 
@@ -1270,9 +1322,9 @@ private class TypeSetter extends ASTVisitor {
       if (l == null) return;
       boolean cbt = canbe_type;
       for (Iterator<?> it = l.iterator(); it.hasNext(); ) {
-	 ASTNode n = (ASTNode) it.next();
-	 n.accept(this);
-	 canbe_type = cbt;
+         ASTNode n = (ASTNode) it.next();
+         n.accept(this);
+         canbe_type = cbt;
        }
     }
 

@@ -92,10 +92,17 @@ package edu.brown.cs.ivy.exec;
 
 import edu.brown.cs.ivy.file.IvyFile;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 import java.util.jar.JarFile;
+import java.util.zip.ZipFile;
 
 public class IvyExecQuery
 {
@@ -313,6 +320,16 @@ private static void addToBasePath(File dir,List<File> rslt)
        }
       catch (IOException e) {
 	 System.err.println("S6: CONTEXT: Can't open system jar file " + dir);
+       }
+    }
+   else if (dir.getName().endsWith(".jmod")) {
+      try {
+         ZipFile zf = new ZipFile(dir);
+         rslt.add(dir);
+         zf.close();
+       }
+      catch (IOException e) {
+	 System.err.println("S6: CONTEXT: Can't open system jmod file " + dir);
        }
     }
 }

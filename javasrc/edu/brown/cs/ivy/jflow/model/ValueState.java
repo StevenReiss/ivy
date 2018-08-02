@@ -59,7 +59,12 @@ import edu.brown.cs.ivy.jflow.JflowConstants;
 
 import com.ibm.jikesbt.BT_Field;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import java.util.Vector;
 
 
 class ValueState implements JflowConstants
@@ -119,13 +124,13 @@ public ValueState cloneState()
 
    if (return_stack == null) ns.return_stack = null;
    else {
-      ns.return_stack = new Stack<Integer>();
+      ns.return_stack = new Stack<>();
       ns.return_stack.addAll(return_stack);
     }
 
    ns.state_set = null;
 
-   ns.field_map = new HashMap<BT_Field,ModelValue>(field_map);
+   ns.field_map = new HashMap<>(field_map);
    ns.active_thread = active_thread;
 
    return ns;
@@ -289,7 +294,7 @@ public boolean mergeThread(ModelValue thrd)
 public void pushReturn(int nino)
 {
    if (return_stack == null) return_stack = new Stack<Integer>();
-   return_stack.push(new Integer(nino));
+   return_stack.push(Integer.valueOf(nino));
 }
 
 

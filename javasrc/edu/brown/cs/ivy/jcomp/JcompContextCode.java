@@ -10,18 +10,18 @@
 
 package edu.brown.cs.ivy.jcomp;
 
+import edu.brown.cs.ivy.jcode.JcodeClass;
+import edu.brown.cs.ivy.jcode.JcodeDataType;
+import edu.brown.cs.ivy.jcode.JcodeFactory;
+import edu.brown.cs.ivy.jcode.JcodeField;
+import edu.brown.cs.ivy.jcode.JcodeMethod;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import edu.brown.cs.ivy.jcode.JcodeClass;
-import edu.brown.cs.ivy.jcode.JcodeDataType;
-import edu.brown.cs.ivy.jcode.JcodeFactory;
-import edu.brown.cs.ivy.jcode.JcodeField;
-import edu.brown.cs.ivy.jcode.JcodeMethod;
 
 class JcompContextCode extends JcompContext implements JcompConstants
 {
@@ -316,7 +316,7 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
 	    if (ijt != null) jt.addInterface(ijt);
 	  }
        }
-      jt.setDefinition(JcompSymbol.createSymbol(jt));
+      jt.setDefinition(JcompSymbol.createSymbol(jt,jc.getModifiers()));
       type_map.put(jc,jt);
     }
    jt = typer.fixJavaType(jt);

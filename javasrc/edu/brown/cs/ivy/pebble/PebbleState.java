@@ -79,12 +79,26 @@ package edu.brown.cs.ivy.pebble;
 
 import edu.brown.cs.ivy.petal.PetalHelper;
 import edu.brown.cs.ivy.petal.PetalNodeDefault;
-import edu.brown.cs.ivy.swing.*;
+import edu.brown.cs.ivy.swing.SwingGridPanel;
+import edu.brown.cs.ivy.swing.SwingListPanel;
+import edu.brown.cs.ivy.swing.SwingListSet;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -311,7 +325,7 @@ void reset()
 
 @Override public boolean handleMouseClick(MouseEvent evt)
 {
-   if ((evt.getModifiers() & InputEvent.BUTTON3_MASK) == 0) return false;
+   if ((evt.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK) == 0) return false;
 
    StateDialog sd = new StateDialog(this);
    sd.process((Component) evt.getSource());

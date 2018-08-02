@@ -65,11 +65,33 @@
 package edu.brown.cs.ivy.jflow.model;
 
 
-import edu.brown.cs.ivy.jflow.*;
+import edu.brown.cs.ivy.jflow.JflowConstants;
+import edu.brown.cs.ivy.jflow.JflowControl;
+import edu.brown.cs.ivy.jflow.JflowEvent;
+import edu.brown.cs.ivy.jflow.JflowMaster;
+import edu.brown.cs.ivy.jflow.JflowMethod;
+import edu.brown.cs.ivy.jflow.JflowModel;
+import edu.brown.cs.ivy.jflow.JflowSource;
+import edu.brown.cs.ivy.jflow.JflowValue;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_FieldRefIns;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_JumpOffsetIns;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodCallSite;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_Opcodes;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 
 

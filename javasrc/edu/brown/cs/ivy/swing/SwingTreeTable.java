@@ -150,12 +150,35 @@ package edu.brown.cs.ivy.swing;
 
 
 
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.table.*;
-import javax.swing.tree.*;
+import javax.swing.CellEditor;
+import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.ListSelectionModel;
+import javax.swing.LookAndFeel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeSelectionModel;
+import javax.swing.tree.TreeCellRenderer;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
@@ -455,18 +478,18 @@ private class TreeTableCellEditor extends AbstractCellEditor implements TableCel
     */
    @Override public boolean isCellEditable(EventObject e) {
       if (e instanceof MouseEvent) {
-	 for (int counter = getColumnCount() - 1; counter >= 0; counter--) {
-	    if (getColumnClass(counter) == TreeTableModel.class) {
-	       MouseEvent me = (MouseEvent)e;
-	       MouseEvent newME = new MouseEvent(tree, me.getID(),
-						    me.getWhen(), me.getModifiers(),
-						    me.getX() - getCellRect(0, counter, true).x,
-						    me.getY(), me.getClickCount(),
-						    me.isPopupTrigger());
-	       tree.dispatchEvent(newME);
-	       break;
-	     }
-	  }
+         for (int counter = getColumnCount() - 1; counter >= 0; counter--) {
+            if (getColumnClass(counter) == TreeTableModel.class) {
+               MouseEvent me = (MouseEvent)e;
+               MouseEvent newME = new MouseEvent(tree, me.getID(),
+        					    me.getWhen(), me.getModifiersEx(),
+        					    me.getX() - getCellRect(0, counter, true).x,
+        					    me.getY(), me.getClickCount(),
+        					    me.isPopupTrigger(),me.getButton());
+               tree.dispatchEvent(newME);
+               break;
+             }
+          }
        }
       return false;
     }

@@ -58,7 +58,12 @@ package edu.brown.cs.ivy.jflow.flow;
 
 import edu.brown.cs.ivy.jflow.JflowConstants;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 
 
@@ -101,8 +106,8 @@ public SourceSetFactory(FlowMaster jm)
 
 public void cleanup()
 {
-   set_table = new HashMap<BitSet,SourceSet>();
-   single_map = new HashMap<SourceBase,SourceSet>();
+   set_table = new HashMap<>();
+   single_map = new HashMap<>();
 }
 
 

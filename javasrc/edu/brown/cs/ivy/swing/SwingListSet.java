@@ -82,7 +82,10 @@ package edu.brown.cs.ivy.swing;
 import javax.swing.AbstractListModel;
 import javax.swing.ComboBoxModel;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 
 

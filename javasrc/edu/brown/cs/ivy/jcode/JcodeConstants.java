@@ -45,7 +45,7 @@ public interface JcodeConstants extends Opcodes
 
 /********************************************************************************/
 /*										*/
-/*	Other op codes (skipped in ASM5)					*/
+/*	Other op codes (skipped in ASM)					*/
 /*										*/
 /********************************************************************************/
 

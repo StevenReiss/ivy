@@ -54,7 +54,9 @@ package edu.brown.cs.ivy.jflow.flow;
 
 import edu.brown.cs.ivy.jflow.JflowConstants;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_Opcodes;
 
 import java.util.HashMap;
 import java.util.Map;

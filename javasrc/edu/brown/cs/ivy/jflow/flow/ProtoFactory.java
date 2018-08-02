@@ -73,7 +73,10 @@ import com.ibm.jikesbt.BT_Class;
 import org.w3c.dom.Node;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 
 

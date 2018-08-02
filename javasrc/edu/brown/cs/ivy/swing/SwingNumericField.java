@@ -82,7 +82,9 @@
 package edu.brown.cs.ivy.swing;
 
 import javax.swing.JTextField;
-import javax.swing.text.*;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
@@ -267,8 +269,8 @@ private static class NumericDocument extends PlainDocument {
  /*************
       try {
 	 Number n;
-	 if (int_only) n = new Integer(txt);
-	 else n = new Double(txt);
+	 if (int_only) n = Integer.valueOf(txt);
+	 else n = Double.valueOf(txt);
 	 // do this at end to make editing easier
 	 if (min_value < max_value) {
 	    if (n.doubleValue() < min_value || n.doubleValue() > max_value) ok = false;
@@ -292,16 +294,16 @@ private static class NumericDocument extends PlainDocument {
       Number n1 = null;
       try {
 	 Number n;
-	 if (int_only) n = new Integer(txt);
-	 else n = new Double(txt);
+	 if (int_only) n = Integer.valueOf(txt);
+	 else n = Double.valueOf(txt);
 
 	 if (min_value < max_value) {
-	    if (n.doubleValue() < min_value) n1 = new Double(min_value);
-	    else if (n.doubleValue() > max_value) n1 = new Double(max_value);
+	    if (n.doubleValue() < min_value) n1 = Double.valueOf(min_value);
+	    else if (n.doubleValue() > max_value) n1 = Double.valueOf(max_value);
 	  }
        }
       catch (NumberFormatException e) {
-	 n1 = new Double(dflt_value);
+	 n1 = Double.valueOf(dflt_value);
        }
       if (n1 == null) return;
       String s;

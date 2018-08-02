@@ -280,16 +280,39 @@
 
 package edu.brown.cs.ivy.xml;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Attr;
+import org.w3c.dom.CDATASection;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import java.awt.Color;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 
 public class IvyXml
@@ -883,7 +906,7 @@ static public Integer getAttrInteger(Node frm,String id)
    Attr a = (Attr) n;
 
    try {
-      return new Integer(a.getValue());
+      return Integer.valueOf(a.getValue());
     }
    catch (NumberFormatException e) { }
 
@@ -993,7 +1016,7 @@ static public Float getAttrFloat(Node frm,String id)
    Attr a = (Attr) n;
 
    try {
-      return new Float(a.getValue());
+      return Float.valueOf(a.getValue());
     }
    catch (NumberFormatException e) { }
 
@@ -1025,7 +1048,7 @@ static public Double getAttrDouble(Node frm,String id)
    Attr a = (Attr) n;
 
    try {
-      return new Double(a.getValue());
+      return Double.valueOf(a.getValue());
     }
    catch (NumberFormatException e) { }
 

@@ -65,7 +65,10 @@
 package edu.brown.cs.ivy.jflow.flow;
 
 
-import edu.brown.cs.ivy.jflow.*;
+import edu.brown.cs.ivy.jflow.JflowConstants;
+import edu.brown.cs.ivy.jflow.JflowModelSource;
+import edu.brown.cs.ivy.jflow.JflowSource;
+import edu.brown.cs.ivy.jflow.JflowValue;
 
 import com.ibm.jikesbt.BT_Class;
 import com.ibm.jikesbt.BT_Opcodes;

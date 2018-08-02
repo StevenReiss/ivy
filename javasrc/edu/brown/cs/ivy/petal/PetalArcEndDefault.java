@@ -76,7 +76,9 @@ package edu.brown.cs.ivy.petal;
 
 
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.geom.Point2D;
 
 

@@ -69,7 +69,15 @@
 
 package edu.brown.cs.ivy.swing;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JRadioButton;
+import javax.swing.JToolBar;
+import javax.swing.ToolTipManager;
 
 import java.awt.event.ActionListener;
 import java.util.HashMap;

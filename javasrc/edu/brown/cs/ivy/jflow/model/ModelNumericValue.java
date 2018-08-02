@@ -599,11 +599,11 @@ private int classLength(BT_Class c0)
 {
    if (have_range) {
       if (is_float) {
-	 if (min_fvalue == max_fvalue) return new Double(min_fvalue);
+	 if (min_fvalue == max_fvalue) return Double.valueOf(min_fvalue);
 	 if (min_fvalue > 0 || max_fvalue < 0) return ValueType.NON_ZERO;
        }
       else {
-	 if (min_value == max_value) return new Long(min_value);
+	 if (min_value == max_value) return Long.valueOf(min_value);
 	 if (min_value > 0 || max_value < 0) return ValueType.NON_ZERO;
        }
     }

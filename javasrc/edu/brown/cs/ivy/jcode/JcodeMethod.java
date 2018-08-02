@@ -36,14 +36,30 @@
 package edu.brown.cs.ivy.jcode;
 
 
-import org.objectweb.asm.tree.*;
-import org.objectweb.asm.*;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.TypeReference;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.LineNumberNode;
+import org.objectweb.asm.tree.LocalVariableAnnotationNode;
+import org.objectweb.asm.tree.LocalVariableNode;
+import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TryCatchBlockNode;
+import org.objectweb.asm.tree.TypeAnnotationNode;
 
-import java.security.*;
-
-import java.util.*;
-import java.lang.reflect.*;
+import java.lang.reflect.Modifier;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class JcodeMethod extends MethodNode
@@ -76,7 +92,7 @@ private Collection<JcodeTryCatchBlock> try_blocks;
 
 JcodeMethod(JcodeFactory bf,JcodeClass cls,int a,String n,String d,String s,String [] ex)
 {
-   super(Opcodes.ASM5,a,n,d,s,ex);
+   super(Opcodes.ASM6,a,n,d,s,ex);
    bcode_factory = bf;
    in_class = cls;
    match_name = null;

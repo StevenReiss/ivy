@@ -40,16 +40,35 @@
 
 package edu.brown.cs.ivy.swing;
 
-import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JEditorPane;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JRootPane;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTree;
+import javax.swing.SwingConstants;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLFrameHyperlinkEvent;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 
 import java.awt.BorderLayout;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Vector;
 
@@ -516,6 +535,24 @@ class Hyperactive implements HyperlinkListener {
 
 }	// end of subclass Hyperactive
 
+
+
+/********************************************************************************/
+/*										*/
+/*	Mouser class used by instances						*/
+/*										*/
+/********************************************************************************/
+
+public class Mouser extends MouseAdapter {
+
+   public void mouseClicked(MouseEvent e) {
+      if (e.getClickCount() == 2) {
+	 HelpInfo item = glossary_list.getSelectedValue();
+	 if (item != null) displayFile(item.fileName);
+       }
+    }
+
+}	// end of  inner class Mouser
 
 }	// end of class SwingHelpFrame
 

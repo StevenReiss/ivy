@@ -126,17 +126,24 @@ else
    setenv BROWN_JAVA_THREADS native_threads
    setenv BROWN_JAVA_OS $javaos
 
-   set blib = $BROWN_JAVA_HOME/jre/lib
+   if (-e $BROWN_JAVA_HOME/jre/lib) then
+      set blib = $BROWN_JAVA_HOME/jre/lib
+   else
+      set blib = $BROWN_JAVA_HOME/lib
+   endif
+
    if (-e $BROWN_JAVA_HOME/../Classes) then
       set blib = $BROWN_JAVA_HOME/../Classes
    endif
    set bx = ""
-   foreach i ($blib/*.jar)
-      if ($i !~ $blib/alt-* ) then
-	 set bx = ${bx}:$i
-      endif
-    end
-   setenv BROWN_JAVA_BOOT $bx
+   if (-e $blib) then
+      foreach i ($blib/*.jar)
+	 if ($i !~ $blib/alt-* ) then
+	    set bx = ${bx}:$i
+	 endif
+       end
+      setenv BROWN_JAVA_BOOT $bx
+   endif
 
 endif
 
@@ -173,9 +180,9 @@ if ($?BROWN_IVY_DBMS == 0) then
    endif
 endif
 
-set xxx = `echo $CLASSPATH | fgrep asm5.jar`
+set xxx = `echo $CLASSPATH | fgrep asm6.jar`
 if ( "X$xxx" == X ) then
-   setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/asm5.jar"
+   setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/asm6.jar"
 endif
 
 set xxx = `echo $CLASSPATH | fgrep javax.servlet.jar`

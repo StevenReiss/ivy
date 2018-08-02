@@ -116,11 +116,11 @@ MintMatchArguments()
 /*										*/
 /********************************************************************************/
 
-void setArgument(int idx,int v) 		{ setArgument(idx,new Integer(v)); }
+void setArgument(int idx,int v) 		{ setArgument(idx,Integer.valueOf(v)); }
 
-void setArgument(int idx,long v)		{ setArgument(idx,new Long(v)); }
+void setArgument(int idx,long v)		{ setArgument(idx,Long.valueOf(v)); }
 
-void setArgument(int idx,double v)		{ setArgument(idx,new Double(v)); }
+void setArgument(int idx,double v)		{ setArgument(idx,Double.valueOf(v)); }
 
 void setArgument(int idx,Object v)
 {
@@ -213,7 +213,7 @@ void setArgument(int idx,Object v)
    if (v instanceof Number) return ((Number) v).doubleValue();
 
    try {
-      Double d = new Double(v.toString());
+      Double d = Double.valueOf(v.toString());
       return d.doubleValue();
     }
    catch (NumberFormatException e) { }

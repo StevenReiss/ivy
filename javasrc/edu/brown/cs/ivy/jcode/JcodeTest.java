@@ -35,9 +35,10 @@
 
 package edu.brown.cs.ivy.jcode;
 
-import java.util.Collection;
+import org.junit.Assert;
+import org.junit.Test;
 
-import org.junit.*;
+import java.util.Collection;
 
 
 
@@ -80,19 +81,20 @@ public JcodeTest()
 
 @Test public void loadClasses()
 {
-   bcode_factory.findJavaType("spr.onsets.OnsetMain");
+   JcodeDataType dt = bcode_factory.findClassType("spr.onsets.OnsetMain");
+   Assert.assertNotNull(dt);
 }
 
 
 
 @Test public void lookupClass()
 {
-   JcodeDataType t1 = bcode_factory.findJavaType("java.lang.Object");
-   JcodeDataType t2 = bcode_factory.findJavaType("java.lang.Object");
-   JcodeDataType t3 = bcode_factory.findJavaType("java.lang.Object[]");
-   JcodeDataType t4 = bcode_factory.findJavaType("int");
-   JcodeDataType t5 = bcode_factory.findJavaType("void");
-   JcodeDataType t6 = bcode_factory.findJavaType("char[]");
+   JcodeDataType t1 = bcode_factory.findClassType("java.lang.Object");
+   JcodeDataType t2 = bcode_factory.findClassType("java.lang.Object");
+   JcodeDataType t3 = bcode_factory.findClassType("java.lang.Object[]");
+   JcodeDataType t4 = bcode_factory.findJavaType("I");
+   JcodeDataType t5 = bcode_factory.findJavaType("V");
+   JcodeDataType t6 = bcode_factory.findJavaType("[C");
    Assert.assertNotNull(t1);
    Assert.assertEquals(t1,t2);
    Assert.assertNotNull(t3);

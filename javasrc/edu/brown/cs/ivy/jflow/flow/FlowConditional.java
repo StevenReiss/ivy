@@ -72,7 +72,22 @@ package edu.brown.cs.ivy.jflow.flow;
 
 import edu.brown.cs.ivy.jflow.JflowConstants;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_ConstantIntegerIns;
+import com.ibm.jikesbt.BT_ConstantLongIns;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_FieldRefIns;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_JumpIns;
+import com.ibm.jikesbt.BT_JumpOffsetIns;
+import com.ibm.jikesbt.BT_LoadLocalIns;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodRefIns;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_Opcodes;
+import com.ibm.jikesbt.BT_StoreLocalIns;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -94,10 +94,17 @@
 package edu.brown.cs.ivy.mint.match;
 
 
-import edu.brown.cs.ivy.mint.*;
+import edu.brown.cs.ivy.mint.MintArguments;
+import edu.brown.cs.ivy.mint.MintConstants;
+import edu.brown.cs.ivy.mint.MintLogger;
+import edu.brown.cs.ivy.mint.MintMessage;
+import edu.brown.cs.ivy.mint.MintSelector;
 import edu.brown.cs.ivy.xml.IvyXml;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.util.HashSet;
 

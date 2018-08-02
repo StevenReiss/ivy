@@ -470,7 +470,7 @@ private int classLength(BT_Class c0)
 @Override public Object getProgramValue()
 {
    if (have_range) {
-      if (min_value == max_value) return new Long(min_value);
+      if (min_value == max_value) return Long.valueOf(min_value);
       if (min_value > 0 || max_value < 0) return ValueType.NON_ZERO;
     }
 

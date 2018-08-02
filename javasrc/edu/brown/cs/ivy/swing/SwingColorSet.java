@@ -71,10 +71,11 @@ package edu.brown.cs.ivy.swing;
 
 
 import java.awt.Color;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.io.*;
 
 
 public class SwingColorSet {

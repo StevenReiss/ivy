@@ -128,7 +128,7 @@ protected JflowMethod getMethod()		{ return for_method; }
 
    Map<BT_Ins,JflowValue> mm = data_map.get(typ);
    if (mm == null) {
-      mm = new HashMap<BT_Ins,JflowValue>();
+      mm = new HashMap<>();
       data_map.put(typ,mm);
     }
    mm.put(ins,v);

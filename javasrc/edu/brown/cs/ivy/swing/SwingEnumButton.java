@@ -69,7 +69,9 @@ package edu.brown.cs.ivy.swing;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
-import javax.swing.event.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.EventListenerList;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

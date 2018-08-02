@@ -189,19 +189,53 @@ package edu.brown.cs.ivy.swing;
 
 
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.event.*;
+import javax.swing.event.CaretListener;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.UndoableEditListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
-import javax.swing.undo.*;
+import javax.swing.undo.AbstractUndoableEdit;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoableEditSupport;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.AWTEventMulticaster;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 
 public class SwingGridPanel extends JPanel
@@ -307,7 +341,7 @@ public final void saveValues()
       Object nval = null;
       if (cmp instanceof JComboBox) {
 	 JComboBox<?> cbx = (JComboBox<?>) cmp;
-	 nval = new Integer(cbx.getSelectedIndex());
+	 nval = Integer.valueOf(cbx.getSelectedIndex());
        }
       else if (cmp instanceof JTextComponent) {
 	 JTextComponent tc = (JTextComponent) cmp;
@@ -643,6 +677,12 @@ public final <T extends Enum<?>> SwingComboBox<T> addChoice(String lbl,T v,boole
 
 
 
+/********************************************************************************/
+/*                                                                              */
+/*      Boolean buttons                                                         */
+/*                                                                              */
+/********************************************************************************/
+
 public final JCheckBox addBoolean(String lbl,boolean val,ActionListener cb)
 {
    JLabel tag = createLabel(lbl);
@@ -660,6 +700,45 @@ public final JCheckBox addBoolean(String lbl,boolean val,ActionListener cb)
 
    return cbx;
 }
+
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Button set buttons                                                      */
+/*                                                                              */
+/********************************************************************************/
+
+public final JList<String> addButtonSet(String lbl,Map<String,Boolean> values,ListSelectionListener cb)
+{
+   JLabel tag = createLabel(lbl);
+   addGBComponent(tag,0,y_count,1,1,0,0);
+   
+   String [] valarr = values.keySet().toArray(new String[values.size()]);
+   JList<String> lst = new JList<>(valarr);
+   lst.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+   for (int i = 0; i < valarr.length; ++i) {
+      if (values.get(valarr[i]) == Boolean.TRUE) {
+         lst.addSelectionInterval(i,i);
+       }
+    }
+   if (cb != null) lst.addListSelectionListener(cb);
+   lst.setOpaque(false);
+   int rows = Math.min(valarr.length,3);
+   lst.setVisibleRowCount(rows);
+   lst.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+   
+   addGBComponent(lst,1,y_count++,1,1,0,0);
+   
+   tag_map.put(lst,lbl);
+   
+   return lst;
+}
+
+
+
+
 
 
 
@@ -1344,8 +1423,8 @@ private class BrowseListener implements ActionListener {
       file_mode = md;
       if (filters == null) user_filters = null;
       else {
-	 user_filters = new ArrayList<FileFilter>();
-	 for (FileFilter ff : filters) user_filters.add(ff);
+         user_filters = new ArrayList<FileFilter>();
+         for (FileFilter ff : filters) user_filters.add(ff);
        }
     }
 

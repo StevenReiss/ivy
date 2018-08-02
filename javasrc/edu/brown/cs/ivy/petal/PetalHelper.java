@@ -79,7 +79,10 @@ package edu.brown.cs.ivy.petal;
 
 
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 

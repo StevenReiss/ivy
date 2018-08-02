@@ -35,8 +35,10 @@
 
 package edu.brown.cs.ivy.jcode;
 
-import org.objectweb.asm.tree.*;
-import java.lang.reflect.*;
+import org.objectweb.asm.tree.AnnotationNode;
+import org.objectweb.asm.tree.FieldNode;
+
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +67,7 @@ private JcodeClass	in_class;
 
 JcodeField(JcodeClass cls,int a,String n,String d,String s,Object val)
 {
-   super(ASM5,a,n,d,s,val);
+   super(ASM6,a,n,d,s,val);
 
    in_class = cls;
 }

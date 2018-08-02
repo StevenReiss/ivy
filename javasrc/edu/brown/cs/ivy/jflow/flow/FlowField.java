@@ -72,9 +72,17 @@ package edu.brown.cs.ivy.jflow.flow;
 
 import edu.brown.cs.ivy.jflow.JflowConstants;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Accessor;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_Opcodes;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 
@@ -105,7 +113,7 @@ FlowField(FlowMaster jm,FlowControl fc)
 {
    jflow_master = jm;
    flow_control = fc;
-   field_map = new HashMap<BT_Field,ValueBase>();
+   field_map = new HashMap<>();
 }
 
 

@@ -58,12 +58,25 @@ package edu.brown.cs.ivy.jflow.flow;
 
 import edu.brown.cs.ivy.jflow.JflowException;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_Opcodes;
 
 import java.io.File;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 
@@ -98,11 +111,11 @@ private Collection<SourceBase> remove_sources;
 FlowIncremental(FlowMaster jm)
 {
    jflow_master = jm;
-   class_set = new HashSet<BT_Class>();
+   class_set = new HashSet<>();
    changed_classes = null;
    changed_methods = null;
-   method_map = new HashMap<BT_Method,MethodData>();
-   field_map = new HashMap<BT_Field,FieldData>();
+   method_map = new HashMap<>();
+   field_map = new HashMap<>();
    remove_sources = null;
 }
 
@@ -149,9 +162,9 @@ void noteChanged(File f)
 	 if (cf != null && cf.endsWith(fnm)) chk = true;
        }
       if (chk) {
-	 System.err.println("CHECK " + bc + " " + dlm + " " + bc.lastModificationTime);
+	 System.err.println("Check " + bc + " " + dlm + " " + bc.lastModificationTime);
 	 if (dlm > bc.lastModificationTime) {
-	    if (changed_classes == null) changed_classes = new HashMap<BT_Class,File>();
+	    if (changed_classes == null) changed_classes = new HashMap<>();
 	    changed_classes.put(bc,f);
 	    System.err.println("ADD CHANGED " + bc);
 	  }

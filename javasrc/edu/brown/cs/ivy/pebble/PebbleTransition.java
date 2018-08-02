@@ -80,16 +80,37 @@
 package edu.brown.cs.ivy.pebble;
 
 
-import edu.brown.cs.ivy.petal.*;
-import edu.brown.cs.ivy.swing.*;
+import edu.brown.cs.ivy.petal.PetalArcDefault;
+import edu.brown.cs.ivy.petal.PetalArcEndDefault;
+import edu.brown.cs.ivy.petal.PetalLinkDefault;
+import edu.brown.cs.ivy.petal.PetalNode;
+import edu.brown.cs.ivy.petal.PetalNodeDefault;
+import edu.brown.cs.ivy.swing.SwingGridPanel;
+import edu.brown.cs.ivy.swing.SwingListPanel;
+import edu.brown.cs.ivy.swing.SwingListSet;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.Stroke;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 
 
@@ -230,7 +251,7 @@ SwingListSet<Action> getActionSet()
 
 private boolean checkTransitionDialog(MouseEvent evt)
 {
-   if ((evt.getModifiers() & InputEvent.BUTTON3_MASK) == 0) return false;
+   if ((evt.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK) == 0) return false;
 
    TransitionDialog td = new TransitionDialog(this);
    td.process((Component) evt.getSource());

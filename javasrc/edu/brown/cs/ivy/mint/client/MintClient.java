@@ -145,14 +145,35 @@
 package edu.brown.cs.ivy.mint.client;
 
 
-import edu.brown.cs.ivy.mint.*;
+import edu.brown.cs.ivy.mint.MintArguments;
+import edu.brown.cs.ivy.mint.MintConnect;
+import edu.brown.cs.ivy.mint.MintControl;
+import edu.brown.cs.ivy.mint.MintErrorHandler;
+import edu.brown.cs.ivy.mint.MintHandler;
+import edu.brown.cs.ivy.mint.MintLogger;
+import edu.brown.cs.ivy.mint.MintMaster;
+import edu.brown.cs.ivy.mint.MintMessage;
+import edu.brown.cs.ivy.mint.MintReply;
+import edu.brown.cs.ivy.mint.MintSelector;
 import edu.brown.cs.ivy.xml.IvyXml;
 
 import org.w3c.dom.Element;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -321,7 +342,7 @@ public MintClient(String id,MintSyncMode mode)
       else {
 	 rid = reply_counter++;
 	 MintMessage mm = new MintClientMessage(this,msg,rid);
-	 reply_hash.put(new Integer(rid),new ActiveInfo(mm,rply));
+	 reply_hash.put(Integer.valueOf(rid),new ActiveInfo(mm,rply));
        }
 
       server_writer.println(MINT_HEADER_SEND + " " + rid + " " + fgs);
@@ -386,7 +407,7 @@ private synchronized void handleRegister(String pattern,Element xml,MintHandler 
 
    synchronized (write_lock) {
       int pid = pat_counter++;
-      pattern_hash.put(new Integer(pid),new PatternInfo(xml,hdlr));
+      pattern_hash.put(Integer.valueOf(pid),new PatternInfo(xml,hdlr));
 
       server_writer.println(MINT_HEADER_REGISTER + " " + pid);
       server_writer.println(pattern);
@@ -758,7 +779,7 @@ private void processMessage(Object o)
       MessageInfo mi = (MessageInfo) o;
       PatternInfo pi = null;
       synchronized (write_lock) {
-	 pi = pattern_hash.get(new Integer(mi.getMessageId()));
+	 pi = pattern_hash.get(Integer.valueOf(mi.getMessageId()));
        }
       if (pi != null) {
 	 MintClientMessage msg;
@@ -768,7 +789,7 @@ private void processMessage(Object o)
     }
    else if (o instanceof ReplyInfo) {
       ReplyInfo ri = (ReplyInfo) o;
-      ActiveInfo ai = reply_hash.get(new Integer(ri.getReplyId()));
+      ActiveInfo ai = reply_hash.get(Integer.valueOf(ri.getReplyId()));
       if (ai == null) return;
       MintReply mr = ai.getReplyHandler();
       MintMessage mm = ai.getMessage();
@@ -784,7 +805,7 @@ private void processMessage(Object o)
     }
    else if (o instanceof DoneInfo) {
       DoneInfo di = (DoneInfo) o;
-      ActiveInfo ai = reply_hash.get(new Integer(di.getDoneId()));
+      ActiveInfo ai = reply_hash.get(Integer.valueOf(di.getDoneId()));
       if (ai == null) return;
       MintReply mr = ai.getReplyHandler();
       try {
@@ -794,7 +815,7 @@ private void processMessage(Object o)
 	 MintLogger.log("Problem handling reply done: " + t);
 	 t.printStackTrace();
        }
-      reply_hash.remove(new Integer(di.getDoneId()));
+      reply_hash.remove(Integer.valueOf(di.getDoneId()));
     }
 }
 

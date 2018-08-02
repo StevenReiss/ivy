@@ -96,11 +96,33 @@ package edu.brown.cs.ivy.jflow.flow;
 
 
 import edu.brown.cs.ivy.cinder.CinderManager;
-import edu.brown.cs.ivy.jflow.*;
+import edu.brown.cs.ivy.jflow.JflowMethod;
+import edu.brown.cs.ivy.jflow.JflowMethodData;
+import edu.brown.cs.ivy.jflow.JflowValue;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_ClassVector;
+import com.ibm.jikesbt.BT_CodeAttribute;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Ins;
+import com.ibm.jikesbt.BT_InsVector;
+import com.ibm.jikesbt.BT_Method;
+import com.ibm.jikesbt.BT_MethodSignature;
+import com.ibm.jikesbt.BT_Opcodes;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 
 
@@ -141,7 +163,7 @@ private Map<BT_Ins,Set<MethodBase>>	      proto_map;
 private Map<BT_Ins,FlowCallSite>	      site_map;
 private Set<BT_Ins>			      ignore_set;
 
-private static Map<BT_Method,ValueBase> native_map = new HashMap<BT_Method,ValueBase>();
+private static Map<BT_Method,ValueBase> native_map = new HashMap<>();
 
 
 
@@ -221,13 +243,13 @@ MethodBase(FlowMaster jm,BT_Method bm,int ct)
        }
     }
 
-   replace_map = new HashMap<BT_Ins,Set<JflowMethod>>(4);
-   array_map = new HashMap<BT_Ins,SourceBase>(4);
-   source_map = new HashMap<BT_Ins,SourceBase>(4);
-   modelsrc_map = new HashMap<BT_Ins,SourceBase>(4);
-   call_map = new HashMap<BT_Ins,Map<BT_Method,MethodBase>>(4);
-   proto_map = new HashMap<BT_Ins,Set<MethodBase>>(4);
-   site_map = new HashMap<BT_Ins,FlowCallSite>(4);
+   replace_map = new HashMap<>(4);
+   array_map = new HashMap<>(4);
+   source_map = new HashMap<>(4);
+   modelsrc_map = new HashMap<>(4);
+   call_map = new HashMap<>(4);
+   proto_map = new HashMap<>(4);
+   site_map = new HashMap<>(4);
    ignore_set = null;
 
    method_data = jflow_master.createMethodData(this);
@@ -632,7 +654,7 @@ public void noteCall(BT_Ins ins,MethodBase cm)
 {
    Map<BT_Method,MethodBase> m = call_map.get(ins);
    if (m == null) {
-      m = new HashMap<BT_Method,MethodBase>();
+      m = new HashMap<>();
       call_map.put(ins,m);
     }
    m.put(cm.getMethod(),cm);
@@ -718,7 +740,7 @@ public final boolean addResult(ValueBase cv,StateBase st)
    if (st != null && (for_method.isInstanceMethod() || for_method.isConstructor())) {
       ValueBase tv = st.getLocal(0);
       if (tv.isUnique()) {
-	 if (result_fields == null) result_fields = new HashMap<BT_Field,ValueBase>();
+	 if (result_fields == null) result_fields = new HashMap<>();
 	 if (FlowMaster.doDebug()) System.err.println("\tSave result fields");
 	 for (BT_Field bf : st.getKnownFields()) {
 	    ValueBase ov = result_fields.get(bf);

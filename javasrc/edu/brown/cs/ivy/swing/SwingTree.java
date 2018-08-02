@@ -87,15 +87,22 @@
 
 package edu.brown.cs.ivy.swing;
 
-import javax.swing.*;
+import javax.swing.Icon;
+import javax.swing.JTree;
+import javax.swing.ToolTipManager;
 import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.tree.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.EventListener;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Vector;
 
 
 

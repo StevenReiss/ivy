@@ -96,9 +96,22 @@ package edu.brown.cs.ivy.swing;
 
 
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.RepaintManager;
+import javax.swing.SwingUtilities;
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.EventQueue;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
@@ -351,7 +364,7 @@ private boolean checkImage(Graphics g)
 
    if (image_valid) {
       g.drawImage(draw_image,0,0,null);
-      return true;
+     return true;
     }
 
    if (!image_valid && ++paint_count > count_threshold) {

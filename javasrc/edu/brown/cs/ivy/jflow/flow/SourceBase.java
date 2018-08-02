@@ -67,12 +67,21 @@
 
 package edu.brown.cs.ivy.jflow.flow;
 
-import edu.brown.cs.ivy.jflow.*;
+import edu.brown.cs.ivy.jflow.JflowConstants;
+import edu.brown.cs.ivy.jflow.JflowModelSource;
+import edu.brown.cs.ivy.jflow.JflowSource;
+import edu.brown.cs.ivy.jflow.JflowValue;
 import edu.brown.cs.ivy.xml.IvyXmlWriter;
 
-import com.ibm.jikesbt.*;
+import com.ibm.jikesbt.BT_Class;
+import com.ibm.jikesbt.BT_Field;
+import com.ibm.jikesbt.BT_Method;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 
 

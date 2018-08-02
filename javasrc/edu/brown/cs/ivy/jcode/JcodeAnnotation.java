@@ -10,11 +10,10 @@
 
 package edu.brown.cs.ivy.jcode;
 
+import org.objectweb.asm.tree.AnnotationNode;
+
 import java.util.HashMap;
 import java.util.Map;
-
-
-import org.objectweb.asm.tree.AnnotationNode;
 
 public class JcodeAnnotation implements JcodeConstants
 {

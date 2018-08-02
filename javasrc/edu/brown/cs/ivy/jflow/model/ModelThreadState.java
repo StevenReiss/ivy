@@ -56,10 +56,17 @@
 package edu.brown.cs.ivy.jflow.model;
 
 
-import edu.brown.cs.ivy.jflow.*;
+import edu.brown.cs.ivy.jflow.JflowEvent;
+import edu.brown.cs.ivy.jflow.JflowMethod;
+import edu.brown.cs.ivy.jflow.JflowModel;
+import edu.brown.cs.ivy.jflow.JflowSource;
 import edu.brown.cs.ivy.xml.IvyXmlWriter;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 
 

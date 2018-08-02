@@ -66,7 +66,11 @@ import edu.brown.cs.ivy.jflow.JflowFlags;
 import com.ibm.jikesbt.BT_Class;
 import com.ibm.jikesbt.BT_ClassVector;
 
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 

@@ -83,12 +83,23 @@
 package edu.brown.cs.ivy.pebble;
 
 
-import edu.brown.cs.ivy.petal.*;
+import edu.brown.cs.ivy.petal.PetalArc;
+import edu.brown.cs.ivy.petal.PetalClipSet;
+import edu.brown.cs.ivy.petal.PetalModelBase;
+import edu.brown.cs.ivy.petal.PetalNode;
 
 import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Vector;
 
 
 
@@ -249,7 +260,7 @@ void normalizeAutomata()
 {
    if (mode == ARC_MODE_START && pn == null) return false;
 
-   if ((evt.getModifiers() & InputEvent.BUTTON3_MASK) == 0) return false;
+   if ((evt.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK) == 0) return false;
 
    return true;
 }

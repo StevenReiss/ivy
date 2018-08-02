@@ -38,7 +38,13 @@ package edu.brown.cs.ivy.jcomp;
 
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 class JcompScopeFixed extends JcompScope implements JcompConstants {
@@ -143,7 +149,7 @@ JcompScopeFixed()
 @Override JcompSymbol lookupMethod(String id,JcompType aty)
 {
    Collection<JcompSymbol> ljs;
-
+   
    ljs = method_names.get(id);
    if (ljs != null) ljs = new ArrayList<JcompSymbol>(ljs);
 
