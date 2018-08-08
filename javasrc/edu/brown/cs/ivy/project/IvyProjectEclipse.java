@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/project/IvyProjectEclipse.java,v 1.9 2015/11/20 15:09:25 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/project/IvyProjectEclipse.java,v 1.10 2018/08/02 15:10:38 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyProjectEclipse.java,v $
+ * Revision 1.10  2018/08/02 15:10:38  spr
+ * Fix imports.
+ *
  * Revision 1.9  2015/11/20 15:09:25  spr
  * Reformatting.
  *

@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingRangeSlider.java,v 1.9 2015/11/20 15:09:26 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingRangeSlider.java,v 1.10 2018/08/02 15:10:54 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingRangeSlider.java,v $
+ * Revision 1.10  2018/08/02 15:10:54  spr
+ * Fix imports.  Prepare for java 10.
+ *
  * Revision 1.9  2015/11/20 15:09:26  spr
  * Reformatting.
  *

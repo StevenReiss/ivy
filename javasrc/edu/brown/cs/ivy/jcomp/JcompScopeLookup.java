@@ -189,7 +189,7 @@ JcompSymbol lookupMethod(String id,JcompType aty,JcompScope js)
 	    for (JcompSymbol ms : me.getMethods()) {
 	       if (aty.isCompatibleWith(ms.getType())) {
 		  if (bestms == null) bestms = ms;
-		  else if (JcompScope.isBetterMethod(aty,ms.getType(),bestms.getType()))
+		  else if (JcompScope.isBetterMethod(aty,ms,bestms))
 		     bestms = ms;
 		}
 	     }

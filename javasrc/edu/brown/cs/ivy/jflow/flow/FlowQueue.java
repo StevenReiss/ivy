@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowQueue.java,v 1.6 2017/10/24 12:46:27 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowQueue.java,v 1.7 2018/08/02 15:10:17 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: FlowQueue.java,v $
+ * Revision 1.7  2018/08/02 15:10:17  spr
+ * Fix imports.
+ *
  * Revision 1.6  2017/10/24 12:46:27  spr
  * Clean up.
  *

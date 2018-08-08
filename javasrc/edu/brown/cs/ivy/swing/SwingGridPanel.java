@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingGridPanel.java,v 1.46 2017/05/12 20:53:54 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingGridPanel.java,v 1.47 2018/08/02 15:10:54 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingGridPanel.java,v $
+ * Revision 1.47  2018/08/02 15:10:54  spr
+ * Fix imports.  Prepare for java 10.
+ *
  * Revision 1.46  2017/05/12 20:53:54  spr
  * Minor fix up.
  *

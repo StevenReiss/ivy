@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvySetup.java,v 1.12 2017/12/20 20:36:15 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvySetup.java,v 1.13 2018/08/02 15:09:37 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvySetup.java,v $
+ * Revision 1.13  2018/08/02 15:09:37  spr
+ * Fix imports
+ *
  * Revision 1.12  2017/12/20 20:36:15  spr
  * Make setup work without user intervention.
  *

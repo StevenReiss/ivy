@@ -32,12 +32,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderConstants.java,v 1.3 2008-11-12 13:44:40 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderConstants.java,v 1.4 2018/08/08 18:46:36 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: CinderConstants.java,v $
+ * Revision 1.4  2018/08/08 18:46:36  spr
+ * Bad checkin for some reason.
+ *
  * Revision 1.3  2008-11-12 13:44:40  spr
  * No changes.
  *

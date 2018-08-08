@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintLogger.java,v 1.4 2013/11/15 02:38:56 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintLogger.java,v 1.5 2018/08/02 15:10:26 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintLogger.java,v $
+ * Revision 1.5  2018/08/02 15:10:26  spr
+ * Fix imports.
+ *
  * Revision 1.4  2013/11/15 02:38:56  spr
  * Fix imports.
  *

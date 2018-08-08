@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/client/MintClient.java,v 1.31 2017/03/14 14:00:30 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/client/MintClient.java,v 1.32 2018/08/02 15:10:28 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintClient.java,v $
+ * Revision 1.32  2018/08/02 15:10:28  spr
+ * Fix imports.
+ *
  * Revision 1.31  2017/03/14 14:00:30  spr
  * Formattig
  *

@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelSynch.java,v 1.3 2007-05-04 02:00:03 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelSynch.java,v 1.4 2018/08/02 15:10:20 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: ModelSynch.java,v $
+ * Revision 1.4  2018/08/02 15:10:20  spr
+ * Fix imports.
+ *
  * Revision 1.3  2007-05-04 02:00:03  spr
  * Update jflow with generic value/source flags.
  *

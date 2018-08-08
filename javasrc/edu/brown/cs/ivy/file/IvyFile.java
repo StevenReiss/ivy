@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.24 2017/06/20 00:51:52 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.25 2018/08/02 15:09:49 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFile.java,v $
+ * Revision 1.25  2018/08/02 15:09:49  spr
+ * Fix imports.  Add copy from input stream.
+ *
  * Revision 1.24  2017/06/20 00:51:52  spr
  * Add copy directory method.
  *

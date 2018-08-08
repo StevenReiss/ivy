@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.20 2018/05/25 17:57:16 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.21 2018/08/02 15:10:54 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingText.java,v $
+ * Revision 1.21  2018/08/02 15:10:54  spr
+ * Fix imports.  Prepare for java 10.
+ *
  * Revision 1.20  2018/05/25 17:57:16  spr
  * Clean up a little.
  *

@@ -79,12 +79,15 @@
  * @author Scott Violet
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.19 2017/07/14 19:36:58 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.20 2018/08/02 15:10:55 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingTreeTable.java,v $
+ * Revision 1.20  2018/08/02 15:10:55  spr
+ * Fix imports.  Prepare for java 10.
+ *
  * Revision 1.19  2017/07/14 19:36:58  spr
  * Update colors.	Make inner classes private.
  *

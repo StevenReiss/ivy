@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingEnumButton.java,v 1.5 2013/11/15 02:38:19 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingEnumButton.java,v 1.6 2018/08/02 15:10:54 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingEnumButton.java,v $
+ * Revision 1.6  2018/08/02 15:10:54  spr
+ * Fix imports.  Prepare for java 10.
+ *
  * Revision 1.5  2013/11/15 02:38:19  spr
  * Update imports; add features to combo box.
  *

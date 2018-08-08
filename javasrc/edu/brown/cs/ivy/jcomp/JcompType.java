@@ -993,6 +993,11 @@ protected JcompSymbol lookupKnownMethod(JcompTyper typs,String id,JcompType mtyp
 	 if (jargs.size() != margs.size()) js = null;
 	 else {
 	    for (int i = 0; i < jargs.size(); ++i) {
+               JcompType m0 = margs.get(i);
+               JcompType j0 = jargs.get(i);
+               while (m0.isParameterizedType()) m0 = m0.getBaseType();
+               while (j0.isParameterizedType()) j0 = j0.getBaseType();
+               if (m0.equals(j0)) continue;
 	       if (!margs.get(i).equals(jargs.get(i)) && !margs.get(i).isErrorType()) {
                   checkjs = js;
                   js = null;

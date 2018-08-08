@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/LocalType.java,v 1.7 2018/05/25 17:56:39 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/LocalType.java,v 1.8 2018/08/02 15:10:17 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: LocalType.java,v $
+ * Revision 1.8  2018/08/02 15:10:17  spr
+ * Fix imports.
+ *
  * Revision 1.7  2018/05/25 17:56:39  spr
  * Formatting.
  *

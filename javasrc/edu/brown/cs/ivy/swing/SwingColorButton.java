@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorButton.java,v 1.6 2015/11/20 15:09:25 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorButton.java,v 1.7 2018/08/02 15:10:53 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingColorButton.java,v $
+ * Revision 1.7  2018/08/02 15:10:53  spr
+ * Fix imports.  Prepare for java 10.
+ *
  * Revision 1.6  2015/11/20 15:09:25  spr
  * Reformatting.
  *

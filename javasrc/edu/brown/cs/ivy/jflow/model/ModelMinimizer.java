@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelMinimizer.java,v 1.3 2015/11/20 15:09:15 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelMinimizer.java,v 1.4 2018/08/02 15:10:19 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: ModelMinimizer.java,v $
+ * Revision 1.4  2018/08/02 15:10:19  spr
+ * Fix imports.
+ *
  * Revision 1.3  2015/11/20 15:09:15  spr
  * Reformatting.
  *

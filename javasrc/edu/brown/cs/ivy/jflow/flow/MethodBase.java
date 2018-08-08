@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/MethodBase.java,v 1.17 2015/11/20 15:09:14 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/MethodBase.java,v 1.18 2018/08/02 15:10:17 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MethodBase.java,v $
+ * Revision 1.18  2018/08/02 15:10:17  spr
+ * Fix imports.
+ *
  * Revision 1.17  2015/11/20 15:09:14  spr
  * Reformatting.
  *

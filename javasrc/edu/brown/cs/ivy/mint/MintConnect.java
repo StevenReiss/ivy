@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintConnect.java,v 1.7 2011-05-27 19:32:42 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintConnect.java,v 1.8 2018/08/02 15:10:26 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintConnect.java,v $
+ * Revision 1.8  2018/08/02 15:10:26  spr
+ * Fix imports.
+ *
  * Revision 1.7  2011-05-27 19:32:42  spr
  * Change copyrights.
  *

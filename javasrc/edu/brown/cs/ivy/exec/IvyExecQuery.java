@@ -38,12 +38,18 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExecQuery.java,v 1.13 2017/05/17 14:13:36 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExecQuery.java,v 1.15 2018/08/08 18:47:24 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyExecQuery.java,v $
+ * Revision 1.15  2018/08/08 18:47:24  spr
+ * Handle java10 base path.
+ *
+ * Revision 1.14  2018/08/02 15:09:37  spr
+ * Fix imports
+ *
  * Revision 1.13  2017/05/17 14:13:36  spr
  * Add call to get java binary name.
  *
@@ -295,12 +301,13 @@ public static List<File> computeBasePath(String javahome)
 
    if (javahome == null) javahome = System.getProperty("java.home");
 
-   String dir = javahome + File.separator + "lib";
-
-   // System.err.println("BASE PATH: " + dir);
-
-   addToBasePath(new File(dir),rslt);
-
+   File f1 = new File(javahome);
+   File f2 = new File(f1,"lib");
+   File f3 = new File(f1,"jmods");
+   
+   if (f3.exists()) addToBasePath(f3,rslt);
+   else addToBasePath(f2,rslt);
+   
    return rslt;
 }
 

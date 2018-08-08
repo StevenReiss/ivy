@@ -136,8 +136,10 @@ public Collection<JcompSymbol> getDefinedFields()	      { return null; }
 /*                                                                              */
 /********************************************************************************/
 
-static boolean isBetterMethod(JcompType ctyp,JcompType m1,JcompType m2)
+static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
 {
+   JcompType m1 = mth1.getType();
+   JcompType m2 = mth2.getType();
    List<JcompType> args = ctyp.getComponents();
    List<JcompType> m1args = m1.getComponents();
    List<JcompType> m2args = m2.getComponents();
@@ -161,6 +163,16 @@ static boolean isBetterMethod(JcompType ctyp,JcompType m1,JcompType m2)
       ct2 += typeComparison(t2,t0);
     }
    if (ct1 < ct2) return true;
+   if (ct1 > ct2) return false;
+   
+   if (mth1.isAbstract() && !mth2.isAbstract()) return false;
+   if (mth2.isAbstract() && !mth1.isAbstract()) return true;
+   
+   int ctx = getTypeDepth(mth1.getClassType(),mth2.getClassType());
+   if (ctx >= 0) return true;
+   ctx = getTypeDepth(mth2.getClassType(),mth1.getClassType());
+   if (ctx >= 0) return false;
+   
    return false;
 }
 
@@ -178,10 +190,29 @@ private static int typeComparison(JcompType tto,JcompType tfrom)
       else return 5;
     }
    else if (tfrom.isNumericType()) return 10;
-   
-   // might want to check subtype depth here
+  
+   int ct = getTypeDepth(tto,tfrom);
+   if (ct > 0) return 11+ct;
    
    return 20;
+}
+
+
+private static int getTypeDepth(JcompType tgt,JcompType tfrom)
+{
+   if (tgt == tfrom) return 0;
+   if (tfrom == null) return -1;
+   
+   int ct = getTypeDepth(tgt,tfrom.getSuperType());
+   if (ct >= 0) return ct+1;
+   if (tfrom.getInterfaces() != null) {
+      for (JcompType t0 : tfrom.getInterfaces()) {
+         ct = getTypeDepth(tgt,t0);
+         if (ct >= 0) return ct+1;
+       }
+    }
+   
+   return -1;
 }
 
 

@@ -158,7 +158,7 @@ JcompScopeFixed()
       for (JcompSymbol js : ljs) {
 	 if (aty.isCompatibleWith(js.getType())) {
 	    if (bestms == null) bestms = js;
-	    else if (isBetterMethod(aty,js.getType(),bestms.getType()))
+	    else if (isBetterMethod(aty,js,bestms))
 	       bestms = js;
 	  }
        }

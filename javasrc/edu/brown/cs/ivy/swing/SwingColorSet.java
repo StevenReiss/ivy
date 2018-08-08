@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.6 2017/07/14 19:36:58 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.7 2018/08/02 15:10:53 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingColorSet.java,v $
+ * Revision 1.7  2018/08/02 15:10:53  spr
+ * Fix imports.  Prepare for java 10.
+ *
  * Revision 1.6  2017/07/14 19:36:58  spr
  * Update colors.	Make inner classes private.
  *
