@@ -36,9 +36,11 @@
 package edu.brown.cs.ivy.jcode;
 
 
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.TypePath;
 import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
@@ -409,6 +411,8 @@ public String getClassSignature()               { return in_class.signature; }
 }
 
 
+
+
 @Override public void visitTypeInsn(int opc,String typ)
 {
    in_class.getFactory().noteClass(typ);
@@ -446,6 +450,12 @@ public String getClassSignature()               { return in_class.signature; }
    try_blocks.add(tcd);
 }
 
+
+@Override public AnnotationVisitor visitTypeAnnotation(int tref,TypePath tp,String des,boolean vis)
+{
+   AnnotationVisitor av = super.visitTypeAnnotation(tref,tp,des,vis);
+   return av;
+}
 
 
 /********************************************************************************/

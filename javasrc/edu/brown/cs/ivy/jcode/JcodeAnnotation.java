@@ -66,6 +66,18 @@ public Map<String,Object> getValues()
 }
 
 
+/********************************************************************************/
+/*                                                                              */
+/*      Output methods                                                          */
+/*                                                                              */
+/********************************************************************************/
+
+public String toString()
+{
+   return "@" + getDescription();
+}
+
+
 
 
 }       // end of class JcodeAnnontation

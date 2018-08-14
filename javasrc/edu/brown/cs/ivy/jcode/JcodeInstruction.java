@@ -858,9 +858,12 @@ public int getStackPush()
 
 public List<JcodeAnnotation> getAnnotations()
 {
+   if (for_inst.visibleTypeAnnotations == null &&
+         for_inst.invisibleTypeAnnotations == null) return null;
+   
    List<JcodeAnnotation> rslt = null;
-   rslt = addInstructionAnnotations(in_method.visibleTypeAnnotations,rslt);
-   rslt = addInstructionAnnotations(in_method.invisibleTypeAnnotations,rslt);
+   rslt = addInstructionAnnotations(for_inst.visibleTypeAnnotations,rslt);
+   rslt = addInstructionAnnotations(for_inst.invisibleTypeAnnotations,rslt);
    return rslt;
 }
 
@@ -870,13 +873,8 @@ private List<JcodeAnnotation> addInstructionAnnotations(List<TypeAnnotationNode>
 {
    if (v == null || v.isEmpty()) return rslt;
    for (TypeAnnotationNode tn : v) {
-      switch (tn.typeRef) {
-         case TypeReference.CAST :
-         case TypeReference.NEW :
-            break;
-         default :
-            break;
-       }
+      if (rslt == null) rslt = new ArrayList<>();
+      rslt.add(new JcodeAnnotation(tn,in_method.getFactory()));
     }
    return rslt;
 }
