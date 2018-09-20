@@ -1,5 +1,5 @@
 
-# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/Make.data,v 1.9 2016/07/22 13:27:11 spr Exp $
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/Make.data,v 1.10 2018/09/20 23:57:42 spr Exp $
 
 #
 # XML -- xml common classes for use with Brown software
@@ -19,3 +19,5 @@ SFILES= \
 
 
 # LOCALJAVAFLAGS= $(J6FLAGS)
+LOCALJAVAFLAGS= $(J8FLAGS)
+

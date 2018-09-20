@@ -1,5 +1,5 @@
 
-# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/Make.data,v 1.5 2013-06-11 23:24:53 spr Exp $
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/Make.data,v 1.6 2018/09/20 23:57:34 spr Exp $
 
 #
 # MINT/SERVER -- MINT server implementation
@@ -25,5 +25,5 @@ SFILES= MintServer.java \
 	MintContextManager.java
 
 
-LOCALJAVAFLAGS= $(J6FLAGS)
+LOCALJAVAFLAGS= $(J8FLAGS)
 

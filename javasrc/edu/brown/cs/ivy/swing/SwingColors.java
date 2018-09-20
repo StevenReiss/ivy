@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColors.java,v 1.5 2011-05-27 19:32:50 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColors.java,v 1.6 2018/09/20 23:57:40 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingColors.java,v $
+ * Revision 1.6  2018/09/20 23:57:40  spr
+ * Java 10 changes
+ *
  * Revision 1.5  2011-05-27 19:32:50  spr
  * Change copyrights.
  *

@@ -1,5 +1,5 @@
 
-# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/match/Make.data,v 1.4 2013-06-11 23:24:53 spr Exp $
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/match/Make.data,v 1.5 2018/09/20 23:57:33 spr Exp $
 
 #
 # MINT/MATCH -- MINT pattern matcher implementation
@@ -13,5 +13,5 @@ SUBDIR= match
 SFILES= MintMatchArguments.java \
 	MintMatchSelector.java
 
-LOCALJAVAFLAGS= $(J6FLAGS)
+LOCALJAVAFLAGS= $(J8FLAGS)
 

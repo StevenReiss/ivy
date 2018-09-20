@@ -1,5 +1,5 @@
 
-# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/test/Make.data,v 1.4 2013-06-11 23:24:54 spr Exp $
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/test/Make.data,v 1.5 2018/09/20 23:57:35 spr Exp $
 
 #
 # MINT/TEST -- MINT test programs
@@ -12,5 +12,5 @@ SUBDIR= test
 
 SFILES= MintTest.java
 
-LOCALJAVAFLAGS= $(J6FLAGS)
+LOCALJAVAFLAGS= $(J8FLAGS)
 

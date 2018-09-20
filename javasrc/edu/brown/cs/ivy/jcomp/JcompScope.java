@@ -36,9 +36,11 @@ package edu.brown.cs.ivy.jcomp;
 
 
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodReference;
+import org.objectweb.asm.Opcodes;
 
 import java.util.Collection;
 import java.util.List;
@@ -119,7 +121,7 @@ JcompSymbol defineReference(MethodReference n)
 
 abstract void defineMethod(JcompSymbol js);
 
-abstract JcompSymbol lookupMethod(String id,JcompType aty);
+abstract JcompSymbol lookupMethod(String id,JcompType aty,JcompType base,ASTNode n);
 abstract JcompSymbol lookupExactMethod(String id,JcompType aty);
 abstract List<JcompSymbol> lookupStatics(String id);
 abstract void getFields(Map<String,JcompType> flds);
@@ -143,11 +145,15 @@ static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
    List<JcompType> args = ctyp.getComponents();
    List<JcompType> m1args = m1.getComponents();
    List<JcompType> m2args = m2.getComponents();
+   
    if (m1args.size() != m2args.size()) {
       if (m1args.size() == args.size()) return true;
       else return false;
     }
    if (m1args.size() != args.size()) return false;
+   
+   if (m1.isVarArgs() && !m2.isVarArgs()) return false;
+   if (!m1.isVarArgs() && m2.isVarArgs()) return true;
    
    int ct1 = 0;
    int ct2 = 0;
@@ -169,6 +175,12 @@ static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
    if (mth2.isAbstract() && !mth1.isAbstract()) return true;
    
    int ctx = getTypeDepth(mth1.getClassType(),mth2.getClassType());
+   if (ctx == 0) {
+      if ((mth1.getModifiers() & Opcodes.ACC_BRIDGE) != 0) return false;
+      else if ((mth2.getModifiers() & Opcodes.ACC_BRIDGE) != 0) return true;
+      if ((mth1.getModifiers() & Opcodes.ACC_SYNTHETIC) != 0) return false;
+      else if ((mth2.getModifiers() & Opcodes.ACC_SYNTHETIC) != 0) return true;
+    }
    if (ctx >= 0) return true;
    ctx = getTypeDepth(mth2.getClassType(),mth1.getClassType());
    if (ctx >= 0) return false;
@@ -198,7 +210,7 @@ private static int typeComparison(JcompType tto,JcompType tfrom)
 }
 
 
-private static int getTypeDepth(JcompType tgt,JcompType tfrom)
+static int getTypeDepth(JcompType tgt,JcompType tfrom)
 {
    if (tgt == tfrom) return 0;
    if (tfrom == null) return -1;

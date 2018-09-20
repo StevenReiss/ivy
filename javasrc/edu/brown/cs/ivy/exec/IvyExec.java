@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExec.java,v 1.31 2018/08/02 15:09:36 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExec.java,v 1.32 2018/09/20 23:56:50 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyExec.java,v $
+ * Revision 1.32  2018/09/20 23:56:50  spr
+ * Handle space in java path name
+ *
  * Revision 1.31  2018/08/02 15:09:36  spr
  * Fix imports
  *
@@ -557,7 +560,7 @@ public static IvyExec ivyJava(String cls,String jargs,String args,int flags) thr
     }
 
    StringBuffer cmd = new StringBuffer();
-   cmd.append(IvyExecQuery.getJavaPath());
+   cmd.append("'" + IvyExecQuery.getJavaPath() + "'");
    cmd.append(" -Xmx1024m ");
    cmd.append("'" + defs + "' ");
    cmd.append("'" + defs1 + "' ");

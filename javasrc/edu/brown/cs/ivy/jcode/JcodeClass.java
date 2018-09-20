@@ -244,11 +244,32 @@ public List<JcodeMethod> findAllMethods(String nm,String desc)
    for (Object o : methods) {
       JcodeMethod bm = (JcodeMethod) o;
       if (nm != null && !bm.getName().equals(nm)) continue;
-      if (desc != null && !bm.getDescription().equals(desc)) continue;
+      if (!compatibleWith(bm,desc)) continue;
       rslt.add(bm);
     }
 
    return rslt;
+}
+
+
+
+private boolean compatibleWith(JcodeMethod bm,String desc)
+{
+   if (desc == null) return true;
+   if (desc.equals(bm.getDescription())) return true;
+   if (bm.isVarArgs()) return true;
+   try {
+      Type [] typs0 = Type.getArgumentTypes(desc);
+      int v0 = typs0.length;
+      Type [] typs1 = Type.getArgumentTypes(bm.getDescription());
+      int v1 = typs1.length;
+      if (v0 == v1) return true;
+    }
+   catch (Throwable t) {
+      return true;
+    }
+   
+   return false;
 }
 
 

@@ -1,5 +1,5 @@
 
-# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/Make.data,v 1.5 2008-03-14 12:26:14 spr Exp $
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/Make.data,v 1.6 2018/09/20 23:57:23 spr Exp $
 
 #
 # JFLOW.FLOW -- implementation for flow analysis JFLOW
@@ -50,4 +50,6 @@ SFILES= \
 	ValueInt.java \
 	ValueNumber.java \
 	ValueObject.java \
+
+LOCALJAVAFLAGS= $(J8FLAGS)
 

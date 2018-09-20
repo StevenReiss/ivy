@@ -56,7 +56,7 @@ protected JcompContext(JcompContext par)
 /********************************************************************************/
 
 abstract JcompType defineKnownType(JcompTyper typer,String name);
-abstract JcompSymbol defineKnownField(JcompTyper typer,String cls,String id);
+abstract JcompSymbol defineKnownField(JcompTyper typer,String cls,String id,JcompType orig);
 abstract JcompSymbol defineKnownMethod(JcompTyper typer,String cls,String id,
 					  JcompType argtype,JcompType ctyp);
 abstract List<JcompSymbol> defineKnownStatics(JcompTyper typer,String cls,String id,JcompType ctyp);
@@ -188,20 +188,20 @@ protected int compatiblityScore(JcompType argtyp,JcompType [] margs,
 
    if (!isok && varargs && args.size() >= margs.length-1) {
       isok = true;
-      score = 0;
+      score = 400;
       for (int i = 0; i < margs.length-1; ++i) {
 	 JcompType jt0 = margs[i];
 	 JcompType jt1 = args.get(i);
 	 if (!jt1.isCompatibleWith(jt0)) isok = false;
 	 else score += score(jt0,jt1);
        }
-      score += 5;
       JcompType rjt0 = margs[margs.length-1];
       // checking for array shouldn't be required here
       if (rjt0.isArrayType()) rjt0 = rjt0.getBaseType();
       for (int i = margs.length-1; i < args.size(); ++i) {
 	 JcompType jt1 = args.get(i);
 	 if (!jt1.isCompatibleWith(rjt0)) isok = false;
+         else score += score(rjt0,jt1);
        }
     }
 
@@ -218,6 +218,7 @@ protected int compatiblityScore(JcompType argtyp,JcompType [] margs,
     }
 
    if (!isok) score = -1;
+   
    return score;
 }
 
@@ -230,7 +231,10 @@ protected static int score(JcompType jt0,JcompType jt1)
    else if (jt0.isNumericType() && jt1.isNumericType()) return 1;
    else if (jt0.isClassType() && !jt1.isClassType()) return 100;
    else if (jt1.isClassType() && !jt0.isClassType()) return 100;
-   else if (jt0.isClassType() && jt1.isClassType()) return 10;
+   else if (jt0.isClassType() && jt1.isClassType()) {
+      int ct = JcompScope.getTypeDepth(jt0,jt1);
+      return 20 + ct;
+    }
    return 5;
 }
 

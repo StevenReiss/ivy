@@ -45,6 +45,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+
 
 class JcompScopeLookup implements JcompConstants {
 
@@ -176,7 +178,7 @@ void defineMethod(JcompSymbol js,JcompScope scp)
 
 
 
-JcompSymbol lookupMethod(String id,JcompType aty,JcompScope js)
+JcompSymbol lookupMethod(String id,JcompType aty,JcompScope js,JcompType basetype,ASTNode n)
 {
    List<MethodElement> lme = method_names.get(id);
    if (lme == null) {
@@ -187,6 +189,9 @@ JcompSymbol lookupMethod(String id,JcompType aty,JcompScope js)
 	 if (me.getScope() == js) {
 	    JcompSymbol bestms = null;
 	    for (JcompSymbol ms : me.getMethods()) {
+               if (basetype != null && n != null) {
+                  if (!JcompType.checkProtections(ms,basetype,n)) continue;
+                }
 	       if (aty.isCompatibleWith(ms.getType())) {
 		  if (bestms == null) bestms = ms;
 		  else if (JcompScope.isBetterMethod(aty,ms,bestms))
@@ -211,7 +216,7 @@ JcompSymbol lookupExactMethod(String id,JcompType aty,JcompScope js)
       return null;
     }
    
-   while (js != null) {
+   if (js != null) {
       for (MethodElement me : lme) {
 	 if (me.getScope() == js) {
 	    for (JcompSymbol ms : me.getMethods()) {
@@ -222,6 +227,8 @@ JcompSymbol lookupExactMethod(String id,JcompType aty,JcompScope js)
 	  }
        }
     }
+   
+  // System.err.println("Couldn't find method " + id + " " + aty);
    
    return null;
 }

@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.25 2018/08/02 15:09:49 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.26 2018/09/20 23:56:58 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFile.java,v $
+ * Revision 1.26  2018/09/20 23:56:58  spr
+ * Add copy without close
+ *
  * Revision 1.25  2018/08/02 15:09:49  spr
  * Fix imports.  Add copy from input stream.
  *
@@ -137,6 +140,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
@@ -164,7 +168,7 @@ public class IvyFile {
 static {
    IvySetup.setup();
 }
-
+ 
 
 
 /********************************************************************************/
@@ -419,6 +423,13 @@ public static String loadFile(Reader fr) throws IOException
 }
 
 
+public static String loadFile(InputStream ins) throws IOException 
+{
+   InputStreamReader isr = new InputStreamReader(ins);
+   return loadFile(isr);
+}
+
+
 
 
 public static void copyFile(File sf,File df) throws IOException
@@ -448,6 +459,20 @@ public static void copyFile(InputStream r,File df) throws IOException
     }
    w.close();
    r.close();
+}
+
+
+
+public static void copyFileNoClose(InputStream r,File df) throws IOException
+{
+   FileOutputStream w = new FileOutputStream(df);
+   byte [] buf = new byte[8192];
+   for ( ; ; ) {
+      int ln = r.read(buf);
+      if (ln <= 0) break;
+      w.write(buf,0,ln);
+    }
+   w.close();
 }
 
 

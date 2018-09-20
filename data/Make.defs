@@ -66,6 +66,7 @@ M4= m4
 MAKEDEP= makedepend -w 1
 MAKEDEPSEP= --
 J6FLAGS= -source 1.6 -target 1.6
+J8FLAGS= -source 1.8 -target 1.8
 
 #
 #	Implicit rules that are needed
@@ -283,7 +284,6 @@ GLIB= -lGLU -lGL -L/usr/X11R6/lib -lX11 -lXmu
 GLLIBDIR=/usr/lib
 GLINCL=/usr/include/GL
 NO64=1
-J6FLAGS= -source 1.6 -target 1.6
 endif
 
 
@@ -315,7 +315,7 @@ GLIB= -lGLU -lGL -L/usr/X11R6/lib -lX11 -lXmu
 GLLIBDIR=/usr/lib
 GLINCL=/usr/include/GL
 NO64=1
-J6FLAGS= -source 1.6 -target 1.6
+J8FLAGS= -source 1.8 -target 1.8 -bootclasspath /pro/java/linux/jdk1.8.0/jre/lib/rt.jar
 endif
 
 
@@ -426,7 +426,6 @@ JINCL= include
 MACHINCLUDES= -I/pro/include -I/usr/local/include -I/sw/include -I/sw/include/xml
 MACHINCLUDES= -I/pro/include -I/usr/local/include
 XERCESLIB= -L/pro/lib -lxerces-c
-J6FLAGS= -source 1.6 -target 1.6
 endif
 
 

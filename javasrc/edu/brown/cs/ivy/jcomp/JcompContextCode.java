@@ -78,12 +78,12 @@ JcompContextCode(JcodeFactory jf)
 }
 
 
-@Override JcompSymbol defineKnownField(JcompTyper typer,String cls,String id)
+@Override JcompSymbol defineKnownField(JcompTyper typer,String cls,String id,JcompType orig)
 {
    JcodeField jf = jcode_control.findField(null,cls,id);
    if (jf == null) return null;
-
-   return createField(typer,jf);
+   
+   return createField(typer,jf,orig);
 }
 
 
@@ -175,14 +175,14 @@ private int compatiblityScore(JcompTyper typer,JcompType argtyp,JcodeMethod jm)
       if (flds != null) {
          for (JcodeField jcf : flds) {
             if (jcf.isStatic()) {
-               JcompSymbol js = createField(typer,jcf);
+               JcompSymbol js = createField(typer,jcf,null);
                rslt.add(js);
              }
           }
        }
     }
    else {
-      JcompSymbol js = defineKnownField(typer,cls,id);
+      JcompSymbol js = defineKnownField(typer,cls,id,null);
       if (js != null && js.isStatic()) rslt.add(js);
     }
    
@@ -238,7 +238,7 @@ private int compatiblityScore(JcompTyper typer,JcompType argtyp,JcodeMethod jm)
    if (!defd.add(scp)) return;
 
    for (JcodeField jf : jc.findAllFields(null)) {
-      JcompSymbol js = createField(typer,jf);
+      JcompSymbol js = createField(typer,jf,null);
       if (scp.lookupVariable(jf.getName()) == null) {
 	 scp.defineVar(js);
        }
@@ -326,11 +326,14 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
 
 
 
-private JcompSymbol createField(JcompTyper typer,JcodeField jf)
+private JcompSymbol createField(JcompTyper typer,JcodeField jf,JcompType orig)
 {
    JcompType fty = getAsmType(typer,jf.desc);
-   return JcompSymbol.createBinaryField(jf.getName(),fty,
-	 JcompControl.convertType(typer,jf.getDeclaringClass()),jf.access);
+   
+   JcompSymbol fs = JcompSymbol.createBinaryField(jf.getName(),fty,
+	 JcompControl.convertType(typer,jf.getDeclaringClass()),jf.access,jf.signature);
+   
+   return fs;
 }
 
 

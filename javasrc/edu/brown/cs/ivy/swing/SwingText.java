@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.21 2018/08/02 15:10:54 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.22 2018/09/20 23:57:40 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingText.java,v $
+ * Revision 1.22  2018/09/20 23:57:40  spr
+ * Java 10 changes
+ *
  * Revision 1.21  2018/08/02 15:10:54  spr
  * Fix imports.  Prepare for java 10.
  *
@@ -120,40 +123,33 @@ package edu.brown.cs.ivy.swing;
 import javax.swing.Action;
 import javax.swing.InputMap;
 import javax.swing.KeyStroke;
+import javax.swing.plaf.TextUI;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Keymap;
+import javax.swing.text.Position;
 import javax.swing.text.TextAction;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 
 
 
 public class SwingText {
-
-
-
-/********************************************************************************/
-/*                                                                              */
-/*      <comment here>                                                          */
-/*                                                                              */
-/********************************************************************************/
-
-private static Double           dpi_scale = null;
-
-private static final int        NORMAL_DPI = 96;
 
 
 
@@ -273,10 +269,9 @@ public static void drawVerticalText(String lbl,Graphics2D g,Rectangle2D box)
 
 public static void fixKeyBindings(JTextComponent tc)
 {
-   int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
-   if (mask != InputEvent.META_MASK && mask != InputEvent.META_DOWN_MASK) return;
-
+   int mask = getMenuShortcutKeyMaskEx();
+   if (mask != InputEvent.META_DOWN_MASK) return;
+   
    Keymap k = tc.getKeymap();
    fixKeyBindings(k);
    tc.setKeymap(k);
@@ -286,13 +281,12 @@ public static void fixKeyBindings(JTextComponent tc)
 
 public static void fixKeyBindings(Keymap k)
 {
-   int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
-   if (mask != InputEvent.META_MASK && mask != InputEvent.META_DOWN_MASK) return;
+   int mask = getMenuShortcutKeyMaskEx();
+   if (mask != InputEvent.META_DOWN_MASK) return;
    
    for (KeyStroke ks : k.getBoundKeyStrokes()) {
-      if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK || ks.getModifiers() == InputEvent.CTRL_MASK) {
-	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
+      if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK) {
+         KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
 	 Action act = k.getAction(ks);
 	 k.removeKeyStrokeBinding(ks);
 	 k.addActionForKeyStroke(nks,act);
@@ -308,13 +302,12 @@ public static void fixKeyBindings(Keymap k)
 
 public static void fixKeyBindings(InputMap m)
 {
-   int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
-   if (mask != InputEvent.META_MASK && mask != InputEvent.META_DOWN_MASK) return;
-
+   int mask = getMenuShortcutKeyMaskEx();
+   if (mask != InputEvent.META_DOWN_MASK) return;
+   
    for (KeyStroke ks : m.keys()) {
-      if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK || ks.getModifiers() == InputEvent.CTRL_MASK) {
-	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
+      if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK) {
+         KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
 	 Object act = m.get(ks);
 	 if (act instanceof Action) {
 	    m.remove(ks);
@@ -323,6 +316,8 @@ public static void fixKeyBindings(InputMap m)
        }
     }
 }
+
+
 
 
 //
@@ -372,38 +367,106 @@ private static class MacKeyTypedAction extends TextAction {
 
 /********************************************************************************/
 /*                                                                              */
-/*      Handle DPI scaling                                                      */
+/*      Handle J8-J10 differences                                               */
 /*                                                                              */
 /********************************************************************************/
 
-private static double getDpiScale()
+public static int getMenuShortcutKeyMaskEx()
 {
-   if (dpi_scale == null) {
-      if (System.getProperty("os.name").toLowerCase().contains("win")) {
-         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-         GraphicsDevice gd = ge.getDefaultScreenDevice();
-         for (GraphicsConfiguration gc : gd.getConfigurations()) {
-            System.err.println("GC: " + gc + " " + gc.getBounds() + " " + gc.getNormalizingTransform());
-          }
-         Toolkit tk = Toolkit.getDefaultToolkit();
-         double dpi = tk.getScreenResolution();
-         double ratio = dpi/NORMAL_DPI;
-         System.err.println("DPI = " + dpi + " " + ratio);
-         if (ratio > 1.1 || ratio < 0.9) dpi_scale = ratio;
-         else dpi_scale = 1.0;
-       }
-      else dpi_scale = 1.0;
+   Toolkit tk = Toolkit.getDefaultToolkit();
+   Class<?> ctk = tk.getClass();
+   try {
+      Method m1 = ctk.getMethod("getMenuShortcutKeyMaskEx");
+      return (Integer) m1.invoke(tk);
     }
+   catch (NoSuchMethodException e) { }
+   catch (InvocationTargetException e) { }
+   catch (IllegalAccessException e) { }
    
-   return dpi_scale;
+   try  {
+      Method m2 = ctk.getMethod("getMenuShortcutKeyMask");
+      int v = (Integer) m2.invoke(tk);
+      int r = convertEventMask(v);
+      return r;
+    }
+   catch (NoSuchMethodException e) { }
+   catch (InvocationTargetException e) { }
+   catch (IllegalAccessException e) { }
+   
+   return InputEvent.CTRL_DOWN_MASK;
 }
 
 
 
-public static void main(String [] args)
+@SuppressWarnings("deprecation")
+public static int viewToModel2D(JTextComponent c,Point pt)
 {
-   getDpiScale();
+   // return c.viewToModel2D(pt);
+   return c.viewToModel(pt);
 }
+
+
+@SuppressWarnings("deprecation")
+public static Rectangle modelToView2D(Object c,int pos) throws BadLocationException
+{
+   if (c instanceof JTextComponent) {
+      JTextComponent tc = (JTextComponent) c;
+      // Rectangle r = tc.modelToView2D(pos);
+      // if (r == null) return r;
+      // return r.getBounds();
+      return tc.modelToView(pos);
+    }
+
+   return null;
+}
+
+
+@SuppressWarnings("deprecation")
+public static String getToolTipText2D(TextUI tu,JTextComponent tc,Point pt)
+{
+   // return tu.getToolTipText2D(tc,pt);
+   return tu.getToolTipText(tc,pt);
+}
+
+
+@SuppressWarnings("deprecation")
+public static Rectangle modelToView2D(TextUI tu,JTextComponent tc,int pos,Position.Bias bias)
+        throws BadLocationException
+{
+   // Rectangle2D r2 = tu.modelToView2D(tc,pos,bias);
+   // return r2.getBounds();
+   return tu.modelToView(tc,pos,bias);
+}
+
+
+@SuppressWarnings("deprecation")
+public static int viewToModel2D(TextUI tu,JTextComponent tc,Point2D pt2,Position.Bias [] bias)
+{
+   // return tu.viewToModel2D(tc,pt2,bias);
+   Point pt = null;
+   if (pt2 instanceof Point) pt = (Point) pt2;
+   else pt = new Point((int) pt2.getX(),(int) pt2.getY());
+   return tu.viewToModel(tc,pt,bias);
+}
+
+
+
+@SuppressWarnings("deprecation")
+private static int convertEventMask(int v)
+{
+   int r = 0;
+   if ((v & InputEvent.CTRL_MASK) != 0) r |= InputEvent.CTRL_DOWN_MASK;
+   if ((v & InputEvent.META_MASK) != 0) r |= InputEvent.META_DOWN_MASK;
+   if ((v & InputEvent.SHIFT_MASK) != 0) r |= InputEvent.SHIFT_DOWN_MASK;
+   if ((v & InputEvent.ALT_MASK) != 0) r |= InputEvent.ALT_DOWN_MASK;
+   if ((v & InputEvent.BUTTON1_MASK) != 0) r |= InputEvent.BUTTON1_DOWN_MASK;
+   if ((v & InputEvent.BUTTON2_MASK) != 0) r |= InputEvent.BUTTON2_DOWN_MASK;
+   if ((v & InputEvent.BUTTON2_MASK) != 0) r |= InputEvent.BUTTON3_DOWN_MASK;
+   
+   return r;
+}
+
+
 
 
 }	// end of class SwingText

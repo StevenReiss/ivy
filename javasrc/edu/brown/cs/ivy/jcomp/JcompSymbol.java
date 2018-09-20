@@ -193,9 +193,9 @@ static JcompSymbol createSymbol(JcompType type,int acc)
 }
 
 
-static JcompSymbol createBinaryField(String id,JcompType typ,JcompType cls,int acc)
+static JcompSymbol createBinaryField(String id,JcompType typ,JcompType cls,int acc,String sign)
 {
-   return new BinaryField(id,typ,cls,acc);
+   return new BinaryField(id,typ,cls,acc,sign);
 }
 
 
@@ -480,6 +480,8 @@ public String getHandle(String proj)
 }
 
 
+String getSignature()                   { return null; }
+
 private boolean isNonLocalDef(ASTNode n)
 {
    if (n == null) return false;
@@ -629,12 +631,14 @@ private static class BinaryField extends JcompSymbol {
    private String field_name;
    private JcompType field_type;
    private int access_info;
+   private String field_signature;
    
-   BinaryField(String id,JcompType fty,JcompType cls,int access) {
+   BinaryField(String id,JcompType fty,JcompType cls,int access,String sign) {
       field_name = id;
       field_type = fty;
       class_type = cls;
       access_info = access;
+      field_signature = sign;
     }
 
    @Override public String getName()		{ return field_name; }
@@ -647,9 +651,19 @@ private static class BinaryField extends JcompSymbol {
    @Override public JcompType getClassType()	{ return class_type; }
    @Override public boolean isEnumSymbol()      { return (access_info & Opcodes.ACC_ENUM) != 0; }
    @Override public int getModifiers()          { return access_info; }
+   @Override String getSignature()              { return field_signature; }
 
    @Override public String getFullName() {
       return class_type.getName() + "." + field_name;
+    }
+   
+   @Override JcompSymbol parameterize(JcompTyper typer,JcompType ptype,List<JcompType> params) {
+      if (field_signature == null) return this;
+      if (!field_signature.startsWith("T")) return this;
+      JcompType jty = JcompGenerics.deriveFieldType(typer,field_type,field_signature,class_type,params);
+      if (jty == null || jty == field_type) return this;
+      BinaryField kf = new BinaryField(field_name,jty,ptype,access_info,field_signature);
+      return kf;
     }
 
 }	// end of subtype KnownField
@@ -1032,6 +1046,7 @@ private static class BinaryMethod extends JcompSymbol {
    @Override public JcompType getClassType()		{ return class_type; }
    @Override public boolean isGenericReturn()		{ return is_generic; }
    @Override public boolean isConstructorSymbol()	{ return method_name.equals("<init>"); }
+   @Override public int getModifiers()                  { return access_flags; }
 
    @Override JcompSymbol parameterize(JcompTyper typer,JcompType ptype,List<JcompType> params) {
       JcompType jty = JcompGenerics.deriveMethodType(typer,method_type,class_type,params);

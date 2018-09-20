@@ -18,7 +18,7 @@
  *										 *
  ********************************************************************************/
 
-/* SVN: $Id: JcompProjectImpl.java,v 1.14 2018/08/02 15:11:13 spr Exp $ */
+/* SVN: $Id: JcompProjectImpl.java,v 1.15 2018/09/20 23:57:55 spr Exp $ */
 
 
 
@@ -31,6 +31,7 @@ import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -555,7 +556,7 @@ private class FileSorter {
          SimpleType st = (SimpleType) t;
          String tnm = st.getName().getFullyQualifiedName();
          JcompFile frm = class_names.get(tnm);
-         if (frm == null) {
+         while (frm == null) {
             String xnm = "." + tnm;
             for (String s : known) {
                if (s.endsWith(xnm)) {
@@ -569,6 +570,11 @@ private class FileSorter {
                   if (frm != null) break;
                 }
              }
+            if (frm == null) {
+               int idx = tnm.lastIndexOf(".");
+               if (idx < 0) break;
+               tnm = tnm.substring(0,idx);
+             }
           }
          if (frm != null && frm != to) {
             List<JcompFile> dps = depend_names.get(to);
@@ -578,6 +584,10 @@ private class FileSorter {
              }
             dps.add(frm);
           }
+       }
+      else if (t.isParameterizedType()) {
+         ParameterizedType pt = (ParameterizedType) t;
+         addDepend(pt.getType(),to,pfxs,known);
        }
     }
    

@@ -257,6 +257,30 @@ static JcompType deriveReturnType(JcompTyper typer,JcompType mty,JcompType bty,
 
 
 
+static JcompType deriveFieldType(JcompTyper typer,JcompType fty,String fsign,JcompType cty,
+      List<JcompType> argtypes)
+{
+   String csgn = cty.getSignature();
+   if (csgn == null) return fty;
+   if (!csgn.startsWith("<")) return fty;
+   
+   TypeVarFinder tvf = new TypeVarFinder(argtypes);
+   SignatureReader sr = new SignatureReader(csgn);
+   sr.accept(tvf);
+   Map<String,JcompType> typemap = tvf.getTypeMap();
+   
+   SignatureWriter sgr = new SignatureWriter();
+   TypeDeriver tdr = new TypeDeriver(typer,typemap,fty,sgr);
+   SignatureReader sr1 = new SignatureReader(fsign);
+   sr1.accept(tdr);
+   JcompType ntype = tdr.getResultType();
+   if (ntype != null) return ntype;
+   
+   return fty;
+}
+
+
+
 
 
 

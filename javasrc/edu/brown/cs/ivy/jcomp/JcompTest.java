@@ -216,7 +216,7 @@ private static int showMessages(String what,JcompProject proj)
 @Test
 public void jcompTest1()
 {
-   StringSource s1 = new StringSource("test1",test1);
+   JcompSource s1 = new StringSource("test1",test1);
    List<JcompSource> srcs = Collections.singletonList(s1);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test1",proj);

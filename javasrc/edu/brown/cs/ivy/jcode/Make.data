@@ -1,5 +1,5 @@
 
-# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jcode/Make.data,v 1.1 2015/12/23 15:55:34 spr Exp $
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jcode/Make.data,v 1.2 2018/09/20 23:57:14 spr Exp $
 
 #
 # EXEC -- classes for creating additional processed
@@ -22,7 +22,7 @@ SFILES= \
 	JcodeTryCatchBlock.java \
 
 
-LOCALJAVAFLAGS=
+LOCALJAVAFLAGS= $(J8FLAGS)
 
 
 

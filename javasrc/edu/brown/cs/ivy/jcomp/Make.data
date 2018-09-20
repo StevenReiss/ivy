@@ -1,5 +1,5 @@
 
-# RCS: $Header: /pro/spr_cvs/pro/ivy/jcomp/src/Make.data,v 1.7 2017/10/24 12:47:04 spr Exp $
+# RCS: $Header: /pro/spr_cvs/pro/ivy/jcomp/src/Make.data,v 1.8 2018/09/20 23:57:56 spr Exp $
 
 #
 # EXEC -- classes for creating additional processed
@@ -41,7 +41,7 @@ SFILES= \
 	JcompTest.java \
 
 
-# LOCALJAVAFLAGS= -Xdiags:verbose
+LOCALJAVAFLAGS= -Xdiags:verbose $(J8FLAGS)
 
 
 

@@ -1,5 +1,5 @@
 #
-# LIMBO -- line number tracking 	
+# LIMBO -- line number tracking 
 #
 # Copyright 2007 <Steven P. Reiss>, Brown University - All rights reserved.
 #
@@ -14,4 +14,6 @@ SFILES= \
 	LimboLine.java \
 
 
+
+LOCALJAVAFLAGS= $(J8FLAGS)
 

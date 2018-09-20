@@ -18,6 +18,7 @@ SFILES= \
 	IvyProjectManager.java	\
 	IvyProjectSetup.java \
 
+LOCALJAVAFLAGS= $(J8FLAGS)
 
 
 test: all

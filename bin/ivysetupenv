@@ -292,7 +292,7 @@ if ($?LD_LIBRARY_PATH == 0) then
 else
    set xxx = `echo $LD_LIBRARY_PATH | fgrep ivy/lib`
 endif
-if ( "X$xxx" == X ) then
+if ( "X$xxx" == X && $?BROWN_VELD_ARCH != 0 ) then
    if ($BROWN_VELD_ARCH == i686 || $BROWN_VELD_ARCH == x86_64) then
       if ($?LD_LIBRARY_PATH == 0) then
 	 setenv LD_LIBRARY_PATH "$BROWN_IVY_ROOT/lib:$BROWN_IVY_IVY/lib/${BROWN_VELD_ARCH}"

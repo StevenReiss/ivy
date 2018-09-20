@@ -36,7 +36,6 @@
 package edu.brown.cs.ivy.jcode;
 
 import org.objectweb.asm.Handle;
-import org.objectweb.asm.TypeReference;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.IincInsnNode;

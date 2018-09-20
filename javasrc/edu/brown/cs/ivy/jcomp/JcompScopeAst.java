@@ -42,6 +42,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+
 
 
 class JcompScopeAst extends JcompScope implements JcompConstants {
@@ -108,9 +110,9 @@ private JcompScopeLookup getLookupScope()		{ return lookup_scope; }
 
 @Override void defineMethod(JcompSymbol js)		      { lookup_scope.defineMethod(js,this); }
 
-@Override JcompSymbol lookupMethod(String id,JcompType aty)
+@Override JcompSymbol lookupMethod(String id,JcompType aty,JcompType base,ASTNode n)
 {
-   return lookup_scope.lookupMethod(id,aty,this);
+   return lookup_scope.lookupMethod(id,aty,this,base,n);
 }
 
 

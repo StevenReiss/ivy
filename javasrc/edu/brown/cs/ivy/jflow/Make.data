@@ -1,5 +1,5 @@
 
-# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/Make.data,v 1.9 2016/07/22 13:26:39 spr Exp $
+# RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/Make.data,v 1.10 2018/09/20 23:57:20 spr Exp $
 
 #
 # JFLOW -- java flow analysis package
@@ -28,6 +28,8 @@ SFILES= \
 
 
 SUBDIRS= flow model
+
+LOCALJAVAFLAGS= $(J8FLAGS)
 
 ALL= jflowdummy.jar
 

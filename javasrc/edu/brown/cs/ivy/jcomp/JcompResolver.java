@@ -634,35 +634,35 @@ private class RefPass extends ASTVisitor {
    public @Override boolean visit(QualifiedName n) {
       JcompType nt = JcompAst.getJavaType(n);
       if (nt != null) {
-	 JcompAst.setExprType(n,nt);
-	 return false;
+         JcompAst.setExprType(n,nt);
+         return false;
        }
       Name qn = n.getQualifier();
       JcompType qt = JcompAst.getJavaType(qn);
       if (qt == null) {
-	 qn.accept(this);
-	 qt = JcompAst.getExprType(qn);
+         qn.accept(this);
+         qt = JcompAst.getExprType(qn);
        }
       JcompSymbol typesym = qt.getDefinition();
       if (typesym != null && JcompAst.getReference(qn) == null) {
-	 JcompAst.setReference(qn,typesym);
+         JcompAst.setReference(qn,typesym);
        }
       JcompSymbol js = null;
       qt.defineAll(type_data);
       if (qt != null) js = qt.lookupField(type_data,n.getName().getIdentifier());
       if (js == null && qt != null && (qt.isArrayType() || qt.isErrorType()) &&
-	     n.getName().getIdentifier().equals("length")) {
-	 JcompAst.setExprType(n,findType("int"));
-	 return false;
+             n.getName().getIdentifier().equals("length")) {
+         JcompAst.setExprType(n,findType("int"));
+         return false;
        }
       else if (js == null) {
-	 JcompAst.setExprType(n,findType(TYPE_ERROR));
+         JcompAst.setExprType(n,findType(TYPE_ERROR));
        }
       else {
-	 JcompAst.setReference(n.getName(),js);
-	 JcompType t = js.getType();
-	 JcompAst.setExprType(n,t);
-	 JcompAst.setExprType(n.getName(),t);
+         JcompAst.setReference(n.getName(),js);
+         JcompType t = js.getType();
+         JcompAst.setExprType(n,t);
+         JcompAst.setExprType(n.getName(),t);
        }
       return false;
     }
@@ -773,30 +773,30 @@ private class RefPass extends ASTVisitor {
       JcompType xt = null;
       Expression e = n.getExpression();
       if (e != null) {
-	 xt = JcompAst.getJavaType(e);
-	 if (xt == null) xt = JcompAst.getExprType(e);
+         xt = JcompAst.getJavaType(e);
+         if (xt == null) xt = JcompAst.getExprType(e);
        }
-
+   
       JcompType bt = JcompAst.getJavaType(n.getType());
       if (bt == null) {
-	 bt = JcompType.createErrorType();
-	 JcompAst.setJavaType(n.getType(),bt);
+         bt = JcompType.createErrorType();
+         JcompAst.setJavaType(n.getType(),bt);
        }
       List<JcompType> targs = null;
       if (n.typeArguments().size() > 0) {
-	 targs = new ArrayList<>();
-	 for (Object o : n.typeArguments()) {
-	    Type tat = (Type) o;
-	    targs.add(JcompAst.getJavaType(tat));
-	  }
+         targs = new ArrayList<>();
+         for (Object o : n.typeArguments()) {
+            Type tat = (Type) o;
+            targs.add(JcompAst.getJavaType(tat));
+          }
        }
       List<JcompType> atys = buildArgumentList(n.arguments(),false);
       boolean dfltcnst = atys.size() == 0;
       if (bt.needsOuterClass()) {
-	 JcompType oty = bt.getOuterType();
-	 if (oty != null) atys.add(0,oty);
+         JcompType oty = bt.getOuterType();
+         if (oty != null) atys.add(0,oty);
        }
-
+   
       JcompAst.setExprType(n,bt);		      // set default type
       lookupMethod(bt,atys,n,null,"<init>",false,dfltcnst,targs);    // this can reset the type
    }
@@ -825,22 +825,22 @@ private class RefPass extends ASTVisitor {
       if (cur_type != null) bt = cur_type.getSuperType();
       if (bt == null) bt = findType("java.lang.Object");
       if (bt.needsOuterClass()) {
-	 JcompType oty = bt.getOuterType();
-	 if (oty != null) atys.add(0,oty);
+         JcompType oty = bt.getOuterType();
+         if (oty != null) atys.add(0,oty);
        }
       List<JcompType> targs = null;
       if (n.typeArguments().size() > 0) {
-	 targs = new ArrayList<>();
-	 for (Object o : n.typeArguments()) {
-	    Type tat = (Type) o;
-	    targs.add(JcompAst.getJavaType(tat));
-	  }
+         targs = new ArrayList<>();
+         for (Object o : n.typeArguments()) {
+            Type tat = (Type) o;
+            targs.add(JcompAst.getJavaType(tat));
+          }
        }
       lookupMethod(bt,atys,n,null,"<init>",false,atys.size() == 0,targs);
       if (JcompAst.getReference(n) != null)
-	 JcompAst.setExprType(n,cur_type);
-      else
-	 JcompAst.setExprType(n,findType(TYPE_ERROR));
+         JcompAst.setExprType(n,cur_type);
+      else if (JcompAst.getExprType(n) == null) 
+         JcompAst.setExprType(n,findType(TYPE_ERROR));
     }
 
    public @Override void endVisit(ArrayAccess n) {
@@ -1334,14 +1334,14 @@ private class RefPass extends ASTVisitor {
        }
    
       if (id == null && nm != null) id = nm.getIdentifier();
-   
+      
       bt.defineAll(type_data);
    
       JcompSymbol js = null;
-      if (bt != null) js = callLookupMethod(bt,id,mtyp);
-      if (js != null) {
-         js = checkProtections(js,bt,n);
-       }
+      if (bt != null) js = callLookupMethod(bt,id,mtyp,n);
+      // if (js != null) {                 // done in callLookupMethod
+         // js = checkProtections(js,bt,n);
+       // }
       if (js != null && bt != null && isstatic && !js.isStatic()) {
          if (!bt.isCompatibleWith(js.getClassType())) {
             System.err.println("JCOMP: Attempt to call non-static method statically");
@@ -1401,85 +1401,16 @@ private class RefPass extends ASTVisitor {
        }
     }
 
-   private JcompSymbol checkProtections(JcompSymbol js,JcompType basetype,ASTNode n) {
-      if (js == null || js.isPublic()) return js;
-      JcompType fromtype = null;
-      JcompType outertype = null;
-      for (ASTNode p = n; p != null; p = p.getParent()) {
-	 switch (p.getNodeType()) {
-	    case ASTNode.TYPE_DECLARATION :
-	    case ASTNode.ENUM_DECLARATION :
-	    case ASTNode.ANNOTATION_TYPE_DECLARATION :
-	       outertype = JcompAst.getJavaType(p);
-	       if (fromtype == null) fromtype = outertype;
-	       break;
-	  }
-       }
-      if (fromtype == null) return js;
+   
 
-      JcompType totype = js.getClassType();
-      if (totype == null) return js;
-      if (totype.isParameterizedType()) totype = totype.getBaseType();
-      if (fromtype == totype) return js;
-      if (fromtype.getName().startsWith(totype.getName() + ".")) return js;
-      if (outertype != null && totype.getName().startsWith(outertype.getName() + ".")) return js;
-      if (js.isPrivate()) {
-	 String nm1 = totype.getName();
-	 String nm2 = fromtype.getName();
-	 if (nm2.startsWith(nm1)) return js;
-       }
-      else if (js.isProtected()) {
-	 if (fromtype.isCompatibleWith(basetype)) {
-	    if (fromtype.isCompatibleWith(totype))
-	       return js;
-	    if (outertype != null && outertype.isCompatibleWith(totype))
-	       return js;
-
-	  }
-	 if (js.getName().equals("clone") && basetype.isArrayType())
-	    return js;
-	 String pkg1 = getPackageName(fromtype);
-	 String pkg2 = getPackageName(totype);
-	 if (pkg1.equals(pkg2)) return js;
-       }
-      else {
-	 String pkg1 = getPackageName(fromtype);
-	 String pkg2 = getPackageName(totype);
-	 if (pkg1.equals(pkg2)) return js;
-       }
-
-      // System.err.println("ATTEMPT TO ACCESS SYMBOL OUT OF CONTEXT:" + n + " " + js);
-
-      return null;
-   }
-
-
-   private String getPackageName(JcompType typ)  {
-      String nm = typ.getName();
-      int idx = nm.lastIndexOf(".");
-      if (idx < 0) return "<DEFAULT>";
-      for ( ; ; ) {
-	 String pkg = nm.substring(0,idx);
-	 idx = pkg.lastIndexOf(".");
-	 if (idx < 0) return pkg;
-	 if (idx == pkg.length()-1) {
-	    pkg = pkg.substring(0,idx);
-	  }
-	 else if (Character.isUpperCase(pkg.charAt(idx+1))) {
-	    pkg = pkg.substring(0,idx);
-	  }
-	 else return pkg;
-       }
-   }
-
-   private JcompSymbol callLookupMethod(JcompType bt,String id,JcompType mtyp) {
+   private JcompSymbol callLookupMethod(JcompType bt,String id,JcompType mtyp,ASTNode n) {
       try {
-	 return bt.lookupMethod(type_data,id,mtyp);
+         return bt.lookupMethod(type_data,id,mtyp,n);
        }
       catch (Throwable t) {
-	 System.err.println("JCOMP: PROBLEM LOOKING UP " + bt + " " + id + " " + mtyp);
-	 t.printStackTrace();
-	 return null;
+         System.err.println("JCOMP: PROBLEM LOOKING UP " + bt + " " + id + " " + mtyp);
+         t.printStackTrace();
+         return null;
        }
     }
 

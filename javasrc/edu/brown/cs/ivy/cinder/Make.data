@@ -15,3 +15,5 @@ SFILES= \
 	CinderPatcher.java \
 	CinderTaj.java \
 
+
+LOCALJAVAFLAGS= $(J8FLAGS)

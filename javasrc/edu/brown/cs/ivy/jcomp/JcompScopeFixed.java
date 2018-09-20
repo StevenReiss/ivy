@@ -46,6 +46,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+
 
 class JcompScopeFixed extends JcompScope implements JcompConstants {
 
@@ -146,7 +148,7 @@ JcompScopeFixed()
 
 
 
-@Override JcompSymbol lookupMethod(String id,JcompType aty)
+@Override JcompSymbol lookupMethod(String id,JcompType aty,JcompType base,ASTNode n)
 {
    Collection<JcompSymbol> ljs;
    
@@ -156,6 +158,9 @@ JcompScopeFixed()
    if (ljs != null) {
       JcompSymbol bestms = null;
       for (JcompSymbol js : ljs) {
+         if (base != null && n != null) {
+            if (!JcompType.checkProtections(js,base,n)) continue;
+          }
 	 if (aty.isCompatibleWith(js.getType())) {
 	    if (bestms == null) bestms = js;
 	    else if (isBetterMethod(aty,js,bestms))
