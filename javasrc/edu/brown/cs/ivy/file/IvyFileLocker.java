@@ -64,6 +64,7 @@ public class IvyFileLocker
 
 private FileOutputStream lock_file;
 private FileLock file_lock;
+private File lock_name;
    
 
 
@@ -88,6 +89,8 @@ public IvyFileLocker(File f)
    if (f.isDirectory()) f = new File(f,".lock");
    else if (!f.getName().endsWith(".lock")) f = new File(f.getPath() + ".lock");
    
+   lock_name = f;
+   
    try {
       lock_file = new FileOutputStream(f);
     }
@@ -109,19 +112,16 @@ public void lock()
    if (lock_file == null) return;
    if (file_lock != null) return;		// assumes only one lock per process
    
-   Exception e = null;
-   
    for (int i = 0; i < 250; ++i) {
       try {
          file_lock = lock_file.getChannel().lock();
          return;
        }
-      catch (IOException ex) {
-         e = ex;
+      catch (IOException e) {
+         System.err.println("IVY: File lock failed for " + lock_name + ": " + e);
+         e.printStackTrace();
        }
     }
-   
-   System.err.println("IVY: File lock failed: " + e);
 }
 
 

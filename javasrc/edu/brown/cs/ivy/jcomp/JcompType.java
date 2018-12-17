@@ -1663,6 +1663,7 @@ private static abstract class ClassInterfaceType extends JcompType {
       List<JcompType> prms = new ArrayList<JcompType>();
       prms.add(typ);
       JcompType atyp = createMethodType(null,prms,false,null);
+      atyp = typer.fixJavaType(atyp);
       JcompSymbol sym = lookupMethod(typer,"<init>",atyp);
    
       if (sym != null && !sym.isPrivate()) {
@@ -1677,41 +1678,42 @@ private static abstract class ClassInterfaceType extends JcompType {
    @Override List<JcompSymbol> isConformableTo(JcompTyper typer,JcompType typ) {
       List<JcompType> prms = new ArrayList<JcompType>();
       JcompType atyp = createMethodType(typ,prms,false,null);
-
+      atyp = typer.fixJavaType(atyp);
+   
       Set<JcompSymbol> rslt = new HashSet<JcompSymbol>();
       if (getScope() != null) {
-	 for (JcompSymbol js : getScope().getDefinedMethods()) {
-	    if (js.isPrivate() || js.getName().contains("<")) continue;
-	    JcompType mty = js.getType();
-	    if (typ.isCompatibleWith(mty) && typ == mty.getBaseType()) {
-	       rslt.add(js);
-	     }
-	  }
+         for (JcompSymbol js : getScope().getDefinedMethods()) {
+            if (js.isPrivate() || js.getName().contains("<")) continue;
+            JcompType mty = js.getType();
+            if (typ.isCompatibleWith(mty) && typ == mty.getBaseType()) {
+               rslt.add(js);
+             }
+          }
        }
-
+   
       List<JcompSymbol> cands = typer.findKnownMethods(getName());
       if (cands != null) {
-	 for (JcompSymbol jsx : cands) {
-	    if (jsx.getName().contains("<")) continue;
-	    if (jsx.isPrivate()) continue;
-	    if (jsx.getType().isCompatibleWith(atyp)) {
-	       if (jsx.getType().getBaseType() == atyp.getBaseType()) {
-		  rslt.add(jsx);
-		  break;
-		}
-	     }
-	  }
+         for (JcompSymbol jsx : cands) {
+            if (jsx.getName().contains("<")) continue;
+            if (jsx.isPrivate()) continue;
+            if (jsx.getType().isCompatibleWith(atyp)) {
+               if (jsx.getType().getBaseType() == atyp.getBaseType()) {
+        	  rslt.add(jsx);
+        	  break;
+        	}
+             }
+          }
        }
-
+   
       if (super_type != null) {
-	 List<JcompSymbol> nrslt = super_type.isConformableTo(typer,typ);
-	 if (nrslt != null) {
-	    rslt.addAll(nrslt);
-	  }
+         List<JcompSymbol> nrslt = super_type.isConformableTo(typer,typ);
+         if (nrslt != null) {
+            rslt.addAll(nrslt);
+          }
        }
-
+   
       if (rslt.size() == 0) return null;
-
+   
       return new ArrayList<JcompSymbol>(rslt);
     }
 
@@ -2250,6 +2252,7 @@ private static class EnumType extends CompiledClassInterfaceType {
          if (values_method == null) {
             JcompType typ1 = JcompType.createArrayType(this);
             JcompType typ2 = JcompType.createMethodType(typ1,new ArrayList<JcompType>(),false,null);
+            typ2 = typer.fixJavaType(typ2);
             int acc = Modifier.PUBLIC | Modifier.STATIC;
             values_method = JcompSymbol.createBinaryMethod("values",typ2,this,acc,null,false);
           }
@@ -2260,6 +2263,7 @@ private static class EnumType extends CompiledClassInterfaceType {
             List<JcompType> types = new ArrayList<>();
             types.add(typer.findSystemType("java.lang.String"));
             JcompType typ2 = JcompType.createMethodType(this,types,false,null);
+            typ2 = typer.fixJavaType(typ2);
             int acc = Modifier.PUBLIC | Modifier.STATIC;
             valueof_method = JcompSymbol.createBinaryMethod("valueOf",typ2,this,acc,null,false);
           }
@@ -2641,9 +2645,9 @@ private static class MethodType extends JcompType {
       boolean chng = nret != return_type;
       List<JcompType> nargs = new ArrayList<JcompType>();
       for (JcompType jt : param_types) {
-	 JcompType njt = jt.resetType(typer);
-	 chng |= jt != njt;
-	 nargs.add(njt);
+         JcompType njt = jt.resetType(typer);
+         chng |= jt != njt;
+         nargs.add(njt);
        }
       if (!chng) return this;
       return new MethodType(nret,nargs,is_varargs,getSignature());

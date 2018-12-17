@@ -1158,10 +1158,6 @@ void handleReturnSetup(MethodBase mi,StateBase st1,boolean chng)
 {
    BT_Method bm = mi.getMethod();
 
-   if (bm.fullName().startsWith("spr.solar.SolarSystem") || bm.fullName().startsWith("spr.solar.SolarRootObject")) {
-      // System.err.println("RETURN " + bm.fullName() + " " + chng);
-    }
-
    if (chng) {
       if (bm.isStaticInitializer()) {
 	 BT_Class bc = bm.getDeclaringClass();

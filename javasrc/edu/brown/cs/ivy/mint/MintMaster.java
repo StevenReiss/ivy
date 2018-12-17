@@ -456,7 +456,6 @@ private static boolean getMasterSocket()
    IvyFileLocker lock = new IvyFileLocker(fn);
    try {
       lock.lock();
-
       for (int i = 0; i < 20; ++i) {
 	 String host = null;
 	 int port = 0;

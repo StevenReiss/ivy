@@ -192,7 +192,8 @@ JcompSymbol lookupMethod(String id,JcompType aty,JcompScope js,JcompType basetyp
                if (basetype != null && n != null) {
                   if (!JcompType.checkProtections(ms,basetype,n)) continue;
                 }
-	       if (aty.isCompatibleWith(ms.getType())) {
+               if (aty == null) bestms = ms;
+	       else if (aty.isCompatibleWith(ms.getType())) {
 		  if (bestms == null) bestms = ms;
 		  else if (JcompScope.isBetterMethod(aty,ms,bestms))
 		     bestms = ms;

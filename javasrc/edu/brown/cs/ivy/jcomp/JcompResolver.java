@@ -292,7 +292,40 @@ private JcompType findNumberType(String n)
 }
 
 
-
+private JcompType getImpliedBaseType(ASTNode n)
+{
+   if (n == null) return null;
+   
+   JcompType rslt = null;
+   
+   switch (n.getNodeType()) {
+      case ASTNode.ARRAY_INITIALIZER :
+         rslt = getImpliedBaseType(n.getParent());
+         rslt = rslt.getBaseType();
+         break;
+      case ASTNode.ARRAY_CREATION :
+         ArrayCreation ac1 = (ArrayCreation) n;
+         JcompType at1 = JcompAst.getJavaType(ac1.getType());
+         if (at1 != null) rslt = at1.getBaseType();
+         break;
+      case ASTNode.VARIABLE_DECLARATION_FRAGMENT :
+         VariableDeclarationFragment vdf2 = (VariableDeclarationFragment) n;
+         JcompType at2 = JcompAst.getDefinition(vdf2).getType();
+         if (at2 != null && at2.isArrayType()) rslt = at2.getBaseType();
+         break;
+      case ASTNode.ASSIGNMENT :
+         Assignment as3 = (Assignment) n;
+         Expression e3 = as3.getLeftHandSide();
+         JcompType at3 = JcompAst.getExprType(e3);
+         if (at3 != null && at3.isArrayType()) rslt = at3.getBaseType();
+         break;
+      default :
+         System.err.println("UNKNOWN PARENT TYPE");
+         break;
+    }
+   
+   return rslt;
+}
 
 /********************************************************************************/
 /*										*/
@@ -866,15 +899,19 @@ private class RefPass extends ASTVisitor {
     }
 
    public @Override void endVisit(ArrayInitializer n) {
-      JcompType bt = findType(TYPE_ANY_CLASS);
-      for (Iterator<?> it = n.expressions().iterator(); it.hasNext(); ) {
-         Expression e = (Expression) it.next();
-         JcompType xbt = JcompAst.getExprType(e);
-         if (xbt != null) {
-            bt = xbt;
-            break;
+      JcompType bt = getImpliedBaseType(n.getParent());
+      if (bt == null) {
+         for (Iterator<?> it = n.expressions().iterator(); it.hasNext(); ) {
+            Expression e = (Expression) it.next();
+            JcompType xbt = JcompAst.getExprType(e);
+            if (xbt != null) {
+               if (bt == null) bt = xbt;
+               else bt = bt.getCommonParent(type_data,xbt);
+             }
           }
        }
+      if (bt == null) bt = findType(TYPE_ANY_CLASS);
+      
       JcompType rslt = findArrayType(bt);
       if (n.getParent().getNodeType() == ASTNode.VARIABLE_DECLARATION_FRAGMENT) {
          ASTNode gp = n.getParent().getParent();
@@ -1156,22 +1193,23 @@ private class RefPass extends ASTVisitor {
    public @Override void endVisit(LambdaExpression e) {
       List<JcompType> argtypes = new ArrayList<JcompType>();
       for (Object o : e.parameters()) {
-	 JcompType jt = type_data.findSystemType("?");
-	 if (o instanceof SingleVariableDeclaration) {
-	    SingleVariableDeclaration svd = (SingleVariableDeclaration) o;
-	    jt = JcompAst.getJavaType(svd.getType());
-	  }
-	 else {
-	    VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
-	    JcompSymbol js = JcompAst.getDefinition(vdf);
-	    if (js != null) jt = js.getType();
-	  }
-
-	 argtypes.add(jt);
+         JcompType jt = type_data.findSystemType("?");
+         if (o instanceof SingleVariableDeclaration) {
+            SingleVariableDeclaration svd = (SingleVariableDeclaration) o;
+            jt = JcompAst.getJavaType(svd.getType());
+          }
+         else {
+            VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+            JcompSymbol js = JcompAst.getDefinition(vdf);
+            if (js != null) jt = js.getType();
+          }
+   
+         argtypes.add(jt);
        }
       JcompSymbol fsym = JcompAst.getDefinition(e);
       JcompType rettype = JcompAst.getExprType(e.getBody());
       JcompType methodtype = JcompType.createMethodType(rettype,argtypes,false,null);
+      methodtype = type_data.fixJavaType(methodtype);
       JcompType reftype = JcompType.createFunctionRefType(methodtype,null,fsym);
       JcompAst.setExprType(e,reftype);
       JcompAst.setJavaType(e,reftype);
@@ -1257,13 +1295,15 @@ private class RefPass extends ASTVisitor {
          List<JcompType> comps = new ArrayList<>(rtyp.getComponents());
          comps.add(0,typ);
          ctyp = JcompType.createMethodType(rtyp.getBaseType(),comps,rtyp.isVarArgs(),null);
+         ctyp = type_data.fixJavaType(ctyp);
        }
       if (rtyp.getComponents().size() >= 1) {
          List<JcompType> comps = new ArrayList<>(rtyp.getComponents());
          if (comps.get(0).isCompatibleWith(typ)) {
             comps.remove(0);
             mtyp = JcompType.createMethodType(rtyp.getBaseType(),comps,
-        	  rtyp.isVarArgs(),null);
+                  rtyp.isVarArgs(),null);
+            mtyp = type_data.fixJavaType(mtyp);
           }
        }
       // should handle type arguments
@@ -1325,6 +1365,7 @@ private class RefPass extends ASTVisitor {
       JcompType mtyp = null;
       try {
          mtyp = JcompType.createMethodType(null,atyp,false,null);
+         mtyp = type_data.fixJavaType(mtyp);
        }
       catch (Throwable t) {
          System.err.println("PROBLEM CREATING METHOD TYPE: " + t);

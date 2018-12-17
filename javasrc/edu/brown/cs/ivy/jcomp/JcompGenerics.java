@@ -525,6 +525,7 @@ private static class MethodDeriver extends SignatureVisitor {
       if (!chng) return original_type;
       JcompType jty = JcompType.createMethodType(return_type,arg_types,original_type.isVarArgs(),
             original_type.getSignature());
+      jty = type_data.fixJavaType(jty);
       return jty;
     }
 

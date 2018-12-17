@@ -225,7 +225,7 @@ if ( "X$xxx" == X ) then
 
    set x1 = `echo $eclipse/plugins/org.eclipse.jface.text_*.jar`
    set x2 = $eclipse/plugins/org.eclipse.jface.text_\*.jar
-   if ($x1 == $x2) then
+   if ("$x1" == "$x2") then
       set eclipse = ~spr/.p2/pool
    endif
 

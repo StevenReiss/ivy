@@ -130,7 +130,10 @@ public String getFullName()
    return in_class.getName() + "." + name;
 }
 
-
+public String getFile() 
+{
+   return in_class.getFilePath();
+}
 
 public String getDescription()
 {
@@ -267,9 +270,17 @@ private List<JcodeAnnotation> addReturnAnnotations(List<TypeAnnotationNode> v,
 
 public List<JcodeAnnotation> getArgumentAnnotations(int arg)
 {
+   if (arg < 0) return null;
+   
    List<JcodeAnnotation> rslt = null;
-   rslt = addAnnotations(visibleParameterAnnotations[arg],rslt);
-   rslt = addAnnotations(invisibleParameterAnnotations[arg],rslt);
+   if (visibleParameterAnnotations != null && arg < visibleParameterAnnotations.length) {
+      rslt = addAnnotations(visibleParameterAnnotations[arg],rslt);
+    }
+   if (invisibleParameterAnnotations != null && 
+         arg < invisibleParameterAnnotations.length) {
+      rslt = addAnnotations(invisibleParameterAnnotations[arg],rslt);
+    }
+   
    return rslt;
 }
 

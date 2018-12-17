@@ -860,19 +860,19 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       visitItem(t.getType());
       visitList(t.typeArguments());
       canbe_type = false;
-
+   
       JcompType jt0 = JcompAst.getJavaType(t.getType());
       List<JcompType> ljt = new ArrayList<JcompType>();
       for (Iterator<?> it = t.typeArguments().iterator(); it.hasNext(); ) {
-	 Type t1 = (Type) it.next();
-	 JcompType jt2 = JcompAst.getJavaType(t1);
-	 if (jt2 == null) jt2 = JcompType.createErrorType();
-	 ljt.add(jt2);
+         Type t1 = (Type) it.next();
+         JcompType jt2 = JcompAst.getJavaType(t1);
+         if (jt2 == null) jt2 = JcompType.createErrorType();
+         ljt.add(jt2);
        }
-
+   
       JcompType jt1 = jt0;
       if (ljt.size() > 0) {
-	 jt1 = JcompType.createParameterizedType(jt0,ljt,JcompTyper.this);
+         jt1 = JcompType.createParameterizedType(jt0,ljt,JcompTyper.this);
        }
       setJavaType(t,jt1);
       return false;
@@ -1577,26 +1577,26 @@ private class TypeSetter extends AbstractTypeSetter {
       canbe_type = false;
       visitItem(t.getBody());
       visitList(t.modifiers());
-
+   
       JcompType jt = JcompAst.getJavaType(t.getReturnType2());
       List<JcompType> ljt = new ArrayList<JcompType>();
       for (Iterator<?> it = t.parameters().iterator(); it.hasNext(); ) {
-	 SingleVariableDeclaration svd = (SingleVariableDeclaration) it.next();
-	 JcompType pjt = JcompAst.getJavaType(svd);
-	 if (pjt == null) pjt = type_map.get(TYPE_ERROR);
-	 ljt.add(pjt);
+         SingleVariableDeclaration svd = (SingleVariableDeclaration) it.next();
+         JcompType pjt = JcompAst.getJavaType(svd);
+         if (pjt == null) pjt = type_map.get(TYPE_ERROR);
+         ljt.add(pjt);
        }
       JcompType clstyp = JcompAst.getJavaType(t.getParent());
       if (clstyp != null && clstyp.needsOuterClass() && t.isConstructor()) {
-	 JcompType outer = clstyp.getOuterType();
-	 if (outer != null) ljt.add(0,outer);
+         JcompType outer = clstyp.getOuterType();
+         if (outer != null) ljt.add(0,outer);
        }
-
+   
       //TODO:  if T is parameterized, need to create a generic signature here
       JcompType mt = JcompType.createMethodType(jt,ljt,t.isVarargs(),null);
       mt = fixJavaType(mt);
       setJavaType(t,mt);
-
+   
       return false;
     }
 

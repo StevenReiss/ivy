@@ -578,6 +578,9 @@ public JcodeMethod getMethodReference()
 	 // arrays might have methods from Object
 	 fm = in_method.getFactory().findMethod(null,"Ljava/lang/Object;",mn.name,mn.desc);
        }
+      if (fm == null && mn.owner.equals("java/lang/invoke/VarHandle")) {
+         fm = in_method.getFactory().findMethod(null,mn.owner,mn.name,null);
+       }
       return fm;
     }
    else if (for_inst instanceof InvokeDynamicInsnNode) {

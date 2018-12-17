@@ -85,6 +85,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletOutputStream;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -205,6 +206,16 @@ private void handleMessage(HttpServletRequest req,HttpServletResponse resp)
    if (fgs != null) fg = Integer.parseInt(fgs);
 
    mintLog("Handle message " + typ + " " + rid + " " + Thread.currentThread().getName());
+
+   if (typ == null) {
+      try {
+	 ServletOutputStream sos = resp.getOutputStream();
+	 sos.println("PONG");
+	 sos.close();
+       }
+      catch (IOException e) { }
+      return;
+    }
 
    if (typ.equals("MSG") || typ.equals("RPLY")) {
       try {
@@ -445,4 +456,46 @@ void mintLog(String msg)
 
 
 /* end of MintWebServlet.java */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

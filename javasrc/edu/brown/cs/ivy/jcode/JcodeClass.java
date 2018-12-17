@@ -358,6 +358,7 @@ public Collection<JcodeMethod> findParentMethods(String nm,String desc,
    if (rslt == null) rslt = new HashSet<JcodeMethod>();
 
    if (first && !rslt.isEmpty()) return rslt;
+   if (nm.equals("<init>")) return rslt;
 
    if (check) {
       JcodeMethod bm = findMethod(nm,desc);
