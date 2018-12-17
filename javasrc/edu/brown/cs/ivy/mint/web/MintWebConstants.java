@@ -38,11 +38,14 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebConstants.java,v 1.2 2011-05-27 19:32:47 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebConstants.java,v 1.3 2018/12/17 14:09:16 spr Exp $ */
 
 /*********************************************************************************
  *
  * $Log: MintWebConstants.java,v $
+ * Revision 1.3  2018/12/17 14:09:16  spr
+ * Fix up web messaging
+ *
  * Revision 1.2  2011-05-27 19:32:47  spr
  * Change copyrights.
  *

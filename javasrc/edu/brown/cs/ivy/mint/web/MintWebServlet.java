@@ -38,11 +38,14 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebServlet.java,v 1.10 2018/08/02 15:10:32 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebServlet.java,v 1.11 2018/12/17 14:09:16 spr Exp $ */
 
 /*********************************************************************************
  *
  * $Log: MintWebServlet.java,v $
+ * Revision 1.11  2018/12/17 14:09:16  spr
+ * Fix up web messaging
+ *
  * Revision 1.10  2018/08/02 15:10:32  spr
  * Fix imports.
  *

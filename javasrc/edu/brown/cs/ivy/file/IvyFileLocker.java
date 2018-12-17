@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFileLocker.java,v 1.1 2017/06/23 20:54:44 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFileLocker.java,v 1.2 2018/12/17 14:08:06 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFileLocker.java,v $
+ * Revision 1.2  2018/12/17 14:08:06  spr
+ * Fix locking protocol.
+ *
  * Revision 1.1  2017/06/23 20:54:44  spr
  * Add file locking as a public class.
  *

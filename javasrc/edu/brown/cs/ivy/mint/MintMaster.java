@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintMaster.java,v 1.30 2018/08/02 15:10:26 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintMaster.java,v 1.31 2018/12/17 14:08:40 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintMaster.java,v $
+ * Revision 1.31  2018/12/17 14:08:40  spr
+ * Minor bug fixes.
+ *
  * Revision 1.30  2018/08/02 15:10:26  spr
  * Fix imports.
  *

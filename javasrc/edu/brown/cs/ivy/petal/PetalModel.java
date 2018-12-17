@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalModel.java,v 1.6 2011-05-27 19:32:49 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalModel.java,v 1.7 2018/12/17 14:09:25 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalModel.java,v $
+ * Revision 1.7  2018/12/17 14:09:25  spr
+ * Library changes.
+ *
  * Revision 1.6  2011-05-27 19:32:49  spr
  * Change copyrights.
  *
