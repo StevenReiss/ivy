@@ -480,6 +480,11 @@ public Collection<JcodeMethod> findChildMethods(String nm,String desc,boolean ch
     }
 }
 
+@Override public void visitOuterClass(String owner,String cname,String desc)
+{
+   super.visitOuterClass(owner,cname,desc);
+}
+
 
 
 

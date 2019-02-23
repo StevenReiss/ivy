@@ -256,6 +256,11 @@ public static JcompType getExprType(ASTNode n)
 
 static void setExprType(ASTNode n,JcompType t)
 {
+   if (t == null) {
+      System.err.println("ASSIGN NULL");
+    }
+   // if (t != null && t.isErrorType()) 
+      // System.err.println("ASSIGN ERROR");
    n.setProperty(PROP_JAVA_ETYPE,t);
 }
 
@@ -353,6 +358,15 @@ static void setTyper(ASTNode n,JcompTyper typer)
 /*										*/
 /********************************************************************************/
 
+static public void clearSubtree(ASTNode n,boolean refsonly)
+{
+   if (n == null) return;
+   
+   ClearVisitor cv = new ClearVisitor(refsonly);
+   n.accept(cv);
+}
+
+
 static public void clearAll(ASTNode n)
 {
    if (n == null) return;
@@ -365,6 +379,33 @@ static public void clearAll(ASTNode n)
    n.setProperty(PROP_JAVA_RESOLVED,null);
    n.setProperty(PROP_JAVA_TYPER,null);
 }
+
+
+static public void clearRefs(ASTNode n)
+{
+   if (n == null) return;
+   
+   n.setProperty(PROP_JAVA_REF,null);
+   n.setProperty(PROP_JAVA_ETYPE,null);
+}
+
+
+
+
+private static class ClearVisitor extends ASTVisitor {
+   
+   private boolean refs_only;
+   
+   ClearVisitor(boolean refsonly) {
+      refs_only = refsonly;
+    }
+   
+   @Override public void postVisit(ASTNode n) {
+      if (refs_only) JcompAst.clearRefs(n);
+      else JcompAst.clearAll(n);
+    }
+   
+}	// end of inner class ClearVisitor
 
 
 

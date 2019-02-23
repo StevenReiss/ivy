@@ -1,0 +1,95 @@
+package sample;
+
+import java.util.*;
+import java.util.stream.*;
+import java.util.concurrent.*;
+import java.lang.annotation.Retention;
+import java.awt.Point;
+
+import static sample.Test29a.SAMPLE;
+
+
+class Test29 {
+
+
+
+void sample3()
+{
+   List<Point> lessons;
+   lessons = lessons.stream().sorted(Comparator.comparing(l -> l.getX())).
+		collect(Collectors.toList());
+}
+
+
+
+void sample5()
+{
+   Test29A<Point> t;
+// t = new Test29A<Point>();
+   t.sample().get(0).getX();
+}
+
+
+void sample4()
+{
+
+   List<String> c;
+// c = new ArrayList<>();
+   c.stream().map(c -> c.toUpperCase()).
+	filter(p -> p.startsWith("A")).
+	map(b -> b.toLowerCase()).filter(a -> a.startsWith("a"));
+}
+
+
+void sample2()
+{
+   List<Class<?>> classes;
+   classes.stream().filter(c -> c.getSuperclass());
+}
+
+
+void sample1()
+{
+   Object o = this.getClass().getAnnotationsByType(Retention.class)[0].value();
+}
+
+
+
+void getLessonOverview()
+{
+   String x = SAMPLE;
+   Map<Assignment,Boolean> overview;
+   Set<Assignment> solvedAssignments;
+
+   overview.putAll(solvedAssignments.stream().collect(
+	 Collectors.toMap(a -> a,b -> true)));
+}
+
+
+private static class Assignment extends Point {
+
+   Assignment() {
+      super();
+    }
+
+}
+
+static class Test29A<C extends Object> {
+
+   private C data;
+   private Test29B test_data;
+
+   Test29A() {
+      data = null;
+    }
+
+   Test29B sample()	{ return test_data; }
+
+   static class Test29B extends List<C> {
+     }
+
+}
+
+
+
+}	// end of Test29

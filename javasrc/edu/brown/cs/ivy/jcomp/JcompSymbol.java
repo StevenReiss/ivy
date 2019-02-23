@@ -38,6 +38,7 @@ package edu.brown.cs.ivy.jcomp;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
@@ -63,7 +64,9 @@ import org.objectweb.asm.Opcodes;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -75,6 +78,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 abstract public class JcompSymbol implements JcompConstants {
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Static Fields                                                           */
+/*                                                                              */
+/********************************************************************************/
+
+private static AtomicInteger lambda_var_counter = new AtomicInteger();
 
 
 
@@ -123,8 +136,9 @@ static JcompSymbol createSymbol(VariableDeclarationFragment n,JcompTyper typer)
       mods = vs.getModifiers();
     }
    else if (par instanceof LambdaExpression) {
-      JcompType jt = typer.findSystemType("?");
-      return new VariableSymbol(n,jt,0,clstyp);
+      JcompType jt1 = JcompType.createVariableType("L$" + lambda_var_counter.incrementAndGet());
+      // JcompType jt1 = typer.findSystemType("?");
+      return new VariableSymbol(n,jt1,0,clstyp);
     }
    else throw new Error("Unknown parent for variable decl: " + par);
 
@@ -164,6 +178,12 @@ static JcompSymbol createSymbol(LabeledStatement n)
 
 
 static JcompSymbol createSymbol(MethodDeclaration n)
+{
+   return new MethodSymbol(n);
+}
+
+
+static JcompSymbol createSymbol(AnnotationTypeMemberDeclaration n) 
 {
    return new MethodSymbol(n);
 }
@@ -526,7 +546,29 @@ public Statement createDeclaration(AST ast)
 /*										*/
 /********************************************************************************/
 
-JcompSymbol parameterize(JcompTyper typer,JcompType ptype,List<JcompType> parms)
+JcompSymbol parameterize(JcompTyper typer,JcompType ptype,
+        Map<String,JcompType> outers)
+{
+   Map<String,JcompType> nouters = (outers == null ? null : new HashMap<>(outers));
+   if (isMethodSymbol()) {
+      JcompType jty = JcompGenerics.deriveMethodType(typer,getType(),ptype,nouters);
+      if (jty == null || jty == getType()) return this;
+      return createParameterized(ptype,jty); 
+    }
+   else if (isFieldSymbol()) {
+      String sgn = getSignature();
+      if (sgn == null) sgn = getType().getSignature();
+      if (sgn == null) return this;
+      JcompType jty = JcompGenerics.deriveFieldType(typer,getType(),sgn,
+            ptype,nouters);
+      if (jty == null || jty == getType()) return this;
+      return createParameterized(ptype,jty);
+    }
+   return this;
+}
+
+
+JcompSymbol createParameterized(JcompType classtype,JcompType symtype)
 {
    return this;
 }
@@ -640,6 +682,10 @@ private static class BinaryField extends JcompSymbol {
       access_info = access;
       field_signature = sign;
     }
+   
+   @Override JcompSymbol createParameterized(JcompType ctype,JcompType ftype) {
+      return new BinaryField(field_name,ftype,ctype,access_info,field_signature);
+    }
 
    @Override public String getName()		{ return field_name; }
    @Override public JcompType getType() 	{ return field_type; }
@@ -657,14 +703,7 @@ private static class BinaryField extends JcompSymbol {
       return class_type.getName() + "." + field_name;
     }
    
-   @Override JcompSymbol parameterize(JcompTyper typer,JcompType ptype,List<JcompType> params) {
-      if (field_signature == null) return this;
-      if (!field_signature.startsWith("T")) return this;
-      JcompType jty = JcompGenerics.deriveFieldType(typer,field_type,field_signature,class_type,params);
-      if (jty == null || jty == field_type) return this;
-      BinaryField kf = new BinaryField(field_name,jty,ptype,access_info,field_signature);
-      return kf;
-    }
+   
 
 }	// end of subtype KnownField
 
@@ -681,17 +720,34 @@ private static class VariableSymbol extends JcompSymbol {
 
    private VariableDeclaration ast_node;
    private JcompType java_type;
+   private JcompType class_type;
    private boolean is_used;
    private boolean is_read;
 
    VariableSymbol(VariableDeclaration n,JcompType t,int mods,JcompType clstyp) {
       ast_node = n;
       java_type = t;
+      class_type = null;
       is_used = false;
       is_read = false;
     }
+   
+   VariableSymbol(VariableSymbol frm,JcompType ctyp,JcompType typ) {
+      ast_node = frm.ast_node;
+      java_type = typ;
+      class_type = ctyp;
+      is_used = frm.is_used;
+      is_read = frm.is_read;
+    }
 
-   @Override public String getName()	{ return ast_node.getName().getIdentifier(); }
+   @Override JcompSymbol createParameterized(JcompType ctype,JcompType vtype) {
+      return new VariableSymbol(this,ctype,vtype);
+    }
+   
+   @Override public String getName() {
+      if (ast_node == null) return "???";
+      return ast_node.getName().getIdentifier(); 
+   }
    @Override public JcompType getType() { return java_type; }
    @Override public boolean isUsed()	{ return is_used; }
    @Override public boolean isRead()	{ return is_read; }
@@ -735,6 +791,7 @@ private static class VariableSymbol extends JcompSymbol {
     }
    
    @Override public JcompType getClassType() {
+      if (class_type != null) return class_type;
       boolean isfld = false;
       for (ASTNode p = ast_node; p != null; p = p.getParent()) {
          switch (p.getNodeType()) {
@@ -817,6 +874,8 @@ private static class VariableSymbol extends JcompSymbol {
       return pfx + jt.getJavaTypeName() + "." + getName();
     }
 
+   
+   
 }	// end of subclass VariableSymbol
 
 
@@ -895,7 +954,10 @@ private static class EnumSymbol extends JcompSymbol {
       java_type = t;
     }
 
-   @Override public String getName()			{ return ast_node.getName().getIdentifier(); }
+   @Override public String getName() {
+      if (ast_node == null) return "???";
+      return ast_node.getName().getIdentifier();
+   }
    @Override public JcompType getType() 		{ return java_type; }
    @Override public boolean isEnumSymbol()		{ return true; }
    @Override public ASTNode getNameNode()		{ return ast_node; }
@@ -928,7 +990,10 @@ private static class LabelSymbol extends JcompSymbol {
       ast_node = n;
     }
 
-   @Override public String getName()		{ return ast_node.getLabel().getIdentifier(); }
+   @Override public String getName() {
+      if (ast_node == null) return "???";
+      return ast_node.getLabel().getIdentifier();
+   }
    @Override public JcompType getType() { return null; }
 
 }	// end of subclass LabelSymbol
@@ -943,36 +1008,72 @@ private static class LabelSymbol extends JcompSymbol {
 
 private static class MethodSymbol extends JcompSymbol {
 
-   private MethodDeclaration ast_node;
+   private ASTNode ast_node;
    private boolean is_used;
    private int symbol_mods;
+   private boolean in_annotation;
+   private JcompType method_type;
+   private JcompType class_type;
 
    MethodSymbol(MethodDeclaration n) {
       ast_node = n;
       is_used = false;
-      symbol_mods = ast_node.getModifiers();
+      symbol_mods = n.getModifiers();
+      in_annotation = false;
+      method_type = null;
+      class_type = null;
       if (JcompAst.isInInterface(n)) {
          symbol_mods |= Modifier.PUBLIC;
          if (n.getBody() == null) symbol_mods |= Modifier.ABSTRACT;
        }
     }
+   
+   MethodSymbol(AnnotationTypeMemberDeclaration n) {
+      ast_node = n;
+      is_used = false;
+      symbol_mods = n.getModifiers();
+      symbol_mods |= Modifier.PUBLIC;
+      in_annotation = true;
+   }
+   
+   MethodSymbol(MethodSymbol frm,JcompType ctyp,JcompType mtyp) {
+      ast_node = frm.ast_node;
+      is_used = frm.is_used;
+      symbol_mods = frm.symbol_mods;
+      in_annotation = frm.in_annotation;
+      method_type = mtyp;
+      class_type = ctyp;
+    }
+   
+   @Override JcompSymbol createParameterized(JcompType ctype,JcompType mtype) {
+      return new MethodSymbol(this,ctype,mtype);
+    }
 
    @Override public String getName() {
-      if (ast_node.isConstructor()) return "<init>";
-      return ast_node.getName().getIdentifier();
+      if (ast_node == null) return "???";
+      if (in_annotation) return ((AnnotationTypeMemberDeclaration) ast_node).getName().getIdentifier();
+      MethodDeclaration md = (MethodDeclaration) ast_node;
+      if (md.isConstructor()) return "<init>";
+      return md.getName().getIdentifier();
     }
 
    @Override public String getReportName() {
-      return ast_node.getName().getIdentifier();
+      return getName();
     }
 
-   @Override public JcompType getType() 		{ return JcompAst.getJavaType(ast_node); }
-
+   @Override public JcompType getType() {
+      if (method_type != null) return method_type;
+      return JcompAst.getJavaType(ast_node); 
+    }   
+   
    @Override public ASTNode getDefinitionNode() 	{ return ast_node; }
    @Override public ASTNode getNameNode()		{ return ast_node; }
 
    @Override public boolean isMethodSymbol()		{ return true; }
-   @Override public boolean isConstructorSymbol()	{ return ast_node.isConstructor(); }
+   @Override public boolean isConstructorSymbol() { 
+      if (in_annotation) return false;
+      return ((MethodDeclaration) ast_node).isConstructor(); 
+    }
 
    @Override public boolean isStatic()			{ return Modifier.isStatic(symbol_mods); }
    @Override public boolean isPrivate() 		{ return Modifier.isPrivate(symbol_mods); }
@@ -986,6 +1087,7 @@ private static class MethodSymbol extends JcompSymbol {
    @Override public int getModifiers()			{ return symbol_mods; }
 
    @Override public JcompType getClassType() {
+      if (class_type != null) return class_type;
       return JcompAst.getJavaType(ast_node.getParent());
     }
 
@@ -1006,6 +1108,8 @@ private static class MethodSymbol extends JcompSymbol {
        }
       return jt;
     }
+   
+   
 }	// end of subclass MethodSymbol
 
 
@@ -1029,6 +1133,10 @@ private static class BinaryMethod extends JcompSymbol {
       is_generic = gen;
     }
 
+   @Override JcompSymbol createParameterized(JcompType ctype,JcompType mtype) {
+      return new BinaryMethod(method_name,mtype,ctype,access_flags,declared_exceptions,is_generic);
+    }
+   
    @Override public String getName()			{ return method_name; }
    @Override public String getFullName() {
       return class_type.getName() + "." + method_name;
@@ -1048,12 +1156,7 @@ private static class BinaryMethod extends JcompSymbol {
    @Override public boolean isConstructorSymbol()	{ return method_name.equals("<init>"); }
    @Override public int getModifiers()                  { return access_flags; }
 
-   @Override JcompSymbol parameterize(JcompTyper typer,JcompType ptype,List<JcompType> params) {
-      JcompType jty = JcompGenerics.deriveMethodType(typer,method_type,class_type,params);
-      if (jty == null || jty == method_type) return this;
-      BinaryMethod km = new BinaryMethod(method_name,jty,ptype,access_flags,declared_exceptions,is_generic);
-      return km;
-    }
+   
    
    @Override public JcompSymbol getBaseSymbol(JcompTyper typer) {
       if (class_type.isParameterizedType()) {
@@ -1084,7 +1187,10 @@ private static class TypeSymbol extends JcompSymbol {
       ast_node = n;
     }
 
-   @Override public String getName()			{ return ast_node.getName().getIdentifier(); }
+   @Override public String getName() { 
+      if (ast_node == null) return "???";
+      return ast_node.getName().getIdentifier(); 
+   }
    @Override public JcompType getType() 		{ return JcompAst.getJavaType(ast_node); }
 
    @Override public ASTNode getDefinitionNode() 	{ return ast_node; }
@@ -1119,6 +1225,7 @@ private static class AsmTypeSymbol extends JcompSymbol {
     }
 
    @Override public String getName() {
+      if (for_type == null) return "???";
       String nm = for_type.getName();
       int idx = nm.indexOf("<");
       if (idx > 0) nm = nm.substring(0,idx);

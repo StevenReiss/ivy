@@ -1,0 +1,9 @@
+package sample;
+
+
+class Test29a {
+
+public static String SAMPLE = "this is a test";
+
+
+}

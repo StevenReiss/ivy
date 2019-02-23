@@ -18,7 +18,7 @@
  *										 *
  ********************************************************************************/
 
-/* SVN: $Id: JcompProjectImpl.java,v 1.15 2018/09/20 23:57:55 spr Exp $ */
+/* SVN: $Id: JcompProjectImpl.java,v 1.16 2019/02/23 02:59:27 spr Exp $ */
 
 
 
@@ -32,6 +32,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.ParameterizedType;
+import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -217,23 +218,15 @@ public JcompTyper getResolveTyper()             { return resolve_typer; }
 
 private void clearResolve()
 {
-   ClearVisitor cv = new ClearVisitor();
-
    for (JcompFile jf : file_nodes) {
       ASTNode cu = jf.getAstNode();
-      if (cu != null) cu.accept(cv);
+      JcompAst.clearSubtree(cu,false);
     }
 }
 
 
 
-private static class ClearVisitor extends ASTVisitor {
 
-   @Override public void postVisit(ASTNode n) {
-      JcompAst.clearAll(n);
-   }
-
-}	// end of inner class ClearVisitor
 
 
 
@@ -505,7 +498,18 @@ private class FileSorter {
        }
       for (Object o : cu.imports()) {
          ImportDeclaration id = (ImportDeclaration) o;
-         if (id.isStatic()) continue;
+         if (id.isStatic()) {
+            String cnm = null;
+            if (id.isOnDemand()) {
+               cnm = id.getName().getFullyQualifiedName();
+             }
+            else if (id.getName() instanceof QualifiedName) {
+               QualifiedName qn = (QualifiedName) id.getName();
+               cnm = qn.getQualifier().getFullyQualifiedName();
+             }
+            else continue; 
+            addDepend(cnm,ff,pfxs,known);
+          }
          if (id.isOnDemand()) {
             pfxs.add(id.getName().getFullyQualifiedName());
           }
@@ -591,6 +595,38 @@ private class FileSorter {
        }
     }
    
+   private void addDepend(String tnm,JcompFile to,List<String> pfxs,List<String> known) {
+      JcompFile frm = class_names.get(tnm);
+      while (frm == null) {
+         String xnm = "." + tnm;
+         for (String s : known) {
+            if (s.endsWith(xnm)) {
+               frm = class_names.get(s);
+               if (frm != null) break;
+             }
+          }
+         if (frm == null) {
+            for (String s : pfxs) {
+               frm = class_names.get(s + xnm);
+               if (frm != null) break;
+             }
+          }
+         if (frm == null) {
+            int idx = tnm.lastIndexOf(".");
+            if (idx < 0) break;
+            tnm = tnm.substring(0,idx);
+          }
+       }
+      if (frm != null && frm != to) {
+         List<JcompFile> dps = depend_names.get(to);
+         if (dps == null) {
+            dps = new ArrayList<>();
+            depend_names.put(to,dps);
+          }
+         dps.add(frm);
+       }
+    }
+         
 }	// end of inner class FileSorter
 
 

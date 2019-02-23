@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyDatabase.java,v 1.16 2018/08/02 15:09:49 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyDatabase.java,v 1.17 2019/02/23 02:58:58 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyDatabase.java,v $
+ * Revision 1.17  2019/02/23 02:58:58  spr
+ * Code clean up.
+ *
  * Revision 1.16  2018/08/02 15:09:49  spr
  * Fix imports.  Add copy from input stream.
  *
@@ -481,6 +484,11 @@ public static String getIdDefType()
 
    return "int AUTO_INCREMENT";
 }
+
+
+
+
+
 
 
 

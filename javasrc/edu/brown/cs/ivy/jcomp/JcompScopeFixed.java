@@ -166,6 +166,9 @@ JcompScopeFixed()
 	    else if (isBetterMethod(aty,js,bestms))
 	       bestms = js;
 	  }
+         else if (bestms == null) {
+            
+          }
        }
       if (bestms != null) return bestms;
     }

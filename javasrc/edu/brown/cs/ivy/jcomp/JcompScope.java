@@ -37,6 +37,7 @@ package edu.brown.cs.ivy.jcomp;
 
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodReference;
@@ -92,6 +93,16 @@ JcompSymbol defineMethod(String nm,MethodDeclaration n)
 
    defineMethod(js);
 
+   return js;
+}
+
+
+JcompSymbol defineMethod(String nm,AnnotationTypeMemberDeclaration n)
+{
+   JcompSymbol js = JcompSymbol.createSymbol(n);
+   
+   defineMethod(js);
+   
    return js;
 }
 

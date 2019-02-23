@@ -31,12 +31,15 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFileLocker.java,v 1.2 2018/12/17 14:08:06 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFileLocker.java,v 1.3 2019/02/23 02:58:58 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFileLocker.java,v $
+ * Revision 1.3  2019/02/23 02:58:58  spr
+ * Code clean up.
+ *
  * Revision 1.2  2018/12/17 14:08:06  spr
  * Fix locking protocol.
  *
@@ -93,9 +96,11 @@ public IvyFileLocker(File f)
    else if (!f.getName().endsWith(".lock")) f = new File(f.getPath() + ".lock");
    
    lock_name = f;
+   f.setWritable(true,false);
    
    try {
       lock_file = new FileOutputStream(f);
+      f.setWritable(true,false);
     }
    catch (IOException e) {
       System.err.println("IVY: lock file " + f + " couldn't be opened");

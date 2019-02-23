@@ -17,6 +17,7 @@ import edu.brown.cs.ivy.jcode.JcodeField;
 import edu.brown.cs.ivy.jcode.JcodeMethod;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -297,30 +298,69 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
       if (idx1 > 0) {
 	 String ojtnm = xnm.substring(0,idx1);
 	 JcompType oty = getAsmTypeName(typer,ojtnm);
-	 if (oty != null) jt.setOuterType(oty);
+	 if (oty != null)
+            jt.setOuterType(oty);
 	 if (!jc.isStatic() && oty != null && !oty.isInterfaceType()) {
 	    jt.setInnerNonStatic(true);
 	  }
        }
       jt.setContextType(false);
+      
+      // first set up type using non-generic values
       if (jc.superName != null) {
-	 JcompType sty = getAsmTypeName(typer,jc.superName);
+         JcompType sty = getAsmTypeName(typer,jc.superName);
 	 if (sty == null) {
 	    System.err.println("SUPER TYPE IS UNKNOWN IN CODE: " + jc.superName);
 	  }
 	 if (sty != null) jt.setSuperType(sty);
        }
-      if (jc.interfaces != null) {
+      if (jc.interfaces != null) { 
 	 for (String inm : jc.interfaces) {
 	    JcompType ijt = getAsmTypeName(typer,inm);
 	    if (ijt != null) jt.addInterface(ijt);
 	  }
        }
+      // then define the type in case of recursion in generic definitions
+      jt = typer.fixJavaType(jt);
       jt.setDefinition(JcompSymbol.createSymbol(jt,jc.getModifiers()));
       type_map.put(jc,jt);
+      
+      // finally handle generic specialization
+      if (jt.getSignature() != null && jt.getSignature().contains("<")) {
+         // System.err.println("CHECK DERIVE " + jt + " " + jt.getSignature());
+         Map<String,JcompType> outermap = computeOutermap(jt);
+         // compute the outermap here by looking at outer type...
+         JcompType sty = JcompGenerics.deriveSupertype(typer,jt,outermap);
+	 if (sty != null) jt.setSuperType(sty);
+         Collection<JcompType> njt = jt.getInterfaces();
+         if (njt != null) {
+            Collection<JcompType> lty1 = null;
+            lty1 = JcompGenerics.deriveInterfaceTypes(typer,jt,outermap);
+            if (lty1 != null && njt != lty1) {
+               njt.clear();
+               for (JcompType ijt : lty1) {
+                  jt.addInterface(ijt);
+                }
+             }
+          }
+       }
     }
+   
    jt = typer.fixJavaType(jt);
    return jt;
+}
+
+
+
+private Map<String,JcompType> computeOutermap(JcompType jt)
+{
+   JcompType oty = jt.getOuterType();
+   if (oty == null) return null;
+   
+   String osgn = oty.getSignature();
+   if (osgn == null || !osgn.contains("<")) return null;
+ 
+   return jt.getOuterComponents();
 }
 
 

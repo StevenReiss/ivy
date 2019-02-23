@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintServerMaster.java,v 1.26 2018/08/02 15:10:26 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintServerMaster.java,v 1.27 2019/02/23 02:59:10 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintServerMaster.java,v $
+ * Revision 1.27  2019/02/23 02:59:10  spr
+ * Bug fix.
+ *
  * Revision 1.26  2018/08/02 15:10:26  spr
  * Fix imports.
  *
@@ -304,60 +307,61 @@ private class SocketThread extends Thread {
    SocketThread(int port) {
       super("MintMasterSocket");
       try {
-	 InetAddress lcl = InetAddress.getLocalHost();
-	 // server_socket = new ServerSocket(port,5,lcl);
-	 server_socket = new ServerSocket(port,5);
-	 port = server_socket.getLocalPort();
-
-	 String fn = MintMaster.getMasterFile();
-	 File mf = new File(fn);
-	 FileWriter fw = new FileWriter(mf);
-	 PrintWriter pw = new PrintWriter(fw);
-	 pw.println(lcl.getHostAddress() + "\t" + port);
-	 pw.close();
-	 mf.deleteOnExit();
-	 MintLogger.log("MASTER: Server file set up as " + fn);
-
-	 try {
-	    HostPortImpl hpi = new HostPortImpl(lcl.getHostAddress(),port);
-	    // HostPort hp = (HostPort) UnicastRemoteObject.exportObject(hpi,0);
-	    Registry r = LocateRegistry.getRegistry();
-	    // Naming.rebind(MINT_REGISTRY_PROP,hpi);
-	    System.setProperty("java.rmi.server.codebase","file:///research/ivy/lib/ivy.jar");
-	    r.rebind(MINT_REGISTRY_PROP,hpi);
-	    String [] nms = r.list();
-	    int ctr = 0;
-	    for (String s : nms) {
-	       if (s.startsWith(MINT_REGISTRY_PREFIX) || s.startsWith("MintMaster[")) {
-		  try {
-		     r.unbind(s);
-		   }
-		  catch (Throwable t) {
-		     int idx = s.indexOf("]");
-		     String v = s.substring(idx+1);
-		     if (v.length() > 0) {
-			ctr = Math.max(ctr,Integer.parseInt(v)+1);
-		      }
-		   }
-		}
-	     }
-	    String nm = MINT_REGISTRY_PREFIX + lcl.getHostAddress() + "@" + port + "]" + ctr;
-	    r.rebind(nm,hpi);
-	    System.err.println("RMI SUCCESSFULLY BOUND");
-	  }
-	 catch (RemoteException e) {
-	    MintLogger.log("MASTER: RMI service not available: " + e);
-	  }
-
-	 if (do_debug) {
-	    MintLogger.log("MASTER: Server set up on " + server_socket.toString() +
-			      " " + server_socket.getInetAddress().isAnyLocalAddress() +
-			      " FILE " + fn);
-	  }
+         InetAddress lcl = InetAddress.getLocalHost();
+         // server_socket = new ServerSocket(port,5,lcl);
+         server_socket = new ServerSocket(port,5);
+         port = server_socket.getLocalPort();
+   
+         String fn = MintMaster.getMasterFile();
+         File mf = new File(fn);
+         FileWriter fw = new FileWriter(mf);
+         PrintWriter pw = new PrintWriter(fw);
+         mf.setWritable(true,false);
+         pw.println(lcl.getHostAddress() + "\t" + port);
+         pw.close();
+         mf.deleteOnExit();
+         MintLogger.log("MASTER: Server file set up as " + fn);
+   
+         try {
+            HostPortImpl hpi = new HostPortImpl(lcl.getHostAddress(),port);
+            // HostPort hp = (HostPort) UnicastRemoteObject.exportObject(hpi,0);
+            Registry r = LocateRegistry.getRegistry();
+            // Naming.rebind(MINT_REGISTRY_PROP,hpi);
+            System.setProperty("java.rmi.server.codebase","file:///research/ivy/lib/ivy.jar");
+            r.rebind(MINT_REGISTRY_PROP,hpi);
+            String [] nms = r.list();
+            int ctr = 0;
+            for (String s : nms) {
+               if (s.startsWith(MINT_REGISTRY_PREFIX) || s.startsWith("MintMaster[")) {
+        	  try {
+        	     r.unbind(s);
+        	   }
+        	  catch (Throwable t) {
+        	     int idx = s.indexOf("]");
+        	     String v = s.substring(idx+1);
+        	     if (v.length() > 0) {
+        		ctr = Math.max(ctr,Integer.parseInt(v)+1);
+        	      }
+        	   }
+        	}
+             }
+            String nm = MINT_REGISTRY_PREFIX + lcl.getHostAddress() + "@" + port + "]" + ctr;
+            r.rebind(nm,hpi);
+            System.err.println("RMI SUCCESSFULLY BOUND");
+          }
+         catch (RemoteException e) {
+            MintLogger.log("MASTER: RMI service not available: " + e);
+          }
+   
+         if (do_debug) {
+            MintLogger.log("MASTER: Server set up on " + server_socket.toString() +
+        		      " " + server_socket.getInetAddress().isAnyLocalAddress() +
+        		      " FILE " + fn);
+          }
        }
       catch (IOException e) {
-	 MintLogger.log("MASTER: Server failed: " + e.getMessage());
-	 System.exit(0);
+         MintLogger.log("MASTER: Server failed: " + e.getMessage());
+         System.exit(0);
        }
     }
 

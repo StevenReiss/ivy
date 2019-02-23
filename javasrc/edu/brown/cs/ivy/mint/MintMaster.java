@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintMaster.java,v 1.31 2018/12/17 14:08:40 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintMaster.java,v 1.32 2019/02/23 02:59:10 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintMaster.java,v $
+ * Revision 1.32  2019/02/23 02:59:10  spr
+ * Bug fix.
+ *
  * Revision 1.31  2018/12/17 14:08:40  spr
  * Minor bug fixes.
  *
@@ -455,6 +458,7 @@ private static boolean getMasterSocket()
    File ffn = new File(fn);
    File ffnp = ffn.getParentFile();
    if (!ffnp.exists()) ffnp.mkdirs();
+   ffnp.setWritable(true,false);
 
    IvyFileLocker lock = new IvyFileLocker(fn);
    try {

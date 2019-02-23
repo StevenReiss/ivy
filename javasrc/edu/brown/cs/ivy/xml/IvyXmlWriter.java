@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXmlWriter.java,v 1.34 2018/08/02 15:11:00 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXmlWriter.java,v 1.35 2019/02/23 02:59:15 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyXmlWriter.java,v $
+ * Revision 1.35  2019/02/23 02:59:15  spr
+ * Code cleanup.
+ *
  * Revision 1.34  2018/08/02 15:11:00  spr
  * Fix imports.
  *
@@ -620,6 +623,7 @@ private void indent()
 
 synchronized public void writeXml(Node n)
 {
+   if (n == null) return;
    if (n.getNodeType() == Node.ELEMENT_NODE) {
       begin(n.getNodeName());
       NamedNodeMap nnm = n.getAttributes();
