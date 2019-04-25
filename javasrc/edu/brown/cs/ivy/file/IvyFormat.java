@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFormat.java,v 1.14 2015/02/14 18:45:34 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFormat.java,v 1.15 2019/04/25 20:09:56 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFormat.java,v $
+ * Revision 1.15  2019/04/25 20:09:56  spr
+ * Add decoding strings.
+ *
  * Revision 1.14  2015/02/14 18:45:34  spr
  * Avoid errors on bad types.
  *
@@ -269,6 +272,75 @@ public static String formatTypeName(String javatype)
 
 
 
+/********************************************************************************/
+/*                                                                              */
+/*      String formatting methods                                               */
+/*                                                                              */
+/********************************************************************************/
+
+public static String getLiteralValue(String s)
+{
+   StringBuffer buf = new StringBuffer();
+   int last = s.length() - 1;
+   for (int i = 1; i < last; i++) {
+      char c = s.charAt(i);
+      if (c == '\\') {
+	 i++;
+	 c = s.charAt(i);
+	 if (Character.toUpperCase(c) == 'U') {
+	    i++;
+	    String unicodeChars = s.substring(i, i + 4);
+	    int val = Integer.parseInt(unicodeChars, 16);
+	    i += 4 - 1;
+	    buf.append((char) val);
+          }
+	 else if (Character.isDigit(c)) {
+            String octchars = s.substring(i,i+3);
+            int val = Integer.parseInt(octchars,8);
+	    i += 3;
+            buf.append((char) val);
+          }
+	 else {
+            switch (c) {
+               case '"' :
+               case '\'' :
+               case '\\' :
+               default :
+                  buf.append(c);
+                  break;
+               case 'n' :
+                  buf.append('\n');
+                  break;
+               case 'r' :
+                  buf.append('\r');
+                  break;
+               case 'f' :
+                  buf.append('\f');
+                  break;
+               case 't' :
+                  buf.append('\t');
+                  break;      
+               case 'b' :
+                  buf.append('\b');
+                  break;               
+             }
+          }
+       }
+      else {
+	 buf.append(c);
+       }
+    }
+   return buf.toString();
+}
+
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Type format methods                                                     */
+/*                                                                              */
+/********************************************************************************/
 
 public static String formatTypeNames(String javatype,String sep)
 {

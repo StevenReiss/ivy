@@ -204,9 +204,10 @@ jar:
 	(cd java; find . -follow -name '*.class' -print | \
 		fgrep -v .AppleDouble | \
 		fgrep -v tea/iced > ../jar.files )
-	(cd java; jar cf ../lib/ivy.jar `cat ../jar.files` )
-	(cd java; jar cfm ../lib/ivyfull.jar ../setupmanifest.mf `cat ../jar.files` )
-	rm -rf jar.files
+	cp javasrc/fait.xml java
+	(cd java; jar cf ../lib/ivy.jar `cat ../jar.files` fait.xml )
+	(cd java; jar cfm ../lib/ivyfull.jar ../setupmanifest.mf `cat ../jar.files` fait.xml )
+	rm -rf jar.files java/fait.xml
 
 world:
 	$(MAKE) realclean

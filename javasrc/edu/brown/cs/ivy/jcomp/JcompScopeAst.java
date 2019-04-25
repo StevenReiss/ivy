@@ -110,9 +110,9 @@ private JcompScopeLookup getLookupScope()		{ return lookup_scope; }
 
 @Override void defineMethod(JcompSymbol js)		      { lookup_scope.defineMethod(js,this); }
 
-@Override JcompSymbol lookupMethod(String id,JcompType aty,JcompType base,ASTNode n)
+@Override JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompType base,ASTNode n)
 {
-   return lookup_scope.lookupMethod(id,aty,this,base,n);
+   return lookup_scope.lookupMethod(typer,id,aty,this,base,n);
 }
 
 

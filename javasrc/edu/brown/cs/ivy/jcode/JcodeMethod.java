@@ -135,6 +135,12 @@ public String getFile()
    return in_class.getFilePath();
 }
 
+public String getSourceFile()
+{
+   return in_class.sourceFile;
+}
+
+
 public String getDescription()
 {
    return desc;
@@ -249,6 +255,8 @@ public List<JcodeAnnotation> getReturnAnnotations()
 {
    List<JcodeAnnotation> rslt = null;
    
+   rslt = addMethodReturnAnnotations(visibleAnnotations,rslt);
+   rslt = addMethodReturnAnnotations(invisibleAnnotations,rslt);
    rslt = addReturnAnnotations(visibleTypeAnnotations,rslt);
    rslt = addReturnAnnotations(invisibleTypeAnnotations,rslt);
    return rslt;
@@ -263,6 +271,20 @@ private List<JcodeAnnotation> addReturnAnnotations(List<TypeAnnotationNode> v,
          if (rslt == null) rslt = new ArrayList<>();
          rslt.add(new JcodeAnnotation(tn,bcode_factory));
        }
+    }
+   
+   return rslt;
+}
+
+
+
+private List<JcodeAnnotation> addMethodReturnAnnotations(List<AnnotationNode> v,
+      List<JcodeAnnotation> rslt)
+{
+   if (v == null || v.isEmpty()) return rslt;
+   for (AnnotationNode tn : v) {
+      if (rslt == null) rslt = new ArrayList<>();
+      rslt.add(new JcodeAnnotation(tn,bcode_factory));
     }
    
    return rslt;

@@ -18,7 +18,7 @@
  *										 *
  ********************************************************************************/
 
-/* SVN: $Id: JcompSearch.java,v 1.4 2018/09/20 23:57:56 spr Exp $ */
+/* SVN: $Id: JcompSearch.java,v 1.5 2019/04/25 20:11:10 spr Exp $ */
 
 
 
@@ -500,7 +500,7 @@ private void expandMatchesForImplementations()
 	 for (JcompType ct : chld) {
 	    JcompScope scp = ct.getScope();
 	    if (scp != null) {
-	       JcompSymbol xsym = scp.lookupMethod(nm,jt,null,null);
+	       JcompSymbol xsym = scp.lookupMethod(null,nm,jt,null,null);
 	       if (!match_symbols.contains(xsym)) add.add(xsym);
 	    }
 	  }

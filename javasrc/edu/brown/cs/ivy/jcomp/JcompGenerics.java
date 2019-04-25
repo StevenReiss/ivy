@@ -1015,7 +1015,7 @@ private static class MethodDeriver extends GenericSignatureVisitor {
       if (return_deriver.isChanged()) chng = true;
       
       if (!chng) return original_type;
-      System.err.println("METHOD " + nsgn + " " + original_type.getSignature());
+      // System.err.println("METHOD " + nsgn + " " + original_type.getSignature());
       
       JcompType jty = JcompType.createMethodType(return_type,arg_types,
             original_type.isVarArgs(),nsgn);
@@ -1179,11 +1179,18 @@ private static class TypeDeriver extends GenericSignatureVisitor {
        }
       String nm = outer_type.getName();
       if (outer_type.isParameterizedType()) nm = outer_type.getBaseType().getName();
-      String fnm = nm + "$" + name;
-      new_type = type_data.findSystemType(fnm);
-      if (new_type == null) {
+     
+      String fnm = nm + "." + name;
+      JcompType nty = type_data.findSystemType(fnm);
+      if (nty == null) {
+         fnm = nm + "$" + name;
+         nty = type_data.findSystemType(fnm);
+       }
+      if (nty == null) {
          System.err.println("Can't find inner type " + name + " " + fnm);
        }
+      new_type = nty;
+      
       super.visitInnerClassType(name);
     }
 

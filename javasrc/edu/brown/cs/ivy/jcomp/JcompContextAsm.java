@@ -429,7 +429,7 @@ private class AsmClass {
    private List<AsmField> field_data;
    private List<AsmMethod> method_data;
    private JcompType base_type;
-   private Set<JcompScope> all_defined;
+   private Map<JcompScope,Object> all_defined;
    private boolean nested_this;
 
    AsmClass(String nm,int acc,String sgn,String sup,String [] ifc) {
@@ -614,10 +614,24 @@ private class AsmClass {
       return rslt;
     }
 
-   synchronized void defineAll(JcompTyper typer,JcompScope scp) {
-      if (all_defined !=  null && all_defined.contains(scp)) return;
-      if (all_defined == null) all_defined = new HashSet<JcompScope>();
-      all_defined.add(scp);
+   void defineAll(JcompTyper typer,JcompScope scp) {
+      synchronized (this) {
+         if (all_defined == null) all_defined = new HashMap<>();
+         else if (all_defined.get(scp) == Boolean.TRUE) return;
+         else if (all_defined.get(scp) == Thread.currentThread()) return;
+         else if (all_defined.get(scp) == null) {
+            all_defined.put(scp,Thread.currentThread());
+          }
+         else {
+            while (all_defined.get(scp) != Boolean.TRUE) {
+               try {
+                  wait(1000);
+                }
+               catch (InterruptedException e) { }
+             }
+            return;
+          }
+       }
    
       for (AsmField af : field_data) {
          if (scp.lookupVariable(af.getName()) == null) {
@@ -631,7 +645,7 @@ private class AsmClass {
        }
       for (AsmMethod am : method_data) {
          JcompType atyp = am.getMethodType(typer,null,null);
-         JcompSymbol fjs = scp.lookupMethod(am.getName(),atyp,null,null);
+         JcompSymbol fjs = scp.lookupMethod(typer,am.getName(),atyp,null,null);
          if (fjs != null) {
             JcompType btyp = fjs.getType();
             if (!btyp.equals(atyp)) {
@@ -669,6 +683,11 @@ private class AsmClass {
         	}
              }
           }
+       }
+      
+      synchronized (this) {
+         all_defined.put(scp,Boolean.TRUE);
+         notifyAll();
        }
     }
 

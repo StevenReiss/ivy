@@ -537,8 +537,11 @@ public JcodeMethod findMethod(String nm,String cls,String mnm,String desc)
       else nm = cls + "." + mnm;
     }
 
+   JcodeMethod bm = known_methods.get(nm);
+   if (bm != null) return bm;
+
    synchronized (known_methods) {
-      JcodeMethod bm = known_methods.get(nm);
+      bm = known_methods.get(nm);
       if (bm == null) {
 	 if (cls == null) {
 	    int idx0 = nm.indexOf("(");
@@ -748,52 +751,52 @@ private class LoadTask implements Runnable {
       JcodeFileInfo fi = class_map.get(load_class);
       String altname = load_class;
       if (fi == null) {
-         while (altname.contains(".")) {
-            int idx = altname.lastIndexOf(".");
-            altname = altname.substring(0,idx) + "$" + altname.substring(idx+1);
-            fi = class_map.get(altname);
-            if (fi != null) break;
-          }
+	 while (altname.contains(".")) {
+	    int idx = altname.lastIndexOf(".");
+	    altname = altname.substring(0,idx) + "$" + altname.substring(idx+1);
+	    fi = class_map.get(altname);
+	    if (fi != null) break;
+	  }
        }
-      
+
       if (fi == null) {
-         // System.err.println("JCODE: Can't find class " + load_class);
-         return;
+	 // System.err.println("JCODE: Can't find class " + load_class);
+	 return;
        }
       try {
-         JcodeClass bc = null;
-         synchronized (known_classes) {
-            if (known_classes.get(load_class) == null) {
-               bc = new JcodeClass(JcodeFactory.this,fi,true);
-               known_classes.put(load_class,bc);
-               String c1 = load_class.replace('.','/');
-               known_classes.put(c1,bc);
-               String c2 = "L" + c1 + ";";
-               known_classes.put(c2,bc);
-               if (c1.contains("$")) {
-                  String c3 = c1.replace('$','.');
-                  known_classes.put(c3,bc);
-                  String c4 = load_class.replace('$','.');
-                  known_classes.put(c4,bc);
-                }
-             }
-          }
-         
-         if (bc != null) {
-            // System.err.println("JCODE: Load class " + load_class);
-            InputStream ins = fi.getInputStream();
-            if (ins == null) {
-               System.err.println("JCODE: Can't open file for class " + load_class);
-             }
-            else {
-               ClassReader cr = new ClassReader(ins)	  ;
-               cr.accept(bc,0);
-               ins.close();
-             }
-          }
+	 JcodeClass bc = null;
+	 synchronized (known_classes) {
+	    if (known_classes.get(load_class) == null) {
+	       bc = new JcodeClass(JcodeFactory.this,fi,true);
+	       known_classes.put(load_class,bc);
+	       String c1 = load_class.replace('.','/');
+	       known_classes.put(c1,bc);
+	       String c2 = "L" + c1 + ";";
+	       known_classes.put(c2,bc);
+	       if (c1.contains("$")) {
+		  String c3 = c1.replace('$','.');
+		  known_classes.put(c3,bc);
+		  String c4 = load_class.replace('$','.');
+		  known_classes.put(c4,bc);
+		}
+	     }
+	  }
+
+	 if (bc != null) {
+	    // System.err.println("JCODE: Load class " + load_class);
+	    InputStream ins = fi.getInputStream();
+	    if (ins == null) {
+	       System.err.println("JCODE: Can't open file for class " + load_class);
+	     }
+	    else {
+	       ClassReader cr = new ClassReader(ins)	  ;
+	       cr.accept(bc,0);
+	       ins.close();
+	     }
+	  }
        }
       catch (IOException e) {
-         System.err.println("JCODE: Problem reading class " + load_class);
+	 System.err.println("JCODE: Problem reading class " + load_class);
        }
    }
 

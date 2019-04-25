@@ -178,12 +178,14 @@ void defineMethod(JcompSymbol js,JcompScope scp)
 
 
 
-JcompSymbol lookupMethod(String id,JcompType aty,JcompScope js,JcompType basetype,ASTNode n)
+JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompScope js,JcompType basetype,ASTNode n)
 {
    List<MethodElement> lme = method_names.get(id);
    if (lme == null) {
       return null;
     }
+   else lme = new ArrayList<>(lme);
+   
    while (js != null) {
       for (MethodElement me : lme) {
 	 if (me.getScope() == js) {
@@ -342,13 +344,15 @@ private static class MethodElement {
 
    MethodElement(JcompScope scp) {
       for_scope = scp;
-      for_methods = new ArrayList<JcompSymbol>();
+      for_methods = new ArrayList<>();
     }
 
-   void add(JcompSymbol js)		      { for_methods.add(js); }
+   synchronized void add(JcompSymbol js)   { for_methods.add(js); }
 
    JcompScope getScope()			      { return for_scope; }
-   Collection<JcompSymbol> getMethods()       { return for_methods; }
+   synchronized Collection<JcompSymbol> getMethods()       { 
+      return new ArrayList<>(for_methods);
+   }
 
 }	// end of subclass MethodElement
 

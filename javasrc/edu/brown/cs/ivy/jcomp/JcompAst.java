@@ -257,9 +257,9 @@ public static JcompType getExprType(ASTNode n)
 static void setExprType(ASTNode n,JcompType t)
 {
    if (t == null) {
-      System.err.println("ASSIGN NULL");
+      // System.err.println("ASSIGN NULL to " + n);
     }
-   // if (t != null && t.isErrorType()) 
+   // if (t != null && t.isErrorType())
       // System.err.println("ASSIGN ERROR");
    n.setProperty(PROP_JAVA_ETYPE,t);
 }
@@ -361,7 +361,7 @@ static void setTyper(ASTNode n,JcompTyper typer)
 static public void clearSubtree(ASTNode n,boolean refsonly)
 {
    if (n == null) return;
-   
+
    ClearVisitor cv = new ClearVisitor(refsonly);
    n.accept(cv);
 }
@@ -384,7 +384,7 @@ static public void clearAll(ASTNode n)
 static public void clearRefs(ASTNode n)
 {
    if (n == null) return;
-   
+
    n.setProperty(PROP_JAVA_REF,null);
    n.setProperty(PROP_JAVA_ETYPE,null);
 }
@@ -393,18 +393,18 @@ static public void clearRefs(ASTNode n)
 
 
 private static class ClearVisitor extends ASTVisitor {
-   
+
    private boolean refs_only;
-   
+
    ClearVisitor(boolean refsonly) {
       refs_only = refsonly;
     }
-   
+
    @Override public void postVisit(ASTNode n) {
       if (refs_only) JcompAst.clearRefs(n);
       else JcompAst.clearAll(n);
     }
-   
+
 }	// end of inner class ClearVisitor
 
 
@@ -424,6 +424,10 @@ public static Name getQualifiedName(AST ast,String s)
 {
    synchronized (ast) {
       int idx = s.lastIndexOf(".");
+      if (s.endsWith(".")) {
+	 s = s.substring(0,idx);
+	 idx = s.lastIndexOf(".");
+       }
       if (idx < 0) {
 	 try {
 	    return ast.newSimpleName(s);
@@ -654,18 +658,18 @@ private static class ExceptionFinder extends ASTVisitor
    private void handleCall(JcompSymbol js) {
       if (js == null) return;
       for (JcompType jt : js.getExceptions()) {
-         found_exceptions.add(jt);
+	 found_exceptions.add(jt);
        }
       if (js.getDefinitionNode() != null) {
-         ASTNode an = js.getDefinitionNode();
-         if (an.getNodeType() == ASTNode.METHOD_DECLARATION) {
-            MethodDeclaration md = (MethodDeclaration) an;
-            for (Object o : md.thrownExceptionTypes()) {
-               Type n = (Type) o;
-               JcompType jt = JcompAst.getJavaType(n);
-               if (jt != null) found_exceptions.add(jt);
-             }
-          }
+	 ASTNode an = js.getDefinitionNode();
+	 if (an.getNodeType() == ASTNode.METHOD_DECLARATION) {
+	    MethodDeclaration md = (MethodDeclaration) an;
+	    for (Object o : md.thrownExceptionTypes()) {
+	       Type n = (Type) o;
+	       JcompType jt = JcompAst.getJavaType(n);
+	       if (jt != null) found_exceptions.add(jt);
+	     }
+	  }
        }
     }
 

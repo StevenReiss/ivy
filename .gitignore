@@ -71,3 +71,7 @@ javasrc/edu/brown/cs/ivy/mint/web/javadep1
 lib/eclipsejar/version
 lib/eclipsejartest/
 lib/updateeclipse.csh
+.idea
+checkthis*
+*.csv
+target

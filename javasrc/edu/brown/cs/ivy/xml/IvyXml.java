@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.77 2018/08/02 15:11:00 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.78 2019/04/25 20:10:57 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyXml.java,v $
+ * Revision 1.78  2019/04/25 20:10:57  spr
+ * Avoid errors on external DTD not available.
+ *
  * Revision 1.77  2018/08/02 15:11:00  spr
  * Fix imports.
  *
@@ -763,7 +766,6 @@ public synchronized static Element loadXmlFromURL(String url,boolean nsa)
     }
    catch (Exception e) {
       System.err.println("Ivy XML error for " + url + " : " + e + " :: " + e.getMessage());
-      e.printStackTrace();
     }
 
    return rslt;
@@ -843,7 +845,6 @@ private synchronized static Element loadXmlFromReader(Reader inf,boolean nsa,Str
     }
    catch (Exception e) {
       System.err.println("Ivy XML error for reader " + src + ": " + e + " :: " + e.getMessage());
-      e.printStackTrace();
     }
 
    return rslt;
@@ -1601,6 +1602,10 @@ private static class XmlParser {
    
       try {
          System.setProperty("entityExpansionLimit","100000000");
+       }
+      catch (Throwable e) { }
+      try {
+         dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd",false);
        }
       catch (Throwable e) { }
       try {

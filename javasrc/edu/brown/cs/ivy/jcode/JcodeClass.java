@@ -213,7 +213,7 @@ public Collection<JcodeMethod> getMethods()
 /********************************************************************************/
 
 public JcodeMethod findMethod(String nm,String desc)
-{
+{ 
    String argdesc = desc;
    if (desc != null) {
       int idx = desc.lastIndexOf(")");
@@ -226,6 +226,14 @@ public JcodeMethod findMethod(String nm,String desc)
          String bmd = bm.getDescription();
          if (bmd.equals(desc)) return bm;
          if (bmd.startsWith(argdesc)) return bm;
+         String sgn = bm.getSignature();
+         if (sgn != null) {
+            int idx1 = sgn.indexOf("(");
+            int idx2 = sgn.lastIndexOf(")");
+            sgn = sgn.substring(idx1,idx2+1);
+            if (sgn.equals(argdesc)) return bm;
+          }
+         
          // if (desc.endsWith(")") && bmd.startsWith(desc)) return bm;
        }
     }

@@ -148,7 +148,7 @@ JcompScopeFixed()
 
 
 
-@Override JcompSymbol lookupMethod(String id,JcompType aty,JcompType base,ASTNode n)
+@Override JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompType base,ASTNode n)
 {
    Collection<JcompSymbol> ljs;
    
@@ -161,6 +161,7 @@ JcompScopeFixed()
          if (base != null && n != null) {
             if (!JcompType.checkProtections(js,base,n)) continue;
           }
+         if (typer != null) js.getType().defineAll(typer);
 	 if (aty.isCompatibleWith(js.getType())) {
 	    if (bestms == null) bestms = js;
 	    else if (isBetterMethod(aty,js,bestms))

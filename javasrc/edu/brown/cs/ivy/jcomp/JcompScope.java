@@ -132,7 +132,7 @@ JcompSymbol defineReference(MethodReference n)
 
 abstract void defineMethod(JcompSymbol js);
 
-abstract JcompSymbol lookupMethod(String id,JcompType aty,JcompType base,ASTNode n);
+abstract JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompType base,ASTNode n);
 abstract JcompSymbol lookupExactMethod(String id,JcompType aty);
 abstract List<JcompSymbol> lookupStatics(String id);
 abstract void getFields(Map<String,JcompType> flds);

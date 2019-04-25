@@ -7,10 +7,37 @@ import java.lang.annotation.Retention;
 import java.awt.Point;
 
 import static sample.Test29a.SAMPLE;
-
+import static sample.Test29.TestState.*;
 
 class Test29 {
 
+
+
+void sample9()
+{
+   TestState ts = TESTA;
+}
+
+
+void sample6()
+{
+   Map<Integer,Integer> votes;
+   votes.entrySet().stream().collect(Collectors.toMap(e -> "" + e.getKey(),e -> e.getValue()));
+}
+
+void sample8()
+{
+   Arrays.asList(new String []{ "HELLO" });
+}
+
+
+
+void sample7()
+{
+   String [] arr;
+   Comparator<Object> comp;
+   Arrays.sort(arr,comp);
+}
 
 
 void sample3()
@@ -35,7 +62,7 @@ void sample4()
 
    List<String> c;
 // c = new ArrayList<>();
-   c.stream().map(c -> c.toUpperCase()).
+   c.stream().map(d -> d.toUpperCase()).
 	filter(p -> p.startsWith("A")).
 	map(b -> b.toLowerCase()).filter(a -> a.startsWith("a"));
 }
@@ -85,10 +112,12 @@ static class Test29A<C extends Object> {
 
    Test29B sample()	{ return test_data; }
 
-   static class Test29B extends List<C> {
+   static class Test29B extends ArrayList<C> {
      }
 
 }
+
+enum TestState { TESTA, TESTB, TESTC };
 
 
 
