@@ -603,7 +603,7 @@ private class RefPass extends ASTVisitor {
                internal = true;
              }      
           }
-         if (internal && n.isOnDemand() && n.isStatic() && jt1 != null) {
+         if (internal && n.isOnDemand() && n.isStatic() && jt1 != null && outer != null) {
             jt1.defineAll(type_data);
             List<JcompSymbol> defs = jt1.lookupStatics(type_data,null);
             if (defs != null) {
@@ -1526,7 +1526,7 @@ private class RefPass extends ASTVisitor {
                rt = JcompGenerics.deriveReturnType(type_data,js.getType(),bt,atyp,js.getClassType(),typargs);
              }
           }
-         else if (rt.isTypeVariable() || jst.getSignature() != null) {
+         else if (rt.isTypeVariable() || (jst != null && jst.getSignature() != null)) {
             if (id != null && id.equals("getClass") && atyp.size() == 0 && bt != null) {
                rt = JcompType.createParameterizedType(rt,Collections.singletonList(bt),null,type_data);
                rt = type_data.fixJavaType(rt);

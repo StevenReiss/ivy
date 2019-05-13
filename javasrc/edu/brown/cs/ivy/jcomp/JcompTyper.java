@@ -871,7 +871,7 @@ private class TypeFinder extends ASTVisitor {
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
       if (outer_type != null) {
-         outer_type = outer_type.getOuterType();
+	 outer_type = outer_type.getOuterType();
        }
     }
 
@@ -897,7 +897,7 @@ private class TypeFinder extends ASTVisitor {
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
       if (outer_type != null) {
-         outer_type = outer_type.getOuterType();
+	 outer_type = outer_type.getOuterType();
        }
     }
 
@@ -1421,7 +1421,7 @@ private class TypePreSetter extends AbstractTypeSetter {
 	 if (ity != null) {
 	    JcompType inttyp = JcompAst.getJavaType(ity);
 	    if (!inttyp.isUndefined()) jt.addInterface(inttyp);
-	    else System.err.println("Undefined pretype");
+	    // else System.err.println("Undefined pretype " + ity);
 	  }
        }
 
@@ -1474,44 +1474,44 @@ private class TypePreSetter extends AbstractTypeSetter {
    @Override public boolean visit(AnonymousClassDeclaration t) {
       JcompType jt = JcompAst.getJavaType(t);
       type_prefix = jt.getName();
-   
+
       JcompType out = outer_type;
       outer_type = jt;
-   
+
       visitList(t.bodyDeclarations());
-   
+
       if (out != null && jt != null) {
-         jt.setOuterType(out);
+	 jt.setOuterType(out);
        }
-   
+
       outer_type = out;
-   
+
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-   
+
       if (t.getParent() instanceof ClassInstanceCreation) {
-         ClassInstanceCreation cic = (ClassInstanceCreation) t.getParent();
-         Type sty = cic.getType();
-         JcompType xjt = JcompAst.getJavaType(sty);
-         if (xjt != null) {
-            if (xjt.isInterfaceType()) {
-               jt.setSuperType(findType("java.lang.Object"));
-               jt.addInterface(xjt);
-             }
-            else jt.setSuperType(xjt);
-          }
+	 ClassInstanceCreation cic = (ClassInstanceCreation) t.getParent();
+	 Type sty = cic.getType();
+	 JcompType xjt = JcompAst.getJavaType(sty);
+	 if (xjt != null) {
+	    if (xjt.isInterfaceType()) {
+	       jt.setSuperType(findType("java.lang.Object"));
+	       jt.addInterface(xjt);
+	     }
+	    else jt.setSuperType(xjt);
+	  }
        }
       else if (t.getParent() instanceof EnumConstantDeclaration) {
-         EnumConstantDeclaration ecd = (EnumConstantDeclaration) t.getParent();
-         JcompType sty = JcompAst.getJavaType(ecd);
-         if (sty == null) {
-            EnumDeclaration ed = (EnumDeclaration) ecd.getParent();
-            sty = JcompAst.getJavaType(ed);
-          }
-         jt.setSuperType(sty);
+	 EnumConstantDeclaration ecd = (EnumConstantDeclaration) t.getParent();
+	 JcompType sty = JcompAst.getJavaType(ecd);
+	 if (sty == null) {
+	    EnumDeclaration ed = (EnumDeclaration) ecd.getParent();
+	    sty = JcompAst.getJavaType(ed);
+	  }
+	 jt.setSuperType(sty);
        }
-   
+
       return false;
     }
 
@@ -1561,7 +1561,7 @@ private class TypeSetter extends AbstractTypeSetter {
       JcompType out = outer_type;
       JcompType jt = JcompAst.getJavaType(t);
       outer_type = jt;
-   
+
       canbe_type = true;
       visitList(t.modifiers());
       visitItem(t.getSuperclassType());
@@ -1570,44 +1570,44 @@ private class TypeSetter extends AbstractTypeSetter {
       visitItem(t.getName());
       canbe_type = false;
       if ((t.getModifiers() & Modifier.ABSTRACT) != 0) {
-         jt.setAbstract(true);
+	 jt.setAbstract(true);
        }
       if (out != null && (t.getModifiers() & Modifier.STATIC) == 0 && !out.isInterfaceType()) {
-         jt.setInnerNonStatic(true);
+	 jt.setInnerNonStatic(true);
        }
-   
+
       if (type_prefix != null) nm = type_prefix + "." + nm;
       Type sty = t.getSuperclassType();
       if (sty != null) {
-         JcompType suptyp = JcompAst.getJavaType(sty);
-         if (suptyp.isUndefined()) {
-            // System.err.println("Super type is undefined");
-          }
-         jt.setSuperType(suptyp);
+	 JcompType suptyp = JcompAst.getJavaType(sty);
+	 if (suptyp.isUndefined()) {
+	    // System.err.println("Super type is undefined");
+	  }
+	 jt.setSuperType(suptyp);
        }
       for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-         Type ity = (Type) it.next();
-         if (ity != null) {
-            JcompType inttyp = JcompAst.getJavaType(ity);
-            if (inttyp.isUndefined()) {
-               // System.err.println("Interface type is undefined");
-             }
-            jt.addInterface(inttyp);
-          }
+	 Type ity = (Type) it.next();
+	 if (ity != null) {
+	    JcompType inttyp = JcompAst.getJavaType(ity);
+	    if (inttyp.isUndefined()) {
+	       // System.err.println("Interface type is undefined");
+	     }
+	    jt.addInterface(inttyp);
+	  }
        }
-   
+
       String sgn = getClassSignature(t,jt);
       jt.setSignature(sgn);
-   
+
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
-   
+
       outer_type = out;
-   
+
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-   
+
       return false;
    }
 
@@ -1617,7 +1617,7 @@ private class TypeSetter extends AbstractTypeSetter {
       String nm = t.getName().getIdentifier();
       if (type_prefix != null) nm = type_prefix + "." + nm;
       type_prefix = nm;
-   
+
       canbe_type = true;
       visitList(t.superInterfaceTypes());
       visitItem(t.getName());
@@ -1625,17 +1625,17 @@ private class TypeSetter extends AbstractTypeSetter {
       visitList(t.enumConstants());
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
-   
+
       JcompType jt = JcompAst.getJavaType(t);
       for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-         Type ity = (Type) it.next();
-         jt.addInterface(JcompAst.getJavaType(ity));
+	 Type ity = (Type) it.next();
+	 jt.addInterface(JcompAst.getJavaType(ity));
        }
-   
+
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-   
+
       return false;
     }
 
@@ -1705,27 +1705,27 @@ private class TypeSetter extends AbstractTypeSetter {
       canbe_type = false;
       visitItem(t.getBody());
       visitList(t.modifiers());
-   
+
       JcompType jt = JcompAst.getJavaType(t.getReturnType2());
       if (t.isConstructor()) jt = VOID_TYPE;
       List<JcompType> ljt = new ArrayList<>();
       for (Iterator<?> it = t.parameters().iterator(); it.hasNext(); ) {
-         SingleVariableDeclaration svd = (SingleVariableDeclaration) it.next();
-         JcompType pjt = JcompAst.getJavaType(svd);
-         if (pjt == null) pjt = type_map.get(TYPE_ERROR);
-         ljt.add(pjt);
+	 SingleVariableDeclaration svd = (SingleVariableDeclaration) it.next();
+	 JcompType pjt = JcompAst.getJavaType(svd);
+	 if (pjt == null) pjt = type_map.get(TYPE_ERROR);
+	 ljt.add(pjt);
        }
       JcompType clstyp = JcompAst.getJavaType(t.getParent());
       if (clstyp != null && clstyp.needsOuterClass() && t.isConstructor()) {
-         JcompType outer = clstyp.getOuterType();
-         if (outer != null) ljt.add(0,outer);
+	 JcompType outer = clstyp.getOuterType();
+	 if (outer != null) ljt.add(0,outer);
        }
-   
+
       String sgn = getMethodSignature(t,jt,ljt);
       JcompType mt = JcompType.createMethodType(jt,ljt,t.isVarargs(),sgn);
       mt = fixJavaType(mt);
       setJavaType(t,mt);
-   
+
       return false;
     }
 

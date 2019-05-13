@@ -35,8 +35,10 @@
 
 package edu.brown.cs.ivy.jcomp;
 
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
@@ -45,6 +47,7 @@ import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.Expression;
@@ -72,6 +75,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -83,6 +87,27 @@ import java.util.concurrent.atomic.AtomicInteger;
  **/
 
 public abstract class JcompAst implements JcompConstants {
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Parsing methods                                                         */
+/*                                                                              */
+/********************************************************************************/
+
+public static CompilationUnit parseSourceFile(String text)
+{
+   ASTParser parser = ASTParser.newParser(AST.JLS8);
+   parser.setKind(ASTParser.K_COMPILATION_UNIT);
+   Map<String,String> optsion = JavaCore.getOptions();
+   JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,optsion);
+   parser.setCompilerOptions(optsion);
+   parser.setSource(text.toCharArray());
+   CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+   
+   return cu;
+}
 
 
 
