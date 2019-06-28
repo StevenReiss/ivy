@@ -73,7 +73,7 @@ static JcompType deriveSupertype(JcompTyper typer,JcompType cty,Map<String,Jcomp
    try {
       sr.accept(sd);
     }
-   catch (StringIndexOutOfBoundsException e) {
+   catch (Throwable t) {
       System.err.println("Problem scanning signature: " + csgn);
     }
 
@@ -152,7 +152,7 @@ static String deriveClassTypeSignature(JcompTyper typer,JcompType cty,
     }
 
    String rslt = sw.toString();
-   if (rslt.endsWith("<"))
+   if (rslt.endsWith("<") || rslt.contains(";;"))
       System.err.println("BAD CLASS SIGNATURE");
    
    return rslt;
@@ -461,9 +461,9 @@ private static abstract class GenericSignatureVisitor extends SignatureVisitor {
       if (skip_type) return new SkipVisitor();
       if (new_signature != null) new_signature.visitClassBound();
       if (formal_type != null) {
-	 TypeDeriver td = createDeriver(null);
-	 bound_types.add(td);
-	 return td;
+         TypeDeriver td = createDeriver(null);
+         bound_types.add(td);
+         return td;
        }
       return super.visitClassBound();
     }
@@ -505,15 +505,15 @@ private static abstract class GenericSignatureVisitor extends SignatureVisitor {
                new_signature.visitFormalTypeParameter(nm);
                new_signature.visitClassBound();
                if (styp != null) {
-        	  new_signature.visitClassType(getInternalJavaName(styp));
-        	}
+                  new_signature.visitClassType(getInternalJavaName(styp));
+                }
                else new_signature.visitClassType("java/lang/Object;");
                if (ityps != null) {
-        	  for (JcompType ityp : ityps) {
-        	     new_signature.visitInterfaceBound();
-        	     new_signature.visitClassType(getInternalJavaName(ityp));
-        	   }
-        	}
+                  for (JcompType ityp : ityps) {
+                     new_signature.visitInterfaceBound();
+                     new_signature.visitClassType(getInternalJavaName(ityp));
+                   }
+                }
              }
             skip_type = true;
           }
@@ -522,37 +522,37 @@ private static abstract class GenericSignatureVisitor extends SignatureVisitor {
          skip_type = true;
        }
       super.visitFormalTypeParameter(name);
-    }
-
+   }
+   
    private String getInternalJavaName(JcompType t)
    {
       if (t.isParameterizedType()) {
-	 StringBuffer buf = new StringBuffer();
-	 String knm = getInternalJavaName(t.getBaseType());
-	 int idx = knm.lastIndexOf(";");
-	 if (idx == knm.length()-1) knm = knm.substring(0,idx);
-	 buf.append(knm);
-	 buf.append("<");
-	 for (JcompType pt : t.getComponents()) {
-	    if (pt.isTypeVariable()) {
-	       String nm = pt.getName();
-	       buf.append("T");
-	       buf.append(nm);
-	     }
-	    else {
-	       String s1 = getInternalJavaName(pt);
-	       buf.append("L");
-	       buf.append(s1);
-	     }
-	    buf.append(";");
-	  }
-	 buf.append(">;");
-	 return buf.toString();
-       }
+         StringBuffer buf = new StringBuffer();
+         String knm = getInternalJavaName(t.getBaseType());
+         int idx = knm.lastIndexOf(";");
+         if (idx == knm.length()-1) knm = knm.substring(0,idx);
+         buf.append(knm);
+         buf.append("<");
+         for (JcompType pt : t.getComponents()) {
+            if (pt.isTypeVariable()) {
+               String nm = pt.getName();
+               buf.append("T");
+               buf.append(nm);
+               buf.append(";");
+             }
+            else {
+               String s1 = getInternalJavaName(pt);
+               buf.append("L");
+               buf.append(s1);
+             }
+          }
+         buf.append(">;");
+         return buf.toString();
+          }
       String tnm = t.getJavaTypeName();
       if (tnm == null) return null;
       if (tnm.startsWith("L") && tnm.endsWith(";")) {
-	 tnm = tnm.substring(1);
+         tnm = tnm.substring(1);
        }
       return tnm;
    }
@@ -572,9 +572,9 @@ private static abstract class GenericSignatureVisitor extends SignatureVisitor {
       if (skip_type) return new SkipVisitor();
       if (new_signature != null) new_signature.visitInterfaceBound();
       if (formal_type != null) {
-	 TypeDeriver td = createDeriver(null);
-	 bound_types.add(td);
-	 return td;
+         TypeDeriver td = createDeriver(null);
+         bound_types.add(td);
+         return td;
        }
       return super.visitInterfaceBound();
     }

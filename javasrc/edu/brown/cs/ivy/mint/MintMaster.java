@@ -483,6 +483,7 @@ private static boolean getMasterSocket()
 	 if (host == null) {
 	    try {
 	       FileReader fr = new FileReader(fn);
+               ffnp.setWritable(true,false);
 	       BufferedReader lnr = new BufferedReader(fr);
 	       String hn = lnr.readLine();
 	       if (hn != null) {

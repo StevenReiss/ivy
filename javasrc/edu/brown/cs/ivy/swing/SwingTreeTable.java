@@ -759,28 +759,28 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
     }
 
    protected void fireTreeStructureChanged(Object source, Object[] path,
-						      int[] childIndices,
-					      Object[] children) {
+        					      int[] childIndices,
+        				      Object[] children) {
       // Guaranteed to return a non-null array
       Object[] listeners = listenerList.getListenerList();
       TreeModelEvent e = null;
       // Process the listeners last to first, notifying
       // those that are interested in this event
       for (int i = listeners.length-2; i>=0; i-=2) {
-	 if (listeners[i]==TreeModelListener.class) {
-	    // Lazily create the event:
-	    if (e == null)
-	       e = new TreeModelEvent(source, path, childIndices, children);
-	    try {
-	       ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
-	     }
-	    catch (Throwable t) { }
-	  }
+         if (listeners[i]==TreeModelListener.class) {
+            // Lazily create the event:
+            if (e == null)
+               e = new TreeModelEvent(source, path, childIndices, children);
+            try {
+               ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
+             }
+            catch (Throwable t) { }
+          }
        }
     }
 
    // TreeTableModel interace implementations
-
+   
    @Override public Class<?> getColumnClass(int column) {
       if (column == 0) return SwingTreeTable.TreeTableModel.class;
       return Object.class;
@@ -798,7 +798,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
    @Override abstract public int getColumnCount();
    @Override abstract public String getColumnName(int col);
    @Override abstract public Object getValueAt(Object node,int col);
-
+   
 }	// end of abstract inner class AbstractTreeTableModel
 
 

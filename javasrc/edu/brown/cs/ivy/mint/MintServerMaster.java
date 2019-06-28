@@ -319,6 +319,7 @@ private class SocketThread extends Thread {
          mf.setWritable(true,false);
          pw.println(lcl.getHostAddress() + "\t" + port);
          pw.close();
+         mf.setWritable(true,false);
          mf.deleteOnExit();
          MintLogger.log("MASTER: Server file set up as " + fn);
    
