@@ -335,6 +335,84 @@ public static String getLiteralValue(String s)
 
 
 
+public static String getConstantExpression(Object o)
+{
+   if (o == null) return "null";
+   
+   if (o instanceof String) {
+      String s = o.toString();
+      StringBuffer buf = new StringBuffer();
+      buf.append("\"");
+      for (int i = 0; i < s.length(); ++i) {
+         char c = s.charAt(i);
+         if (c == '\\' || c <= '"') {
+            buf.append("\\");
+            buf.append(c);
+          }
+         else if (c == '\n') buf.append("\\n");
+         else if (c == '\r') buf.append("\\r");
+         else if (c == '\t') buf.append("\\t");
+         else if (c < 32 || c >= 0177) {
+            buf.append("\\u");
+            String d = Integer.toString(c,16);
+            while (d.length() < 4) d = "0" + d;
+            buf.append(d);
+          }
+         else buf.append(c);
+       }
+      buf.append("\"");
+      return buf.toString();
+    }
+   else if (o instanceof Number) {
+      Number v = (Number) o;
+      if (o instanceof Double) {
+         return v.toString();
+       }
+      else if (o instanceof Float) {
+         return v.toString() + "f";
+       }
+      else if (o instanceof Integer) {
+         return v.toString();
+       }
+      else if (o instanceof Long) {
+         return v.toString() + "l";
+       }
+      else if (o instanceof Short) {
+         return "((short)" + v.toString() + ")";
+       }
+      else if (o instanceof Byte) {
+         return "((byte)" + v.toString() + ")";
+       }
+      else return v.toString();
+    }
+   else if (o instanceof Character) {
+      StringBuffer buf = new StringBuffer();
+      buf.append("'");
+      char c = ((Character) o).charValue();
+      if (c == '\\' || c <= '\'') {
+         buf.append("\\");
+         buf.append(c);
+       }
+      else if (c == '\n') buf.append("\\n");
+      else if (c == '\r') buf.append("\\r");
+      else if (c == '\t') buf.append("\\t");
+      else if (c < 32 || c >= 0177) {
+         buf.append("\\u");
+         String d = Integer.toString(c,16);
+         while (d.length() < 4) d = "0" + d;
+         buf.append(d);
+       }
+      else buf.append(c);
+      buf.append("'");
+      return buf.toString();
+    }
+   else {
+      return o.toString();
+    }
+}
+
+
+
 
 /********************************************************************************/
 /*                                                                              */

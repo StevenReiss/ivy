@@ -751,12 +751,12 @@ protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,Jc
 
 public List<JcompSymbol> lookupMethods(JcompTyper typer,String id,String aid)
 {
-   defineAll(typer);
+   if (typer != null) defineAll(typer);
 
    List<JcompSymbol> rslt = new ArrayList<>();
    if (assoc_scope != null) {
       for (JcompSymbol js : assoc_scope.getDefinedMethods()) {
-	 if (js.getName().equals(id) ||
+	 if (id == null || js.getName().equals(id) ||
 	       (aid != null && js.getName().equals(aid))) {
 	    rslt.add(js);
 	  }

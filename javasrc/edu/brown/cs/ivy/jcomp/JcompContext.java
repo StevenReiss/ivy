@@ -12,6 +12,7 @@ package edu.brown.cs.ivy.jcomp;
 
 import org.objectweb.asm.Type;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -236,6 +237,13 @@ protected static int score(JcompType jt0,JcompType jt1)
       return 20 + ct;
     }
    return 5;
+}
+
+
+List<String> getClassPath()
+{
+   if (parent_context == null) return new ArrayList<>();
+   return parent_context.getClassPath();
 }
 
 

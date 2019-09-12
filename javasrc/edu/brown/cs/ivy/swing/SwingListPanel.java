@@ -83,6 +83,7 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -165,7 +166,17 @@ public void setVisibleRowCount(int ct)
    invalidate();
 }
 
-	
+
+public void setBackground(Color c) 
+{
+   super.setBackground(c);
+   if (item_list != null) {
+      item_list.setBackground(c);
+      item_list.setOpaque(false);
+    }
+}
+
+
 @Override public void addActionListener(ActionListener al)
 {
    action_listeners.add(al);

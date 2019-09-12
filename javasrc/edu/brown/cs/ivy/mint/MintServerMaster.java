@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintServerMaster.java,v 1.27 2019/02/23 02:59:10 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintServerMaster.java,v 1.28 2019/06/28 17:12:33 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: MintServerMaster.java,v $
+ * Revision 1.28  2019/06/28 17:12:33  spr
+ * Fix permission settings
+ *
  * Revision 1.27  2019/02/23 02:59:10  spr
  * Bug fix.
  *

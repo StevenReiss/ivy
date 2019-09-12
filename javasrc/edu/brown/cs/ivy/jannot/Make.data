@@ -1,0 +1,78 @@
+
+# RCS: $Header: /pro/spr_cvs/pro/ivy/jcomp/src/Make.data,v 1.8 2018/09/20 23:57:56 spr Exp $
+
+#
+# EXEC -- classes for creating additional processed
+#
+# Copyright 2003 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= jcomp
+
+
+SFILES= \
+	JannotConstants.java \
+	JannotElement.java \
+	JannotFactory.java \
+	JannotFileObject.java \
+	JannotFiler.java \
+	JannotProcessingEnvironment.java \
+	JannotProject.java \
+	JannotProjectImpl.java \
+	JannotRoundEnvironment.java \
+	JannotTest.java \
+	JannotTestGeneratingAnnotationProcessor.java \
+	JannotTestImmutable.java \
+	JannotTestMutableClass.java \
+	JannotTypeMirror.java \
+
+
+LOCALJAVAFLAGS= -Xdiags:verbose
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

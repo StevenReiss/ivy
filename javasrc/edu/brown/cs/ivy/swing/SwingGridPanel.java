@@ -263,9 +263,9 @@ private ActionListener		action_listener;
 private String			action_command;
 private Map<Object,JFileChooser> chooser_map;
 
-private JLabel			banner_prototype;
-private JLabel			section_prototype;
-private JLabel			label_prototype;
+protected JLabel		banner_prototype;
+protected JLabel		section_prototype;
+protected JLabel		label_prototype;
 
 
 private static final long serialVersionUID = 1;

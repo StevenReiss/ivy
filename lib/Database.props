@@ -4,5 +4,5 @@
 <entry key="edu.brown.cs.ivy.file.dbmstype">POSTGRESQL</entry>
 <entry key="edu.brown.cs.ivy.file.dbmshost">db</entry>
 <entry key="edu.brown.cs.ivy.file.dbmsuser">spr</entry>
-<entry key="edu.brown.cs.ivy.file.dbmspassword">yGCdDnDC</entry>
+<entry key="edu.brown.cs.ivy.file.dbmspassword">password goes here</entry>
 </properties>

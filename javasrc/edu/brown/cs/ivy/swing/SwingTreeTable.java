@@ -79,12 +79,15 @@
  * @author Scott Violet
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.20 2018/08/02 15:10:55 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.21 2019/06/28 17:12:55 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingTreeTable.java,v $
+ * Revision 1.21  2019/06/28 17:12:55  spr
+ * Formatting.
+ *
  * Revision 1.20  2018/08/02 15:10:55  spr
  * Fix imports.  Prepare for java 10.
  *

@@ -112,6 +112,14 @@ void addFile(JcompFile jf)
 }
 
 
+@Override public void addSourceFile(JcompSource src)
+{
+   JcompFile jf = new JcompFile(src);
+   addFile(jf);
+   jf.reparse();
+}
+
+
 
 @Override public Collection<JcompSemantics> getSources()
 {
@@ -167,6 +175,13 @@ synchronized public boolean isResolved()
     }
 
    return is_resolved;
+}
+
+
+
+public List<String> getClassPath()
+{
+   return base_context.getClassPath();
 }
 
 

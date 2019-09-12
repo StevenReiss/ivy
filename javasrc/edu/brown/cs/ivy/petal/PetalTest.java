@@ -81,7 +81,6 @@ import edu.brown.cs.ivy.swing.SwingSetup;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 
 import java.awt.GridLayout;
@@ -136,14 +135,10 @@ private PetalTest()
 {
    super("Petal Editor Test");
 
-   JRootPane jrp = getRootPane();
-   jrp.setDoubleBuffered(true);
-
    setSize(500,500);
    setJMenuBar(new MenuBar());
 
    JPanel pnl = new JPanel();
-   pnl.setDoubleBuffered(true);
    GridLayout glay = new GridLayout(1,1);
    pnl.setLayout(glay);
 

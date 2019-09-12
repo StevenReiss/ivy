@@ -74,6 +74,7 @@ class JcompContextAsm extends JcompContext implements JcompConstants {
 
 private Map<String,AsmClass>	known_types;
 private List<ClassPathEntry>	base_files;
+private List<String>            class_path;
 private JcompContextAsm 	my_parent;
 
 
@@ -88,6 +89,7 @@ JcompContextAsm(String javahome)
 {
    this((JcompContext) null);
    known_types = new HashMap<String,AsmClass>();
+   class_path = new ArrayList<>();
 
    computeBasePath(javahome);
 }
@@ -98,7 +100,7 @@ JcompContextAsm(JcompContext par,String jarname)
   this(par);
 
   try {
-     addClassPathEntry(jarname);
+     addUserClassPathEntry(jarname);
    }
   catch (IOException e) {
      System.err.println("JCOMP: can't open file " + jarname + ": " + e);
@@ -114,7 +116,7 @@ JcompContextAsm(JcompContext par,Iterable<String> jarnames)
 
    for (String jarname : jarnames) {
       try {
-	 addClassPathEntry(jarname);
+	 addUserClassPathEntry(jarname);
        }
       catch (IOException e) {
 	 System.err.println("JCOMP: can't open file " + jarname + ": " + e);
@@ -132,8 +134,9 @@ private JcompContextAsm(JcompContext par)
    my_parent = null;
    if (par != null && par instanceof JcompContextAsm) my_parent = (JcompContextAsm) par;
 
-   known_types = new HashMap<String,AsmClass>();
-   base_files = new ArrayList<ClassPathEntry>();
+   known_types = new HashMap<>();
+   base_files = new ArrayList<>();
+   class_path = new ArrayList<>();
 }
 
 
@@ -286,6 +289,18 @@ void defineAll(JcompTyper typer,String cls,JcompScope scp)
 }
 
 
+List<String> getClassPath()
+{
+   List<String> rslt;
+   if (parent_context != null) {
+      rslt = parent_context.getClassPath();
+    }
+   else rslt = new ArrayList<>();
+   
+   rslt.addAll(class_path);
+   return rslt;
+}
+
 
 
 /********************************************************************************/
@@ -429,7 +444,7 @@ private class AsmClass {
    private List<AsmField> field_data;
    private List<AsmMethod> method_data;
    private JcompType base_type;
-   private Map<JcompScope,Object> all_defined;
+   private Set<JcompScope> all_defined;
    private boolean nested_this;
 
    AsmClass(String nm,int acc,String sgn,String sup,String [] ifc) {
@@ -614,25 +629,10 @@ private class AsmClass {
       return rslt;
     }
 
-   void defineAll(JcompTyper typer,JcompScope scp) {
-      synchronized (this) {
-         if (all_defined == null) all_defined = new HashMap<>();
-         else if (all_defined.get(scp) == Boolean.TRUE) return;
-         else if (all_defined.get(scp) == Thread.currentThread()) return;
-         else if (all_defined.get(scp) == null) {
-            all_defined.put(scp,Thread.currentThread());
-          }
-         else {
-            while (all_defined.get(scp) != Boolean.TRUE) {
-               try {
-                  wait(1000);
-                }
-               catch (InterruptedException e) { }
-             }
-            return;
-          }
-       }
-   
+   synchronized void defineAll(JcompTyper typer,JcompScope scp) {
+      if (all_defined == null) all_defined = new HashSet<>();
+      else if (!all_defined.add(scp)) return;
+      
       for (AsmField af : field_data) {
          if (scp.lookupVariable(af.getName()) == null) {
             JcompSymbol js = af.createField(typer);
@@ -645,7 +645,7 @@ private class AsmClass {
        }
       for (AsmMethod am : method_data) {
          JcompType atyp = am.getMethodType(typer,null,null);
-         JcompSymbol fjs = scp.lookupMethod(typer,am.getName(),atyp,null,null);
+         JcompSymbol fjs = scp.lookupExactMethod(am.getName(),atyp);
          if (fjs != null) {
             JcompType btyp = fjs.getType();
             if (!btyp.equals(atyp)) {
@@ -654,11 +654,11 @@ private class AsmClass {
                if (bcomp.size() != acomp.size()) fjs = null;
                // else if (atyp.isVarArgs() != btyp.isVarArgs()) fjs = null;
                else {
-        	  for (int i = 0; i < bcomp.size(); ++i) {
-        	     if (!acomp.get(i).equals(bcomp.get(i)))
-        		fjs = null;
-        	   }
-        	}
+                  for (int i = 0; i < bcomp.size(); ++i) {
+                     if (!acomp.get(i).equals(bcomp.get(i)))
+                        fjs = null;
+                   }
+                }
              }
           }
          if (fjs == null) {
@@ -679,17 +679,12 @@ private class AsmClass {
             if (styp == null || styp.isBinaryType()) {
                AsmClass icl = findKnownType(typer,inm);
                if (icl != null) {
-        	  icl.defineAll(typer,scp);
-        	}
+                  icl.defineAll(typer,scp);
+                }
              }
           }
        }
-      
-      synchronized (this) {
-         all_defined.put(scp,Boolean.TRUE);
-         notifyAll();
-       }
-    }
+   }
 
 
    private JcompType findExistingType(JcompTyper typer,String nm) {
@@ -900,6 +895,13 @@ public synchronized InputStream getInputStream(String name)
 /*										*/
 /********************************************************************************/
 
+private void addUserClassPathEntry(String fil) throws IOException
+{
+   class_path.add(fil);
+   addClassPathEntry(fil);
+}
+
+
 private void addClassPathEntry(String fil) throws IOException
 {
    addClassPathEntry(new File(fil));
@@ -1038,7 +1040,6 @@ private static class DirClassPathEntry extends ClassPathEntry {
     }
 
 }	// end of inner class DirClassPathEntry
-
 
 
 

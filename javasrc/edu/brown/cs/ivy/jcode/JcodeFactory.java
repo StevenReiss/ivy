@@ -82,6 +82,7 @@ private Map<String,JcodeField>	known_fields;
 private Queue<String>		work_list;
 private LoadExecutor		work_holder;
 private Set<String>		path_set;
+private List<String>            user_paths;
 private Map<Type,JcodeDataType> static_map;
 private Map<String,JcodeDataType> name_map;
 private Map<String,JcodeDataType> jname_map;
@@ -106,14 +107,15 @@ public JcodeFactory()
 
 public JcodeFactory(int nth)
 {
-   class_map = new HashMap<String,JcodeFileInfo>();
-   known_classes = new HashMap<String,JcodeClass>();
-   known_methods = new HashMap<String,JcodeMethod>();
-   known_fields = new HashMap<String,JcodeField>();
-   static_map = new ConcurrentHashMap<Type,JcodeDataType>();
-   name_map = new ConcurrentHashMap<String,JcodeDataType>();
-   jname_map = new HashMap<String,JcodeDataType>();
-   path_set = new HashSet<String>();
+   class_map = new HashMap<>();
+   known_classes = new HashMap<>();
+   known_methods = new HashMap<>();
+   known_fields = new HashMap<>();
+   static_map = new ConcurrentHashMap<>();
+   name_map = new ConcurrentHashMap<>();
+   jname_map = new HashMap<>();
+   path_set = new HashSet<>();
+   user_paths = new ArrayList<>();
 
    work_list = new LinkedList<String>();
    num_threads = nth;
@@ -281,6 +283,13 @@ public Collection<JcodeClass> getAllPossibleClasses(Predicate<String> filter)
 /*										*/
 /********************************************************************************/
 
+public List<String> getUserClassPath()
+{
+   return user_paths;
+}
+
+
+
 private void addUserClassPath(String cp)
 {
    if (cp == null) return;
@@ -288,7 +297,7 @@ private void addUserClassPath(String cp)
    StringTokenizer tok = new StringTokenizer(cp,File.pathSeparator);
    while (tok.hasMoreTokens()) {
       String cpe = tok.nextToken();
-      addClassPathEntry(cpe);
+      if (addClassPathEntry(cpe)) user_paths.add(cpe);
     }
 }
 
@@ -331,12 +340,12 @@ private void addJavaJars(File f)
 
 
 
-private void addClassPathEntry(String cpe)
+private boolean addClassPathEntry(String cpe)
 {
-   if (!path_set.add(cpe)) return;
+   if (!path_set.add(cpe)) return false;
 
    File f = new File(cpe);
-   if (!f.exists()) return;
+   if (!f.exists()) return false;
    if (f.isDirectory()) {
       addClassFiles(f,null);
     }
@@ -371,6 +380,8 @@ private void addClassPathEntry(String cpe)
        }
       catch (IOException e) { }
     }
+   
+   return true;
 }
 
 

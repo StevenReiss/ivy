@@ -1001,19 +1001,19 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       visitItem(t.getType());
       visitList(t.typeArguments());
       canbe_type = false;
-
+   
       JcompType jt0 = JcompAst.getJavaType(t.getType());
       List<JcompType> ljt = new ArrayList<JcompType>();
       for (Iterator<?> it = t.typeArguments().iterator(); it.hasNext(); ) {
-	 Type t1 = (Type) it.next();
-	 JcompType jt2 = JcompAst.getJavaType(t1);
-	 if (jt2 == null) jt2 = findType(TYPE_ERROR);
-	 ljt.add(jt2);
+         Type t1 = (Type) it.next();
+         JcompType jt2 = JcompAst.getJavaType(t1);
+         if (jt2 == null) jt2 = findType(TYPE_ERROR);
+         ljt.add(jt2);
        }
-
+   
       JcompType jt1 = jt0;
       if (ljt.size() > 0) {
-	 jt1 = JcompType.createParameterizedType(jt0,ljt,null,JcompTyper.this);
+         jt1 = JcompType.createParameterizedType(jt0,ljt,null,JcompTyper.this);
        }
       setJavaType(t,jt1);
       return false;
@@ -1022,12 +1022,12 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    @Override public void endVisit(TypeParameter t) {
       JcompType vart = JcompAst.getJavaType(t);
       for (Object o : t.typeBounds()) {
-	 Type tt = (Type) o;
-	 JcompType jt = JcompAst.getJavaType(tt);
-	 if (jt != null) {
-	    if (jt.isInterfaceType()) vart.addInterface(jt);
-	    else vart.setSuperType(jt);
-	  }
+         Type tt = (Type) o;
+         JcompType jt = JcompAst.getJavaType(tt);
+         if (jt != null) {
+            if (jt.isInterfaceType()) vart.addInterface(jt);
+            else vart.setSuperType(jt);
+          }
        }
     }
 
@@ -1150,9 +1150,9 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
 
    @Override public void endVisit(SimpleName t) {
       if (set_types) {
-	 String s = t.getFullyQualifiedName();
-	 JcompType jt = lookupPossibleType(s);
-	 if (jt != null) setJavaType(t,jt);
+         String s = t.getFullyQualifiedName();
+         JcompType jt = lookupPossibleType(s);
+         if (jt != null) setJavaType(t,jt);
        }
     }
 
@@ -1178,18 +1178,18 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       String s = findTypeName(nm,true);
       JcompType jt = type_map.get(s);
       if (jt != null) return jt;
-
+   
       jt = findSystemType(s);
       if (jt != null && !canbe_type) {
-	 System.err.println("FOUND UNEXPECTED TYPE " + s);
+         System.err.println("FOUND UNEXPECTED TYPE " + s);
        }
-
+   
       if (jt == null) {
-	 jt = fixJavaType(JcompType.createCompiledClassType(nm));
-	 jt.setUndefined(true);
-	 jt.setSuperType(type_map.get("java.lang.Object"));
+         jt = fixJavaType(JcompType.createCompiledClassType(nm));
+         jt.setUndefined(true);
+         jt.setSuperType(type_map.get("java.lang.Object"));
        }
-
+   
       return jt;
     }
 
@@ -1212,64 +1212,64 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    protected JcompType forceType(Name n) {
       JcompType jt = JcompAst.getJavaType(n);
       if (jt == null) {
-	 String qnm = n.getFullyQualifiedName();
-	 boolean fg = canbe_type;
-	 canbe_type = true;
-	 jt = lookupType(qnm);
-	 canbe_type = fg;
-	 setJavaType(n,jt);
+         String qnm = n.getFullyQualifiedName();
+         boolean fg = canbe_type;
+         canbe_type = true;
+         jt = lookupType(qnm);
+         canbe_type = fg;
+         setJavaType(n,jt);
        }
       return jt;
     }
 
    protected String findTypeName(String nm,boolean force) {
       if (outer_type != null) {
-	 String onm = findOuterTypeName(nm);
-	 if (onm != null) return onm;
+         String onm = findOuterTypeName(nm);
+         if (onm != null) return onm;
        }
-
+   
       String spn = specific_names.get(nm);
       if (spn != null) return spn;
       spn = checkTypeName(nm,nm);
       if (spn != null) return spn;
-
+   
       int idx = nm.lastIndexOf('.');            // look for subtypes
       if (idx >= 0) {
-	 String pfx = nm.substring(0,idx);
-	 String s0 = findTypeName(pfx,false);
-	 if (s0 != null) {
-	    String s = s0 + nm.substring(idx);
-	    String s1 = checkTypeName(nm,s);
-	    if (s1 != null) {
-	       known_names.put(nm,s1);
-	       return s1;
-	     }
-	    JcompType jt = findSystemType(s0);
-	    if (jt != null) {
-	       String s2 = checkParentType(nm.substring(idx+1),jt,false,new HashSet<>());
-	       if (s2 != null) {
-		  known_names.put(nm,s2);
-		  return s2;
-		}
-	     }
-	  }
+         String pfx = nm.substring(0,idx);
+         String s0 = findTypeName(pfx,false);
+         if (s0 != null) {
+            String s = s0 + nm.substring(idx);
+            String s1 = checkTypeName(nm,s);
+            if (s1 != null) {
+               known_names.put(nm,s1);
+               return s1;
+             }
+            JcompType jt = findSystemType(s0);
+            if (jt != null) {
+               String s2 = checkParentType(nm.substring(idx+1),jt,false,new HashSet<>());
+               if (s2 != null) {
+        	  known_names.put(nm,s2);
+        	  return s2;
+        	}
+             }
+          }
        }
-
+   
       for (String p : prefix_set) {		// look for on-demand types
-	 String t = p + nm;
-	 spn = checkTypeName(nm,t);
-	 if (spn != null) return spn;
+         String t = p + nm;
+         spn = checkTypeName(nm,t);
+         if (spn != null) return spn;
        }
-
+   
       if (!force) return null;
-
+   
       if (type_prefix != null && idx < 0) {
-	 spn = type_prefix + "." + nm;
+         spn = type_prefix + "." + nm;
        }
       else spn = nm;
-
+   
       // known_names.put(nm,spn);
-
+   
       return spn;
     }
 
@@ -1277,16 +1277,16 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    protected JcompType findTypeVariable(String nm)
    {
       for (JcompType ot = outer_type; ot != null; ot = ot.getOuterType()) {
-	 String sgn = ot.getSignature();
-	 if (sgn == null) continue;
-	 // should create a new type variable for nm from the signature and return it
-	 // need to have super/interface types set appropriately
-	 List<String> vnms = JcompGenerics.getTypeVariableNames(sgn,false);
-	 if (vnms != null && vnms.contains(nm)) {
-	    return JcompType.createVariableType(nm);
-	  }
+         String sgn = ot.getSignature();
+         if (sgn == null) continue;
+         // should create a new type variable for nm from the signature and return it
+         // need to have super/interface types set appropriately
+         List<String> vnms = JcompGenerics.getTypeVariableNames(sgn,false);
+         if (vnms != null && vnms.contains(nm)) {
+            return JcompType.createVariableType(nm);
+          }
        }
-
+   
       return null;
    }
 
@@ -1348,19 +1348,19 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    {
       String spn = known_names.get(tnm);
       if (spn != null) {
-	 if (nm != null) known_names.put(nm,spn);
-	 return spn;
+         if (nm != null) known_names.put(nm,spn);
+         return spn;
        }
-
+   
       if (canbe_type) {
-	 JcompType t = findSystemType(tnm);
-	 if (t != null) {
-	    tnm = t.getName();
-	    if (nm != null && !t.isUndefined()) known_names.put(nm,tnm);
-	    return tnm;
-	  }
+         JcompType t = findSystemType(tnm);
+         if (t != null) {
+            tnm = t.getName();
+            if (nm != null && !t.isUndefined()) known_names.put(nm,tnm);
+            return tnm;
+          }
        }
-
+   
       return null;
    }
 

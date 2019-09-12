@@ -6,8 +6,6 @@
 /*										*/
 /********************************************************************************/
 
-
-
 package edu.brown.cs.ivy.jcomp;
 
 import edu.brown.cs.ivy.jcode.JcodeClass;
@@ -83,7 +81,7 @@ JcompContextCode(JcodeFactory jf)
 {
    JcodeField jf = jcode_control.findField(null,cls,id);
    if (jf == null) return null;
-   
+
    return createField(typer,jf,orig);
 }
 
@@ -100,7 +98,7 @@ JcompContextCode(JcodeFactory jf)
    if (argtype.getBaseType() != null) {
       desc += argtype.getBaseType().getJavaTypeName();
     }
-   
+
    JcodeDataType jdt = jcode_control.findNamedType(cls);
    List<JcodeMethod> mthds = new ArrayList<JcodeMethod>();
    addCompatibleMethods(jdt,id,desc,mthds);
@@ -110,11 +108,11 @@ JcompContextCode(JcodeFactory jf)
       int score = compatiblityScore(typer,argtype,jm1);
       if (score < 0) continue;
       if (best == null || score < bestscore) {
-         best = jm1;
-         bestscore = score;
+	 best = jm1;
+	 bestscore = score;
        }
     }
-   
+
    // JcodeMethod best = jcode_control.findMethod(null,cls,id,desc);
    if (best == null) return null;
 
@@ -141,14 +139,14 @@ private int compatiblityScore(JcompTyper typer,JcompType argtyp,JcodeMethod jm)
    for (int i = 0; i < margs.length; ++i) {
       margs[i] = JcompControl.convertType(typer,jm.getArgType(i));
     }
-   
+
    boolean init = jm.getName().equals("<init>");
    init &= jm.getDeclaringClass().isStatic();
    String cnm = jm.getDeclaringClass().getName();
    int idx = cnm.lastIndexOf("$");
    int idx1 = cnm.lastIndexOf(".");
    init &= idx > 0 && idx > idx1;
-   
+
    return compatiblityScore(argtyp,margs,jm.isVarArgs(),init);
 }
 
@@ -174,19 +172,19 @@ private int compatiblityScore(JcompTyper typer,JcompType argtyp,JcodeMethod jm)
    if (id == null) {
       Iterable<JcodeField> flds = jcode_control.findAllFields(jdt,id);
       if (flds != null) {
-         for (JcodeField jcf : flds) {
-            if (jcf.isStatic()) {
-               JcompSymbol js = createField(typer,jcf,null);
-               rslt.add(js);
-             }
-          }
+	 for (JcodeField jcf : flds) {
+	    if (jcf.isStatic()) {
+	       JcompSymbol js = createField(typer,jcf,null);
+	       rslt.add(js);
+	     }
+	  }
        }
     }
    else {
       JcompSymbol js = defineKnownField(typer,cls,id,null);
       if (js != null && js.isStatic()) rslt.add(js);
     }
-   
+
    if (rslt.isEmpty()) return null;
 
    return rslt;
@@ -284,8 +282,8 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
 	 if (jc.isAbstract()) jt.setAbstract(true);
        }
       else if (jc.isEnum()) {
-         jt = JcompType.createBinaryEnumType(jnm,jc.signature);
-         if (jc.isAbstract()) jt.setAbstract(true);
+	 jt = JcompType.createBinaryEnumType(jnm,jc.signature);
+	 if (jc.isAbstract()) jt.setAbstract(true);
        }
       else {
 	 jt = JcompType.createBinaryClassType(jnm,jc.signature);
@@ -299,22 +297,22 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
 	 String ojtnm = xnm.substring(0,idx1);
 	 JcompType oty = getAsmTypeName(typer,ojtnm);
 	 if (oty != null)
-            jt.setOuterType(oty);
+	    jt.setOuterType(oty);
 	 if (!jc.isStatic() && oty != null && !oty.isInterfaceType()) {
 	    jt.setInnerNonStatic(true);
 	  }
        }
       jt.setContextType(false);
-      
+
       // first set up type using non-generic values
       if (jc.superName != null) {
-         JcompType sty = getAsmTypeName(typer,jc.superName);
+	 JcompType sty = getAsmTypeName(typer,jc.superName);
 	 if (sty == null) {
 	    System.err.println("SUPER TYPE IS UNKNOWN IN CODE: " + jc.superName);
 	  }
 	 if (sty != null) jt.setSuperType(sty);
        }
-      if (jc.interfaces != null) { 
+      if (jc.interfaces != null) {
 	 for (String inm : jc.interfaces) {
 	    JcompType ijt = getAsmTypeName(typer,inm);
 	    if (ijt != null) jt.addInterface(ijt);
@@ -324,28 +322,28 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
       jt = typer.fixJavaType(jt);
       jt.setDefinition(JcompSymbol.createSymbol(jt,jc.getModifiers()));
       type_map.put(jc,jt);
-      
+
       // finally handle generic specialization
       if (jt.getSignature() != null && jt.getSignature().contains("<")) {
-         // System.err.println("CHECK DERIVE " + jt + " " + jt.getSignature());
-         Map<String,JcompType> outermap = computeOutermap(jt);
-         // compute the outermap here by looking at outer type...
-         JcompType sty = JcompGenerics.deriveSupertype(typer,jt,outermap);
+	 // System.err.println("CHECK DERIVE " + jt + " " + jt.getSignature());
+	 Map<String,JcompType> outermap = computeOutermap(jt);
+	 // compute the outermap here by looking at outer type...
+	 JcompType sty = JcompGenerics.deriveSupertype(typer,jt,outermap);
 	 if (sty != null) jt.setSuperType(sty);
-         Collection<JcompType> njt = jt.getInterfaces();
-         if (njt != null) {
-            Collection<JcompType> lty1 = null;
-            lty1 = JcompGenerics.deriveInterfaceTypes(typer,jt,outermap);
-            if (lty1 != null && njt != lty1) {
-               njt.clear();
-               for (JcompType ijt : lty1) {
-                  jt.addInterface(ijt);
-                }
-             }
-          }
+	 Collection<JcompType> njt = jt.getInterfaces();
+	 if (njt != null) {
+	    Collection<JcompType> lty1 = null;
+	    lty1 = JcompGenerics.deriveInterfaceTypes(typer,jt,outermap);
+	    if (lty1 != null && njt != lty1) {
+	       njt.clear();
+	       for (JcompType ijt : lty1) {
+		  jt.addInterface(ijt);
+		}
+	     }
+	  }
        }
     }
-   
+
    jt = typer.fixJavaType(jt);
    return jt;
 }
@@ -356,10 +354,10 @@ private Map<String,JcompType> computeOutermap(JcompType jt)
 {
    JcompType oty = jt.getOuterType();
    if (oty == null) return null;
-   
+
    String osgn = oty.getSignature();
    if (osgn == null || !osgn.contains("<")) return null;
- 
+
    return jt.getOuterComponents();
 }
 
@@ -369,10 +367,10 @@ private Map<String,JcompType> computeOutermap(JcompType jt)
 private JcompSymbol createField(JcompTyper typer,JcodeField jf,JcompType orig)
 {
    JcompType fty = getAsmType(typer,jf.desc);
-   
+
    JcompSymbol fs = JcompSymbol.createBinaryField(jf.getName(),fty,
 	 JcompControl.convertType(typer,jf.getDeclaringClass()),jf.access,jf.signature);
-   
+
    return fs;
 }
 
@@ -414,6 +412,20 @@ private JcompType getMethodType(JcompTyper typer,JcodeMethod jm,JcompType rt)
 
    return mt;
 }
+
+
+List<String> getClassPath()
+{
+   List<String> rslt;
+   if (parent_context != null) {
+      rslt = parent_context.getClassPath();
+    }
+   else rslt = new ArrayList<>();
+   List<String> cp = jcode_control.getUserClassPath();
+   if (cp != null) rslt.addAll(cp);
+   return rslt;
+}
+
 
 }	// end of class JcompContextCode
 
