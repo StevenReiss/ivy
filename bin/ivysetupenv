@@ -202,7 +202,8 @@ if ( "X$xxx" == X ) then
 endif
 
 set xxx = `echo $CLASSPATH | fgrep org.eclipse.jdt.debug`
-if ( "X$xxx" == X && $?ECLIPSEROOT == 0 ) then
+# if ( "X$xxx" == X && $?ECLIPSEROOT == 0 ) then
+if ( "X$xxx" == X ) then
    set eclipsejar =
    foreach i ($BROWN_IVY_IVY/lib/eclipsejar/*.jar)
       set eclipsejar = ${eclipsejar}:$i
@@ -212,7 +213,7 @@ if ( "X$xxx" == X && $?ECLIPSEROOT == 0 ) then
 endif
 
 set xxx = `echo $CLASSPATH | fgrep org.eclipse.jdt.debug`
-if ( "X$xxx" == X ) then
+if ( "X$xxx" == X  && 0 == 1 ) then
    if ( $?ECLIPSEROOT == 1) then
       set eclipse = $ECLIPSEROOT
    else

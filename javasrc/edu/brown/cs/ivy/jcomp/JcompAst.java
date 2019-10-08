@@ -91,21 +91,21 @@ public abstract class JcompAst implements JcompConstants {
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Parsing methods                                                         */
-/*                                                                              */
+/*										*/
+/*	Parsing methods 							*/
+/*										*/
 /********************************************************************************/
 
 public static CompilationUnit parseSourceFile(String text)
 {
-   ASTParser parser = ASTParser.newParser(AST.JLS8);
+   ASTParser parser = ASTParser.newParser(AST.JLS11);
    parser.setKind(ASTParser.K_COMPILATION_UNIT);
    Map<String,String> optsion = JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,optsion);
    parser.setCompilerOptions(optsion);
    parser.setSource(text.toCharArray());
    CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-   
+
    return cu;
 }
 

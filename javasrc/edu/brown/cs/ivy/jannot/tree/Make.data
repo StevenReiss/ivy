@@ -1,0 +1,71 @@
+#
+# JANNOT/TREE -- compilation trees for jannot
+#
+# Copyright 2019 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= jannot/tree
+SUBDIR= tree
+
+SFILES = JannotTree.java \
+	JannotTreeConstants.java \
+	JannotTreeJCAnnotatedType.java \
+	JannotTreeJCAnnotation.java \
+	JannotTreeJCArrayAccess.java \
+	JannotTreeJCArrayTypeTree.java \
+	JannotTreeJCAssert.java \
+	JannotTreeJCAssign.java \
+	JannotTreeJCAssignOp.java \
+	JannotTreeJCBinary.java \
+	JannotTreeJCBlock.java \
+	JannotTreeJCBreak.java \
+	JannotTreeJCCase.java \
+	JannotTreeJCCatch.java \
+	JannotTreeJCClassDecl.java \
+	JannotTreeJCCompilationUnit.java \
+	JannotTreeJCConditional.java \
+	JannotTreeJCContinue.java \
+	JannotTreeJCDoWhileLoop.java \
+	JannotTreeJCEnhancedForLoop.java \
+	JannotTreeJCExpression.java \
+	JannotTreeJCExpressionStatement.java \
+	JannotTreeJCFieldAccess.java \
+	JannotTreeJCForLoop.java \
+	JannotTreeJCFunctionalExpression.java \
+	JannotTreeJCIdent.java \
+	JannotTreeJCIf.java \
+	JannotTreeJCImport.java \
+	JannotTreeJCInstanceOf.java \
+	JannotTreeJCLabeledStatement.java \
+	JannotTreeJCLambda.java \
+	JannotTreeJCLiteral.java \
+	JannotTreeJCMemberReference.java \
+	JannotTreeJCMethodDecl.java \
+	JannotTreeJCMethodInvocation.java \
+	JannotTreeJCModifiers.java \
+	JannotTreeJCNewArray.java \
+	JannotTreeJCNewClass.java \
+	JannotTreeJCPackageDecl.java \
+	JannotTreeJCParens.java \
+	JannotTreeJCPolyExpression.java \
+	JannotTreeJCPrimitiveTypeTree.java \
+	JannotTreeJCReturn.java \
+	JannotTreeJCSkip.java \
+	JannotTreeJCStatement.java \
+	JannotTreeJCSwitch.java \
+	JannotTreeJCSynchronized.java \
+	JannotTreeJCThrow.java \
+	JannotTreeJCTry.java \
+	JannotTreeJCTypeApply.java \
+	JannotTreeJCTypeCast.java \
+	JannotTreeJCTypeIntersection.java \
+	JannotTreeJCTypeParameter.java \
+	JannotTreeJCTypeUnion.java \
+	JannotTreeJCUnary.java \
+	JannotTreeJCVariableDecl.java \
+	JannotTreeJCWhileLoop.java \
+	JannotTreeJCWildcard.java \
+	JannotTrees.java \
+
+
+

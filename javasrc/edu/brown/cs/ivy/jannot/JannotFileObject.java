@@ -69,9 +69,9 @@ private JannotOutputStream output_buffer;
 /*                                                                              */
 /********************************************************************************/
 
-JannotFileObject(URI name,JavaFileObject.Kind kind,Element [] elts)
+JannotFileObject(URI name,JavaFileObject.Kind k,Element [] elts)
 {
-   super(name,kind);
+   super(name,k);
    related_elements = elts;
    output_buffer = null;
 }

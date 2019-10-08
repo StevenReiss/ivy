@@ -2,14 +2,14 @@ package edu.brown.cs.ivy.jannot;
 
 @JannotTestImmutable
 public class JannotTestMutableClass {
-    private String name;
+    private String class_name;
 
     public JannotTestMutableClass( final String name ) {
-	this.name = name;
+	class_name = name;
     }
 
     public String getName() {
-	return name;
+	return class_name;
     }
 }
 

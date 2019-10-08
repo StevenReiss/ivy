@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXmlWriter.java,v 1.35 2019/02/23 02:59:15 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXmlWriter.java,v 1.36 2019/09/12 12:48:57 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyXmlWriter.java,v $
+ * Revision 1.36  2019/09/12 12:48:57  spr
+ * Code cleanup
+ *
  * Revision 1.35  2019/02/23 02:59:15  spr
  * Code cleanup.
  *

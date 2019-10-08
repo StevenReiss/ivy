@@ -443,11 +443,13 @@ public:
 
    typename vector<T>::iterator nth(int n)		{ return vector<T>::begin()+n; }
 
-   T& operator[](int v) throw(IndexException) {
+// T& operator[](int v) throw(IndexException) {
+   T& operator[](int v) {
       if (v < 0 || v >= (int) vector<T>::size()) throw IndexException(v);
       else return vector<T>::operator[](v);
     }
-   const T& operator[](int v) const throw(IndexException) {
+// const T& operator[](int v) const throw(IndexException) {
+   const T& operator[](int v) const {
       if (v < 0 || v >= (int) vector<T>::size()) throw IndexException(v);
       else return vector<T>::operator[](v);
     }
@@ -716,7 +718,7 @@ currentTimeNanos()
    ts.tv_sec = mts.tv_sec;
 #endif
 
-   LongLong rslt = ts.tv_nsec + ts.tv_sec * 1000000000; 		
+   LongLong rslt = ts.tv_nsec + ts.tv_sec * 1000000000; 
 
    return rslt;
 }

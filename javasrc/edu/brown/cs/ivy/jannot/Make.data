@@ -11,21 +11,34 @@ PACKAGE= jcomp
 
 
 SFILES= \
+	JannotAnnotation.java \
+	JannotAnnotationValue.java \
 	JannotConstants.java \
 	JannotElement.java \
+	JannotElementUtils.java \
+	JannotExecutableElement.java \
 	JannotFactory.java \
 	JannotFileObject.java \
 	JannotFiler.java \
+	JannotInstrumenter.java \
+	JannotModuleElement.java \
+	JannotName.java \
+	JannotPackageElement.java \
 	JannotProcessingEnvironment.java \
 	JannotProject.java \
 	JannotProjectImpl.java \
 	JannotRoundEnvironment.java \
+	JannotTypeElement.java \
+	JannotTypeMirror.java \
+	JannotTypeParameterElement.java \
+	JannotTypeUtils.java \
+	JannotVariableElement.java \
 	JannotTest.java \
 	JannotTestGeneratingAnnotationProcessor.java \
 	JannotTestImmutable.java \
 	JannotTestMutableClass.java \
-	JannotTypeMirror.java \
 
+SUBDIRS= tree
 
 LOCALJAVAFLAGS= -Xdiags:verbose
 

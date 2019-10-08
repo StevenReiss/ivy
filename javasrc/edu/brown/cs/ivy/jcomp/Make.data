@@ -42,6 +42,7 @@ SFILES= \
 
 
 LOCALJAVAFLAGS= -Xdiags:verbose $(J8FLAGS)
+LOCALJAVAFLAGS= -Xdiags:verbose
 
 
 

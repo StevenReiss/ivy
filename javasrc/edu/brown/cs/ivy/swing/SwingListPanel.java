@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingListPanel.java,v 1.8 2018/08/02 15:10:54 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingListPanel.java,v 1.9 2019/09/12 12:48:51 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingListPanel.java,v $
+ * Revision 1.9  2019/09/12 12:48:51  spr
+ * Minor extensions.  Code cleanup
+ *
  * Revision 1.8  2018/08/02 15:10:54  spr
  * Fix imports.  Prepare for java 10.
  *

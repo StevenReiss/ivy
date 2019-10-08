@@ -75,7 +75,7 @@ class JannotProjectImpl extends JannotProject
 /********************************************************************************/
 
 
-private URLClassLoader class_loader;
+private JannotClassLoader class_loader;
 private Map<Processor,Set<String>> annot_processors; 
 private JannotProcessingEnvironment process_env;
 private Set<String> annot_types;
@@ -114,7 +114,7 @@ JannotProjectImpl(JcompProject jp)
          System.err.println("JANNOT: bad class path entry: " + ent);
        }
     }
-   class_loader = new URLClassLoader(urls);
+   class_loader = new JannotClassLoader(urls);
    annot_processors = new LinkedHashMap<>();
    process_env = new JannotProcessingEnvironment(jp);
    annot_types = new HashSet<>();
@@ -360,6 +360,22 @@ private class AnnotationPresentFinder extends ASTVisitor {
     }
    
 }
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Our class loader                                                        */
+/*                                                                              */
+/********************************************************************************/
+
+private static class JannotClassLoader extends URLClassLoader {
+   
+   JannotClassLoader(URL [] urls) {
+      super(urls);
+    }
+
+}       // end of inner class JannotClassLoader
 
 
 

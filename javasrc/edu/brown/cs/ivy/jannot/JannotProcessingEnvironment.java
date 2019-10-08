@@ -53,7 +53,7 @@ import javax.tools.Diagnostic;
 import edu.brown.cs.ivy.jcomp.JcompProject;
 
 
-class JannotProcessingEnvironment implements JannotConstants, ProcessingEnvironment
+public class JannotProcessingEnvironment implements JannotConstants, ProcessingEnvironment
 {
 
 

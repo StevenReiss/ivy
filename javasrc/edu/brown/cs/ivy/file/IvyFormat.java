@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFormat.java,v 1.15 2019/04/25 20:09:56 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFormat.java,v 1.16 2019/09/12 12:48:14 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFormat.java,v $
+ * Revision 1.16  2019/09/12 12:48:14  spr
+ * Changes for annotation processor.
+ *
  * Revision 1.15  2019/04/25 20:09:56  spr
  * Add decoding strings.
  *

@@ -37,7 +37,7 @@ package edu.brown.cs.ivy.jannot;
 
 import javax.lang.model.element.Name;
 
-class JannotName implements Name, JannotConstants
+public class JannotName implements Name, JannotConstants
 {
 
 
@@ -58,7 +58,7 @@ private String name_string;
 /*                                                                              */
 /********************************************************************************/
 
-JannotName(String name) 
+public JannotName(String name) 
 {
    if (name == null) name = "";
    name_string = name;
