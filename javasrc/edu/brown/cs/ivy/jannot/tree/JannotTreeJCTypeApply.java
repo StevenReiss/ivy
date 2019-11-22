@@ -67,10 +67,25 @@ JannotTreeJCTypeApply(ParameterizedType n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitTypeApply(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitParameterizedType(this,arg);
 }
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getType());
+   tt.translate(getTypeArguments());
+   return this;
+}
+
 
 
 

@@ -71,10 +71,30 @@ JannotTreeJCMethodDecl(MethodDeclaration md)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitMethodDef(this);
+}
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitMethod(this,arg);
 }
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getModifiers());
+   tt.translate(getReturnType());
+   tt.translate(getTypeParameters());
+   tt.translate(getReceiverParameter());
+   tt.translate(getParameters());
+   tt.translate(getThrows());
+   tt.translate(getBody());
+   return this;
+}
+
+
 
 
 

@@ -65,9 +65,24 @@ JannotTreeJCInstanceOf(InstanceofExpression n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitTypeTest(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitInstanceOf(this,arg);
+}
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getExpression());
+   tt.translate(getType());
+   return this;
 }
 
 

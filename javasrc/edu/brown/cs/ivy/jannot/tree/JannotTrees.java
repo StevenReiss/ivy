@@ -46,6 +46,8 @@ import javax.lang.model.type.ErrorType;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
+import org.eclipse.jdt.core.dom.ASTNode;
+
 import com.sun.source.tree.CatchTree;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
@@ -55,6 +57,7 @@ import com.sun.source.tree.Tree;
 import com.sun.source.util.SourcePositions;
 import com.sun.source.util.TreePath;
 
+import edu.brown.cs.ivy.jannot.JannotElement;
 import edu.brown.cs.ivy.jannot.JannotProcessingEnvironment;
 
 public class JannotTrees extends com.sun.source.util.Trees implements JannotTreeConstants
@@ -68,7 +71,7 @@ public class JannotTrees extends com.sun.source.util.Trees implements JannotTree
 /*                                                                              */
 /********************************************************************************/
 
-public JannotTrees jannotInstance(ProcessingEnvironment env)
+public static com.sun.source.util.Trees jannotInstance(ProcessingEnvironment env)
 {
    return new JannotTrees(env);
 }
@@ -126,7 +129,23 @@ private JannotTrees(ProcessingEnvironment pe)
 
 @Override public TreePath getPath(Element e)
 {
-   return null;
+   JannotElement je = (JannotElement) e;
+   return getPath(je.getAstNode());
+}
+
+
+
+private TreePath getPath(ASTNode n)
+{
+   JannotTree jt = JannotTree.createTree(n);
+   if (jt == null) {
+      return getPath(n.getParent());
+    }
+   if (jt instanceof CompilationUnitTree) {
+      return new TreePath((CompilationUnitTree) jt);
+    }
+   TreePath parpath = getPath(n.getParent());
+   return new TreePath(parpath,jt);
 }
 
 

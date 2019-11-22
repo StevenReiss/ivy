@@ -77,7 +77,7 @@ import edu.brown.cs.ivy.jcomp.JcompAst;
 import edu.brown.cs.ivy.jcomp.JcompSymbol;
 import edu.brown.cs.ivy.jcomp.JcompType;
 
-class JannotElement implements Element, Parameterizable, QualifiedNameable, JannotConstants 
+public class JannotElement implements Element, Parameterizable, QualifiedNameable, JannotConstants 
 {
 
 
@@ -200,7 +200,7 @@ JannotElement(ASTNode n)
 /*                                                                              */
 /********************************************************************************/
 
-ASTNode getAstNode()                    { return ast_node; }
+public ASTNode getAstNode()             { return ast_node; }
 
 
 

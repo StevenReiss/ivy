@@ -63,9 +63,23 @@ JannotTreeJCDoWhileLoop(DoStatement n)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitDoLoop(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitDoWhileLoop(this,arg);
+}
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getStatement());
+   tt.translate(getCondition());
+   return this;
 }
 
 

@@ -70,10 +70,26 @@ JannotTreeJCLambda(LambdaExpression n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitLambda(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitLambdaExpression(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getParameters());
+   tt.translate(getBody());
+   return this;
+}
+
 
 
 

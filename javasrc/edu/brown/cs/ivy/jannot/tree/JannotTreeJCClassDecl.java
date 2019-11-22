@@ -41,6 +41,7 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 
@@ -73,10 +74,29 @@ JannotTreeJCClassDecl(ASTNode n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitClassDef(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitClass(this,arg);
 }
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getModifiers());
+   tt.translate(getTypeParameters());
+   tt.translate(getExtendsClause());
+   tt.translate(getImplementsClause());
+   tt.translate(getMembers());
+   return this;
+}
+
+
 
 
 
@@ -129,7 +149,11 @@ JannotTreeJCClassDecl(ASTNode n)
    if (ast_node instanceof AbstractTypeDeclaration) {
       AbstractTypeDeclaration atd = getTypeDecl();
       for (Object o : atd.bodyDeclarations()) {
-         rslt.add(createTree((ASTNode) o));
+         if (o instanceof FieldDeclaration) {
+            FieldDeclaration fd = (FieldDeclaration) o;
+            rslt.addAll(createTrees(fd));
+          }
+        else rslt.add(createTree((ASTNode) o));
        }
     }
    else if (ast_node instanceof AnonymousClassDeclaration) {

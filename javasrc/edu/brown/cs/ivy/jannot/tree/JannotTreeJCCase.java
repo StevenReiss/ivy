@@ -68,10 +68,26 @@ JannotTreeJCCase(SwitchCase n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitCase(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitCase(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getExpression());
+   tt.translate(getStatements());
+   return this;
+}
+
 
 
 

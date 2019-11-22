@@ -69,10 +69,25 @@ JannotTreeJCAnnotatedType(AnnotatableType n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitAnnotatedType(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitAnnotatedType(this,arg);
 }
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getAnnotations());
+   tt.translate(getUnderlyingType());
+   return this;
+}
+
 
 
 

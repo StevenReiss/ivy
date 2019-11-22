@@ -41,6 +41,7 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import com.sun.source.tree.BlockTree;
 import com.sun.source.tree.Tree;
@@ -69,9 +70,24 @@ JannotTreeJCBlock(Block b)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitBlock(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitBlock(this,arg);
+}
+
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getStatements());
+   return this;
 }
 
 
@@ -93,7 +109,11 @@ JannotTreeJCBlock(Block b)
 {
    List<JannotTreeJCStatement> rslt = new ArrayList<>();
    for (Object o : getBlock().statements()) {
-      rslt.add((JannotTreeJCStatement) createTree((ASTNode) o));
+      if (o instanceof VariableDeclarationStatement) {
+         VariableDeclarationStatement vds = (VariableDeclarationStatement) o;
+         rslt.addAll(createTrees(vds));
+       }
+      else rslt.add((JannotTreeJCStatement) createTree((ASTNode) o));
     }
    return rslt;
 }

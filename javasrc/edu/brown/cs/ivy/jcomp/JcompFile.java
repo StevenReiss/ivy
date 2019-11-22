@@ -104,7 +104,7 @@ JcompFile(JcompSource rf)
        }
       String txt = for_file.getFileContents();
       if (txt != null) {
-	 ASTParser parser = ASTParser.newParser(AST.JLS11);
+	 ASTParser parser = ASTParser.newParser(AST.JLS12);
 	 Map<String,String> options = JavaCore.getOptions();
 	 JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,options);
 	 parser.setCompilerOptions(options);

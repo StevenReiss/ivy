@@ -71,9 +71,25 @@ JannotTreeJCVariableDecl(VariableDeclaration vd)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitVarDef(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitVariable(this,arg);
+}
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getModifiers());
+   tt.translate(getNameExpression());
+   tt.translate(getType());
+   tt.translate(getInitializer());
+   return this;
 }
 
 
@@ -156,6 +172,17 @@ JannotTreeJCVariableDecl(VariableDeclaration vd)
 }
 
 
+
+/********************************************************************************/
+/*                                                                              */
+/*      Field methods                                                           */
+/*                                                                              */
+/********************************************************************************/
+
+public JannotTreeJCModifiers getFieldMods()
+{
+   return getModifiers();
+}
 
 
 /********************************************************************************/

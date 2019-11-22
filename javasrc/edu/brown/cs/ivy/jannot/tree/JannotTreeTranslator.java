@@ -1,8 +1,8 @@
 /********************************************************************************/
 /*                                                                              */
-/*              JannotTreeJCBinary.java                                         */
+/*              JannotTreeTranslator.java                                       */
 /*                                                                              */
-/*      Compilation trees for binary operators                                  */
+/*      Internal tree visitor with children visits                              */
 /*                                                                              */
 /********************************************************************************/
 /*      Copyright 2013 Brown University -- Steven P. Reiss                    */
@@ -35,50 +35,21 @@
 
 package edu.brown.cs.ivy.jannot.tree;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.jdt.core.dom.InfixExpression;
-
-import com.sun.source.tree.BinaryTree;
-import com.sun.source.tree.Tree;
-import com.sun.source.tree.TreeVisitor;
+import java.util.List;
+import java.util.ListIterator;
 
 
-public class JannotTreeJCBinary extends JannotTreeJCExpression implements BinaryTree
+public class JannotTreeTranslator extends JannotTreeVisitor
 {
 
 
 /********************************************************************************/
 /*                                                                              */
-/*      Private storage                                                         */
+/*      Private Storage                                                         */
 /*                                                                              */
 /********************************************************************************/
 
-private static Map<InfixExpression.Operator,Tree.Kind> op_map;
-
-static {
-   op_map = new HashMap<>();
-   op_map.put(InfixExpression.Operator.AND,Tree.Kind.AND);
-   op_map.put(InfixExpression.Operator.CONDITIONAL_AND,Tree.Kind.CONDITIONAL_AND); 
-   op_map.put(InfixExpression.Operator.CONDITIONAL_OR,Tree.Kind.CONDITIONAL_OR); 
-   op_map.put(InfixExpression.Operator.DIVIDE,Tree.Kind.DIVIDE); 
-   op_map.put(InfixExpression.Operator.EQUALS,Tree.Kind.EQUAL_TO); 
-   op_map.put(InfixExpression.Operator.GREATER,Tree.Kind.GREATER_THAN); 
-   op_map.put(InfixExpression.Operator.GREATER_EQUALS,Tree.Kind.GREATER_THAN_EQUAL); 
-   op_map.put(InfixExpression.Operator.LEFT_SHIFT,Tree.Kind.LEFT_SHIFT); 
-   op_map.put(InfixExpression.Operator.LESS,Tree.Kind.LESS_THAN); 
-   op_map.put(InfixExpression.Operator.LESS_EQUALS,Tree.Kind.LESS_THAN_EQUAL);  
-   op_map.put(InfixExpression.Operator.MINUS,Tree.Kind.MINUS);  
-   op_map.put(InfixExpression.Operator.NOT_EQUALS,Tree.Kind.NOT_EQUAL_TO); 
-   op_map.put(InfixExpression.Operator.OR,Tree.Kind.OR);  
-   op_map.put(InfixExpression.Operator.PLUS,Tree.Kind.PLUS); 
-   op_map.put(InfixExpression.Operator.REMAINDER,Tree.Kind.REMAINDER);  
-   op_map.put(InfixExpression.Operator.RIGHT_SHIFT_SIGNED,Tree.Kind.RIGHT_SHIFT); 
-   op_map.put(InfixExpression.Operator.RIGHT_SHIFT_UNSIGNED,Tree.Kind.UNSIGNED_RIGHT_SHIFT); 
-   op_map.put(InfixExpression.Operator.TIMES,Tree.Kind.MULTIPLY); 
-   op_map.put(InfixExpression.Operator.XOR,Tree.Kind.XOR); 
-}
+protected JannotTree    result;
 
 
 
@@ -88,83 +59,103 @@ static {
 /*                                                                              */
 /********************************************************************************/
 
-JannotTreeJCBinary(InfixExpression n) 
-{
-   super(n);
-}
-
-
-/********************************************************************************/
-/*                                                                              */
-/*      Abstract Method Implementations                                         */
-/*                                                                              */
-/********************************************************************************/
-
-@Override public void accept(JannotTreeVisitor v)
-{
-   v.visitBinary(this);
-}
-
-
-@Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
-{
-   return visitor.visitBinary(this,arg);
-}
-
-
-
-@Override public JannotTree translate(JannotTreeTranslator tt)
-{
-   tt.translate(getLeftOperand());
-   tt.translate(getRightOperand());
-   return this;
-}
-
-
-
-@Override public Tree.Kind getKind()
-{
-   return op_map.get(getNode().getOperator());
-}
+public JannotTreeTranslator()
+{ }
 
 
 
 /********************************************************************************/
 /*                                                                              */
-/*      Tree methods                                                            */
+/*      Main entries                                                            */
 /*                                                                              */
 /********************************************************************************/
 
-@Override public JannotTreeJCExpression getLeftOperand()
+@SuppressWarnings("unchecked")
+public <T extends JannotTree> T translate(T tree)
 {
-   return createTree(getNode().getLeftOperand()); 
+   if (tree == null) return null;
+   tree.accept(this);
+   JannotTree rslt = this.result;
+   result = null;
+   return (T) rslt;
 }
 
 
-@Override public JannotTreeJCExpression getRightOperand()
+public <T extends JannotTree> List<T> translate(List<T> trees)
 {
-   return createTree(getNode().getRightOperand()); 
+   if (trees == null) return null;
+   for (ListIterator<T> it = trees.listIterator(); it.hasNext(); ) {
+      T t = it.next();
+      T newt = translate(t);
+      if (newt != t) it.set(newt);
+    }
+   return trees;
 }
 
+
+public List<JannotTreeJCVariableDecl> translateVarDefs(List<JannotTreeJCVariableDecl> trees)
+{
+   return translate(trees);
+}
+
+public List<JannotTreeJCTypeParameter> translateTypeParams(List<JannotTreeJCTypeParameter> trees)
+{
+   return translate(trees);
+}
+
+public List<JannotTreeJCCase> translateCases(List<JannotTreeJCCase> trees)
+{
+   return translate(trees);
+}
+
+public List<JannotTreeJCCatch> translateCatcheers(List<JannotTreeJCCatch> trees)
+{
+   return translate(trees);
+}
+
+public List<JannotTreeJCAnnotation> translateAnnotations(List<JannotTreeJCAnnotation> trees)
+{
+   return translate(trees);
+}
 
 
 /********************************************************************************/
 /*                                                                              */
-/*      Helper methods                                                          */
+/*      Visitor methods                                                         */
 /*                                                                              */
 /********************************************************************************/
 
-private InfixExpression getNode()
+public void visitTree(JannotTree t)
 {
-   return (InfixExpression) ast_node;
+   result = t.translate(this);
 }
 
 
 
-}       // end of class JannotTreeJCBinary
 
 
 
 
-/* end of JannotTreeJCBinary.java */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}       // end of class JannotTreeTranslator
+
+
+
+
+/* end of JannotTreeTranslator.java */
 

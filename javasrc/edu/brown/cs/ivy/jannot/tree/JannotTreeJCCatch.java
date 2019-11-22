@@ -67,10 +67,27 @@ JannotTreeJCCatch(CatchClause cc)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitCatch(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitCatch(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getParameter());
+   tt.translate(getBlock());
+   
+   return this;
+}
+
 
 
 
@@ -100,16 +117,16 @@ public VariableTree getParam()
 }
 
 
-public BlockTree getBlock()
+public JannotTreeJCBlock getBlock()
 {
-   return (BlockTree) JannotTree.createTree(getCatch().getBody());
+   return JannotTree.createTree(getCatch().getBody());
 }
 
 
 
-public VariableTree getParameter()
+public JannotTreeJCVariableDecl getParameter()
 {
-   return (VariableTree) JannotTree.createTree(getCatch().getException());
+   return JannotTree.createTree(getCatch().getException());
 }
 
 

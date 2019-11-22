@@ -69,10 +69,25 @@ JannotTreeJCSwitch(SwitchStatement s)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitSwitch(this);
+}
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitSwitch(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getExpression());
+   tt.translate(getCases());
+   return this;
+}
+
 
 
 

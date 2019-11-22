@@ -170,7 +170,7 @@ public static Color getColorByName(String v)
       return c;
     }
    catch (NumberFormatException e) {
-      System.err.println("IVY: Bad color value: " + v);
+      System.err.println("IVY: Bad color value: '" + v + "'");
     }
 
    return null;

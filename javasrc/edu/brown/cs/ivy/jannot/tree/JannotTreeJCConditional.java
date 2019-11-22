@@ -66,10 +66,27 @@ JannotTreeJCConditional(ConditionalExpression n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitConditional(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitConditionalExpression(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getCondition());
+   tt.translate(getTrueExpression());
+   tt.translate(getFalseExpression());
+   return this;
+}
+
 
 
 

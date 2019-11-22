@@ -65,10 +65,27 @@ JannotTreeJCIf(IfStatement s)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitIf(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitIf(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getCondition());
+   tt.translate(getThenStatement());
+   tt.translate(getElseStatement());
+   return this;
+}
+
 
 
 

@@ -63,10 +63,24 @@ JannotTreeJCArrayTypeTree(ArrayType n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitTypeArray(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitArrayType(this,arg);
 }
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getType());
+   return this;
+}
+
 
 
 

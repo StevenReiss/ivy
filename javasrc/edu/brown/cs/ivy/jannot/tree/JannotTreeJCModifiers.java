@@ -37,6 +37,7 @@ package edu.brown.cs.ivy.jannot.tree;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -44,6 +45,10 @@ import javax.lang.model.element.Modifier;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Annotation;
+import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import com.sun.source.tree.ModifiersTree;
 import com.sun.source.tree.Tree;
@@ -81,10 +86,24 @@ JannotTreeJCModifiers(ASTNode base,List<?> mods)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitModifiers(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitModifiers(this,arg);
 }
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getAnnotations());
+   return this;
+}
+
 
 
 @Override public Tree.Kind getKind()
@@ -123,6 +142,7 @@ JannotTreeJCModifiers(ASTNode base,List<?> mods)
          else if (mod.isNative()) rslt.add(Modifier.NATIVE);
          else if (mod.isPrivate()) rslt.add(Modifier.PRIVATE);
          else if (mod.isProtected()) rslt.add(Modifier.PROTECTED);
+         else if (mod.isPublic()) rslt.add(Modifier.PUBLIC);
          else if (mod.isStatic()) rslt.add(Modifier.STATIC);
          else if (mod.isStrictfp()) rslt.add(Modifier.STRICTFP);
          else if (mod.isSynchronized()) rslt.add(Modifier.SYNCHRONIZED);
@@ -132,6 +152,95 @@ JannotTreeJCModifiers(ASTNode base,List<?> mods)
     }
    return rslt;
 }
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Field methods                                                           */
+/*                                                                              */
+/********************************************************************************/
+
+public long getFieldFlags()
+{
+   if (ast_node instanceof BodyDeclaration) {
+      BodyDeclaration bd = (BodyDeclaration) ast_node;
+      return bd.getModifiers();
+    }
+   else if (ast_node instanceof SingleVariableDeclaration) {
+      SingleVariableDeclaration svd = (SingleVariableDeclaration) ast_node;
+      return svd.getModifiers();
+    }
+   else if (ast_node instanceof VariableDeclarationExpression) {
+      VariableDeclarationExpression vde = (VariableDeclarationExpression) ast_node;
+      return vde.getModifiers();
+    }
+   else if (ast_node instanceof VariableDeclarationStatement) {
+      VariableDeclarationStatement vds = (VariableDeclarationStatement) ast_node;
+      return vds.getModifiers();
+    }
+   return 0;
+}
+
+
+public void setFieldFlags(long vl)
+{
+   int v = (int) vl;
+   if (ast_node instanceof BodyDeclaration) {
+      BodyDeclaration bd = (BodyDeclaration) ast_node;
+      handleSetMods(bd.modifiers(),v);
+    }
+   else if (ast_node instanceof SingleVariableDeclaration) {
+      SingleVariableDeclaration svd = (SingleVariableDeclaration) ast_node;
+      handleSetMods(svd.modifiers(),v);
+    }
+   else if (ast_node instanceof VariableDeclarationExpression) {
+      VariableDeclarationExpression vde = (VariableDeclarationExpression) ast_node;
+      handleSetMods(vde.modifiers(),v);
+    }
+   else if (ast_node instanceof VariableDeclarationStatement) {
+      VariableDeclarationStatement vds = (VariableDeclarationStatement) ast_node;
+      handleSetMods(vds.modifiers(),v);
+    }
+}
+
+
+@SuppressWarnings("unchecked")
+private void handleSetMods(@SuppressWarnings("rawtypes") List modifiers,int v)
+{
+   for (Iterator<?> it = modifiers.iterator(); it.hasNext(); ) {
+      Object o = it.next();
+      if (o instanceof org.eclipse.jdt.core.dom.Modifier) {
+         org.eclipse.jdt.core.dom.Modifier mod = (org.eclipse.jdt.core.dom.Modifier) o;
+         int fg = getModifierFlag(mod);
+         if ((v & fg) != 0) v &= ~fg;
+       }
+    }
+   if (v != 0) {
+      List<?> add = ast_node.getAST().newModifiers(v);
+      if (add != null) modifiers.addAll(add);
+    }
+}
+
+
+
+private int getModifierFlag(org.eclipse.jdt.core.dom.Modifier mod)
+{
+   int rslt = 0;
+   if (mod.isAbstract()) rslt = org.eclipse.jdt.core.dom.Modifier.ABSTRACT;
+   else if (mod.isDefault()) rslt = org.eclipse.jdt.core.dom.Modifier.DEFAULT;
+   else if (mod.isFinal()) rslt = org.eclipse.jdt.core.dom.Modifier.FINAL;
+   else if (mod.isNative()) rslt = org.eclipse.jdt.core.dom.Modifier.NATIVE;
+   else if (mod.isPrivate()) rslt = org.eclipse.jdt.core.dom.Modifier.PRIVATE;
+   else if (mod.isProtected()) rslt = org.eclipse.jdt.core.dom.Modifier.PROTECTED;
+   else if (mod.isPublic()) rslt = org.eclipse.jdt.core.dom.Modifier.PUBLIC;
+   else if (mod.isStatic()) rslt = org.eclipse.jdt.core.dom.Modifier.STATIC;
+   else if (mod.isStrictfp()) rslt = org.eclipse.jdt.core.dom.Modifier.STRICTFP;
+   else if (mod.isSynchronized()) rslt = org.eclipse.jdt.core.dom.Modifier.SYNCHRONIZED;
+   else if (mod.isTransient()) rslt = org.eclipse.jdt.core.dom.Modifier.TRANSIENT;
+   else if (mod.isVolatile()) rslt = org.eclipse.jdt.core.dom.Modifier.VOLATILE;
+   return rslt;
+}
+
 
 
 

@@ -63,10 +63,26 @@ JannotTreeJCAssert(AssertStatement n)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitAssert(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitAssert(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getCondition());
+   tt.translate(getDetail());
+   return this;
+}
+
 
 
 

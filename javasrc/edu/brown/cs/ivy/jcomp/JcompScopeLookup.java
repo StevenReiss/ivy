@@ -156,23 +156,25 @@ private static class VarElement {
 
 void defineMethod(JcompSymbol js,JcompScope scp)
 {
-   List<MethodElement> lme = method_names.get(js.getName());
-   if (lme == null) {
-      lme = new ArrayList<MethodElement>();
-      method_names.put(js.getName(),lme);
-    }
-   MethodElement useme = null;
-   for (MethodElement me : lme) {
-      if (me.getScope() == scp) {
-	 useme = me;
-	 break;
+   synchronized (method_names) {
+      List<MethodElement> lme = method_names.get(js.getName());
+      if (lme == null) {
+	 lme = new ArrayList<MethodElement>();
+	 method_names.put(js.getName(),lme);
        }
+      MethodElement useme = null;
+      for (MethodElement me : lme) {
+	 if (me.getScope() == scp) {
+	    useme = me;
+	    break;
+	  }
+       }
+      if (useme == null) {
+	 useme = new MethodElement(scp);
+	 lme.add(useme);
+       }
+      useme.add(js);
     }
-   if (useme == null) {
-      useme = new MethodElement(scp);
-      lme.add(useme);
-    }
-   useme.add(js);
 }
 
 
@@ -181,20 +183,23 @@ void defineMethod(JcompSymbol js,JcompScope scp)
 JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompScope js,JcompType basetype,ASTNode n)
 {
    List<MethodElement> lme = method_names.get(id);
-   if (lme == null) {
-      return null;
+   synchronized(method_names) {
+      lme = method_names.get(id);
+      if (lme == null) {
+	 return null;
+       }
+      else lme = new ArrayList<>(lme);
     }
-   else lme = new ArrayList<>(lme);
-   
+
    while (js != null) {
       for (MethodElement me : lme) {
 	 if (me.getScope() == js) {
 	    JcompSymbol bestms = null;
 	    for (JcompSymbol ms : me.getMethods()) {
-               if (basetype != null && n != null) {
-                  if (!JcompType.checkProtections(ms,basetype,n)) continue;
-                }
-               if (aty == null) bestms = ms;
+	       if (basetype != null && n != null) {
+		  if (!JcompType.checkProtections(ms,basetype,n)) continue;
+		}
+	       if (aty == null) bestms = ms;
 	       else if (aty.isCompatibleWith(ms.getType())) {
 		  if (bestms == null) bestms = ms;
 		  else if (JcompScope.isBetterMethod(aty,ms,bestms))
@@ -215,24 +220,28 @@ JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompScope js,
 JcompSymbol lookupExactMethod(String id,JcompType aty,JcompScope js)
 {
    List<MethodElement> lme = method_names.get(id);
-   if (lme == null) {
-      return null;
+   synchronized(method_names) {
+      lme = method_names.get(id);
+      if (lme == null) {
+	 return null;
+       }
+      else lme = new ArrayList<>(lme);
     }
-   
+
    if (js != null) {
       for (MethodElement me : lme) {
 	 if (me.getScope() == js) {
 	    for (JcompSymbol ms : me.getMethods()) {
 	       if (aty.equals(ms.getType())) {
-                  return ms;
+		  return ms;
 		}
 	     }
 	  }
        }
     }
-   
+
   // System.err.println("Couldn't find method " + id + " " + aty);
-   
+
    return null;
 }
 
@@ -244,29 +253,31 @@ JcompSymbol lookupExactMethod(String id,JcompType aty,JcompScope js)
 List<JcompSymbol> lookupStatics(String id,JcompScope jscp)
 {
    List<JcompSymbol> rslt = null;
-   
+
    if (id == null) {
       Set<JcompSymbol> r2 = new HashSet<>();
       for (String s : method_names.keySet()) {
-         List<JcompSymbol> r1 = lookupStatics(s,jscp);
-         if (r1 != null) r2.addAll(r1);
+	 List<JcompSymbol> r1 = lookupStatics(s,jscp);
+	 if (r1 != null) r2.addAll(r1);
        }
       for (String s : var_names.keySet()) {
-         List<JcompSymbol> r1 = lookupStatics(s,jscp);
-         if (r1 != null) r2.addAll(r1);
+	 List<JcompSymbol> r1 = lookupStatics(s,jscp);
+	 if (r1 != null) r2.addAll(r1);
        }
       if (r2.size() == 0) return null;
       rslt = new ArrayList<>(r2);
       return rslt;
     }
-   
-   List<MethodElement> lme = method_names.get(id);
-   if (lme != null) {
-      for (MethodElement me : lme) {
-	 for (JcompSymbol js : me.getMethods()) {
-	    if (!js.isStatic()) continue;
-	    if (rslt == null) rslt = new ArrayList<JcompSymbol>();
-	    rslt.add(js);
+
+   synchronized (method_names) {
+      List<MethodElement> lme = method_names.get(id);
+      if (lme != null) {
+	 for (MethodElement me : lme) {
+	    for (JcompSymbol js : me.getMethods()) {
+	       if (!js.isStatic()) continue;
+	       if (rslt == null) rslt = new ArrayList<JcompSymbol>();
+	       rslt.add(js);
+	     }
 	  }
        }
     }
@@ -305,11 +316,14 @@ void getFields(Map<String,JcompType> flds,JcompScope scope)
 Set<JcompSymbol> lookupAbstracts(JcompTyper typer)
 {
    Set<JcompSymbol> rslt = new HashSet<JcompSymbol>();
-   for (List<MethodElement> lme : method_names.values()) {
-      for (MethodElement me : lme) {
-	 for (JcompSymbol js : me.getMethods()) {
-	    if (js.isStatic() || !js.isAbstract()) continue;
-	    rslt.add(js);
+
+   synchronized (method_names) {
+      for (List<MethodElement> lme : method_names.values()) {
+	 for (MethodElement me : lme) {
+	    for (JcompSymbol js : me.getMethods()) {
+	       if (js.isStatic() || !js.isAbstract()) continue;
+	       rslt.add(js);
+	     }
 	  }
        }
     }
@@ -350,7 +364,7 @@ private static class MethodElement {
    synchronized void add(JcompSymbol js)   { for_methods.add(js); }
 
    JcompScope getScope()			      { return for_scope; }
-   synchronized Collection<JcompSymbol> getMethods()       { 
+   synchronized Collection<JcompSymbol> getMethods()	   {
       return new ArrayList<>(for_methods);
    }
 

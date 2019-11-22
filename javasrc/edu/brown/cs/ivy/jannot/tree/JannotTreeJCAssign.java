@@ -64,9 +64,24 @@ JannotTreeJCAssign(Assignment n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitAssign(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitAssignment(this,arg);
+}
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getVariable());
+   tt.translate(getExpression());
+   return this;
 }
 
 

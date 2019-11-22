@@ -65,10 +65,26 @@ JannotTreeJCSynchronized(SynchronizedStatement s)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitSynchronized(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitSynchronized(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getExpression());
+   tt.translate(getBlock());
+   return this;
+}
+
 
 
 

@@ -130,6 +130,7 @@ class JcompResolver implements JcompConstants {
 /********************************************************************************/
 
 private JcompTyper	 type_data;
+private boolean 	preview_needed;
 
 
 
@@ -144,6 +145,7 @@ JcompResolver(JcompTyper typer)
    type_data = typer;
    JcompType ot = typer.findSystemType("java.lang.Object");
    ot.defineAll(typer);
+   preview_needed = false;
 }
 
 
@@ -601,7 +603,7 @@ private class RefPass extends ASTVisitor {
 	       JcompScope scp = JcompAst.getJavaScope(atd);
 	       if (scp != null) outer = scp.getParent();
 	       internal = true;
-	     }	
+	     }
 	  }
 	 if (internal && n.isOnDemand() && n.isStatic() && jt1 != null && outer != null) {
 	    jt1.defineAll(type_data);
@@ -1198,6 +1200,7 @@ private class RefPass extends ASTVisitor {
       cur_type = outer_types.pop();
     }
 
+   @SuppressWarnings("deprecation")
    public @Override boolean visit(SwitchCase n) {
       SwitchStatement ss = null;
       for (ASTNode p = n; p != null; p = p.getParent()) {
@@ -1209,10 +1212,29 @@ private class RefPass extends ASTVisitor {
       if (ss != null) {
 	 JcompType switchtype = JcompAst.getExprType(ss.getExpression());
 	 if (switchtype != null && switchtype.isEnumType()) {
-	    for (Object o : n.expressions()) {
-	       if (o instanceof SimpleName) {
-		  switchtype.defineAll(type_data);
-		  SimpleName sn = (SimpleName) o;
+	    switchtype.defineAll(type_data);
+	    if (!preview_needed) {
+	       try {
+		  for (Object o : n.expressions()) {
+		     if (o instanceof SimpleName) {
+			SimpleName sn = (SimpleName) o;
+			JcompSymbol js = switchtype.getScope().lookupVariable(sn.getIdentifier());
+			if (js != null && js.isEnumSymbol()) {
+			   JcompAst.setReference(sn,js);
+			   JcompAst.setExprType(sn,switchtype);
+			   return false;
+			 }
+		      }
+		   }
+		}
+	       catch (UnsupportedOperationException e) {
+		  preview_needed = true;
+		}
+	     }
+	    if (preview_needed) {
+	       Expression e = n.getExpression();
+	       if (e instanceof SimpleName) {
+		  SimpleName sn = (SimpleName) e;
 		  JcompSymbol js = switchtype.getScope().lookupVariable(sn.getIdentifier());
 		  if (js != null && js.isEnumSymbol()) {
 		     JcompAst.setReference(sn,js);
@@ -1307,8 +1329,8 @@ private class RefPass extends ASTVisitor {
       boolean oref = false;
       JcompType qt = JcompAst.getJavaType(r.getExpression());
       if (qt == null) {
-	 oref = true;
-	 qt = JcompAst.getExprType(r.getExpression());
+         oref = true;
+         qt = JcompAst.getExprType(r.getExpression());
        }
       handleReference(r,qt,oref,r.getName().getIdentifier());
       return false;
@@ -1466,11 +1488,11 @@ private class RefPass extends ASTVisitor {
 	    t.printStackTrace();
 	    mtyp = findType(TYPE_ERROR);
 	  }
-	
+
 	 if (id == null && nm != null) id = nm.getIdentifier();
-	
+
 	 if (bt != null) bt.defineAll(type_data);
-	
+
 	 if (bt != null) js = callLookupMethod(bt,id,mtyp,n);
 	 if (js != null && bt != null && isstatic && !js.isStatic()) {
 	    if (!bt.isCompatibleWith(js.getClassType())) {
@@ -1478,7 +1500,7 @@ private class RefPass extends ASTVisitor {
 	       // js = null;
 	     }
 	  }
-	
+
 	 if (js == null && id != null && bt != null && id.equals("<init>") && dfltcnst) {
 	    boolean havecnst = false;
 	    if (bt.getScope() != null) {
@@ -1510,11 +1532,11 @@ private class RefPass extends ASTVisitor {
 	 JcompAst.setReference(n,js);
 	 fixStaticSignature(bt,n);
 	 js = JcompAst.getReference(n);
-	
+
 	 rescanArgsForMethod(js,args);
 	 List<JcompType> natyp = buildArgumentList(args,false);
 	 atyp = natyp;
-	
+
 	 JcompType jst = js.getType();
 	 JcompType rt;
 	 if (jst == null) rt = findType("void");

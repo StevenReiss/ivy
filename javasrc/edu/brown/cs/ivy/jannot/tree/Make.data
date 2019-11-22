@@ -9,6 +9,7 @@ SUBDIR= tree
 
 SFILES = JannotTree.java \
 	JannotTreeConstants.java \
+	JannotTreeFactory.java \
 	JannotTreeJCAnnotatedType.java \
 	JannotTreeJCAnnotation.java \
 	JannotTreeJCArrayAccess.java \
@@ -65,6 +66,10 @@ SFILES = JannotTree.java \
 	JannotTreeJCVariableDecl.java \
 	JannotTreeJCWhileLoop.java \
 	JannotTreeJCWildcard.java \
+	JannotTreeMaker.java \
+	JannotTreeTag.java \
+	JannotTreeTranslator.java \
+	JannotTreeVisitor.java \
 	JannotTrees.java \
 
 

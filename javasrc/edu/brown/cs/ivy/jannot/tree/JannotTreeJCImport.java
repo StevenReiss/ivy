@@ -63,11 +63,22 @@ JannotTreeJCImport(ImportDeclaration n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitImport(this);
+}
+
 
 
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitImport(this,arg);
+}
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getQualId());
+   return this;
 }
 
 

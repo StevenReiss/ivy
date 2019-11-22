@@ -47,8 +47,12 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.Handle;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.signature.SignatureReader;
+import org.objectweb.asm.signature.SignatureWriter;
 import org.objectweb.asm.util.Printer;
 import org.objectweb.asm.util.Textifier;
 import org.objectweb.asm.util.TraceMethodVisitor;
@@ -171,10 +175,23 @@ private class JannotTransformer extends ClassVisitor {
       super(ASM_API,cvx);
     }
    
+   @Override public void visit(int v,int acc,String name,String sign,String sup,String [] ifaces) {
+      String osup = getOurClass(sup);
+      String osign = getOurSignature(sign);
+      super.visit(v,acc,name,osign,osup,ifaces);
+      if (do_debug) {
+         System.err.println("JANNOT: start class " + name + " extends " + osup);
+       }
+    }
+   
+   
    @Override public MethodVisitor visitMethod(int acc,String name,String desc,String sgn,
          String [] exc) {
-      MethodVisitor mv = super.visitMethod(acc,name,desc,sgn,exc);
-      if (do_debug) mv = new MethodTracer(mv,name,desc);
+      String ndesc = getOurDescriptor(desc);
+      String nsgn = getOurSignature(sgn);
+      System.err.println("JANNOT: VISIT " + name + " " + desc + " " + ndesc + " " + sgn + " " + nsgn);
+      MethodVisitor mv = super.visitMethod(acc,name,ndesc,nsgn,exc);
+      if (do_debug) mv = new MethodTracer(mv,name,ndesc);
       mv = new TreeMapper(mv);
       
       return mv;
@@ -206,11 +223,58 @@ private static String updateDescription(String d)
 
 private String getOurClass(String cls) 
 {
-   if (!cls.startsWith("com/sun/tools/javac/tree/JCTree")) return cls;
-   int idx = 32;
-   if (cls.length() < idx) return "edu/brown/cs/ivy/jannot/tree/JannotTree";
-   else return "edu/brown/cs/ivy/jannot/tree/JannotTree" + cls.substring(idx);
+   if (cls.startsWith("com/sun/tools/javac/tree/JCTree")) {
+      int idx = 32;
+      if (cls.length() < idx) return "edu/brown/cs/ivy/jannot/tree/JannotTree";
+      else return "edu/brown/cs/ivy/jannot/tree/JannotTree" + cls.substring(idx);
+    }
+   if (cls.equals("com/sun/tools/javac/tree/TreeTranslator")) {
+      return "edu/brown/cs/ivy/jannot/tree/JannotTreeTranslator";
+    }
+   if (cls.equals("com/sun/tools/javac/tree/TreeMaker")) {
+      return "edu/brown/cs/ivy/jannot/tree/JannotTreeMaker";
+    }
+   return cls;
 }
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Handle descriptor and signature mapping                                 */
+/*                                                                              */
+/********************************************************************************/
+
+private String getOurDescriptor(String d)
+{
+   if (d == null) return null;
+   if (!d.contains("javac")) return d;
+   
+   SignatureReader sr = new SignatureReader(d);
+   SignatureMapper sm = new SignatureMapper();
+   sr.accept(sm);
+   return sm.toString();
+}
+
+
+private String getOurSignature(String s)
+{
+   return getOurDescriptor(s);
+}
+
+
+
+private class SignatureMapper extends SignatureWriter {
+
+   @Override public void visitClassType(String name) {
+      super.visitClassType(getOurClass(name));
+    }
+   
+   @Override public void visitFormalTypeParameter(String name) {
+      super.visitFormalTypeParameter(getOurClass(name));
+    }
+   
+}       // end of inner class SignatureMapper
 
 
 
@@ -235,17 +299,22 @@ private class TreeMapper extends MethodVisitor {
       super(ASM_API,mvx);
     }
    
+   @Override public void visitLocalVariable(String name,String desc,String sign,Label start,Label end,int idx) {
+      super.visitLocalVariable(name,getOurDescriptor(desc),sign,start,end,idx);
+    }
+   
    @Override public void visitFieldInsn(int opcode,String owner,String name,String desc) {
       if (owner.startsWith("com/sun/tools/javac/tree/JCTree")) {
+         String ndesc = getOurDescriptor(desc);
          String cnm = getOurClass(owner);
          if (opcode == Opcodes.GETFIELD || opcode == Opcodes.GETSTATIC) {
-            String nm = getFieldName("get",name);
-            String descl = "()" + desc;
+            String nm = getFieldName("getField",name);
+            String descl = "()" + ndesc;
             super.visitMethodInsn(Opcodes.INVOKEVIRTUAL,cnm,nm,descl,false);
           }
          else {
-            String nm = getFieldName("set",name);
-            String descl = "(" + desc + ")V";
+            String nm = getFieldName("setField",name);
+            String descl = "(" + ndesc + ")V";
             super.visitMethodInsn(Opcodes.INVOKEVIRTUAL,cnm,nm,descl,false);
           }
        }
@@ -256,14 +325,14 @@ private class TreeMapper extends MethodVisitor {
    
    @Override public void visitMethodInsn(int opcode,String owner,String name,String desc,
          boolean iface) {
-      if (owner.startsWith("com/sun/tools/javac/tree/JCTree")) {
-         super.visitMethodInsn(opcode,getOurClass(owner),name,desc,iface);
+      if (owner.startsWith("com/sun/tools/javac")) {
+         super.visitMethodInsn(opcode,getOurClass(owner),name,getOurDescriptor(desc),iface);
        }
       else if (owner.equals("com/sun/source/util/Trees") && name.equals("instance")) {
          super.visitMethodInsn(opcode,"edu/brown/cs/ivy/jannot/tree/JannotTrees","jannotInstance",desc,iface);
        }
       else {
-         super.visitMethodInsn(opcode,owner,name,desc,iface);
+         super.visitMethodInsn(opcode,owner,name,getOurDescriptor(desc),iface);
        }
     }
    
@@ -274,6 +343,16 @@ private class TreeMapper extends MethodVisitor {
       else {
          super.visitTypeInsn(opcode,type);
        }
+    }
+   
+   @Override public void visitInvokeDynamicInsn(String name,String desc,Handle hdl,Object ... obj) {
+      Handle nhdl = mapHandle(hdl);
+      super.visitInvokeDynamicInsn(name,getOurDescriptor(desc),nhdl,obj);
+    }
+   
+   private Handle mapHandle(Handle h) {
+      
+      return h;
     }
         
 }       // end of inner class TreeMapper

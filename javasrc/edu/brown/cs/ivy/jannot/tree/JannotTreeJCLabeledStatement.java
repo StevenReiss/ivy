@@ -67,9 +67,23 @@ JannotTreeJCLabeledStatement(LabeledStatement s)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitLabelled(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitLabeledStatement(this,arg);
+}
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getStatement());
+   return this;
 }
 
 

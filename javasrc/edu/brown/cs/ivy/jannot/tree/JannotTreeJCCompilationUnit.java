@@ -51,6 +51,10 @@ import com.sun.source.tree.PackageTree;
 import com.sun.source.tree.Tree;
 import com.sun.source.tree.TreeVisitor;
 
+import edu.brown.cs.ivy.jannot.JannotFileObject;
+import edu.brown.cs.ivy.jcomp.JcompAst;
+import edu.brown.cs.ivy.jcomp.JcompSource;
+
 public class JannotTreeJCCompilationUnit extends JannotTree implements CompilationUnitTree
 {
 
@@ -74,6 +78,10 @@ JannotTreeJCCompilationUnit(CompilationUnit cu)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitTopLevel(this);
+}
 
 
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
@@ -113,11 +121,11 @@ public List<JannotTree> getDefs()
 
 
 
-
 public JannotTreeJCExpression getPid()
 {
    return null;
 }
+
 
 
 
@@ -158,7 +166,7 @@ public JannotTreeJCExpression getPid()
 
 @Override public ExpressionTree getPackageName()
 {
-   return (ExpressionTree) createTree(getCU().getPackage().getName());
+   return createTree(getCU().getPackage().getName());
 }
 
 
@@ -175,7 +183,30 @@ public JannotTreeJCExpression getPid()
 
 @Override public JavaFileObject getSourceFile()
 {
-   return null;
+   CompilationUnit cu = getCU();
+        
+   JcompSource src = JcompAst.getSource(cu);
+   return JannotFileObject.createFileObject(src);
+}
+
+
+public JavaFileObject getFieldSourcefile()
+{
+   return getSourceFile();
+}
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Translation methods                                                     */
+/*                                                                              */
+/********************************************************************************/
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getDefs());
+   // translate each def and generate the result tree and insert into defs
+   return this;
 }
 
 

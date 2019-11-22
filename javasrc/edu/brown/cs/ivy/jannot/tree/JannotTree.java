@@ -35,6 +35,9 @@
 
 package edu.brown.cs.ivy.jannot.tree;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnnotatableType;
 import org.eclipse.jdt.core.dom.Annotation;
@@ -57,6 +60,7 @@ import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
@@ -85,6 +89,9 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.UnionType;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
+import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 import org.eclipse.jdt.core.dom.LambdaExpression;
@@ -144,6 +151,40 @@ static JannotTreeJCExpression createTree(Type n)
 static JannotTreeJCVariableDecl createTree(VariableDeclaration n)
 {
    return (JannotTreeJCVariableDecl) createTree((ASTNode) n);
+}
+
+
+static List<JannotTreeJCVariableDecl> createTrees(FieldDeclaration fd)
+{
+   List<JannotTreeJCVariableDecl> rslt = new ArrayList<>();
+   for (Object o : fd.fragments()) {
+      VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+      rslt.add(createTree(vdf));
+    }
+   return rslt;     
+}
+
+
+static List<JannotTreeJCVariableDecl> createTrees(VariableDeclarationExpression vde)
+{
+   List<JannotTreeJCVariableDecl> rslt = new ArrayList<>();
+   for (Object o : vde.fragments()) {
+      VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+      rslt.add(createTree(vdf));
+    }
+   return rslt;     
+}
+
+
+
+static List<JannotTreeJCVariableDecl> createTrees(VariableDeclarationStatement vds)
+{
+   List<JannotTreeJCVariableDecl> rslt = new ArrayList<>();
+   for (Object o : vds.fragments()) {
+      VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+      rslt.add(createTree(vdf));
+    }
+   return rslt;     
 }
 
 
@@ -268,7 +309,7 @@ static JannotTree createTree(ASTNode n)
 	 return new JannotTreeJCFieldAccess((FieldAccess) n);
       case ASTNode.QUALIFIED_NAME :
       case ASTNode.SIMPLE_NAME :
-	 return new JannotTreeJCIdent((Name) n);
+	 return new JannotTreeJCIdent(n);
       case ASTNode.INSTANCEOF_EXPRESSION :
 	 return new JannotTreeJCInstanceOf((InstanceofExpression) n);
       case ASTNode.NUMBER_LITERAL :
@@ -389,6 +430,10 @@ protected JannotTree(ASTNode n)
 @Override public abstract Tree.Kind getKind();
 
 @Override public abstract <R,D> R accept(TreeVisitor<R,D> visitor,D data);
+public abstract void accept(JannotTreeVisitor v); 
+public JannotTree translate(JannotTreeTranslator tt)            { return this; }
+
+
 
 
 /********************************************************************************/

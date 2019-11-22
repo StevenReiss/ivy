@@ -70,6 +70,12 @@ JannotTreeJCIdent(ASTNode n)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitIdent(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitIdentifier(this,arg);

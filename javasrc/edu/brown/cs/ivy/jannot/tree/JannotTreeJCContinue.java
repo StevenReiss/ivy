@@ -66,6 +66,12 @@ JannotTreeJCContinue(ContinueStatement bs)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitContinue(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitContinue(this,arg);

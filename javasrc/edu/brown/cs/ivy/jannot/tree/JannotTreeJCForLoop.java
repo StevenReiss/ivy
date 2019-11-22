@@ -70,9 +70,25 @@ JannotTreeJCForLoop(ForStatement s)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitForLoop(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitForLoop(this,arg);
+}
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getInitializer());
+   tt.translate(getCondition());
+   tt.translate(getUpdate());
+   tt.translate(getStatement());
+   return this;
 }
 
 

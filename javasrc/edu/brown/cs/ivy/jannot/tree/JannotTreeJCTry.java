@@ -70,10 +70,29 @@ JannotTreeJCTry(TryStatement s)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitTry(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitTry(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getResources());
+   tt.translate(getBlock());
+   tt.translate(getCatches());
+   tt.translate(getFinallyBlock());
+   return this;
+}
+
+
 
 
 

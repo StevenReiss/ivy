@@ -71,10 +71,26 @@ JannotTreeJCMethodInvocation(MethodInvocation n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitApply(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitMethodInvocation(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getMethodSelect());
+   tt.translate(getArguments());
+   return this;
+}
+
 
 
 

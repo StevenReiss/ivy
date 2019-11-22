@@ -71,10 +71,28 @@ JannotTreeJCNewClass(ClassInstanceCreation n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitNewClass(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitNewClass(this,arg);
 }
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getEnclosingExpression());
+   tt.translate(getIdentifier());
+   tt.translate(getArguments());
+   tt.translate(getClassBody());
+   return this;
+}
+
 
 
 

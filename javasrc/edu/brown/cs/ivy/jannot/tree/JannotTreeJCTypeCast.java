@@ -66,9 +66,24 @@ JannotTreeJCTypeCast(CastExpression n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitTypeCast(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitTypeCast(this,arg);
+}
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getType());
+   tt.translate(getExpression());
+   return this;
 }
 
 

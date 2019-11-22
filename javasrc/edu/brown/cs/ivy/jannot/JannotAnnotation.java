@@ -111,7 +111,7 @@ Annotation getAstNode()
 
 @Override public DeclaredType getAnnotationType() 
 {
-   JcompType jt = JcompAst.getJavaType(annot_node);
+   JcompType jt = JcompAst.getJavaType(annot_node.getTypeName());
    return (DeclaredType) JannotTypeMirror.createTypeMirror(jt);
 }
 

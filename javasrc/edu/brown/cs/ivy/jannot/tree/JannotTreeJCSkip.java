@@ -65,6 +65,12 @@ JannotTreeJCSkip(EmptyStatement bs)
 /*										*/
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitSkip(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitEmptyStatement(this,arg);

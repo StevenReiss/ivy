@@ -31,11 +31,14 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/stdlib/src/ivy_datatypes.H,v 1.14 2013/09/24 01:07:55 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/stdlib/src/ivy_datatypes.H,v 1.15 2019/10/08 01:24:27 spr Exp $ */
 
 /************************************************************************
  *
  * $Log: ivy_datatypes.H,v $
+ * Revision 1.15  2019/10/08 01:24:27  spr
+ * Formatting.
+ *
  * Revision 1.14  2013/09/24 01:07:55  spr
  * data format
  *

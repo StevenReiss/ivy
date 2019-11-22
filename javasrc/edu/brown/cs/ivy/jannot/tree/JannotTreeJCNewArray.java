@@ -72,9 +72,29 @@ JannotTreeJCNewArray(ArrayCreation n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitNewArray(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitNewArray(this,arg);
+}
+
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getAnnotations());
+   for (List<JannotTreeJCAnnotation> oda : getDimAnnotations()) {
+      tt.translate(oda);
+    }
+   tt.translate(getType());
+   tt.translate(getDimensions());
+   tt.translate(getInitializers());
+   return this;
 }
 
 

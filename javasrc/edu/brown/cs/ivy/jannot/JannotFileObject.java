@@ -38,6 +38,7 @@ package edu.brown.cs.ivy.jannot;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.lang.model.element.Element;
 import javax.tools.SimpleJavaFileObject;
@@ -48,7 +49,7 @@ import javax.tools.JavaFileObject;
 
 
 
-class JannotFileObject extends SimpleJavaFileObject implements JannotConstants, JcompSource
+public class JannotFileObject extends SimpleJavaFileObject implements JannotConstants, JcompSource
 {
 
 
@@ -74,6 +75,21 @@ JannotFileObject(URI name,JavaFileObject.Kind k,Element [] elts)
    super(name,k);
    related_elements = elts;
    output_buffer = null;
+}
+
+
+public static JannotFileObject createFileObject(JcompSource src)
+{
+   if (src == null) return null;
+   
+   String pnm = src.getFileName();
+   try {
+      URI uri = new URI("file:" + pnm);
+      return new JannotFileObject(uri,JavaFileObject.Kind.SOURCE,null);
+    }
+   catch (URISyntaxException e) {}
+   
+   return null;
 }
 
 

@@ -133,6 +133,7 @@ import edu.brown.cs.ivy.exec.IvyExecQuery;
 import edu.brown.cs.ivy.exec.IvySetup;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -427,6 +428,22 @@ public static String loadFile(InputStream ins) throws IOException
 {
    InputStreamReader isr = new InputStreamReader(ins);
    return loadFile(isr);
+}
+
+
+public static byte [] loadBinaryFile(InputStream r) throws IOException
+{
+   ByteArrayOutputStream w = new ByteArrayOutputStream();
+   byte [] buf = new byte[8192];
+   for ( ; ; ) {
+      int ln = r.read(buf);
+      if (ln <= 0) break;
+      w.write(buf,0,ln);
+    }
+   byte [] rslt = w.toByteArray();
+   r.close();
+   w.close();
+   return rslt;
 }
 
 

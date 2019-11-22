@@ -1,8 +1,8 @@
 /********************************************************************************/
 /*                                                                              */
-/*              JannotTreeJCParens.java                                         */
+/*              JannotTreeMaker.java                                            */
 /*                                                                              */
-/*      Compilation trees for parenthesized expressions                         */
+/*      Actual builder class                                                    */
 /*                                                                              */
 /********************************************************************************/
 /*      Copyright 2013 Brown University -- Steven P. Reiss                    */
@@ -35,15 +35,17 @@
 
 package edu.brown.cs.ivy.jannot.tree;
 
-import org.eclipse.jdt.core.dom.ParenthesizedExpression;
-
-import com.sun.source.tree.ParenthesizedTree;
-import com.sun.source.tree.Tree;
-import com.sun.source.tree.TreeVisitor;
 
 
-public class JannotTreeJCParens extends JannotTreeJCExpression implements ParenthesizedTree
+public class JannotTreeMaker extends JannotTreeFactory implements JannotTreeConstants
 {
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Private Storage                                                         */
+/*                                                                              */
+/********************************************************************************/
 
 
 
@@ -53,78 +55,16 @@ public class JannotTreeJCParens extends JannotTreeJCExpression implements Parent
 /*                                                                              */
 /********************************************************************************/
 
-JannotTreeJCParens(ParenthesizedExpression n) 
+protected JannotTreeMaker()
 {
-   super(n);
-}
-
-
-/********************************************************************************/
-/*                                                                              */
-/*      Abstract Method Implementations                                         */
-/*                                                                              */
-/********************************************************************************/
-
-@Override public void accept(JannotTreeVisitor v)
-{
-   v.visitParens(this);
-}
-
-
-@Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
-{
-   return visitor.visitParenthesized(this,arg);
 }
 
 
 
-@Override public JannotTree translate(JannotTreeTranslator tt)
-{
-   tt.translate(getExpression());
-   return this;
-}
-
-
-
-@Override public Tree.Kind getKind()
-{
-   return Tree.Kind.PARENTHESIZED;
-}
-
-
-
-/********************************************************************************/
-/*                                                                              */
-/*      Tree methods                                                            */
-/*                                                                              */
-/********************************************************************************/
-
-@Override public JannotTreeJCExpression getExpression()
-{
-   return createTree(getNode().getExpression()); 
-}
-
-
-
-/********************************************************************************/
-/*                                                                              */
-/*      Helper methods                                                          */
-/*                                                                              */
-/********************************************************************************/
-
-private ParenthesizedExpression getNode()
-{
-   return (ParenthesizedExpression) ast_node;
-}
+}       // end of class JannotTreeMaker
 
 
 
 
-
-}       // end of class JannotTreeJCParens
-
-
-
-
-/* end of JannotTreeJCParens.java */
+/* end of JannotTreeMaker.java */
 

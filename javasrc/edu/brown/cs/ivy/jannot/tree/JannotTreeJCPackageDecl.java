@@ -70,9 +70,23 @@ JannotTreeJCPackageDecl(PackageDeclaration n)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitPackageDef(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitPackage(this,arg);
+}
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getAnnotations());
+   tt.translate(getPackageName());
+   return this;
 }
 
 

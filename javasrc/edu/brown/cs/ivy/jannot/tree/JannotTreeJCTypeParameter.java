@@ -71,10 +71,25 @@ JannotTreeJCTypeParameter(TypeParameter tp)
 /*                                                                              */
 /********************************************************************************/
 
+@Override public void accept(JannotTreeVisitor v)
+{
+   v.visitTypeParameter(this);
+}
+
+
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
    return visitor.visitTypeParameter(this,arg);
 }
+
+
+@Override public JannotTree translate(JannotTreeTranslator tt)
+{
+   tt.translate(getAnnotations());
+   tt.translate(getBounds());
+   return this;
+}
+
 
 
 
