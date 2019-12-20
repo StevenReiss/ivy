@@ -46,7 +46,16 @@ static JcompType deriveMethodType(JcompTyper typer,JcompType mty,JcompType cty,
 
    MethodDeriver md = new MethodDeriver(typer,cty,typemap,mty);
    SignatureReader sr1 = new SignatureReader(msgn);
-   sr1.accept(md);
+   
+   try {
+      sr1.accept(md);
+    }
+   catch (Throwable t) {
+      System.err.println("JCOMP: Problem deriving method type: " +
+            mty + " : " + cty + " " + msgn + " " + t);
+      t.printStackTrace();
+      return mty;
+    }
 
    JcompType newty = md.getNewMethodType();
 

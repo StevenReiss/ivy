@@ -132,6 +132,13 @@ public static ASTNode parseStatement(String text)
 
 
 
+public static AST createNewAst()
+{
+   return AST.newAST(AST.JLS11,true);
+}
+
+
+
 /********************************************************************************/
 /*										*/
 /*	Scope Properties							*/

@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.26 2018/09/20 23:56:58 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.27 2019/11/22 13:13:43 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFile.java,v $
+ * Revision 1.27  2019/11/22 13:13:43  spr
+ * Add byte load routine.
+ *
  * Revision 1.26  2018/09/20 23:56:58  spr
  * Add copy without close
  *

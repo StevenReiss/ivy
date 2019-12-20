@@ -1329,8 +1329,8 @@ private class RefPass extends ASTVisitor {
       boolean oref = false;
       JcompType qt = JcompAst.getJavaType(r.getExpression());
       if (qt == null) {
-         oref = true;
-         qt = JcompAst.getExprType(r.getExpression());
+	 oref = true;
+	 qt = JcompAst.getExprType(r.getExpression());
        }
       handleReference(r,qt,oref,r.getName().getIdentifier());
       return false;
@@ -1386,7 +1386,7 @@ private class RefPass extends ASTVisitor {
    private boolean handleReference(ASTNode r,JcompType typ,boolean ref,String id)
    {
       JcompType rtyp = getReferenceType(r);
-      if (rtyp == null) {
+      if (rtyp == null || rtyp.getComponents() == null) {
 	 need_rescan = true;
 	 JcompAst.setExprType(r,type_data.findType(TYPE_ANY_CLASS));
 	 return false;
@@ -1411,6 +1411,8 @@ private class RefPass extends ASTVisitor {
       // should handle type arguments
       boolean thisarg = false;
       JcompSymbol js = null;
+      if (typ == null || typ.getScope() == null) return false;
+
       Collection<JcompSymbol> mthds = typ.getScope().getDefinedMethods();
       for (JcompSymbol ms : mthds) {
 	 if (ms.getName().equals(id)) {

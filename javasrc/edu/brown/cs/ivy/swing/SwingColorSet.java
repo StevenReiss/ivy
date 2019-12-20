@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.7 2018/08/02 15:10:53 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.8 2019/11/22 13:14:21 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingColorSet.java,v $
+ * Revision 1.8  2019/11/22 13:14:21  spr
+ * Fixups for inverting colors.
+ *
  * Revision 1.7  2018/08/02 15:10:53  spr
  * Fix imports.  Prepare for java 10.
  *
