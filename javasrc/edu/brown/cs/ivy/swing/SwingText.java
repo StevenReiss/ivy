@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.22 2018/09/20 23:57:40 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.23 2020/01/28 21:14:06 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: SwingText.java,v $
+ * Revision 1.23  2020/01/28 21:14:06  spr
+ * Clean up.
+ *
  * Revision 1.22  2018/09/20 23:57:40  spr
  * Java 10 changes
  *
@@ -317,7 +320,11 @@ public static void fixKeyBindings(InputMap m)
     }
 }
 
-
+public static Font deriveLarger(Font f)
+{
+   float sz = f.getSize2D();
+   return f.deriveFont(sz+2f);
+}
 
 
 //

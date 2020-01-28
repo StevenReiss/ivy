@@ -238,7 +238,7 @@ static JcompType deriveReturnType(JcompTyper typer,JcompType mty,JcompType bty,
 	 int ct = argtypes.size() - csz+1;
 	 int ct0 = argtypes.size() - ct;
 	 JcompType rtype = null;
-	 if (ct == 0) rtype = mty.getComponents().get(csz-1).getBaseType();
+	 if (ct <= 0) rtype = mty.getComponents().get(csz-1).getBaseType();
 	 else {
 	    for (int i = ct0; i < argtypes.size(); ++i) {
 	       if (rtype == null) rtype = argtypes.get(i);

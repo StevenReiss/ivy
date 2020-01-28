@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.27 2019/11/22 13:13:43 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.28 2020/01/28 21:13:55 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFile.java,v $
+ * Revision 1.28  2020/01/28 21:13:55  spr
+ * Add logging as ivy primitive.  Add new functions to ivyfile.
+ *
  * Revision 1.27  2019/11/22 13:13:43  spr
  * Add byte load routine.
  *
@@ -148,6 +151,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -527,6 +531,19 @@ public static void copyFile(File sf,OutputStream w) throws IOException
 }
 
 
+public static void copyFile(InputStream ins,OutputStream ots) throws IOException
+{
+   byte [] buf = new byte[8192];
+   for ( ; ; ) {
+      int ln = ins.read(buf);
+      if (ln < 0) break;
+      ots.write(buf,0,ln);
+    }
+   ins.close();
+   ots.close();
+}
+
+
 
 
 public static void copyFile(File sf,Writer w) throws IOException
@@ -620,5 +637,31 @@ public static File getCommonParent(File f1,File f2)
 }
 
 
+
+/********************************************************************************/
+/*                                                                              */
+/*      JAR utilities                                                           */
+/*                                                                              */
+/********************************************************************************/
+
+public static File getJarFile(Class<?> c)
+{
+   String s = c.getName();
+   s = s.replace(".","/") + ".class";
+   ClassLoader cl = c.getClassLoader();
+   URL url = cl.getResource(s);
+   if (url == null) return null;
+   String file = url.toString();
+   if (file.startsWith("jar:file:/")) file = file.substring(9);
+   if (file.length() >= 3 && file.charAt(0) == '/' && 
+         Character.isLetter(file.charAt(1)) && file.charAt(2) == ':' &&
+         File.separatorChar == '\\') file = file.substring(1);
+   int idx = file.lastIndexOf("!");
+   if (idx > 0) file = file.substring(0,idx);
+   if (File.separatorChar != '/') file = file.replace('/',File.separatorChar);
+   file = file.replace("%20"," ");
+   File f = new File(file);
+   return f;
+}
 
 }	// end of class IvyFile
