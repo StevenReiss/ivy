@@ -426,7 +426,7 @@ JINCL= include
 MACHINCLUDES= -I/pro/include -I/usr/local/include -I/sw/include -I/sw/include/xml
 MACHINCLUDES= -I/pro/include -I/usr/local/include
 XERCESLIB= -L/pro/lib -lxerces-c
-J8FLAGS= -source 1.8 -target 1.8 -bootclasspath /System/Library/Frameworks/JavaVM.framework/Vresons/1.8/Classes/classes.jar
+J8FLAGS= -source 1.8 -target 1.8
 endif
 
 
