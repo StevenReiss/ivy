@@ -9,6 +9,7 @@
 
    <METHOD NAME="org.eclipse.jdt.core.dom.ASTParser.createAST"
 	RETURN="org.eclipse.jdt.core.dom.CompilationUnit" />
+   <METHOD NAME='org.eclipse.jdt.core.dom.ASTNode.&lt;init&gt;' SCAN='true' SETFIELDS='true' />
 
 </FAIT>
 

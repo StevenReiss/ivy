@@ -136,6 +136,10 @@ public static void useStdErr(boolean fg)
 }
 
 public static boolean isTracing()		{ return trace_execution; }
+public static boolean isDebug()                 
+{
+   return log_level == LogLevel.DEBUG;
+}
 
 public static void setTracing(boolean fg)	{ trace_execution = fg; }
 

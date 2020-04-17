@@ -9,7 +9,7 @@ endif
 
 set path = ( /bin /usr/bin /usr/ucb/bin $BROWN_IVY_IVY/bin )
 
-set p = `pwd`
+set p = `pwd -P`
 
 if ($#argv == 0) then
    set x = $p
@@ -39,3 +39,4 @@ endif
 
 
 echo $y
+

@@ -36,11 +36,8 @@ package edu.brown.cs.ivy.jcomp;
 
 
 
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.compiler.IProblem;
-import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -52,7 +49,6 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -104,15 +100,7 @@ JcompFile(JcompSource rf)
        }
       String txt = for_file.getFileContents();
       if (txt != null) {
-	 ASTParser parser = ASTParser.newParser(AST.JLS12);
-	 Map<String,String> options = JavaCore.getOptions();
-	 JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,options);
-	 parser.setCompilerOptions(options);
-	 parser.setKind(ASTParser.K_COMPILATION_UNIT);
-	 parser.setSource(txt.toCharArray());
-	 parser.setResolveBindings(false);
-	 parser.setStatementsRecovery(true);
-	 ast_root = parser.createAST(null);
+	 ast_root = JcompAst.parseSourceFile(txt.toCharArray());
 	 if (for_file instanceof JcompAstCleaner) {
 	    JcompAstCleaner updr = (JcompAstCleaner) for_file;
 	    ast_root = updr.cleanupAst(ast_root);

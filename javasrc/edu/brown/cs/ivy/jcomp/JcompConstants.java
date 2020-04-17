@@ -55,6 +55,7 @@ String PROP_JAVA_RESOLVED = "JCOMP$Resolved";
 String PROP_JAVA_TYPER = "JCOMP$Typer";
 String PROP_JAVA_SOURCE = "JCOMP$Source";
 String PROP_JAVA_KEEP = "JCOMP$Keep";
+String PROP_JAVA_PROJECT = "JCOMP$Project";
 
 
 

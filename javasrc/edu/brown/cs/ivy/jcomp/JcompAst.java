@@ -73,8 +73,10 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
@@ -104,14 +106,17 @@ public static CompilationUnit parseSourceFile(String text)
 
 public static CompilationUnit parseSourceFile(char [] buf)
 {
-   ASTParser parser = ASTParser.newParser(AST.JLS11);
+   ASTParser parser = ASTParser.newParser(AST.JLS12);
    parser.setKind(ASTParser.K_COMPILATION_UNIT);
-   Map<String,String> optsion = JavaCore.getOptions();
-   JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,optsion);
-   parser.setCompilerOptions(optsion);
+   Map<String,String> options = JavaCore.getOptions();
+   options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
+   JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
+   parser.setCompilerOptions(options);
+   parser.setResolveBindings(false);
+   parser.setStatementsRecovery(true);
    parser.setSource(buf);
    CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-   
+
    return cu;
 }
 
@@ -119,14 +124,14 @@ public static CompilationUnit parseSourceFile(char [] buf)
 
 public static ASTNode parseStatement(String text)
 {
-   ASTParser parser = ASTParser.newParser(AST.JLS11);
+   ASTParser parser = ASTParser.newParser(AST.JLS12);
    parser.setKind(ASTParser.K_COMPILATION_UNIT);
    Map<String,String> optsion = JavaCore.getOptions();
-   JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,optsion);
+   // JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,optsion);
    parser.setCompilerOptions(optsion);
    parser.setSource(text.toCharArray());
    CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-   
+
    return cu;
 }
 
@@ -134,8 +139,65 @@ public static ASTNode parseStatement(String text)
 
 public static AST createNewAst()
 {
-   return AST.newAST(AST.JLS11,true);
+   return AST.newAST(AST.JLS12,true);
 }
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Resolving methods                                                       */
+/*                                                                              */
+/********************************************************************************/
+
+public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an)
+{
+   if (an == null) return null;
+   
+   List<JcompSource> srcs = new ArrayList<>();
+   JcompSource src = new LocalSource(an);
+   srcs.add(src);
+   List<String> jars = new ArrayList<>();
+   
+   JcompProject proj = ctrl.getProject(jars,srcs,false);
+   try {
+      ASTNode root = an.getRoot();
+      synchronized (root) {
+         proj.resolve();
+       }
+    }
+   catch (Throwable t) {
+      t.printStackTrace();
+      ctrl.freeProject(proj);
+      return null;
+    }
+   
+   return proj;
+}
+
+
+private static class LocalSource implements JcompExtendedSource {
+
+   private ASTNode root_result;
+   
+   LocalSource(ASTNode nd) {
+      root_result = nd.getRoot();
+    }
+   
+   @Override public String getFileContents() {
+      return root_result.toString();
+    }
+   
+   @Override public String getFileName() {
+      return "*SCRAP*";
+    }
+   
+   @Override public ASTNode getAstRootNode() {
+      return root_result;
+    }
+
+}       // end of inner class ResultSource
+
 
 
 
@@ -401,6 +463,19 @@ static void setTyper(ASTNode n,JcompTyper typer)
 {
    n = n.getRoot();
    n.setProperty(PROP_JAVA_TYPER,typer);
+}
+
+
+public static JcompProject getProject(ASTNode n)
+{
+   n = n.getRoot();
+   return (JcompProject) n.getProperty(PROP_JAVA_PROJECT);
+}
+
+public static void setProject(ASTNode n,JcompProject p)
+{
+   n = n.getRoot();
+   n.setProperty(PROP_JAVA_PROJECT,p);
 }
 
 

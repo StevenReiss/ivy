@@ -15,6 +15,8 @@ import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.signature.SignatureVisitor;
 import org.objectweb.asm.signature.SignatureWriter;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,7 +55,7 @@ static JcompType deriveMethodType(JcompTyper typer,JcompType mty,JcompType cty,
    catch (Throwable t) {
       System.err.println("JCOMP: Problem deriving method type: " +
             mty + " : " + cty + " " + msgn + " " + t);
-      t.printStackTrace();
+      // t.printStackTrace();
       return mty;
     }
 
@@ -133,6 +135,7 @@ static void fixupTypeVariable(JcompType var,List<TypeDeriver> bounds)
    for (TypeDeriver td : bounds) {
       // Might need to handle multiple supertypes, intersection types
       JcompType btyp = td.getResultType();
+      if (btyp == null) continue;
       if (btyp.isInterfaceType()) var.addInterface(btyp);
       else var.setSuperType(btyp);
     }
@@ -247,6 +250,7 @@ static JcompType deriveReturnType(JcompTyper typer,JcompType mty,JcompType bty,
 	  }
 	 rtype = typer.findArrayType(rtype);
 	 List<JcompType> nargs = new ArrayList<>();
+         ct0 = Math.min(ct0,argtypes.size());
 	 for (int i = 0; i < ct0; ++i) nargs.add(argtypes.get(i));
 	 nargs.add(rtype);
 	 argtypes = nargs;
@@ -294,7 +298,15 @@ static JcompType deriveReturnType(JcompTyper typer,JcompType mty,JcompType bty,
    if (msgn.startsWith("<")) {
       MethodVarFinder mvf = new MethodVarFinder(typer,argtypes,typemap,typeparams);
       SignatureReader msr = new SignatureReader(msgn);
-      msr.accept(mvf);
+      try {
+         msr.accept(mvf);
+       }
+      catch (Throwable t) {
+         System.err.println("JCOMP: Problem deriving return type: " +
+               mty + " : " + msgn + " " + t);
+         // t.printStackTrace();
+         return mty;
+       }   
       Map<String,JcompType> rsltmap = mvf.getTypeMap();
       if (rsltmap == null) return rty;
       typemap.putAll(rsltmap);
@@ -1174,7 +1186,7 @@ private static class TypeDeriver extends GenericSignatureVisitor {
       super.visitClassType(name);
       new_type = lookupClassType(type_data,name);
       if (new_type == null) {
-         System.err.println("TYPE " + name + " not found");
+         IvyLog.logD("JCOMP","TYPE " + name + " not found");
        }
     }
 
@@ -1186,19 +1198,21 @@ private static class TypeDeriver extends GenericSignatureVisitor {
       else {
          outer_type = new_type;
        }
-      String nm = outer_type.getName();
-      if (outer_type.isParameterizedType()) nm = outer_type.getBaseType().getName();
-     
-      String fnm = nm + "." + name;
-      JcompType nty = type_data.findSystemType(fnm);
-      if (nty == null) {
-         fnm = nm + "$" + name;
-         nty = type_data.findSystemType(fnm);
+      if (outer_type != null) {
+         String nm = outer_type.getName();
+         if (outer_type.isParameterizedType()) nm = outer_type.getBaseType().getName();
+         
+         String fnm = nm + "." + name;
+         JcompType nty = type_data.findSystemType(fnm);
+         if (nty == null) {
+            fnm = nm + "$" + name;
+            nty = type_data.findSystemType(fnm);
+          }
+         if (nty == null) {
+            System.err.println("Can't find inner type " + name + " " + fnm);
+          }
+         new_type = nty;
        }
-      if (nty == null) {
-         System.err.println("Can't find inner type " + name + " " + fnm);
-       }
-      new_type = nty;
       
       super.visitInnerClassType(name);
     }

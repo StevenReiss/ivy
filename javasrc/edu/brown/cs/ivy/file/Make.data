@@ -20,6 +20,8 @@ SFILES= \
 	IdentityHashSet.java \
 	IvyFileLocker.java \
 	IvyStringDiff.java \
+	IvyWordStemmer.java \
+	IvyWordPluralFilter.java \
 	Pair.java \
 
 LOCALJAVAFLAGS= $(J8FLAGS)

@@ -193,13 +193,13 @@ public static void drawText(String lbl,Graphics2D g,Rectangle2D box)
 public static void drawTextRight(String lbl,Graphics2D g,Rectangle2D box)
 {
    if (lbl == null) return;
-   
+
    Font f = g.getFont();
-   
+
    FontRenderContext ctx = g.getFontRenderContext();
    LineMetrics lm = f.getLineMetrics(lbl,ctx);
    Rectangle2D rc = f.getStringBounds(lbl,ctx);
-   
+
    double s0 = box.getWidth() / rc.getWidth();
    double s1 = box.getHeight() / rc.getHeight();
    if (s0 > s1) s0 = s1;
@@ -207,10 +207,10 @@ public static void drawTextRight(String lbl,Graphics2D g,Rectangle2D box)
    if (s0 < 0.01) return;
    float fz = f.getSize2D() * ((float) s0);
    Font f1 = f.deriveFont(fz);
-   
+
    double xp = box.getX() + (box.getWidth() - rc.getWidth() * s0);
    double yp = box.getY() + (box.getHeight() - rc.getHeight() * s0) / 2 + lm.getAscent() * s0;
-   
+
    g.setFont(f1);
    g.drawString(lbl,(float) xp,(float) yp);
    g.setFont(f);
@@ -274,7 +274,7 @@ public static void fixKeyBindings(JTextComponent tc)
 {
    int mask = getMenuShortcutKeyMaskEx();
    if (mask != InputEvent.META_DOWN_MASK) return;
-   
+
    Keymap k = tc.getKeymap();
    fixKeyBindings(k);
    tc.setKeymap(k);
@@ -286,10 +286,10 @@ public static void fixKeyBindings(Keymap k)
 {
    int mask = getMenuShortcutKeyMaskEx();
    if (mask != InputEvent.META_DOWN_MASK) return;
-   
+
    for (KeyStroke ks : k.getBoundKeyStrokes()) {
       if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK) {
-         KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
+	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
 	 Action act = k.getAction(ks);
 	 k.removeKeyStrokeBinding(ks);
 	 k.addActionForKeyStroke(nks,act);
@@ -307,10 +307,10 @@ public static void fixKeyBindings(InputMap m)
 {
    int mask = getMenuShortcutKeyMaskEx();
    if (mask != InputEvent.META_DOWN_MASK) return;
-   
+
    for (KeyStroke ks : m.keys()) {
       if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK) {
-         KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
+	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
 	 Object act = m.get(ks);
 	 if (act instanceof Action) {
 	    m.remove(ks);
@@ -373,24 +373,22 @@ private static class MacKeyTypedAction extends TextAction {
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Handle J8-J10 differences                                               */
-/*                                                                              */
+/*										*/
+/*	Handle J8-J10 differences						*/
+/*										*/
 /********************************************************************************/
 
 public static int getMenuShortcutKeyMaskEx()
 {
    Toolkit tk = Toolkit.getDefaultToolkit();
-   Class<?> ctk = tk.getClass();
+
    try {
-      Method m1 = ctk.getMethod("getMenuShortcutKeyMaskEx");
-      return (Integer) m1.invoke(tk);
+      return tk.getMenuShortcutKeyMaskEx();
     }
-   catch (NoSuchMethodException e) { }
-   catch (InvocationTargetException e) { }
-   catch (IllegalAccessException e) { }
-   
-   try  {
+   catch (Throwable e) { }
+
+   try	{
+      Class<?> ctk = tk.getClass();
       Method m2 = ctk.getMethod("getMenuShortcutKeyMask");
       int v = (Integer) m2.invoke(tk);
       int r = convertEventMask(v);
@@ -399,7 +397,7 @@ public static int getMenuShortcutKeyMaskEx()
    catch (NoSuchMethodException e) { }
    catch (InvocationTargetException e) { }
    catch (IllegalAccessException e) { }
-   
+
    return InputEvent.CTRL_DOWN_MASK;
 }
 
@@ -438,7 +436,7 @@ public static String getToolTipText2D(TextUI tu,JTextComponent tc,Point pt)
 
 @SuppressWarnings("deprecation")
 public static Rectangle modelToView2D(TextUI tu,JTextComponent tc,int pos,Position.Bias bias)
-        throws BadLocationException
+	throws BadLocationException
 {
    // Rectangle2D r2 = tu.modelToView2D(tc,pos,bias);
    // return r2.getBounds();
@@ -469,7 +467,7 @@ private static int convertEventMask(int v)
    if ((v & InputEvent.BUTTON1_MASK) != 0) r |= InputEvent.BUTTON1_DOWN_MASK;
    if ((v & InputEvent.BUTTON2_MASK) != 0) r |= InputEvent.BUTTON2_DOWN_MASK;
    if ((v & InputEvent.BUTTON2_MASK) != 0) r |= InputEvent.BUTTON3_DOWN_MASK;
-   
+
    return r;
 }
 

@@ -37,5 +37,5 @@ SFILES= \
 	SwingTreeTable.java \
 
 
-LOCALJAVAFLAGS= $(J8FLAGS)
+# LOCALJAVAFLAGS= $(J8FLAGS)
 

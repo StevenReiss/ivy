@@ -156,6 +156,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -636,6 +638,32 @@ public static File getCommonParent(File f1,File f2)
    return par;
 }
 
+
+/********************************************************************************/
+/*                                                                              */
+/*      Encoding methods                                                        */
+/*                                                                              */
+/********************************************************************************/
+
+public static String digestString(String text)
+{
+   String rslt = text;
+   try {
+      MessageDigest md5 = MessageDigest.getInstance("MD5");
+      byte [] dig = md5.digest(rslt.getBytes());
+      StringBuffer buf = new StringBuffer();
+      for (int i = 0; i < dig.length; ++i) {
+	 int v = dig[i] & 0xff;
+	 String s0 = Integer.toString(v,16);
+	 if (s0.length() == 1) buf.append("0");
+	 buf.append(s0);
+       }
+      rslt = buf.toString();
+    }
+   catch (NoSuchAlgorithmException e) { }
+   
+   return rslt;
+}
 
 
 /********************************************************************************/

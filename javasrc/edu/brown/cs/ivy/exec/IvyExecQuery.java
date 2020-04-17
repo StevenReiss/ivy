@@ -97,6 +97,7 @@
 package edu.brown.cs.ivy.exec;
 
 import edu.brown.cs.ivy.file.IvyFile;
+import edu.brown.cs.ivy.file.IvyLog;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -326,7 +327,7 @@ private static void addToBasePath(File dir,List<File> rslt)
 	 jf.close();
        }
       catch (IOException e) {
-	 System.err.println("S6: CONTEXT: Can't open system jar file " + dir);
+         IvyLog.logE("IVY","Can't open system jar file " + dir);
        }
     }
    else if (dir.getName().endsWith(".jmod")) {
@@ -336,7 +337,7 @@ private static void addToBasePath(File dir,List<File> rslt)
          zf.close();
        }
       catch (IOException e) {
-	 System.err.println("S6: CONTEXT: Can't open system jmod file " + dir);
+         IvyLog.logE("IVY","Can't open system jmod file " + dir);
        }
     }
 }

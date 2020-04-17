@@ -36,6 +36,7 @@
 package edu.brown.cs.ivy.jcode;
 
 import org.objectweb.asm.Handle;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.IincInsnNode;
@@ -593,6 +594,17 @@ public JcodeMethod getMethodReference()
        }
     }
    return null;
+}
+
+
+public int getNumArgs()
+{
+   if (for_inst instanceof MethodInsnNode) {
+      MethodInsnNode mn = (MethodInsnNode) for_inst;
+      Type [] typs = Type.getArgumentTypes(mn.desc);
+      return typs.length;
+    }
+   return -1;
 }
 
 

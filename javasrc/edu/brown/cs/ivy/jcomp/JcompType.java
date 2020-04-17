@@ -48,6 +48,8 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.Type;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -174,7 +176,7 @@ static JcompType createParameterizedType(JcompType jt,List<JcompType> ptl,Sorted
    if (ntyp != pttyp) return ntyp;
    
    if (pttyp.getName().length() > 1024) 
-      System.err.println("PARAMETERIZED TYPE TOO LONG");
+      IvyLog.logD("JCOMP","PARAMETERIZED TYPE TOO LONG");
    
    // typer.applyParameters(pttyp);
 
@@ -543,24 +545,33 @@ public List<JcompType> getComponents()		{ return null; }
 
 public SortedMap<String,JcompType> getOuterComponents() 
 {
+   return getOuterComponents(null);
+}
+
+
+public SortedMap<String,JcompType> getOuterComponents(Set<JcompType> done) 
+{
    SortedMap<String,JcompType> rslt = null;
+   
+   if (done == null) done = new HashSet<>();
+   if (!done.add(this)) return rslt;
    
    rslt = addToMap(rslt,getLocalComponents());
    
    JcompType oty = getOuterType();
    if (oty != null) {
-      rslt = addToMap(rslt,oty.getOuterComponents());
+      rslt = addToMap(rslt,oty.getOuterComponents(done));
     }
    
    JcompType sty = getSuperType();
    if (sty != null) {
-      rslt = addToMap(rslt,sty.getOuterComponents());
+      rslt = addToMap(rslt,sty.getOuterComponents(done));
     }
   
    Collection<JcompType> ityps = getInterfaces();
    if (ityps != null) {
       for (JcompType ity : ityps) {
-         rslt = addToMap(rslt,ity.getOuterComponents());
+         rslt = addToMap(rslt,ity.getOuterComponents(done));
        }
     }
    
@@ -881,7 +892,7 @@ public static JcompType mergeTypes(JcompTyper typr,JcompType jt1,JcompType jt2)
       if (jt2a != null) return mergeTypes(typr,jt1,jt2a);
     }
 
-   System.err.println("INCOMPATIBLE MERGE: " + jt1 + " & " + jt2);
+   IvyLog.logD("JCOMP","INCOMPATIBLE MERGE: " + jt1 + " & " + jt2);
 
    return jt1;
 }
@@ -2056,7 +2067,7 @@ private static abstract class ClassInterfaceType extends JcompType {
           }
        }
       else {
-         System.err.println("Can't decode java type name");
+         IvyLog.logD("JCOMP","Can't decode java type name " + getName());
          return "L" + getName().replace(".","/") + ";";
        }
       

@@ -63,6 +63,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.objectweb.asm.Opcodes;
 
 import edu.brown.cs.ivy.file.IvyFormat;
+import edu.brown.cs.ivy.file.IvyLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -155,7 +156,7 @@ static JcompSymbol createSymbol(VariableDeclarationFragment n,JcompTyper typer)
     }
 
    if (jt == null)
-      System.err.println("NULL TYPE for variable declaration: " + typ);
+      IvyLog.logE("JCOMP","NULL TYPE for variable declaration: " + typ);
 
    return new VariableSymbol(n,jt,mods,clstyp);
 }
