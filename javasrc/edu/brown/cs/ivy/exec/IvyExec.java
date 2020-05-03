@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExec.java,v 1.32 2018/09/20 23:56:50 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExec.java,v 1.33 2020/05/03 01:18:24 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyExec.java,v $
+ * Revision 1.33  2020/05/03 01:18:24  spr
+ * GIve us a local copy of expandString to avoid circular dependencies.
+ *
  * Revision 1.32  2018/09/20 23:56:50  spr
  * Handle space in java path name
  *
@@ -146,8 +149,6 @@
 
 
 package edu.brown.cs.ivy.exec;
-
-import edu.brown.cs.ivy.file.IvyFile;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -514,36 +515,36 @@ public static IvyExec ivyJava(String cls,String jargs,String args) throws IOExce
 
 public static IvyExec ivyJava(String cls,String jargs,String args,int flags) throws IOException
 {
-   String check = IvyFile.expandName("$(IVY)");
+   String check = expandString("$(IVY)");
    if (check.length() == 0) {
       System.err.println("IVY: IVY is not set up correctly. Please define BROWN_IVY_IVY");
       System.exit(1);
     }
 
-   String defs = IvyFile.expandName(DEFS);
-   String defs1 = IvyFile.expandName(DEFS1);
+   String defs = expandString(DEFS);
+   String defs1 = expandString(DEFS1);
 
    String libpath = System.getProperty("java.library.path");
-   String lp2 = IvyFile.expandName("$(IVY)/lib/$(BROWN_IVY_ARCH)");
+   String lp2 = expandString("$(IVY)/lib/$(BROWN_IVY_ARCH)");
    if (libpath == null) libpath = lp2;
    else if (!libpath.contains(lp2)) libpath += File.pathSeparator + lp2;
 
    String cp = null;
-   String fjn = IvyFile.expandName("$(IVY)/ivyfull.jar");
+   String fjn = expandString("$(IVY)/ivyfull.jar");
    File f = new File(fjn);
    if (f.exists()) cp = fjn;
 
    if (cp == null || cp.length() == 0) {
-      String jdir = IvyFile.expandName("$(IVY)/java");
-      String jidir = IvyFile.expandName("$(IVY)/java/edu/brown/cs/ivy/exec/");
+      String jdir = expandString("$(IVY)/java");
+      String jidir = expandString("$(IVY)/java/edu/brown/cs/ivy/exec/");
       File jf = new File(jdir);
       File jif = new File(jidir);
-      String kdir = IvyFile.expandName("$(IVY)/lib/ivy.jar");
+      String kdir = expandString("$(IVY)/lib/ivy.jar");
       File kf = new File(kdir);
       if (jf.exists() && jf.isDirectory() && jif.exists()) cp = jdir;
       else if (kf.exists() && kf.canRead()) cp = kdir;
       if (cp != null) {
-	 String cp3 = IvyFile.expandName("$(IVY)/lib/jikesbt.jar");
+	 String cp3 = expandString("$(IVY)/lib/jikesbt.jar");
 	 File lf = new File(cp3);
 	 if (lf.exists() && lf.canRead()) cp += File.pathSeparator + cp3;
        }
@@ -739,6 +740,48 @@ public static List<String> tokenize(String cmd)
    return argv;
 }
 
+
+/********************************************************************************/
+/*                                                                              */
+/*      Replace common terms in a string                                        */
+/*                                                                              */
+/********************************************************************************/
+
+private static String expandString(String name)
+{
+   StringBuffer buf = new StringBuffer();
+   
+   if (name == null) return null;
+   
+   for (int i = 0; i < name.length(); ++i) {
+      char c = name.charAt(i);
+      if (c == '$' && i+1 < name.length() && name.charAt(i+1) == '(') {
+	 StringBuffer tok = new StringBuffer();
+	 for (i = i+2; i < name.length() && name.charAt(i) != ')'; ++i) {
+	    tok.append(name.charAt(i));
+	  }
+	 if (i >= name.length()) break;
+	 String erslt = null;
+	 String what = tok.toString();
+	 
+         if (what.equals("PRO")) what = "ROOT";
+         else if (what.equals("USER")) what = "user.name";
+         else if (what.equals("HOME")) what = "user.home";
+         else if (what.equals("CWD")) what = "user.dir";
+         erslt = System.getProperty(what);
+         if (erslt == null) erslt = System.getProperty("edu.brown.cs.ivy." + what);
+         if (erslt == null) erslt = System.getenv(what);
+         if (erslt == null) erslt = System.getenv("BROWN_IVY_" + what);
+         if (erslt == null) erslt = System.getenv("BROWN_" + what);
+         if (erslt == null && what.equals("HOST")) erslt = IvyExecQuery.computeHostName();
+	 if (erslt != null) buf.append(erslt);
+       }
+      else if (c == '/') buf.append(File.separatorChar);
+      else buf.append(c);
+    }
+   
+   return buf.toString();
+}
 
 
 

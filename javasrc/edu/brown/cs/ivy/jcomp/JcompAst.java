@@ -108,13 +108,14 @@ public static CompilationUnit parseSourceFile(char [] buf)
 {
    ASTParser parser = ASTParser.newParser(AST.JLS12);
    parser.setKind(ASTParser.K_COMPILATION_UNIT);
+   parser.setSource(buf);
+   
    Map<String,String> options = JavaCore.getOptions();
-   options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
    JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
+   options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
    parser.setCompilerOptions(options);
    parser.setResolveBindings(false);
    parser.setStatementsRecovery(true);
-   parser.setSource(buf);
    CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
    return cu;
@@ -139,7 +140,9 @@ public static ASTNode parseStatement(String text)
 
 public static AST createNewAst()
 {
-   return AST.newAST(AST.JLS12,true);
+   AST ast = AST.newAST(AST.JLS12,true);
+  
+   return ast;
 }
 
 

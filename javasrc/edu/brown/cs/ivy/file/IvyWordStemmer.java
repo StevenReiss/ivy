@@ -17,7 +17,7 @@
  *	http://www.eclipse.org/legal/epl-v10.html				 *
  *										 *
  ********************************************************************************/
-/* SVN: $Id: SearchWordStemmer.java,v 1.1 2015/02/14 19:40:22 spr Exp $ */
+/* SVN: $Id: IvyWordStemmer.java,v 1.1 2020/05/03 01:18:52 spr Exp $ */
 /*
  File: Stemmer.java
 

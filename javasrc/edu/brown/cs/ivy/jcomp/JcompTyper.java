@@ -352,6 +352,22 @@ public Collection<JcompType> getAllTypes()
 
 
 
+public static boolean isSystemType(String nm) 
+{
+   int idx = nm.indexOf(".");
+   if (idx >= 0) {
+      String s = nm.substring(0,idx);
+      if (known_prefix.contains(s)) {
+         return true;
+       }
+    }
+   
+   return false;
+}
+
+
+
+
 /********************************************************************************/
 /*										*/
 /*	JcompType and type mapping maintenance functions			*/
@@ -408,14 +424,11 @@ public JcompType defineUserType(String nm,boolean iface,boolean etype,boolean at
 
    if (jt != null) return jt;
 
-   int idx = nm.indexOf(".");
-   if (idx >= 0 && !force) {
-      String s = nm.substring(0,idx);
-      if (known_prefix.contains(s)) {
-	 jt = findSystemType(nm);
-	 if (jt != null) return jt;
-       }
+   if (!force && isSystemType(nm)) {
+      jt = findSystemType(nm);
+      if (jt != null) return jt;
     }
+   
    // if (nm.startsWith("edu.brown.cs.s6.runner.Runner")) {
       // jt = findSystemType(nm);
       // if (jt != null) return jt;

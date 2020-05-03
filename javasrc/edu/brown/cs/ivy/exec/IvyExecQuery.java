@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExecQuery.java,v 1.15 2018/08/08 18:47:24 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExecQuery.java,v 1.16 2020/05/03 01:18:24 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyExecQuery.java,v $
+ * Revision 1.16  2020/05/03 01:18:24  spr
+ * GIve us a local copy of expandString to avoid circular dependencies.
+ *
  * Revision 1.15  2018/08/08 18:47:24  spr
  * Handle java10 base path.
  *

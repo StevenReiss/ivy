@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalArcDefault.java,v 1.5 2011-05-27 19:32:48 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalArcDefault.java,v 1.6 2020/05/03 01:19:07 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: PetalArcDefault.java,v $
+ * Revision 1.6  2020/05/03 01:19:07  spr
+ * Format Changes.
+ *
  * Revision 1.5  2011-05-27 19:32:48  spr
  * Change copyrights.
  *

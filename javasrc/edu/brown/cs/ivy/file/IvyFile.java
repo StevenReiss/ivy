@@ -38,12 +38,15 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.28 2020/01/28 21:13:55 spr Exp $ */
+/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.29 2020/05/03 01:18:51 spr Exp $ */
 
 
 /*********************************************************************************
  *
  * $Log: IvyFile.java,v $
+ * Revision 1.29  2020/05/03 01:18:51  spr
+ * Minor extensions.  Add stemming facilities.id circular dependencies.
+ *
  * Revision 1.28  2020/01/28 21:13:55  spr
  * Add logging as ivy primitive.  Add new functions to ivyfile.
  *

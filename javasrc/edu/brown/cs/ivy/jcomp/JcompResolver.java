@@ -868,30 +868,30 @@ private class RefPass extends ASTVisitor {
       JcompType xt = null;
       Expression e = n.getExpression();
       if (e != null) {
-	 xt = JcompAst.getJavaType(e);
-	 if (xt == null) xt = JcompAst.getExprType(e);
+         xt = JcompAst.getJavaType(e);
+         if (xt == null) xt = JcompAst.getExprType(e);
        }
-
+   
       JcompType bt = JcompAst.getJavaType(n.getType());
       if (bt == null) {
-	 bt = findType(TYPE_ERROR);
-	 JcompAst.setJavaType(n.getType(),bt);
+         bt = findType(TYPE_ERROR);
+         JcompAst.setJavaType(n.getType(),bt);
        }
       List<JcompType> targs = null;
       if (n.typeArguments().size() > 0) {
-	 targs = new ArrayList<>();
-	 for (Object o : n.typeArguments()) {
-	    Type tat = (Type) o;
-	    targs.add(JcompAst.getJavaType(tat));
-	  }
+         targs = new ArrayList<>();
+         for (Object o : n.typeArguments()) {
+            Type tat = (Type) o;
+            targs.add(JcompAst.getJavaType(tat));
+          }
        }
       List<JcompType> atys = buildArgumentList(n.arguments(),false);
       boolean dfltcnst = atys.size() == 0;
       if (bt.needsOuterClass()) {
-	 JcompType oty = bt.getOuterType();
-	 if (oty != null) atys.add(0,oty);
+         JcompType oty = bt.getOuterType();
+         if (oty != null) atys.add(0,oty);
        }
-
+   
       JcompAst.setExprType(n,bt);		      // set default type
       lookupMethod(bt,atys,n,null,"<init>",false,dfltcnst,n.arguments(),targs);    // this can reset the type
    }
