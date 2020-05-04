@@ -353,30 +353,34 @@ private boolean addClassPathEntry(String cpe)
       try {
 	 FileInputStream fis = new FileInputStream(f);
 	 JarInputStream jis = new JarInputStream(fis);
-	 for ( ; ; ) {
-	    JarEntry je = jis.getNextJarEntry();
-	    if (je == null) break;
-	    String cn = je.getName();
-	    String en = cn;
-	    if (cn.endsWith(".class")) en = cn.substring(0,cn.length()-6);
-	    else continue;
-	    en = en.replace("/",".");
-	    if (!class_map.containsKey(en)) {
-	       int sz = (int) je.getSize();
-	       byte [] buf = null;
-	       if (sz > 0) {
-		  buf = new byte[sz];
-		  int ln = 0;
-		  while (ln < sz) {
-		     int ct = jis.read(buf,ln,sz-ln);
-		     ln += ct;
-		   }
-		}
-	       JcodeFileInfo fi = new JcodeFileInfo(f,cn,buf);
-	       class_map.put(en,fi);
-	     }
-	  }
-	 jis.close();
+         try {
+            for ( ; ; ) {
+               JarEntry je = jis.getNextJarEntry();
+               if (je == null) break;
+               String cn = je.getName();
+               String en = cn;
+               if (cn.endsWith(".class")) en = cn.substring(0,cn.length()-6);
+               else continue;
+               en = en.replace("/",".");
+               if (!class_map.containsKey(en)) {
+                  int sz = (int) je.getSize();
+                  byte [] buf = null;
+                  if (sz > 0) {
+                     buf = new byte[sz];
+                     int ln = 0;
+                     while (ln < sz) {
+                        int ct = jis.read(buf,ln,sz-ln);
+                        ln += ct;
+                      }
+                   }
+                  JcodeFileInfo fi = new JcodeFileInfo(f,cn,buf);
+                  class_map.put(en,fi);
+                }
+             }
+          }
+         finally {
+            jis.close();
+          }
        }
       catch (IOException e) { }
     }

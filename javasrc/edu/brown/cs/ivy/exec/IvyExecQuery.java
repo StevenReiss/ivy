@@ -142,31 +142,35 @@ public static String [] getCommandLine()
       boolean fnd = false;
       if (f.exists()) {
 	 FileReader fr = new FileReader(f);
-	 char [] buf = new char[100000];
-	 int fsz = buf.length;
-	 int off = 0;
-	 for ( ; ; ) {
-	    int rsz = fr.read(buf,off,fsz-off);
-	    if (rsz < 0) break;
-	    off += rsz;
-	  }
-	 int sz = off;
-	 fr.close();
-	 if (sz != 0 && sz != 4096) {
-	    int st = 0;
-	    for (int i = 1; i < sz; ++i) {
-	       if (buf[i] == 0) {
-		  String s = new String(buf,st,i-st);
-		  cmds.add(s);
-		  st = i+1;
-		}
-	     }
-	    if (sz > st) {
-	       String s = new String(buf,st,sz-st);
-	       cmds.add(s);
-	     }
-	    fnd = true;
-	  }
+         try {
+            char [] buf = new char[100000];
+            int fsz = buf.length;
+            int off = 0;
+            for ( ; ; ) {
+               int rsz = fr.read(buf,off,fsz-off);
+               if (rsz < 0) break;
+               off += rsz;
+             }
+            int sz = off;
+            if (sz != 0 && sz != 4096) {
+               int st = 0;
+               for (int i = 1; i < sz; ++i) {
+                  if (buf[i] == 0) {
+                     String s = new String(buf,st,i-st);
+                     cmds.add(s);
+                     st = i+1;
+                   }
+                }
+               if (sz > st) {
+                  String s = new String(buf,st,sz-st);
+                  cmds.add(s);
+                }
+               fnd = true;
+             }
+          }
+         finally {
+            fr.close();
+          }
        }
       if (!fnd) {
 	 tryUsingJps(cmds);
@@ -176,7 +180,7 @@ public static String [] getCommandLine()
    catch (Throwable t) {
       System.err.println("IVY: EXEC: Problem getting command line: " + t);
     }
-
+   
    String [] r = new String[cmds.size()];
    r = cmds.toArray(r);
 
@@ -196,14 +200,18 @@ public static String getProcessId()
    try {
       File f = new File("/proc/self/stat");
       if (f.exists()) {
-	 FileReader fr = new FileReader(f);
-	 int pid = 0;
-	 for ( ; ; ) {
-	    int c = fr.read();
-	    if (c < '0' || c > '9') break;
-	    pid = pid * 10 + c - '0';
-	  }
-	 fr.close();
+         int pid = 0;
+         FileReader fr = new FileReader(f);
+         try {
+            for ( ; ; ) {
+               int c = fr.read();
+               if (c < '0' || c > '9') break;
+               pid = pid * 10 + c - '0';
+             }
+          }
+         finally {
+            fr.close();
+          }
 	 return Integer.toString(pid);
        }
     }

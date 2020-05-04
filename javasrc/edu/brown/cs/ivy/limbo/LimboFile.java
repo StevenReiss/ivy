@@ -108,15 +108,19 @@ LimboFile(File f)
    last_modified = f.lastModified();
 
    try {
-      BufferedReader br = new BufferedReader(new FileReader(f));
       List<String> ldata = new ArrayList<String>();
-      for ( ; ; ) {
-	 String ln = br.readLine();
-	 if (ln == null) break;
-	 ldata.add(ln);
-
+      BufferedReader br = new BufferedReader(new FileReader(f));
+      try {
+         for ( ; ; ) {
+            String ln = br.readLine();
+            if (ln == null) break;
+            ldata.add(ln);
+            
+          }
        }
-      br.close();
+      finally {
+         br.close();
+       }
       line_data = ldata.toArray(new String[ldata.size()]);
     }
    catch (IOException e) {

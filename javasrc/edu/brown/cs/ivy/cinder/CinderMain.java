@@ -298,6 +298,7 @@ private void process()
 /*									*/
 /************************************************************************/
 
+@SuppressWarnings("resource")
 private void runServer(String args)
 {
    int port = 0;

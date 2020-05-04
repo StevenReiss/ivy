@@ -476,14 +476,14 @@ private class MethodDetail extends MemberDetail {
 
    MethodDetail(Node xml) throws JflowException {
       super(xml);
-
+   
       method_name = IvyXml.getAttrString(xml,"NAME");
-
+   
       int narg = IvyXml.getAttrInt(xml,"NARG");
       String sgn = IvyXml.getAttrString(xml,"SIGNATURE");
       if (sgn != null && sgn.length() == 0) sgn = null;
       BT_Class bc = getMemberClass();
-
+   
       addMethods(bc,narg,sgn,method_map);
     }
 

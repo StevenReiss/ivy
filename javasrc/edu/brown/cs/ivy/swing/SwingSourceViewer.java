@@ -207,14 +207,18 @@ public boolean openFile(String file)
       try {
 	 StringBuffer sbuf = new StringBuffer();
 	 FileReader fr = new FileReader(file);
-	 char [] buf = new char[4096];
-	 for ( ; ; ) {
-	    int ct = fr.read(buf);
-	    if (ct < 0) break;
-	    sbuf.append(buf,0,ct);
-	  }
-	 txt = sbuf.toString();
-         fr.close();
+         try {
+            char [] buf = new char[4096];
+            for ( ; ; ) {
+               int ct = fr.read(buf);
+               if (ct < 0) break;
+               sbuf.append(buf,0,ct);
+             }
+            txt = sbuf.toString();
+          }
+         finally {
+            fr.close();
+          }
        }
       catch (IOException e) {
 	 file = null;

@@ -465,14 +465,18 @@ public static void copyFile(File sf,File df) throws IOException
 {
    FileInputStream r = new FileInputStream(sf);
    FileOutputStream w = new FileOutputStream(df);
-   byte [] buf = new byte[8192];
-   for ( ; ; ) {
-      int ln = r.read(buf);
-      if (ln <= 0) break;
-      w.write(buf,0,ln);
+   try {
+      byte [] buf = new byte[8192];
+      for ( ; ; ) {
+         int ln = r.read(buf);
+         if (ln <= 0) break;
+         w.write(buf,0,ln);
+       }
     }
-   w.close();
-   r.close();
+   finally {
+      w.close();
+      r.close();
+    }
 }
 
 
@@ -480,14 +484,18 @@ public static void copyFile(File sf,File df) throws IOException
 public static void copyFile(InputStream r,File df) throws IOException
 {
    FileOutputStream w = new FileOutputStream(df);
-   byte [] buf = new byte[8192];
-   for ( ; ; ) {
-      int ln = r.read(buf);
-      if (ln <= 0) break;
-      w.write(buf,0,ln);
+   try {
+      byte [] buf = new byte[8192];
+      for ( ; ; ) {
+         int ln = r.read(buf);
+         if (ln <= 0) break;
+         w.write(buf,0,ln);
+       }
     }
-   w.close();
-   r.close();
+   finally {
+      w.close();
+      r.close();
+    }
 }
 
 
@@ -495,13 +503,17 @@ public static void copyFile(InputStream r,File df) throws IOException
 public static void copyFileNoClose(InputStream r,File df) throws IOException
 {
    FileOutputStream w = new FileOutputStream(df);
-   byte [] buf = new byte[8192];
-   for ( ; ; ) {
-      int ln = r.read(buf);
-      if (ln <= 0) break;
-      w.write(buf,0,ln);
+   try {
+      byte [] buf = new byte[8192];
+      for ( ; ; ) {
+         int ln = r.read(buf);
+         if (ln <= 0) break;
+         w.write(buf,0,ln);
+       }
     }
-   w.close();
+   finally {
+      w.close();
+    }
 }
 
 
@@ -526,13 +538,17 @@ public static void copyHierarchy(File sd,File dd) throws IOException
 public static void copyFile(File sf,OutputStream w) throws IOException
 {
    FileInputStream r = new FileInputStream(sf);
-   byte [] buf = new byte[8192];
-   for ( ; ; ) {
-      int ln = r.read(buf);
-      if (ln <= 0) break;
-      w.write(buf,0,ln);
+   try {
+      byte [] buf = new byte[8192];
+      for ( ; ; ) {
+         int ln = r.read(buf);
+         if (ln <= 0) break;
+         w.write(buf,0,ln);
+       }
     }
-   r.close();
+   finally {
+      r.close();
+    }
 }
 
 
@@ -554,13 +570,17 @@ public static void copyFile(InputStream ins,OutputStream ots) throws IOException
 public static void copyFile(File sf,Writer w) throws IOException
 {
    FileReader r = new FileReader(sf);
-   char [] buf = new char[8192];
-   for ( ; ; ) {
-      int ln = r.read(buf);
-      if (ln <= 0) break;
-      w.write(buf,0,ln);
+   try {
+      char [] buf = new char[8192];
+      for ( ; ; ) {
+         int ln = r.read(buf);
+         if (ln <= 0) break;
+         w.write(buf,0,ln);
+       }
     }
-   r.close();
+   finally {
+      r.close();
+    }
 }
 
 
@@ -568,19 +588,19 @@ public static void copyFile(File sf,Writer w) throws IOException
 
 public static void copyFile(File sf,File df,Map<String,String> vals) throws IOException
 {
-   BufferedReader r = new BufferedReader(new FileReader(sf));
-   FileWriter w = new FileWriter(df);
-   String eol = System.getProperty("line.separator");
-   if (eol == null) eol = "\n";
-   for ( ; ; ) {
-      String ln = r.readLine();
-      if (ln == null) break;
-      ln = expandText(ln,vals);
-      w.write(ln);
-      w.write(eol);
+   try (
+         BufferedReader r = new BufferedReader(new FileReader(sf));
+         FileWriter w = new FileWriter(df)) {
+      String eol = System.getProperty("line.separator");
+      if (eol == null) eol = "\n";
+      for ( ; ; ) {
+         String ln = r.readLine();
+         if (ln == null) break;
+         ln = expandText(ln,vals);
+         w.write(ln);
+         w.write(eol);
+       }
     }
-   w.close();
-   r.close();
 }
 
 

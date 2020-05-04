@@ -276,22 +276,26 @@ private void loadPathVars()
 
    try {
       BufferedReader fr = new BufferedReader(new FileReader(d));
-      for ( ; ; ) {
-	 String ln = fr.readLine();
-	 if (ln == null) break;
-	 ln = ln.trim();
-	 if (ln.startsWith("#") || ln.length() == 0) continue;
-	 int idx = ln.indexOf("=");
-	 if (idx < 0) continue;
-	 String key = ln.substring(0,idx);
-	 String val = ln.substring(idx+1);
-	 if (key.startsWith("org.ecliplse.jdt.core.classpathVariable.")) {
-	    int idx1 = key.lastIndexOf(".");
-	    String var = key.substring(idx1+1);
-	    path_vars.put(var,val);
-	  }
+      try {
+         for ( ; ; ) {
+            String ln = fr.readLine();
+            if (ln == null) break;
+            ln = ln.trim();
+            if (ln.startsWith("#") || ln.length() == 0) continue;
+            int idx = ln.indexOf("=");
+            if (idx < 0) continue;
+            String key = ln.substring(0,idx);
+            String val = ln.substring(idx+1);
+            if (key.startsWith("org.ecliplse.jdt.core.classpathVariable.")) {
+               int idx1 = key.lastIndexOf(".");
+               String var = key.substring(idx1+1);
+               path_vars.put(var,val);
+             }
+          }
        }
-      fr.close();
+      finally {
+         fr.close();
+       }
     }
    catch (IOException e) { }
 }
