@@ -504,6 +504,36 @@ public String getFullReportName()
 
 
 /**
+ *      Get complete name including method, etc.
+ **/
+
+public String getCompleteName()
+{
+   ASTNode dn = getDefinitionNode();
+   String pfx = null;
+   for (ASTNode p = dn; p != null; p = p.getParent()) {
+      switch (p.getNodeType()) {
+         case ASTNode.ANONYMOUS_CLASS_DECLARATION :
+         case ASTNode.TYPE_DECLARATION :
+         case ASTNode.ANNOTATION_TYPE_DECLARATION :
+         case ASTNode.ENUM_DECLARATION :
+            JcompType jt = JcompAst.getJavaType(p);
+            if (jt != null) pfx = jt.getName(); 
+            break;
+         case ASTNode.METHOD_DECLARATION :
+            JcompSymbol js = JcompAst.getDefinition(p);
+            pfx = js.getFullName();
+            break;
+       }
+    }
+   if (pfx == null) return getReportName();
+   
+   return pfx + "." + getName();
+}
+
+
+
+/**
  *	Get the handle or key for the symbol within a given project.
  **/
 
@@ -784,15 +814,15 @@ private static class VariableSymbol extends JcompSymbol {
 
    @Override public ASTNode getDefinitionNode() {
       for (ASTNode p = ast_node; p != null; p = p.getParent()) {
-	 switch (p.getNodeType()) {
-	    case ASTNode.FIELD_DECLARATION :
-	       return p;
-	    case ASTNode.SINGLE_VARIABLE_DECLARATION :
-	    case ASTNode.VARIABLE_DECLARATION_EXPRESSION :
-	    case ASTNode.VARIABLE_DECLARATION_STATEMENT :
-	    case ASTNode.LAMBDA_EXPRESSION :
-	       return p;
-	  }
+         switch (p.getNodeType()) {
+            case ASTNode.FIELD_DECLARATION :
+               return p;
+            case ASTNode.SINGLE_VARIABLE_DECLARATION :
+            case ASTNode.VARIABLE_DECLARATION_EXPRESSION :
+            case ASTNode.VARIABLE_DECLARATION_STATEMENT :
+            case ASTNode.LAMBDA_EXPRESSION :
+               return p;
+          }
        }
       return null;
     }
