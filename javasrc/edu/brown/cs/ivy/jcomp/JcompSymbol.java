@@ -525,6 +525,7 @@ public String getCompleteName()
             pfx = js.getFullName();
             break;
        }
+      if (pfx != null) break;
     }
    if (pfx == null) return getReportName();
    
