@@ -30,8 +30,8 @@ warconifer:    all
 	cp $(PRO)/ivy/javasrc/edu/brown/cs/ivy/mint/web/web.xml binary/WEB-INF
 	cp $(PRO)/ivy/java/edu/brown/cs/ivy/mint/web/*.class binary/WEB-INF/classes/edu/brown/cs/ivy/mint/web
 	(cd binary; jar cvf $(PRO)/ivy/javasrc/edu/brown/cs/ivy/mint/web/mint.war *)
-	scp mint.war conifer:/vol/mint/servlets/mint.war
-	-scp mint.war conifer:/var/lib/tomcat5/webapps/mint.war
+	scp mint.war conifer2:/vol/mint/servlets/mint.war
+	-scp mint.war conifer2:/var/lib/tomcat5/webapps/mint.war
 	rm -rf binary
 
 war:	all
@@ -44,6 +44,8 @@ war:	all
 	(cd binary; jar cvf $(WARFILE) *)
 	scp $(WARFILE) bubbles:/var/lib/tomcat8/webapps/mint.war
 	scp $(WARFILE) bubbles:.
+	scp $(WARFILE) conifer2:/var/lib/tomcat8/webapps/mint.war
+	scp $(WARFILE) conifer2:.
 	rm -rf binary
 
 
