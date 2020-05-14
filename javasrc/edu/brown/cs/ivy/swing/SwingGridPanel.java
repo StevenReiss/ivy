@@ -216,6 +216,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileSystemView;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.undo.AbstractUndoableEdit;
@@ -917,7 +918,7 @@ public final JTextField addFileField(String lbl,File val,int md,
 {
    String fnm = null;
    if (val != null) fnm = val.getPath();
-   return localAddFileField(lbl,fnm,md,filters,cb1,cb3,cb2);
+   return localAddFileField(lbl,fnm,md,filters,null,cb1,cb3,cb2);
 }
 
 
@@ -929,7 +930,7 @@ public final JTextField addFileField(String lbl,File val,int md,
 {
    String fnm = null;
    if (val != null) fnm = val.getPath();
-   return localAddFileField(lbl,fnm,md,filters,cb1,null,cb2);
+   return localAddFileField(lbl,fnm,md,filters,null,cb1,null,cb2);
 }
 
 
@@ -951,7 +952,7 @@ public final JTextField addFileField(String lbl,File val,int md,ActionListener c
 {
    String fnm = null;
    if (val != null) fnm = val.getPath();
-   return localAddFileField(lbl,fnm,md,null,cb1,null,cb2);
+   return localAddFileField(lbl,fnm,md,null,null,cb1,null,cb2);
 }
 
 
@@ -959,7 +960,7 @@ public final JTextField addFileField(String lbl,File val,int md,ActionListener c
 public final JTextField addFileField(String lbl,String val,int md,ActionListener cb1,
 					UndoableEditListener cb2)
 {
-   return localAddFileField(lbl,val,md,(Iterable<FileFilter>) null,cb1,null,cb2);
+   return localAddFileField(lbl,val,md,(Iterable<FileFilter>) null,null,cb1,null,cb2);
 }
 
 
@@ -970,7 +971,7 @@ public final JTextField addFileField(String lbl,String val,int md,
 					ActionListener cb1,
 					UndoableEditListener cb2)
 {
-   return localAddFileField(lbl,val,md,filters,cb1,null,cb2);
+   return localAddFileField(lbl,val,md,filters,null,cb1,null,cb2);
 }
 
 
@@ -981,7 +982,19 @@ public final JTextField addFileField(String lbl,String val,int md,
 					CaretListener cb3,
 					UndoableEditListener cb2)
 {
-   return localAddFileField(lbl,val,md,filters,cb1,cb3,cb2);
+   return localAddFileField(lbl,val,md,filters,null,cb1,cb3,cb2);
+}
+
+
+
+public final JTextField addFileField(String lbl,String val,int md,
+      Iterable<FileFilter> filters,
+      FileSystemView fsv,
+      ActionListener cb1,
+      CaretListener cb3,
+      UndoableEditListener cb2)
+{
+   return localAddFileField(lbl,val,md,filters,fsv,cb1,cb3,cb2);
 }
 
 
@@ -997,7 +1010,7 @@ public final JTextField addFileField(String lbl,String val,int md,
       fl.add(filter);
     }
 
-   return localAddFileField(lbl,val,md,fl,cb1,null,cb2);
+   return localAddFileField(lbl,val,md,fl,null,cb1,null,cb2);
 }
 
 
@@ -1014,13 +1027,14 @@ public final JTextField addFileField(String lbl,String val,int md,
       fl.add(filter);
     }
 
-   return localAddFileField(lbl,val,md,fl,cb1,cb3,cb2);
+   return localAddFileField(lbl,val,md,fl,null,cb1,cb3,cb2);
 }
 
 
 
 private JTextField localAddFileField(String lbl,String val,int md,
 					Iterable<FileFilter> filters,
+                                        FileSystemView fsv,
 					ActionListener cb1,
 					CaretListener cb3,
 					UndoableEditListener cb2)
@@ -1044,7 +1058,7 @@ private JTextField localAddFileField(String lbl,String val,int md,
    addGBComponent(tfld,1,y_count,1,1,10,0);
 
    JButton browser = new JButton("Browse");
-   BrowseListener bl = new BrowseListener(tfld,md,filters);
+   BrowseListener bl = new BrowseListener(tfld,md,filters,fsv);
    browser.addActionListener(bl);
    addGBComponent(browser,2,y_count++,1,1,0,0);
 
@@ -1423,9 +1437,10 @@ private class BrowseListener implements ActionListener {
    private JTextField text_field;
    private int file_mode;
 
-   BrowseListener(JTextField tfld,int md,Iterable<FileFilter> filters) {
+   BrowseListener(JTextField tfld,int md,Iterable<FileFilter> filters,FileSystemView fsv) {
       text_field = tfld;
-      file_chooser = new JFileChooser();
+      if (fsv != null) file_chooser = new JFileChooser(fsv);
+      else file_chooser = new JFileChooser();
       file_mode = md;
       if (filters == null) user_filters = null;
       else {
