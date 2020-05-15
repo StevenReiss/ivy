@@ -509,6 +509,13 @@ public String getFullReportName()
 
 public String getCompleteName()
 {
+   return getFullName();
+}
+
+
+
+protected String getNamePrefix()
+{
    ASTNode dn = getDefinitionNode();
    String pfx = null;
    for (ASTNode p = dn; p != null; p = p.getParent()) {
@@ -527,9 +534,11 @@ public String getCompleteName()
        }
       if (pfx != null) break;
     }
-   if (pfx == null) return getReportName();
    
-   return pfx + "." + getName();
+   if (pfx == null) pfx = "";
+   else pfx += ".";
+   
+   return pfx;
 }
 
 
@@ -803,6 +812,11 @@ private static class VariableSymbol extends JcompSymbol {
       if (ast_node == null) return "???";
       return ast_node.getName().getIdentifier();
    }
+   @Override public String getCompleteName() {
+      if (isFieldSymbol()) return getFullName();
+      return getNamePrefix() + getName();
+    }
+   
    @Override public JcompType getType() { return java_type; }
    @Override public boolean isUsed()	{ return is_used; }
    @Override public boolean isRead()	{ return is_read; }
@@ -1049,6 +1063,9 @@ private static class LabelSymbol extends JcompSymbol {
       if (ast_node == null) return "???";
       return ast_node.getLabel().getIdentifier();
    }
+   @Override public String getCompleteName() {
+      return getNamePrefix() + getName();
+    }
    @Override public JcompType getType() { return null; }
 
 }	// end of subclass LabelSymbol
