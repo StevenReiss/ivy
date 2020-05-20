@@ -113,6 +113,8 @@ public static CompilationUnit parseSourceFile(char [] buf)
    Map<String,String> options = JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
    options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
+   options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
+   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");
    parser.setCompilerOptions(options);
    parser.setResolveBindings(false);
    parser.setStatementsRecovery(true);
