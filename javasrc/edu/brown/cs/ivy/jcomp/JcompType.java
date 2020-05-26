@@ -3175,6 +3175,7 @@ private static class FunctionRefType extends JcompType {
       return method_type;
     }
    @Override public boolean isFunctionRef()		{ return true; }
+   @Override public List<JcompType> getComponents()     { return  method_type.getComponents(); }
 
    @Override public JcompType getBaseType() {
       if (ref_symbol == null) return method_type;
