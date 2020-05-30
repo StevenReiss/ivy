@@ -75,3 +75,11 @@ lib/updateeclipse.csh
 checkthis*
 *.csv
 target
+build.properties
+test.out.xml
+lib/eclipsejar.7
+lib/eclipsejar.older
+lib/junit.jar.2
+lib/useneweclipse.csh
+pom.xml
+
