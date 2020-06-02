@@ -26,7 +26,7 @@
 
 
    <target name='doc'>
-      <javadoc sourcepathref='jdocsrc' classpathref='bubbles.classpath' destdir='${PRO}/bubbles/doc'>
+      <javadoc sourcepathref='jdocsrc' classpathref='ivy.classpath' destdir='${PRO}/bubbles/doc'>
 	 <package name='edu.brown.cs.ivy.exec' />
 	 <package name='edu.brown.cs.ivy.file' />
 	 <package name='edu.brown.cs.ivy.swing' />
