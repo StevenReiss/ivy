@@ -2523,6 +2523,7 @@ private Dimension getUsedSize()
       Point [] pts = arcs[i].getPoints();
       if (pts != null) {
 	 for (int j = 0; j < pts.length; ++j) {
+            if (pts[j] == null) continue;
 	    if (pts[j].x > mxsz.width) mxsz.width = pts[j].x;
 	    if (pts[j].y > mxsz.height) mxsz.height = pts[j].y;
 	  }
