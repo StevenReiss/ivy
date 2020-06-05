@@ -25,6 +25,7 @@ SFILES= \
 	SwingMenuBar.java \
 	SwingMonitoredWindow.java \
 	SwingNumericField.java \
+	SwingPasswordField.java \
 	SwingRangeScrollBar.java \
 	SwingRangeSlider.java \
 	SwingRootMonitor.java \
@@ -32,6 +33,9 @@ SFILES= \
 	SwingSetup.java \
 	SwingSourceViewer.java \
 	SwingText.java \
+	SwingTextArea.java \
+	SwingTextField.java \
+	SwingTextPane.java \
 	SwingToolBar.java \
 	SwingTree.java \
 	SwingTreeTable.java \
