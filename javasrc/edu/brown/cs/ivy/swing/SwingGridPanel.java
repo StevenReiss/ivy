@@ -854,7 +854,7 @@ public final JTextField addTextField(String lbl,String val,int wid,ActionListene
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   JTextField tfld = new JTextField(val,wid);
+   JTextField tfld = new SwingTextField(val,wid);
    Document doc = tfld.getDocument();
    tfld.setActionCommand(lbl);
 
@@ -886,7 +886,7 @@ public final JTextArea addTextArea(String lbl,String val,int row,int col,Undoabl
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   JTextArea tarea = new JTextArea(val,row,col);
+   JTextArea tarea = new SwingTextArea(val,row,col);
    Document doc = tarea.getDocument();
 
    if (cb != null) doc.addUndoableEditListener(cb);
@@ -1042,7 +1042,7 @@ private JTextField localAddFileField(String lbl,String val,int md,
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   JTextField tfld = new JTextField(val,24);
+   JTextField tfld = new SwingTextField(val,24);
    Document doc = tfld.getDocument();
    tfld.setActionCommand(lbl);
 

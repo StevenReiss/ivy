@@ -1,11 +1,11 @@
 /********************************************************************************/
-/*										*/
-/*		SwingEditorPane.java						*/
-/*										*/
-/*	JEditorPane with additional support facilities				*/
-/*										*/
+/*                                                                              */
+/*              SwingTextField.java                                             */
+/*                                                                              */
+/*      JTextField with proper key bindings                                     */
+/*                                                                              */
 /********************************************************************************/
-/*	Copyright 1998 Brown University -- Steven P. Reiss		      */
+/*      Copyright 2011 Brown University -- Steven P. Reiss                    */
 /*********************************************************************************
  *  Copyright 2011, Brown University, Providence, RI.				 *
  *										 *
@@ -37,127 +37,72 @@
  *										 *
  ********************************************************************************/
 
-
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingEditorPane.java,v 1.2 2013/11/15 02:38:19 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingEditorPane.java,v $
- * Revision 1.2  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.1  2011-11-22 12:07:34  spr
- * Add editor pane extensions.
- *
- *
- ********************************************************************************/
-
+/* SVN: $Id$ */
 
 
 
 package edu.brown.cs.ivy.swing;
 
+import javax.swing.JTextField;
+import javax.swing.text.Document;
 
-
-import javax.swing.JEditorPane;
-
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.Transferable;
-import java.io.IOException;
-import java.net.URL;
-
-
-public class SwingEditorPane extends JEditorPane
+public class SwingTextField extends JTextField
 {
 
 
-
 /********************************************************************************/
-/*										*/
-/*	Private storage 							*/
-/*										*/
+/*                                                                              */
+/*      Private Storage                                                         */
+/*                                                                              */
 /********************************************************************************/
-
-private static SwingEditorPane source_component = null;
-private static Clipboard system_clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-private static Transferable last_content = null;
 
 private static final long serialVersionUID = 1;
 
 
-
 /********************************************************************************/
-/*										*/
-/*	Constructors								*/
-/*										*/
+/*                                                                              */
+/*      Constructors                                                            */
+/*                                                                              */
 /********************************************************************************/
 
-public SwingEditorPane()	
+public SwingTextField()
 {
    SwingText.fixKeyBindings(this);
 }
 
-public SwingEditorPane(String url) throws IOException	
+public SwingTextField(int col)
 {
-   super(url);
-   SwingText.fixKeyBindings(this);
-}
-
-public SwingEditorPane(String type,String txt)	
-{
-   super(type,txt);
-   SwingText.fixKeyBindings(this);
-}
-
-public SwingEditorPane(URL u) throws IOException	
-{
-   super(u); 
+   super(col);
    SwingText.fixKeyBindings(this);
 }
 
 
-
-
-/********************************************************************************/
-/*										*/
-/*	Methods for tracking current clip owner 				*/
-/*										*/
-/********************************************************************************/
-
-@Override public void copy()
+public SwingTextField(String text)
 {
-   source_component = this;
-   super.copy();
-   last_content = system_clipboard.getContents(null);
+   super(text);
+   SwingText.fixKeyBindings(this);
+}
+
+
+public SwingTextField(String text,int cols)
+{
+   super(text,cols);
+   SwingText.fixKeyBindings(this);
+}
+
+
+public SwingTextField(Document doc,String text,int cols)
+{
+   super(doc,text,cols);
+   SwingText.fixKeyBindings(this);
 }
 
 
 
-@Override public void cut()
-{
-   source_component = this;
-   super.cut();
-   last_content = system_clipboard.getContents(null);
-}
+}       // end of class SwingTextField
 
 
 
-public SwingEditorPane getClipboardSource()
-{
-   if (source_component != null && system_clipboard.getContents(null) != last_content) {
-      source_component = null;
-      last_content = null;
-    }
 
-   return source_component;
-}
+/* end of SwingTextField.java */
 
-
-
-}	// end of class SwingEditorPane
-
-
-
-/* end of SwingEditorPane.java */

@@ -93,6 +93,7 @@ package edu.brown.cs.ivy.pebble;
 
 
 import edu.brown.cs.ivy.swing.SwingGridPanel;
+import edu.brown.cs.ivy.swing.SwingTextField;
 
 import javax.swing.AbstractListModel;
 import javax.swing.Box;
@@ -834,16 +835,16 @@ private class ClassEditor extends JPanel implements ActionListener {
 
     protected PebbleEvent for_event;
     public void setup() {
-	setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-	//mainLabel = new JLabel(label + " Class: ");
-	//add(mainLabel);
-	matchClass = new JComboBox<Object>();
-	add(matchClass);
-	matchClass.addActionListener(this);
-	classLabel = new JLabel(" Classname: ");
-	add(classLabel);
-	classname = new JTextField(15); 
-	add(classname);
+        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        //mainLabel = new JLabel(label + " Class: ");
+        //add(mainLabel);
+        matchClass = new JComboBox<Object>();
+        add(matchClass);
+        matchClass.addActionListener(this);
+        classLabel = new JLabel(" Classname: ");
+        add(classLabel);
+        classname = new SwingTextField(15); 
+        add(classname);
     }
 
     public void sync(String name) {

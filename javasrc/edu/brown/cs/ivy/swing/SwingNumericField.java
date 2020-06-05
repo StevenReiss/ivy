@@ -84,7 +84,6 @@
 
 package edu.brown.cs.ivy.swing;
 
-import javax.swing.JTextField;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -96,7 +95,7 @@ import java.awt.event.FocusListener;
 
 
 
-public class SwingNumericField extends JTextField implements FocusListener
+public class SwingNumericField extends SwingTextField implements FocusListener
 {
 
 

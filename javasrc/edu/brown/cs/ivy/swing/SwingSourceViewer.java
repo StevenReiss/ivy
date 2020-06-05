@@ -100,7 +100,6 @@
 
 package edu.brown.cs.ivy.swing;
 
-import javax.swing.JTextPane;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.BoxView;
@@ -130,7 +129,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class SwingSourceViewer extends JTextPane implements SwingColors
+public class SwingSourceViewer extends SwingTextPane implements SwingColors
 {
 
 

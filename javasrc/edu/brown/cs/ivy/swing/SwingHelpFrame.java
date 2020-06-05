@@ -199,11 +199,11 @@ public SwingHelpFrame(String title, String dir, String ext, String defau)
 
    help_view.setColumnHeaderView(b);
 
-   index_pane = new JEditorPane();
+   index_pane = new SwingEditorPane();
    index_pane.setEditable(false);
    index_view = new JScrollPane(index_pane);
 
-   glossary_pane = new JEditorPane();
+   glossary_pane = new SwingEditorPane();
    glossary_pane.setEditable(false);
    glossary_view = new JScrollPane(glossary_pane);
 
@@ -478,13 +478,12 @@ static class HelpFileFilter implements FilenameFilter {
 /*										*/
 /********************************************************************************/
 
-class SwingHelpFrameEditorPane extends JEditorPane {
+class SwingHelpFrameEditorPane extends SwingEditorPane {
 
    private SwingHelpFrame help_frame;
    private static final long serialVersionUID = 1;
 
-   public SwingHelpFrameEditorPane(SwingHelpFrame frame)
-      {
+   public SwingHelpFrameEditorPane(SwingHelpFrame frame) {
       help_frame = frame;
     }
 
