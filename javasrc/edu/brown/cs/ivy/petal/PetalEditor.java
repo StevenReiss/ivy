@@ -1466,15 +1466,15 @@ private class TabFrame extends JPanel {
 
    @Override public void paint(Graphics g) {
       PetalNode [] nodes = graph_model.getSelectedNodes();
-
+   
       for (int i = 0; i < nodes.length; ++i) {
-	 drawNodeHandles(g,nodes[i]);
+         drawNodeHandles(g,nodes[i]);
        }
-
+   
       PetalArc [] arcs = graph_model.getSelectedArcs();
-
+   
       for (int i = 0; i < arcs.length; ++i) {
-	 drawArcHandles(g,arcs[i]);
+         drawArcHandles(g,arcs[i]);
        }
     }
 

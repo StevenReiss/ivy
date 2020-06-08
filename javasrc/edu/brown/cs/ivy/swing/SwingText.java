@@ -151,11 +151,23 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 
 
 
 public class SwingText {
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Private stoarge                                                         */
+/*                                                                              */
+/********************************************************************************/
+
+private static Map<Object,Boolean>      done_keys = new WeakHashMap<>();
 
 
 
@@ -268,6 +280,21 @@ public static void drawVerticalText(String lbl,Graphics2D g,Rectangle2D box)
 
 
 /********************************************************************************/
+/*                                                                              */
+/*      Font methods                                                            */
+/*                                                                              */
+/********************************************************************************/
+
+public static Font deriveLarger(Font f)
+{
+   float sz = f.getSize2D();
+   return f.deriveFont(sz+2f);
+}
+
+
+
+
+/********************************************************************************/
 /*										*/
 /*	Methods to fix JTextComponent for the mac				*/
 /*										*/
@@ -289,6 +316,7 @@ public static void fixKeyBindings(Keymap k)
 {
    int mask = getMenuShortcutKeyMaskEx();
    if (mask != InputEvent.META_DOWN_MASK) return;
+   if (done_keys.put(k,Boolean.TRUE) != null) return;
 
    for (KeyStroke ks : k.getBoundKeyStrokes()) {
       if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK) {
@@ -310,7 +338,8 @@ public static void fixKeyBindings(InputMap m)
 {
    int mask = getMenuShortcutKeyMaskEx();
    if (mask != InputEvent.META_DOWN_MASK) return;
-
+   if (done_keys.put(m,Boolean.TRUE) != null) return;
+   
    for (KeyStroke ks : m.keys()) {
       if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK) {
 	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
@@ -322,13 +351,6 @@ public static void fixKeyBindings(InputMap m)
        }
     }
 }
-
-public static Font deriveLarger(Font f)
-{
-   float sz = f.getSize2D();
-   return f.deriveFont(sz+2f);
-}
-
 
 //
 //   InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
