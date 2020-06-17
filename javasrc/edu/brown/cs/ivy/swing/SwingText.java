@@ -128,6 +128,7 @@ package edu.brown.cs.ivy.swing;
 
 import javax.swing.Action;
 import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 import javax.swing.plaf.TextUI;
 import javax.swing.text.BadLocationException;
@@ -144,6 +145,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.geom.AffineTransform;
@@ -302,12 +304,32 @@ public static Font deriveLarger(Font f)
 
 public static void fixKeyBindings(JTextComponent tc)
 {
+   fixKeyBindings(tc,true);
+}
+
+
+
+public static void fixKeyBindings(JTextComponent tc,boolean doedit)
+{
    int mask = getMenuShortcutKeyMaskEx();
    if (mask != InputEvent.META_DOWN_MASK) return;
 
-   Keymap k = tc.getKeymap();
+   Keymap k = tc.getKeymap(); 
    fixKeyBindings(k);
    tc.setKeymap(k);
+   
+   if (doedit) defineEditBindings(tc);
+}
+
+
+
+public static void fixKeyBindings(JComponent c)
+{
+   int mask = getMenuShortcutKeyMaskEx();
+   if (mask != InputEvent.META_DOWN_MASK) return;
+   
+   InputMap m = c.getInputMap();
+   fixKeyBindings(m);
 }
 
 
@@ -327,29 +349,59 @@ public static void fixKeyBindings(Keymap k)
        }
     }
 
-   k.setDefaultAction(new MacKeyTypedAction());
+   if (k.getDefaultAction() != null)
+      k.setDefaultAction(new MacKeyTypedAction());
 
    Keymap par = k.getResolveParent();
    if (par != null && par != k) fixKeyBindings(par);
 }
 
 
+public static void defineEditBindings(JTextComponent tc)
+{
+   int mask = getMenuShortcutKeyMaskEx();
+   KeyStroke cutkey = KeyStroke.getKeyStroke(KeyEvent.VK_X,mask);
+   KeyStroke pastekey = KeyStroke.getKeyStroke(KeyEvent.VK_V,mask);
+   KeyStroke copykey = KeyStroke.getKeyStroke(KeyEvent.VK_C,mask);
+   Keymap km = tc.getKeymap();
+   if (km == null) return;
+   if (km.getAction(cutkey) == null) {
+      km.addActionForKeyStroke(cutkey,new DefaultEditorKit.CutAction());
+    }
+   if (km.getAction(pastekey) == null) {
+      km.addActionForKeyStroke(pastekey,new DefaultEditorKit.PasteAction());
+    }
+   if (km.getAction(copykey) == null) {
+      km.addActionForKeyStroke(copykey,new DefaultEditorKit.CopyAction());
+    }
+   tc.setKeymap(km);
+}
+
+
+
+
 public static void fixKeyBindings(InputMap m)
 {
+   if (m == null) return;
    int mask = getMenuShortcutKeyMaskEx();
    if (mask != InputEvent.META_DOWN_MASK) return;
    if (done_keys.put(m,Boolean.TRUE) != null) return;
    
-   for (KeyStroke ks : m.keys()) {
-      if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK) {
-	 KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
-	 Object act = m.get(ks);
-	 if (act instanceof Action) {
-	    m.remove(ks);
-	    m.put(nks,act);
-	 }
+   if (m.keys() != null) {
+      for (KeyStroke ks : m.keys()) {
+         if (ks.getModifiers() == InputEvent.CTRL_DOWN_MASK) {
+            KeyStroke nks = KeyStroke.getKeyStroke(ks.getKeyCode(),mask);
+            Object act = m.get(ks);
+            if (act instanceof Action) {
+               m.remove(ks);
+               m.put(nks,act);
+             }
+          }
        }
     }
+   
+   InputMap pm = m.getParent();
+   if (pm != null && pm != m) fixKeyBindings(pm);
 }
 
 //
