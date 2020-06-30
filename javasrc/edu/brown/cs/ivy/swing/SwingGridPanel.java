@@ -1454,23 +1454,26 @@ private class BrowseListener implements ActionListener {
    @Override public void actionPerformed(ActionEvent e) {
       String cur = text_field.getText();
       if (cur != null) {
-	 File curf = new File(cur);
-	 file_chooser.setSelectedFile(curf);
+         File curf = null;
+         FileSystemView fsv = file_chooser.getFileSystemView();
+         if (fsv == null) curf = new File(cur);
+         else curf = fsv.createFileObject(cur);
+         file_chooser.setSelectedFile(curf);
        }
       file_chooser.setFileSelectionMode(file_mode);
       if (user_filters != null) {
-	 file_chooser.setAcceptAllFileFilterUsed(false);
-	 int ct = 0;
-	 for (FileFilter ff : user_filters) {
-	    if (ct++ == 0) file_chooser.setFileFilter(ff);
-	    file_chooser.addChoosableFileFilter(ff);
-	  }
+         file_chooser.setAcceptAllFileFilterUsed(false);
+         int ct = 0;
+         for (FileFilter ff : user_filters) {
+            if (ct++ == 0) file_chooser.setFileFilter(ff);
+            file_chooser.addChoosableFileFilter(ff);
+          }
        }
-
+   
       int rval = file_chooser.showOpenDialog(SwingGridPanel.this);
       if (rval == JFileChooser.APPROVE_OPTION) {
-	 text_field.setText(file_chooser.getSelectedFile().getAbsolutePath());
-	 text_field.postActionEvent();
+         text_field.setText(file_chooser.getSelectedFile().getAbsolutePath());
+         text_field.postActionEvent();
        }
     }
 

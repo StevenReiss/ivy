@@ -814,27 +814,27 @@ private class RefPass extends ASTVisitor {
       Expression e = n.getExpression();
       boolean isstatic = false;
       if (e != null) {
-	 e.accept(this);
-	 bt = JcompAst.getJavaType(e);
-	 if (bt == null) bt = JcompAst.getExprType(e);
-	 else {
-	    isstatic = true;
-	  }
+         e.accept(this);
+         bt = JcompAst.getJavaType(e);
+         if (bt == null) bt = JcompAst.getExprType(e);
+         else {
+            isstatic = true;
+          }
        }
-
+   
       List<JcompType> targs = null;
       if (n.typeArguments().size() > 0) {
-	 targs = new ArrayList<>();
-	 for (Object o : n.typeArguments()) {
-	    Type tat = (Type) o;
-	    targs.add(JcompAst.getJavaType(tat));
-	  }
+         targs = new ArrayList<>();
+         for (Object o : n.typeArguments()) {
+            Type tat = (Type) o;
+            targs.add(JcompAst.getJavaType(tat));
+          }
        }
-
+   
       List<JcompType> atyp = buildArgumentList(n.arguments(),true);
       lookupMethod(bt,atyp,n,n.getName(),null,isstatic,false,n.arguments(),targs);
       // might want to use outer types if this failed
-
+   
       return false;
     }
 
