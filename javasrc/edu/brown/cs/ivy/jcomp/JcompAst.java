@@ -155,14 +155,21 @@ public static AST createNewAst()
 /*                                                                              */
 /********************************************************************************/
 
+
 public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an)
+{
+   return getResolvedAst(ctrl,an,null);
+}
+
+   public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an,List<String> jarnames)
 {
    if (an == null) return null;
    
    List<JcompSource> srcs = new ArrayList<>();
    JcompSource src = new LocalSource(an);
    srcs.add(src);
-   List<String> jars = new ArrayList<>();
+   List<String> jars = jarnames;
+   if (jars == null) jars = new ArrayList<>();
    
    JcompProject proj = ctrl.getProject(jars,srcs,false);
    try {
