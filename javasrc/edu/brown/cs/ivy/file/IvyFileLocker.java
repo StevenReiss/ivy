@@ -133,6 +133,24 @@ public void lock()
 }
 
 
+public boolean tryLock()
+{
+   if (lock_file == null) return false;
+   if (file_lock != null) return true;		// assumes only one lock per process
+   
+   try {
+      file_lock = lock_file.getChannel().tryLock();
+      if (file_lock != null) return true;
+    }
+   catch (IOException e) {
+      System.err.println("IVY: File lock failed for " + lock_name + ": " + e);
+      e.printStackTrace();
+    }
+   
+   return false;
+}
+
+
 
 
 public void unlock()
