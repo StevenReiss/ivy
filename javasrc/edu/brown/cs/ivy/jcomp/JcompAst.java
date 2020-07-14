@@ -74,6 +74,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -161,20 +162,31 @@ public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an)
    return getResolvedAst(ctrl,an,null);
 }
 
-   public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an,List<String> jarnames)
+public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an,List<String> jarnames)
 {
    if (an == null) return null;
    
+   return getResolvedAst(ctrl,Collections.singletonList(an),jarnames);
+}
+
+
+public static JcompProject getResolvedAst(JcompControl ctrl,List<ASTNode> srcasts,List<String> jarnames)
+{
+   if (srcasts == null || srcasts.isEmpty()) return null;
+   
    List<JcompSource> srcs = new ArrayList<>();
-   JcompSource src = new LocalSource(an);
-   srcs.add(src);
+   ASTNode sync = null;
+   for (ASTNode an : srcasts) {
+      JcompSource src = new LocalSource(an);
+      srcs.add(src);
+      if (sync == null) sync = an;
+    }
    List<String> jars = jarnames;
    if (jars == null) jars = new ArrayList<>();
    
    JcompProject proj = ctrl.getProject(jars,srcs,false);
    try {
-      ASTNode root = an.getRoot();
-      synchronized (root) {
+      synchronized (sync) {
          proj.resolve();
        }
     }
@@ -186,6 +198,9 @@ public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an)
    
    return proj;
 }
+
+
+
 
 
 private static class LocalSource implements JcompExtendedSource {
