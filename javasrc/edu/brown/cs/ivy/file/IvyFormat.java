@@ -117,9 +117,16 @@ public class IvyFormat {
 private static final DecimalFormat MEMORY_FORMAT = new DecimalFormat("0.0");
 private static final DecimalFormat COUNT_FORMAT = new DecimalFormat("0.0");
 private static final DecimalFormat PERCENT_FORMAT = new DecimalFormat("0.0");
-private static final DecimalFormat TIME_FORMAT = new DecimalFormat("0.00");
+private static final DecimalFormat TIME_FORMAT;
 private static final DecimalFormat INTERVAL_FORMAT = new DecimalFormat("0.0000");
 private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("0.00");
+
+
+static {
+   TIME_FORMAT = new DecimalFormat("0.00");
+   TIME_FORMAT.setMinimumFractionDigits(3);
+   TIME_FORMAT.setMaximumFractionDigits(3);
+}
 
 
 
