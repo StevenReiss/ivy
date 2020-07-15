@@ -158,6 +158,7 @@ JcompType defineKnownType(JcompTyper typer,String name)
       if (parent_context != null) {
 	 return parent_context.defineKnownType(typer,name);
        }
+      // define undefined type here
       return null;
     }
 
