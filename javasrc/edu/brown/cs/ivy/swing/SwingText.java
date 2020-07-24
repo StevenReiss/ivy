@@ -357,29 +357,6 @@ public static void fixKeyBindings(Keymap k)
 }
 
 
-public static void defineEditBindings(JTextComponent tc)
-{
-   int mask = getMenuShortcutKeyMaskEx();
-   KeyStroke cutkey = KeyStroke.getKeyStroke(KeyEvent.VK_X,mask);
-   KeyStroke pastekey = KeyStroke.getKeyStroke(KeyEvent.VK_V,mask);
-   KeyStroke copykey = KeyStroke.getKeyStroke(KeyEvent.VK_C,mask);
-   Keymap km = tc.getKeymap();
-   if (km == null) return;
-   if (km.getAction(cutkey) == null) {
-      km.addActionForKeyStroke(cutkey,new DefaultEditorKit.CutAction());
-    }
-   if (km.getAction(pastekey) == null) {
-      km.addActionForKeyStroke(pastekey,new DefaultEditorKit.PasteAction());
-    }
-   if (km.getAction(copykey) == null) {
-      km.addActionForKeyStroke(copykey,new DefaultEditorKit.CopyAction());
-    }
-   tc.setKeymap(km);
-}
-
-
-
-
 public static void fixKeyBindings(InputMap m)
 {
    if (m == null) return;
@@ -404,11 +381,30 @@ public static void fixKeyBindings(InputMap m)
    if (pm != null && pm != m) fixKeyBindings(pm);
 }
 
-//
-//   InputMap im = (InputMap) UIManager.get("TextField.focusInputMap");
-//   im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
-//   im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
-//   im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+
+
+
+public static void defineEditBindings(JTextComponent tc)
+{
+   int mask = getMenuShortcutKeyMaskEx();
+   KeyStroke cutkey = KeyStroke.getKeyStroke(KeyEvent.VK_X,mask);
+   KeyStroke pastekey = KeyStroke.getKeyStroke(KeyEvent.VK_V,mask);
+   KeyStroke copykey = KeyStroke.getKeyStroke(KeyEvent.VK_C,mask);
+   Keymap km = tc.getKeymap();
+   if (km == null) return;
+   if (km.getAction(cutkey) == null) {
+      km.addActionForKeyStroke(cutkey,new DefaultEditorKit.CutAction());
+    }
+   if (km.getAction(pastekey) == null) {
+      km.addActionForKeyStroke(pastekey,new DefaultEditorKit.PasteAction());
+    }
+   if (km.getAction(copykey) == null) {
+      km.addActionForKeyStroke(copykey,new DefaultEditorKit.CopyAction());
+    }
+   tc.setKeymap(km);
+}
+
+
 
 
 private static class MacKeyTypedAction extends TextAction {
@@ -457,6 +453,13 @@ private static class MacKeyTypedAction extends TextAction {
 
 public static int getMenuShortcutKeyMaskEx()
 {
+   if (System.getenv("USE_MAC_KEYS") != null) {
+      String s = System.getenv("USE_MAC_KEYS").toLowerCase();
+      if (!s.startsWith("n") && !s.startsWith("f") && !s.startsWith("0")) {
+         return InputEvent.META_DOWN_MASK;
+       }
+    }
+   
    Toolkit tk = Toolkit.getDefaultToolkit();
 
    try {
