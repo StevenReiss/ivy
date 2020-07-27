@@ -1139,7 +1139,11 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
          s = qt.getName() + "." + t.getName().getIdentifier();
        }
       JcompType jt = lookupPossibleType(s);
-      if (jt != null) setJavaType(t,jt);
+      if (jt != null) {
+         setJavaType(t,jt);
+         // if (JcompAst.getJavaType(t.getName()) == null) 
+            // setJavaType(t.getName(),jt);
+       }
       return false;
     }
 

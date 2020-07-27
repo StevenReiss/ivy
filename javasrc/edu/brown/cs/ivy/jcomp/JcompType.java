@@ -1587,12 +1587,12 @@ private static class ArrayType extends JcompType {
       int ndim = 1;
       JcompType bt = base_type;
       while (bt.isArrayType()) {
-	 bt = bt.getBaseType();
-	 ++ndim;
+         bt = bt.getBaseType();
+         ++ndim;
        }
       org.eclipse.jdt.core.dom.ArrayType at = ast.newArrayType(bt.createAstNode(ast));
       while (at.getDimensions() < ndim) {
-	 at.dimensions().add(ast.newDimension());
+         at.dimensions().add(ast.newDimension());
        }
       return at;
       // return ast.newArrayType(base_type.createAstNode(ast));
