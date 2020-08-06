@@ -1463,7 +1463,7 @@ private class TypePreSetter extends AbstractTypeSetter {
       String nm = t.getName().getIdentifier();
       if (type_prefix != null) nm = type_prefix + "." + nm;
       type_prefix = nm;
-
+   
       set_types = true;
       canbe_type = true;
       visitList(t.superInterfaceTypes());
@@ -1472,19 +1472,19 @@ private class TypePreSetter extends AbstractTypeSetter {
       set_types = false;
       visitList(t.enumConstants());
       visitList(t.bodyDeclarations());
-
+   
       // visitList(t.modifiers());
-
+   
       JcompType jt = JcompAst.getJavaType(t);
       for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-	 Type ity = (Type) it.next();
-	 jt.addInterface(JcompAst.getJavaType(ity));
+         Type ity = (Type) it.next();
+         jt.addInterface(JcompAst.getJavaType(ity));
        }
-
+   
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-
+   
       return false;
     }
 

@@ -76,7 +76,6 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Name;
 import org.eclipse.jdt.core.dom.NameQualifiedType;
-import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.eclipse.jdt.core.dom.NullLiteral;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
@@ -89,7 +88,6 @@ import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.QualifiedType;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SimpleType;
-import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
@@ -634,8 +632,8 @@ private class RefPass extends ASTVisitor {
    public @Override boolean visit(WildcardType n)			{ return false; }
    public @Override boolean visit(UnionType n)				{ return true; }
    public @Override boolean visit(IntersectionType n)			{ return true; }
-   public @Override boolean visit(NormalAnnotation n)			{ return false; }
-   public @Override boolean visit(SingleMemberAnnotation n)		{ return false; }
+   
+   
 
    public @Override void preVisit(ASTNode n) {
       JcompScope s = JcompAst.getJavaScope(n);
@@ -684,23 +682,23 @@ private class RefPass extends ASTVisitor {
       n.getExpression().accept(this);
       JcompType t = JcompAst.getExprType(n.getExpression());
       if (t == null) {
-	 t = findType(TYPE_ERROR);
-	 JcompAst.setExprType(n.getExpression(),t);
+         t = findType(TYPE_ERROR);
+         JcompAst.setExprType(n.getExpression(),t);
        }
       JcompSymbol js = null;
       if (t != null) js = t.lookupField(type_data,n.getName().getIdentifier());
       if (js == null && t != null && (t.isArrayType() || t.isErrorType()) &&
-	     n.getName().getIdentifier().equals("length")) {
-	 JcompAst.setExprType(n,findType("int"));
-	 return false;
+             n.getName().getIdentifier().equals("length")) {
+         JcompAst.setExprType(n,findType("int"));
+         return false;
        }
       if (js == null) {
-	 JcompAst.setExprType(n,findType(TYPE_ERROR));
+         JcompAst.setExprType(n,findType(TYPE_ERROR));
        }
       else {
-	 JcompAst.setReference(n.getName(),js);
-	 JcompType jt = js.getType();
-	 JcompAst.setExprType(n,jt);
+         JcompAst.setReference(n.getName(),js);
+         JcompType jt = js.getType();
+         JcompAst.setExprType(n,jt);
        }
       return false;
     }
@@ -710,16 +708,16 @@ private class RefPass extends ASTVisitor {
       if (qn != null) qn.accept(this);
       JcompSymbol js = null;
       if (cur_type != null) {
-	 JcompType jt = cur_type.getSuperType();
-	 if (jt != null) js = jt.lookupField(type_data,n.getName().getIdentifier());
+         JcompType jt = cur_type.getSuperType();
+         if (jt != null) js = jt.lookupField(type_data,n.getName().getIdentifier());
        }
       if (js == null) {
-	 JcompAst.setExprType(n,findType(TYPE_ERROR));
+         JcompAst.setExprType(n,findType(TYPE_ERROR));
        }
       else {
-	 JcompAst.setReference(n.getName(),js);
-	 JcompType t = js.getType();
-	 JcompAst.setExprType(n,t);
+         JcompAst.setReference(n.getName(),js);
+         JcompType t = js.getType();
+         JcompAst.setExprType(n,t);
        }
       return false;
     }
@@ -1208,48 +1206,48 @@ private class RefPass extends ASTVisitor {
    public @Override boolean visit(SwitchCase n) {
       SwitchStatement ss = null;
       for (ASTNode p = n; p != null; p = p.getParent()) {
-	 if (p instanceof SwitchStatement) {
-	    ss = (SwitchStatement) p;
-	    break;
-	  }
+         if (p instanceof SwitchStatement) {
+            ss = (SwitchStatement) p;
+            break;
+          }
        }
       if (ss != null) {
-	 JcompType switchtype = JcompAst.getExprType(ss.getExpression());
-	 if (switchtype != null && switchtype.isEnumType()) {
-	    switchtype.defineAll(type_data);
-	    if (!preview_needed) {
-	       try {
-		  for (Object o : n.expressions()) {
-		     if (o instanceof SimpleName) {
-			SimpleName sn = (SimpleName) o;
-			JcompSymbol js = switchtype.getScope().lookupVariable(sn.getIdentifier());
-			if (js != null && js.isEnumSymbol()) {
-			   JcompAst.setReference(sn,js);
-			   JcompAst.setExprType(sn,switchtype);
-			   return false;
-			 }
-		      }
-		   }
-		}
-	       catch (UnsupportedOperationException e) {
-		  preview_needed = true;
-		}
-	     }
-	    if (preview_needed) {
-	       Expression e = n.getExpression();
-	       if (e instanceof SimpleName) {
-		  SimpleName sn = (SimpleName) e;
-		  JcompSymbol js = switchtype.getScope().lookupVariable(sn.getIdentifier());
-		  if (js != null && js.isEnumSymbol()) {
-		     JcompAst.setReference(sn,js);
-		     JcompAst.setExprType(sn,switchtype);
-		     return false;
-		   }
-		}
-	     }
-	  }
+         JcompType switchtype = JcompAst.getExprType(ss.getExpression());
+         if (switchtype != null && switchtype.isEnumType()) {
+            switchtype.defineAll(type_data);
+            if (!preview_needed) {
+               try {
+        	  for (Object o : n.expressions()) {
+        	     if (o instanceof SimpleName) {
+        		SimpleName sn = (SimpleName) o;
+        		JcompSymbol js = switchtype.getScope().lookupVariable(sn.getIdentifier());
+        		if (js != null && js.isEnumSymbol()) {
+        		   JcompAst.setReference(sn,js);
+        		   JcompAst.setExprType(sn,switchtype);
+        		   return false;
+        		 }
+        	      }
+        	   }
+        	}
+               catch (UnsupportedOperationException e) {
+        	  preview_needed = true;
+        	}
+             }
+            if (preview_needed) {
+               Expression e = n.getExpression();
+               if (e instanceof SimpleName) {
+        	  SimpleName sn = (SimpleName) e;
+        	  JcompSymbol js = switchtype.getScope().lookupVariable(sn.getIdentifier());
+        	  if (js != null && js.isEnumSymbol()) {
+        	     JcompAst.setReference(sn,js);
+        	     JcompAst.setExprType(sn,switchtype);
+        	     return false;
+        	   }
+        	}
+             }
+          }
        }
-
+   
       return true;
     }
 
@@ -1391,80 +1389,80 @@ private class RefPass extends ASTVisitor {
    {
       JcompType rtyp = getReferenceType(r);
       if (rtyp == null || rtyp.getComponents() == null) {
-	 need_rescan = true;
-	 JcompAst.setExprType(r,type_data.findType(TYPE_ANY_CLASS));
-	 return false;
+         need_rescan = true;
+         JcompAst.setExprType(r,type_data.findType(TYPE_ANY_CLASS));
+         return false;
        }
       JcompType mtyp = null;
       JcompType ctyp = null;
       if (ref) {
-	 List<JcompType> comps = new ArrayList<>(rtyp.getComponents());
-	 comps.add(0,typ);
-	 ctyp = JcompType.createMethodType(rtyp.getBaseType(),comps,rtyp.isVarArgs(),null);
-	 ctyp = type_data.fixJavaType(ctyp);
+         List<JcompType> comps = new ArrayList<>(rtyp.getComponents());
+         comps.add(0,typ);
+         ctyp = JcompType.createMethodType(rtyp.getBaseType(),comps,rtyp.isVarArgs(),null);
+         ctyp = type_data.fixJavaType(ctyp);
        }
       if (rtyp.getComponents().size() >= 1) {
-	 List<JcompType> comps = new ArrayList<>(rtyp.getComponents());
-	 if (comps.get(0).isCompatibleWith(typ)) {
-	    comps.remove(0);
-	    mtyp = JcompType.createMethodType(rtyp.getBaseType(),comps,
-		  rtyp.isVarArgs(),null);
-	    mtyp = type_data.fixJavaType(mtyp);
-	  }
+         List<JcompType> comps = new ArrayList<>(rtyp.getComponents());
+         if (comps.get(0).isCompatibleWith(typ)) {
+            comps.remove(0);
+            mtyp = JcompType.createMethodType(rtyp.getBaseType(),comps,
+        	  rtyp.isVarArgs(),null);
+            mtyp = type_data.fixJavaType(mtyp);
+          }
        }
       // should handle type arguments
       boolean thisarg = false;
       JcompSymbol js = null;
       if (typ == null || typ.getScope() == null) return false;
-
+   
       Collection<JcompSymbol> mthds = typ.getScope().getDefinedMethods();
       for (JcompSymbol ms : mthds) {
-	 if (ms.getName().equals(id)) {
-	    if (ms.isStatic() && ms.getType().isCompatibleWith(rtyp)) {
-	       js = ms;
-	       break;
-	     }
-	    else if (!ms.isStatic() && mtyp != null &&
-		  ms.getType().isCompatibleWith(mtyp)) {
-	       thisarg = true;
-	       js = ms;
-	       break;
-	     }
-	    else if (!ms.isStatic() && ctyp != null &&
-		  ms.getType().isCompatibleWith(ctyp)) {
-	       js = ms;
-	       break;
-	     }
-	    else if (!ms.isStatic() && ref &&
-		  ms.getType().isCompatibleWith(rtyp)) {
-	       thisarg = true;
-	       js = ms;
-	       break;
-	     }
-	 }
+         if (ms.getName().equals(id)) {
+            if (ms.isStatic() && ms.getType().isCompatibleWith(rtyp)) {
+               js = ms;
+               break;
+             }
+            else if (!ms.isStatic() && mtyp != null &&
+        	  ms.getType().isCompatibleWith(mtyp)) {
+               thisarg = true;
+               js = ms;
+               break;
+             }
+            else if (!ms.isStatic() && ctyp != null &&
+        	  ms.getType().isCompatibleWith(ctyp)) {
+               js = ms;
+               break;
+             }
+            else if (!ms.isStatic() && ref &&
+        	  ms.getType().isCompatibleWith(rtyp)) {
+               thisarg = true;
+               js = ms;
+               break;
+             }
+         }
        }
-
+   
       if (js != null) {
-	 JcompAst.setReference(r,js);
-	 JcompType styp = js.getType();
-	 JcompType nstype = null;
-	 if (thisarg) {
-	    List<JcompType> comps = new ArrayList<>(styp.getComponents());
-	    comps.add(0,js.getClassType());
-	    nstype = styp;
-	    styp = JcompType.createMethodType(styp.getBaseType(),comps,
-		  styp.isVarArgs(),null);
-	    styp = type_data.fixJavaType(styp);
-	  }
-	 JcompSymbol rsym = JcompAst.getDefinition(r);
-	 JcompType reftype = JcompType.createFunctionRefType(styp,nstype,rsym,js);
-	 JcompAst.setExprType(r,reftype);
-	 JcompAst.setJavaType(r,reftype);
+         JcompAst.setReference(r,js);
+         JcompType styp = js.getType();
+         JcompType nstype = null;
+         if (thisarg) {
+            List<JcompType> comps = new ArrayList<>(styp.getComponents());
+            comps.add(0,js.getClassType());
+            nstype = styp;
+            styp = JcompType.createMethodType(styp.getBaseType(),comps,
+        	  styp.isVarArgs(),null);
+            styp = type_data.fixJavaType(styp);
+          }
+         JcompSymbol rsym = JcompAst.getDefinition(r);
+         JcompType reftype = JcompType.createFunctionRefType(styp,nstype,rsym,js);
+         JcompAst.setExprType(r,reftype);
+         JcompAst.setJavaType(r,reftype);
        }
       else {
-	 JcompAst.setExprType(r,findType(TYPE_ERROR));
+         JcompAst.setExprType(r,findType(TYPE_ERROR));
        }
-
+   
       return true;
    }
 

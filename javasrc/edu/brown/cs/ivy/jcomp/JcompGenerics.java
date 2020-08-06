@@ -848,6 +848,7 @@ private static class MethodVarTypeFinder extends SignatureVisitor {
       super(Opcodes.ASM6);
       type_data = typer;
       type_map = typs;
+      if (typ == null) typ = typer.findSystemType("java.lang.Object");
       if (typ.isFunctionRef()) typ = typ.getBaseType();
       base_type = typ;
       cur_type = base_type;
