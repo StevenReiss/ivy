@@ -137,7 +137,7 @@ public SwingRangeSlider(int min,int max,int dec,int val)
    if (val > max) val = max;
    setValue(val);
 
-   int del = max - min;
+   int del = max - min + 1;
    int fct = 0;
    int minv = min;
    while (del > 10) {
@@ -150,8 +150,9 @@ public SwingRangeSlider(int min,int max,int dec,int val)
       minv *= 10;
       delv *= 10;
     }
-   int ct = (max-min)/delv;
+   int ct = (max-min+1)/delv;
    if (ct > 5) delv *= 2;
+   else if (ct <= 2) delv /= 2;
 
    double decv = 1;
    for (int i = 0; i < dec; ++i) decv *= 10;
