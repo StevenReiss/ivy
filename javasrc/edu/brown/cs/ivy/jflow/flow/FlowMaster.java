@@ -193,10 +193,10 @@ public FlowMaster(JflowControl factory)
 
    class_path = ".";
    base_path = null;
-   class_set = new LinkedHashSet<String>();
-   special_files = new ArrayList<String>();
-   used_classes = new HashSet<BT_Class>();
-   model_sources = new HashMap<JflowModelSource,SourceBase>();
+   class_set = new LinkedHashSet<>();
+   special_files = new ArrayList<>();
+   used_classes = new HashSet<>();
+   model_sources = new HashMap<>();
    start_class = null;
 
    detail_data = null;

@@ -285,7 +285,7 @@ void noteInterfaces(Collection<?> ifs)
 
 private synchronized void addChild(JcodeDataType bdt)
 {
-   if (child_types == null) child_types = new ArrayList<JcodeDataType>();
+   if (child_types == null) child_types = new ArrayList<>();
    child_types.add(bdt);
 }
 
@@ -398,7 +398,7 @@ public JcodeDataType findCommonParent(JcodeDataType t2)
    if (t2 == this) return t2;
 
    synchronized (this) {
-      if (parent_map == null) parent_map = new HashMap<JcodeDataType,JcodeDataType>();
+      if (parent_map == null) parent_map = new HashMap<>();
     }
 
    boolean setother = false;

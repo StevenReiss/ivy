@@ -198,7 +198,7 @@ void finish()
 void patch(BT_Class bc)
 {
    boolean chng = true;
-   Set<BT_Method> done = new HashSet<BT_Method>();
+   Set<BT_Method> done = new HashSet<>();
 
    patch_type.getInstrumenter().startClass(bc);
 

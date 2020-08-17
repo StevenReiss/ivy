@@ -461,7 +461,7 @@ private ValueBase processMethod(BT_Method bm,List<ValueBase> args,boolean virt,
       MethodBase mi0 = findMethod(caller,calins,bm0,nargs);
       Set<MethodBase> s = rename_map.get(mi0);
       if (s == null) {
-	 s = new HashSet<MethodBase>();
+	 s = new HashSet<>();
 	 rename_map.put(mi0,s);
        }
       s.add(mi);

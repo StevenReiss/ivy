@@ -418,7 +418,7 @@ public static class TestIOControl extends TestControl {
    private Map<String,TestEvent> event_map;
 
    TestIOControl() {
-      event_map = new HashMap<String,TestEvent>();
+      event_map = new HashMap<>();
     }
 
    @Override public JflowModelSource createModelSource(JflowMethod m,int ino,BT_Ins ins,JflowValue base) {

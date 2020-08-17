@@ -1537,7 +1537,7 @@ private void queueMethod(MethodBase cm,BT_Ins ins)
 
    Set<BT_Ins> s = imethod_queue.get(cm);
    if (s == null) {
-      s = new HashSet<BT_Ins>();
+      s = new HashSet<>();
       imethod_queue.put(cm,s);
     }
 

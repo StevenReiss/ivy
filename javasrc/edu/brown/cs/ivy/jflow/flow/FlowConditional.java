@@ -466,7 +466,7 @@ private AccessSafety checkSafeCallAccess(BT_Method bm,int argno)
 {
    Map<Integer,AccessSafety> m = call_access.get(bm);
    if (m == null) {
-      m = new HashMap<Integer,AccessSafety>();
+      m = new HashMap<>();
       call_access.put(bm,m);
     }
    AccessSafety as = m.get(argno);

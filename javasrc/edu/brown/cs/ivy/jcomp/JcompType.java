@@ -2193,7 +2193,7 @@ private static abstract class CompiledClassInterfaceType extends ClassInterfaceT
       if (js == null && basetype == this) {
          Set<JcompType> args = method_names.get(id);
          if (args == null) {
-            args = new HashSet<JcompType>();
+            args = new HashSet<>();
             method_names.put(id,args);
           }
          atyps = typer.fixJavaType(atyps);

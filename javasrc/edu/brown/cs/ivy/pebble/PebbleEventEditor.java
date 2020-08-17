@@ -499,7 +499,7 @@ private class EditEventDialog extends SwingGridPanel implements ActionListener {
 
    EditEventDialog(PebbleEvent evt) {
       for_event = evt;
-      prop_fields = new HashMap<String,Component>();
+      prop_fields = new HashMap<>();
    
       EventType et = evt.getEventType();
       beginLayout();
@@ -509,7 +509,7 @@ private class EditEventDialog extends SwingGridPanel implements ActionListener {
       label_field = addTextField("Event Label",evt.getLabel(),this,null);
    
       Object [] nds = for_editor.getEditModel().getNodes();
-      TreeSet<String> vset = new TreeSet<String>();
+      TreeSet<String> vset = new TreeSet<>();
       for (int i = 0; i < nds.length; ++i) {
          if (nds[i] instanceof PebbleState) {
             PebbleState ps = (PebbleState) nds[i];

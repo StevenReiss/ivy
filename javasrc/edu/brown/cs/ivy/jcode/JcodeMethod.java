@@ -215,7 +215,7 @@ public JcodeDataType getReturnType()
 
 public List<JcodeDataType> getExceptionTypes()
 {
-   List<JcodeDataType> rslt = new ArrayList<JcodeDataType>();
+   List<JcodeDataType> rslt = new ArrayList<>();
    for (int i = 0; i < exceptions.size(); ++i) {
       String enm = exceptions.get(i);
       JcodeDataType fdt = bcode_factory.findClassType(enm);
@@ -227,7 +227,7 @@ public List<JcodeDataType> getExceptionTypes()
 
 public List<JcodeClass> getExceptionClasses()
 {
-   List<JcodeClass> rslt = new ArrayList<JcodeClass>();
+   List<JcodeClass> rslt = new ArrayList<>();
    for (int i = 0; i < exceptions.size(); ++i) {
       String enm = exceptions.get(i);
       JcodeClass fdt = bcode_factory.findClass(enm);

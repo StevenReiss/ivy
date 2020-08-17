@@ -134,7 +134,7 @@ private Map<String,JcompType> type_map;
 
 private JcompContext	 type_context;
 
-private static Map<String,JcompType> system_types = new HashMap<String,JcompType>();
+private static Map<String,JcompType> system_types = new HashMap<>();
 
 private final String [] BASE_TYPES = { "byte", "short", "char", "int", "long", "float",
 					  "double", "boolean", "void" };
@@ -164,9 +164,9 @@ JcompTyper(JcompContext ctx)
 {
    type_context = ctx;
 
-   initial_types = new HashMap<String,String>();
+   initial_types = new HashMap<>();
 
-   type_map = new ConcurrentHashMap<String,JcompType>();
+   type_map = new ConcurrentHashMap<>();
 
    BYTE_TYPE = definePrimitive(PrimitiveType.BYTE);
    SHORT_TYPE = definePrimitive(PrimitiveType.SHORT);
@@ -505,13 +505,13 @@ void defineAll(String cls,JcompScope scp)
 
 void assignTypes(JcompProjectImpl root)
 {
-   Map<ASTNode,Map<String,String>> specmap = new HashMap<ASTNode,Map<String,String>>();
-   Map<ASTNode,List<String>> prefmap = new HashMap<ASTNode,List<String>>();
+   Map<ASTNode,Map<String,String>> specmap = new HashMap<>();
+   Map<ASTNode,List<String>> prefmap = new HashMap<>();
 
    for (ASTNode cu : root.getTrees()) {
-      Map<String,String> specificnames = new HashMap<String,String>();
+      Map<String,String> specificnames = new HashMap<>();
       specmap.put(cu,specificnames);
-      List<String> prefixes = new ArrayList<String>();
+      List<String> prefixes = new ArrayList<>();
       prefixes.add("java.lang.");
       prefmap.put(cu,prefixes);
 
@@ -520,7 +520,7 @@ void assignTypes(JcompProjectImpl root)
     }
 
    for (ASTNode cu : root.getTrees()) {
-      Map<String,String> knownnames = new HashMap<String,String>(initial_types);
+      Map<String,String> knownnames = new HashMap<>(initial_types);
       Map<String,String> specificnames = specmap.get(cu);
       List<String> prefixes = prefmap.get(cu);
 

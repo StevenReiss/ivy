@@ -135,7 +135,7 @@ public class IvyExecQuery
 
 public static String [] getCommandLine()
 {
-   List<String> cmds = new ArrayList<String>();
+   List<String> cmds = new ArrayList<>();
 
    try {
       File f = new File("/proc/self/cmdline");

@@ -292,7 +292,7 @@ private AbstractTypeDeclaration findTypeDecl(String cls,List<?> typs)
 
 @Override public Set<String> getRelatedPackages()
 {
-   Set<String> rslt = new HashSet<String>();
+   Set<String> rslt = new HashSet<>();
    CompilationUnit cu = getRootNode();
    if (cu == null) return rslt;
 

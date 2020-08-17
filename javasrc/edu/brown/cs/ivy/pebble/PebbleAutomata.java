@@ -139,11 +139,11 @@ PebbleAutomata(PebbleEditor pe)
    for_editor = pe;
    state_counter = 1;
    start_state = null;
-   state_set = new HashSet<PebbleState>();
-   transition_set = new HashSet<PebbleTransition>();
-   event_set = new TreeMap<String,PebbleEvent>();
-   match_set = new TreeMap<String,String>();
-   attribute_values = new HashMap<AutomataProperty,String>();
+   state_set = new HashSet<>();
+   transition_set = new HashSet<>();
+   event_set = new TreeMap<>();
+   match_set = new TreeMap<>();
+   attribute_values = new HashMap<>();
 }
 
 

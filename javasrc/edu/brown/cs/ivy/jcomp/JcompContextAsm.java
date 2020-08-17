@@ -221,7 +221,7 @@ List<JcompSymbol> defineKnownStatics(JcompTyper typer,String cls,String id,Jcomp
    AsmClass ac = findKnownType(typer,cls);
    if (ac == null) return null;
 
-   List<JcompSymbol> rslt = new ArrayList<JcompSymbol>();
+   List<JcompSymbol> rslt = new ArrayList<>();
 
    List<AsmMethod> aml = ac.findMethods(typer,id,null,ctyp);
    if (aml != null) {

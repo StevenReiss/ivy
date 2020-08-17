@@ -326,7 +326,7 @@ public JcodeField findInheritedField(String nm)
 
 public List<JcodeField> findAllFields(String nm)
 {
-   List<JcodeField> rslt = new ArrayList<JcodeField>();
+   List<JcodeField> rslt = new ArrayList<>();
    for (Object o : fields) {
       JcodeField jf = (JcodeField) o;
       if (nm != null && !jf.getName().equals(nm)) continue;
@@ -392,7 +392,7 @@ public Collection<JcodeMethod> findParentMethods(String nm,String desc,
 public Collection<JcodeMethod> findChildMethods(String nm,String desc,boolean check,
 					    Collection<JcodeMethod> rslt)
 {
-   if (rslt == null) rslt = new HashSet<JcodeMethod>();
+   if (rslt == null) rslt = new HashSet<>();
    int sz0 = rslt.size();
    
    if (check) {

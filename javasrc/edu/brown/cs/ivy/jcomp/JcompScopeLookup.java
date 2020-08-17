@@ -315,7 +315,7 @@ void getFields(Map<String,JcompType> flds,JcompScope scope)
 
 Set<JcompSymbol> lookupAbstracts(JcompTyper typer)
 {
-   Set<JcompSymbol> rslt = new HashSet<JcompSymbol>();
+   Set<JcompSymbol> rslt = new HashSet<>();
 
    synchronized (method_names) {
       for (List<MethodElement> lme : method_names.values()) {

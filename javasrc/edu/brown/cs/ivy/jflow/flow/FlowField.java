@@ -343,7 +343,7 @@ void resetupFields(StateBase st,ValueBase base,BT_Class bc)
 {
    if (MethodSpecial.isClassSpecial(bc)) return;
 
-   Set<BT_Field> done = new HashSet<BT_Field>();
+   Set<BT_Field> done = new HashSet<>();
 
    for (BT_Field fld : st.getKnownFields()) {
       done.add(fld);

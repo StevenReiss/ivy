@@ -361,21 +361,21 @@ private class DefPass extends ASTVisitor {
 
    public @Override void preVisit(ASTNode n) {
       switch (n.getNodeType()) {
-	 case ASTNode.ANONYMOUS_CLASS_DECLARATION :
-	 case ASTNode.TYPE_DECLARATION :
-	 case ASTNode.ENUM_DECLARATION :
-	 case ASTNode.INITIALIZER :
-	 case ASTNode.BLOCK :
-	 case ASTNode.CATCH_CLAUSE :
-	 case ASTNode.FOR_STATEMENT :
-	 case ASTNode.ENHANCED_FOR_STATEMENT :
-	 case ASTNode.SWITCH_STATEMENT :
-	 case ASTNode.ANNOTATION_TYPE_DECLARATION :
-	    cur_scope = new JcompScopeAst(cur_scope);
-	    JcompType jt = JcompAst.getJavaType(n);
-	    if (jt != null) jt.setScope(cur_scope);
-	    JcompAst.setJavaScope(n,cur_scope);
-	    break;
+         case ASTNode.ANONYMOUS_CLASS_DECLARATION :
+         case ASTNode.TYPE_DECLARATION :
+         case ASTNode.ENUM_DECLARATION :
+         case ASTNode.INITIALIZER :
+         case ASTNode.BLOCK :
+         case ASTNode.CATCH_CLAUSE :
+         case ASTNode.FOR_STATEMENT :
+         case ASTNode.ENHANCED_FOR_STATEMENT :
+         case ASTNode.SWITCH_STATEMENT :
+         case ASTNode.ANNOTATION_TYPE_DECLARATION :
+            cur_scope = new JcompScopeAst(cur_scope);
+            JcompType jt = JcompAst.getJavaType(n);
+            if (jt != null) jt.setScope(cur_scope);
+            JcompAst.setJavaScope(n,cur_scope);
+            break;
        }
     }
 
@@ -388,33 +388,33 @@ private class DefPass extends ASTVisitor {
    public @Override boolean visit(ImportDeclaration n) {
       Name nm = n.getName();
       if (nm.isQualifiedName()) {
-	 QualifiedName qn = (QualifiedName) nm;
-	 JcompType jt1 = JcompAst.getJavaType(qn);
-	 JcompType jt = JcompAst.getJavaType(qn.getQualifier());
-	 String inm = qn.getName().getIdentifier();
-	 if (jt != null && jt1 == null) {
-	    jt.defineAll(type_data);
-	    List<JcompSymbol> defs = jt.lookupStatics(type_data,inm);
-	    if (defs != null) {
-	       for (JcompSymbol js : defs) {
-		  if (js.isMethodSymbol()) cur_scope.defineMethod(js);
-		  else cur_scope.defineVar(js);
-		}
-	     }
-	  }
-	 else if (n.isOnDemand() && n.isStatic() && jt1 != null) {
-	    jt1.defineAll(type_data);
-	    List<JcompSymbol> defs = jt1.lookupStatics(type_data,null);
-	    if (defs != null) {
-	       for (JcompSymbol js : defs) {
-		  if (js.isMethodSymbol()) {
-		     if (js.isConstructorSymbol()) continue;
-		     cur_scope.defineMethod(js);
-		   }
-		  else cur_scope.defineVar(js);
-		}
-	     }
-	  }
+         QualifiedName qn = (QualifiedName) nm;
+         JcompType jt1 = JcompAst.getJavaType(qn);
+         JcompType jt = JcompAst.getJavaType(qn.getQualifier());
+         String inm = qn.getName().getIdentifier();
+         if (jt != null && jt1 == null) {
+            jt.defineAll(type_data);
+            List<JcompSymbol> defs = jt.lookupStatics(type_data,inm);
+            if (defs != null) {
+               for (JcompSymbol js : defs) {
+        	  if (js.isMethodSymbol()) cur_scope.defineMethod(js);
+        	  else cur_scope.defineVar(js);
+        	}
+             }
+          }
+         else if (n.isOnDemand() && n.isStatic() && jt1 != null) {
+            jt1.defineAll(type_data);
+            List<JcompSymbol> defs = jt1.lookupStatics(type_data,null);
+            if (defs != null) {
+               for (JcompSymbol js : defs) {
+        	  if (js.isMethodSymbol()) {
+        	     if (js.isConstructorSymbol()) continue;
+        	     cur_scope.defineMethod(js);
+        	   }
+        	  else cur_scope.defineVar(js);
+        	}
+             }
+          }
        }
       return false;
     }
@@ -516,9 +516,9 @@ private class DefPass extends ASTVisitor {
       JcompAst.setDefinition(n,js);
       JcompAst.setDefinition(n.getName(),js);
       if (jt.needsOuterClass()) {
-	 // define field symbol for this$0
-	 JcompSymbol thisjs = JcompSymbol.createNestedThis(jt,jt.getOuterType());
-	 jt.getScope().defineVar(thisjs);
+         // define field symbol for this$0
+         JcompSymbol thisjs = JcompSymbol.createNestedThis(jt,jt.getOuterType());
+         jt.getScope().defineVar(thisjs);
        }
     }
 
@@ -1592,13 +1592,13 @@ private class RefPass extends ASTVisitor {
       if (js.getType().getSignature() == null && js.getSignature() == null) return;
       need_rescan = false;
       for (Object o : args) {
-	 JcompType jt = JcompAst.getExprType((ASTNode) o);
-	 if (jt != null && jt.isErrorType())
-	    return;
+         JcompType jt = JcompAst.getExprType((ASTNode) o);
+         if (jt != null && jt.isErrorType())
+            return;
        }
       for (Object o : args) {
-	 Expression arge = (Expression) o;
-	 arge.accept(this);
+         Expression arge = (Expression) o;
+         arge.accept(this);
        }
    }
 

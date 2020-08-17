@@ -598,7 +598,7 @@ public JcodeMethod findInheritedMethod(String cls,String nm,String desc)
    JcodeClass bc = known_classes.get(cls);
    if (bc == null) return null;
 
-   List<JcodeMethod> rslt = new ArrayList<JcodeMethod>();
+   List<JcodeMethod> rslt = new ArrayList<>();
    bc.findParentMethods(nm,desc,true,true,rslt);
 
    if (rslt.isEmpty()) return null;

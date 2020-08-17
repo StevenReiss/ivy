@@ -92,7 +92,7 @@ class LocalType implements JflowConstants
 /*										*/
 /********************************************************************************/
 
-private static Map<String,LocalType>	local_types = new HashMap<String,LocalType>();
+private static Map<String,LocalType>	local_types = new HashMap<>();
 
 
 
@@ -127,7 +127,7 @@ private String type_name;
 private String type_description;
 private BT_Class base_type;
 
-private static Map<String,List<LocalOp>> operator_set = new HashMap<String,List<LocalOp>>();
+private static Map<String,List<LocalOp>> operator_set = new HashMap<>();
 private static LocalType	ANY_TYPE = new LocalType();
 
 

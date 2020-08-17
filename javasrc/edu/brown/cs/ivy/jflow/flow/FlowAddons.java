@@ -130,7 +130,7 @@ void addFieldChecks(BT_Field fld)
    SourceSet sset = jflow_master.createSingletonSet(src);
    ValueBase sval = jflow_master.objectValue(fld.type,sset,JflowFlags.NON_NULL);
 
-   Map<BT_Ins,Set<Integer>> done = new HashMap<BT_Ins,Set<Integer>>();
+   Map<BT_Ins,Set<Integer>> done = new HashMap<>();
 
    for (Enumeration<?> e = fld.accessors.elements(); e.hasMoreElements(); ) {
       BT_Accessor ba = (BT_Accessor) e.nextElement();

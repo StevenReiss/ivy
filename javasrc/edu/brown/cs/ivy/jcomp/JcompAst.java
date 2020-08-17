@@ -752,7 +752,7 @@ private static class ReturnCheck extends ASTVisitor {
 
 public static Set<JcompType> findExceptions(ASTNode n)
 {
-   if (n == null) return new HashSet<JcompType>();
+   if (n == null) return new HashSet<>();
 
    ExceptionFinder ef = new ExceptionFinder();
    n.accept(ef);

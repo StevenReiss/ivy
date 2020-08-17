@@ -129,15 +129,15 @@ FlowDetails(FlowMaster ch)
 
    proj_field_detail = true;
    lib_field_detail = false;
-   field_map = new HashMap<BT_Field,Boolean>();
+   field_map = new HashMap<>();
 
    proj_method_detail = InlineType.THIS;
    lib_method_detail = InlineType.DEFAULT;
-   method_map = new HashMap<BT_Method,InlineType>();
+   method_map = new HashMap<>();
 
    proj_source_detail = true;
    lib_source_detail = true;
-   source_map = new HashMap<BT_Class,SourceDetail>();
+   source_map = new HashMap<>();
 }
 
 
@@ -401,15 +401,15 @@ private abstract class MemberDetail {
    protected Set<BT_Class> classSet()		{ return classSet(for_class,null); }
 
    private Set<BT_Class> classSet(BT_Class bc,Set<BT_Class> s) {
-      if (s == null) s = new HashSet<BT_Class>();
+      if (s == null) s = new HashSet<>();
       s.add(bc);
       if (getInherit()) {
-	 for (Enumeration<?> e = bc.getKids().elements(); e.hasMoreElements(); ) {
-	    BT_Class sc = (BT_Class) e.nextElement();
-	    if (!s.contains(sc)) classSet(sc,s);
-	  }
+         for (Enumeration<?> e = bc.getKids().elements(); e.hasMoreElements(); ) {
+            BT_Class sc = (BT_Class) e.nextElement();
+            if (!s.contains(sc)) classSet(sc,s);
+          }
        }
-
+   
       return s;
     }
 

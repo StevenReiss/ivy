@@ -135,13 +135,13 @@ private JFileChooser file_chooser;
 
 public PebbleXmlModel(String xmlfile)
 {
-   event_map = new TreeMap<String,Event>();
-   action_set = new Vector<XmlAction>();
-   condition_set = new Vector<Condition>();
+   event_map = new TreeMap<>();
+   action_set = new Vector<>();
+   condition_set = new Vector<>();
    transition_actions = false;
    state_actions = false;
    format_xml = null;
-   attribute_set = new Vector<AutomataProperty>();
+   attribute_set = new Vector<>();
    String cwd = System.getProperty("user.dir");
    file_chooser = new JFileChooser(new File(cwd));
 

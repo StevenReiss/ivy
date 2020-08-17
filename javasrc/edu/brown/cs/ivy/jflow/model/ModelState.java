@@ -310,7 +310,7 @@ void extendTo(int lno)
     }
 
    if (line_blocks == null) {
-      line_blocks = new TreeSet<LineBlock>();
+      line_blocks = new TreeSet<>();
       LineBlock lb = new LineBlock(line_number,end_line);
       line_blocks.add(lb);
     }
