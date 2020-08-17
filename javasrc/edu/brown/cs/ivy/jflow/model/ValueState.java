@@ -99,8 +99,8 @@ private ModelValue	 active_thread;
 ValueState(int numlocal)
 {
    local_values = new ModelValue[numlocal];
-   stack_values = new Stack<ModelValue>();
-   field_map = new HashMap<BT_Field,ModelValue>(4);
+   stack_values = new Stack<>();
+   field_map = new HashMap<>(4);
    state_set = null;
    return_stack = null;
    active_thread = null;
@@ -296,7 +296,7 @@ public boolean mergeThread(ModelValue thrd)
 
 public void pushReturn(int nino)
 {
-   if (return_stack == null) return_stack = new Stack<Integer>();
+   if (return_stack == null) return_stack = new Stack<>();
    return_stack.push(Integer.valueOf(nino));
 }
 

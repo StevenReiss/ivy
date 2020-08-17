@@ -135,8 +135,8 @@ public ProtoCollection(FlowMaster jm,BT_Class bc)
    enum_source = null;
    comparator_value = null;
 
-   first_element = new HashSet<FlowCallSite>(4);
-   element_change = new HashSet<FlowCallSite>();
+   first_element = new HashSet<>(4);
+   element_change = new HashSet<>();
 }
 
 

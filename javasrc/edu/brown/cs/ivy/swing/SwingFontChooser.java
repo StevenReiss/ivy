@@ -144,7 +144,7 @@ public SwingFontChooser(String nm,Font font)
 public SwingFontChooser(String nm,Font font,Color c,int opts)
 {
    action_name = nm;
-   action_listeners = new SwingEventListenerList<ActionListener>(ActionListener.class);
+   action_listeners = new SwingEventListenerList<>(ActionListener.class);
    if (c == null) opts |= FONT_FIXED_COLOR;
    choice_options = opts;
 

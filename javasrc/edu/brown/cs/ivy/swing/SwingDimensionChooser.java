@@ -106,7 +106,7 @@ private final static long serialVersionUID = 1;
 public SwingDimensionChooser(String nm,int w,int h)
 {
    action_name = nm;
-   action_listeners = new SwingEventListenerList<ActionListener>(ActionListener.class);
+   action_listeners = new SwingEventListenerList<>(ActionListener.class);
 
    if (w < 0) w = 200;
    if (h < 0) h = 200;

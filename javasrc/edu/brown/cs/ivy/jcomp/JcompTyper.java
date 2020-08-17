@@ -529,7 +529,7 @@ void assignTypes(JcompProjectImpl root)
     }
 
    for (ASTNode cu : root.getTrees()) {
-      Map<String,String> knownnames = new HashMap<String,String>(initial_types);
+      Map<String,String> knownnames = new HashMap<>(initial_types);
       Map<String,String> specificnames = specmap.get(cu);
       List<String> prefixes = prefmap.get(cu);
 

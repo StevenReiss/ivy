@@ -111,7 +111,7 @@ private Object		exec_lock;
 
 IvyExecFiles()
 {
-   active_copies = new LinkedList<FileCopy>();
+   active_copies = new LinkedList<>();
    exec_lock = new Object();
 
    new FileCopy(null,null);		// force load

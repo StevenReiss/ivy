@@ -148,7 +148,7 @@ StateBase cloneState()
 
    if (return_stack == null) ns.return_stack = null;
    else {
-      ns.return_stack = new Stack<Integer>();
+      ns.return_stack = new Stack<>();
       ns.return_stack.addAll(return_stack);
     }
 
@@ -390,7 +390,7 @@ Iterator<BT_Class> getInitializations()
 
 void pushReturn(int nino)
 {
-   if (return_stack == null) return_stack = new Stack<Integer>();
+   if (return_stack == null) return_stack = new Stack<>();
    return_stack.push(Integer.valueOf(nino));
 }
 

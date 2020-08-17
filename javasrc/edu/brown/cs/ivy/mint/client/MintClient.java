@@ -227,10 +227,10 @@ public MintClient(String id,MintSyncMode mode)
    if (mode == MintSyncMode.MULTIPLE) mode = MintSyncMode.ONLY_REPLIES;
 
    synch_mode = mode;
-   message_queue = new LinkedList<Object>();
-   reply_queue = new LinkedList<Object>();
-   reply_hash = new HashMap<Integer,ActiveInfo>();
-   pattern_hash = new HashMap<Integer,PatternInfo>();
+   message_queue = new LinkedList<>();
+   reply_queue = new LinkedList<>();
+   reply_hash = new HashMap<>();
+   pattern_hash = new HashMap<>();
    reply_counter = 1;
    pat_counter = 1;
    mint_name = id;

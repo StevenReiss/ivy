@@ -162,13 +162,13 @@ static void stateMinimize(ModelMaster jm,JflowModel.Node s)
 
 void minimize(JflowModel.Node s)
 {
-   Vector<LinkedList<JflowModel.Node>> newstates = new Vector<LinkedList<JflowModel.Node>>();
-   Set<JflowModel.Node> done = new HashSet<JflowModel.Node>();
-   Map<JflowModel.Node,JflowModel.Node> statemap = new HashMap<JflowModel.Node,JflowModel.Node>();
+   Vector<LinkedList<JflowModel.Node>> newstates = new Vector<>();
+   Set<JflowModel.Node> done = new HashSet<>();
+   Map<JflowModel.Node,JflowModel.Node> statemap = new HashMap<>();
 
    LinkedList<JflowModel.Node> l = getStateList(s,done,null,statemap,s);
    newstates.add(l);
-   LinkedList<JflowModel.Node> allst = new LinkedList<JflowModel.Node>(l);
+   LinkedList<JflowModel.Node> allst = new LinkedList<>(l);
 
    boolean chng = true;
    while (chng) {
@@ -246,7 +246,7 @@ private LinkedList<JflowModel.Node> getStateList(JflowModel.Node s,Set<JflowMode
    if (done.contains(s)) return l;
    done.add(s);
 
-   if (l == null) l = new LinkedList<JflowModel.Node>();
+   if (l == null) l = new LinkedList<>();
    l.add(s);
    statemap.put(s,s0);
 

@@ -211,7 +211,7 @@ ModelMethod createAutomata()
 
    JflowEvent evt = model_master.findEvent(for_method,null,true,null);
    sst = addEventState(0,sst,evt);
-   Stack<Integer> jsrs = new Stack<Integer>();
+   Stack<Integer> jsrs = new Stack<>();
 
    if (event_gen.isStartMethod(for_method)) {
       for (JflowMethod cfm : model_master.getStaticInitializers()) {
@@ -229,7 +229,7 @@ ModelMethod createAutomata()
     }
 
    state_map = new StateMap();
-   work_queue = new LinkedList<InsState>();
+   work_queue = new LinkedList<>();
 
    if (ins_vector != null) addToQueue(0,sst,jsrs,model_master.getStartState(for_method));
 
@@ -456,7 +456,7 @@ private Stack<Integer> cloneStack(Stack<Integer> j)
 {
    if (j == null) return null;
 
-   Stack<Integer> nj = new Stack<Integer>();
+   Stack<Integer> nj = new Stack<>();
    nj.addAll(j);
 
    if (model_master.doDebug() && !j.equals(nj))
@@ -1334,7 +1334,7 @@ private void addEventValue(ModelValue mv)
 private void prefixEventValue(ModelValue mv)
 {
    if (event_values == null) {
-      event_values = new LinkedList<Object>();
+      event_values = new LinkedList<>();
     }
    event_values.add(0,mv.getProgramValue());
 }

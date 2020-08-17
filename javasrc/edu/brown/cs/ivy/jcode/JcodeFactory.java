@@ -117,7 +117,7 @@ public JcodeFactory(int nth)
    path_set = new HashSet<>();
    user_paths = new ArrayList<>();
 
-   work_list = new LinkedList<String>();
+   work_list = new LinkedList<>();
    num_threads = nth;
 
    setupClassPath();
@@ -707,10 +707,10 @@ private class LoadExecutor extends ThreadPoolExecutor implements ThreadFactory {
 
 
    LoadExecutor(int nth) {
-      super(nth,nth,10,TimeUnit.SECONDS,new LinkedBlockingQueue<Runnable>());
+      super(nth,nth,10,TimeUnit.SECONDS,new LinkedBlockingQueue<>());
       num_active = 0;
       work_pending = true;
-      work_items = new ConcurrentHashMap<String,Object>();
+      work_items = new ConcurrentHashMap<>();
       setThreadFactory(this);
     }
 

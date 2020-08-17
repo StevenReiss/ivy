@@ -165,7 +165,7 @@ private class ErrorVisitor extends ASTVisitor {
    ErrorVisitor(List<JcompMessage> msgs) {
       message_list = msgs;
       have_error = false;
-      error_stack = new Stack<Boolean>();
+      error_stack = new Stack<>();
     }
 
    @Override public void preVisit(ASTNode n) {

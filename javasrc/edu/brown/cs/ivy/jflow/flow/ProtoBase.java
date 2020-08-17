@@ -112,7 +112,7 @@ private BT_Class	proto_class;
 
 
 
-private static Map<Class<?>,Map<BT_Method,Method>> method_map = new HashMap<Class<?>,Map<BT_Method,Method>>();
+private static Map<Class<?>,Map<BT_Method,Method>> method_map = new HashMap<>();
 
 
 private static Class<?> [] call_params = new Class<?> [] { BT_Method.class,

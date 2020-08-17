@@ -113,7 +113,7 @@ private String []	gradient_options = {
 public SwingColorRangeChooser(String nm,Color c1,Color c2)
 {
    action_name = nm;
-   action_listeners = new SwingEventListenerList<ActionListener>(ActionListener.class);
+   action_listeners = new SwingEventListenerList<>(ActionListener.class);
 
    if (c1 == null) c1 = Color.BLACK;
    if (c2 == null) c2 = c1;

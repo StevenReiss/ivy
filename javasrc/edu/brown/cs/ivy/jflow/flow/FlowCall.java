@@ -150,7 +150,7 @@ boolean handleCall(BT_MethodRefIns ins,int ino,StateBase st0,FlowQueue wq)
 {
    BT_Method bm = ins.getTarget();
    BT_MethodSignature sgn = bm.getSignature();
-   LinkedList<ValueBase> args = new LinkedList<ValueBase>();
+   LinkedList<ValueBase> args = new LinkedList<>();
    boolean virt = (ins.opcode == opc_invokeinterface || ins.opcode == opc_invokevirtual);
    boolean ifc = (ins.opcode == opc_invokeinterface);
    MethodBase method = wq.getMethod();
@@ -386,7 +386,7 @@ private ValueBase noteMethod(BT_Method bm,List<ValueBase> args,boolean virt,
       if (c == null) return rslt;
       for (BT_Method bm0 : c) {
 	 LinkedList<ValueBase> vargs = nargs;
-	 if (c.size() > 1) vargs = new LinkedList<ValueBase>(nargs);
+	 if (c.size() > 1) vargs = new LinkedList<>(nargs);
 	 ValueBase xrslt = mi.fixReplaceArgs(bm0,vargs);
 	 if (xrslt != null) rslt = xrslt.mergeValue(rslt);
 	 if (calins != null && caller != null) bm0.addCallSite(calins,caller.getMethod());
@@ -519,7 +519,7 @@ private LinkedList<ValueBase> checkCall(MethodBase caller,BT_Ins calins,BT_Metho
    int xid = ((bm.isInstanceMethod() || bm.isConstructor()) ? -1 : 0);
    BT_Class bc;
 
-   LinkedList<ValueBase> nargs = new LinkedList<ValueBase>();
+   LinkedList<ValueBase> nargs = new LinkedList<>();
    for (ValueBase cv : args) {
       if (xid < 0) {
 	 bc = bm.getDeclaringClass();

@@ -130,7 +130,7 @@ public SwingColorButton(String nm,Color c)
 
 public SwingColorButton(String nm,boolean alpha,Color c)
 {
-   action_listeners = new SwingEventListenerList<ActionListener>(ActionListener.class);
+   action_listeners = new SwingEventListenerList<>(ActionListener.class);
 
    if (c == null) c = Color.BLACK;
    button_name = nm;

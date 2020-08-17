@@ -451,7 +451,7 @@ public ValueBase initialFieldValue(BT_Field fld,boolean nat)
 
 Map<JflowValue,JflowValue> handleSourceSetUpdate(Map<SourceSet,SourceSet> upds)
 {
-   Map<JflowValue,JflowValue> vupds = new HashMap<JflowValue,JflowValue>();
+   Map<JflowValue,JflowValue> vupds = new HashMap<>();
 
    if (upds == null) return vupds;
 

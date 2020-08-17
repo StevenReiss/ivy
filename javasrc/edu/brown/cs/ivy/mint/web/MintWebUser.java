@@ -97,7 +97,7 @@ private long		wait_cycle = 60*1000;
 
 MintWebUser()
 {
-   pending_messages = new LinkedList<MessageData>();
+   pending_messages = new LinkedList<>();
    last_used = System.currentTimeMillis();
 }
 

@@ -136,8 +136,8 @@ MintServerUserConnection(MintServer ms,Socket s,boolean dbg)
 
    for_server = ms;
    client_socket = s;
-   message_queue = new LinkedList<ClientData>();
-   active_patterns = new HashMap<Integer,MintSelector>();
+   message_queue = new LinkedList<>();
+   active_patterns = new HashMap<>();
    is_valid = true;
    debug_output = dbg;
 }

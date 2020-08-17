@@ -577,7 +577,7 @@ private class RefPass extends ASTVisitor {
    RefPass() {
       cur_scope = null;
       cur_type = null;
-      outer_types = new Stack<JcompType>();
+      outer_types = new Stack<>();
       need_rescan = false;
     }
 

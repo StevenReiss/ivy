@@ -128,7 +128,7 @@ protected SwingListPanel(SwingListSet<T> itemset)
    int y = 0;
    item_set = itemset;
 
-   action_listeners = new SwingEventListenerList<ActionListener>(ActionListener.class);
+   action_listeners = new SwingEventListenerList<>(ActionListener.class);
 
    item_list = new JList<T>(item_set);
    item_list.setVisibleRowCount(6);

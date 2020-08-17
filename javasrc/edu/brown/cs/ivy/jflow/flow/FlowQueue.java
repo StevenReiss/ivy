@@ -108,8 +108,8 @@ private Map<BT_Ins,StateBase> state_map;
 FlowQueue(MethodBase cm,BT_InsVector iv) {
    for_method = cm;
    ins_vector = iv;
-   work_list = new LinkedList<Integer>();
-   state_map = new HashMap<BT_Ins,StateBase>();
+   work_list = new LinkedList<>();
+   state_map = new HashMap<>();
 }
 
 

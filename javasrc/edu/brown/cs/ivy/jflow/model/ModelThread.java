@@ -183,8 +183,8 @@ private void findThreads(JflowModel.Node nd,Set<JflowModel.Node> used,Set<JflowM
 
 ModelThreadState createThreadModel(JflowMethod fm)
 {
-   LinkedList<WorkItem> workq = new LinkedList<WorkItem>();
-   Map<ThreadState,ModelThreadState> done = new HashMap<ThreadState,ModelThreadState>();
+   LinkedList<WorkItem> workq = new LinkedList<>();
+   Map<ThreadState,ModelThreadState> done = new HashMap<>();
 
    if (model_master.doDebug()) System.err.println("Create thread model for " + fm);
 

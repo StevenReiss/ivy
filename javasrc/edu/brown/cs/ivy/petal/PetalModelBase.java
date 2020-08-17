@@ -112,7 +112,7 @@ private SwingEventListenerList<PetalModelListener> model_listeners;
 
 public PetalModelBase()
 {
-   model_listeners = new SwingEventListenerList<PetalModelListener>(PetalModelListener.class);
+   model_listeners = new SwingEventListenerList<>(PetalModelListener.class);
 
    select_set = new PetalSelectionSet(this);
 }
