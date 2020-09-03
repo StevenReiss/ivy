@@ -118,7 +118,7 @@ public class IvySetup {
 
 public static void main(String [] args)
 {
-   String dir = System.getProperty("user.dir");
+   String dir = null;
    boolean nohost = false;
 
    if (args != null) {
@@ -128,6 +128,9 @@ public static void main(String [] args)
           }
          else if (args[i].startsWith("-l")) {                      // -local
             nohost = true;
+          }
+         else if (args[i].startsWith("-c")) {                      // -cwd
+            dir = System.getProperty("user.dir");
           }
          else {
             System.err.println("IVYSETUP: ivysetup [-d directory]");
@@ -244,10 +247,11 @@ public static void setup()
    File ivv = new File(System.getProperty("user.home"),".ivy");
 
    if (!setup(ivv)) {
-      if (findIvyDirectory() != null) {
-         main(new String [] { "-local" });
-         if (setup(ivv)) return;
-       }
+      if (findIvyDirectory() == null) return;
+      
+      main(new String [] { "-local" });
+      if (setup(ivv)) return;
+      
       System.err.println("IVY: setup file ~/.ivy/Props missing, unreadable or incomplete");
       System.err.println("IVY: try running IvySetup");
       System.exit(1);
