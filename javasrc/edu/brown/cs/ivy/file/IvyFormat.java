@@ -471,6 +471,18 @@ public static String formatTypeName(String javatype,boolean internal)
 private static int internalFormatTypeName(String jty,int idx,StringBuffer buf,boolean internal)
 {
    if (idx >= jty.length()) return idx;
+   
+   if (jty.charAt(idx) == '<') {
+      ++idx;
+      for ( ; ; ) {
+         StringBuffer vbuf = new StringBuffer();
+         idx = internalFormatTypeName(jty,idx,vbuf,internal);
+         if (jty.charAt(idx) == '>') {
+            ++idx;
+            break;
+          }
+       }
+    }
 
    switch (jty.charAt(idx)) {
       case '?' :
@@ -527,6 +539,7 @@ private static int internalFormatTypeName(String jty,int idx,StringBuffer buf,bo
 	 int i1 = jty.indexOf(";",idx);
 	 if (i1 < 0) i1 = jty.length();
 	 buf.append(jty.substring(idx+1,i1));
+         if (i1 < jty.length() && jty.charAt(i1) == ';') ++i1;
 	 return i1;
 
       case '(' :
