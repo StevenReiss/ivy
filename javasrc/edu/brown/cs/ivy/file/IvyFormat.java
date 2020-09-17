@@ -473,13 +473,16 @@ private static int internalFormatTypeName(String jty,int idx,StringBuffer buf,bo
    if (idx >= jty.length()) return idx;
    
    if (jty.charAt(idx) == '<') {
-      ++idx;
+      int lvl = 0;
       for ( ; ; ) {
-         StringBuffer vbuf = new StringBuffer();
-         idx = internalFormatTypeName(jty,idx,vbuf,internal);
-         if (jty.charAt(idx) == '>') {
-            ++idx;
-            break;
+         ++idx;
+         if (jty.charAt(idx) == '<') ++lvl;
+         else if (jty.charAt(idx) == '>') {
+            if (lvl == 0) {
+               ++idx;
+               break;
+             }
+            else --lvl;
           }
        }
     }
