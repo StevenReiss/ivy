@@ -110,7 +110,7 @@ public static CompilationUnit parseSourceFile(char [] buf)
    ASTParser parser = ASTParser.newParser(AST.JLS12);
    parser.setKind(ASTParser.K_COMPILATION_UNIT);
    parser.setSource(buf);
-   
+
    Map<String,String> options = JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
    options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
@@ -144,16 +144,16 @@ public static ASTNode parseStatement(String text)
 public static AST createNewAst()
 {
    AST ast = AST.newAST(AST.JLS12,true);
-  
+
    return ast;
 }
 
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Resolving methods                                                       */
-/*                                                                              */
+/*										*/
+/*	Resolving methods							*/
+/*										*/
 /********************************************************************************/
 
 
@@ -165,7 +165,7 @@ public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an)
 public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an,List<String> jarnames)
 {
    if (an == null) return null;
-   
+
    return getResolvedAst(ctrl,Collections.singletonList(an),jarnames);
 }
 
@@ -173,7 +173,7 @@ public static JcompProject getResolvedAst(JcompControl ctrl,ASTNode an,List<Stri
 public static JcompProject getResolvedAst(JcompControl ctrl,List<ASTNode> srcasts,List<String> jarnames)
 {
    if (srcasts == null || srcasts.isEmpty()) return null;
-   
+
    List<JcompSource> srcs = new ArrayList<>();
    ASTNode sync = null;
    for (ASTNode an : srcasts) {
@@ -183,11 +183,11 @@ public static JcompProject getResolvedAst(JcompControl ctrl,List<ASTNode> srcast
     }
    List<String> jars = jarnames;
    if (jars == null) jars = new ArrayList<>();
-   
+
    JcompProject proj = ctrl.getProject(jars,srcs,false);
    try {
       synchronized (sync) {
-         proj.resolve();
+	 proj.resolve();
        }
     }
    catch (Throwable t) {
@@ -195,7 +195,7 @@ public static JcompProject getResolvedAst(JcompControl ctrl,List<ASTNode> srcast
       ctrl.freeProject(proj);
       return null;
     }
-   
+
    return proj;
 }
 
@@ -206,24 +206,24 @@ public static JcompProject getResolvedAst(JcompControl ctrl,List<ASTNode> srcast
 private static class LocalSource implements JcompExtendedSource {
 
    private ASTNode root_result;
-   
+
    LocalSource(ASTNode nd) {
       root_result = nd.getRoot();
     }
-   
+
    @Override public String getFileContents() {
       return root_result.toString();
     }
-   
+
    @Override public String getFileName() {
       return "*SCRAP*";
     }
-   
+
    @Override public ASTNode getAstRootNode() {
       return root_result;
     }
 
-}       // end of inner class ResultSource
+}	// end of inner class ResultSource
 
 
 
@@ -234,7 +234,7 @@ private static class LocalSource implements JcompExtendedSource {
 /*										*/
 /********************************************************************************/
 
-static JcompScope getJavaScope(ASTNode n)
+static public JcompScope getJavaScope(ASTNode n)
 {
    return (JcompScope) n.getProperty(PROP_JAVA_SCOPE);
 }

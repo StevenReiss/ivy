@@ -77,7 +77,7 @@ void defineDupVar(JcompSymbol s)
    defineVar(s);
 }
 
-abstract JcompSymbol lookupVariable(String nm);
+abstract public JcompSymbol lookupVariable(String nm);
 
 
 
@@ -100,9 +100,9 @@ JcompSymbol defineMethod(String nm,MethodDeclaration n)
 JcompSymbol defineMethod(String nm,AnnotationTypeMemberDeclaration n)
 {
    JcompSymbol js = JcompSymbol.createSymbol(n);
-   
+
    defineMethod(js);
-   
+
    return js;
 }
 
@@ -110,9 +110,9 @@ JcompSymbol defineMethod(String nm,AnnotationTypeMemberDeclaration n)
 JcompSymbol defineLambda(LambdaExpression n)
 {
    JcompSymbol js = JcompSymbol.createSymbol(n);
-   
+
    defineMethod(js);
-   
+
    return js;
 }
 
@@ -120,9 +120,9 @@ JcompSymbol defineLambda(LambdaExpression n)
 JcompSymbol defineReference(MethodReference n)
 {
    JcompSymbol js = JcompSymbol.createSymbol(n);
-   
+
    defineMethod(js);
-   
+
    return js;
 }
 
@@ -144,9 +144,9 @@ public Collection<JcompSymbol> getDefinedFields()	      { return null; }
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Helper methods                                                          */
-/*                                                                              */
+/*										*/
+/*	Helper methods								*/
+/*										*/
 /********************************************************************************/
 
 static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
@@ -156,19 +156,19 @@ static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
    List<JcompType> args = ctyp.getComponents();
    List<JcompType> m1args = m1.getComponents();
    List<JcompType> m2args = m2.getComponents();
-   
+
    if (m1args.size() != m2args.size()) {
       if (m1args.size() == args.size()) return true;
       else return false;
     }
    if (m1args.size() != args.size()) return false;
-   
+
    if (m1.isVarArgs() && !m2.isVarArgs()) return false;
    if (!m1.isVarArgs() && m2.isVarArgs()) return true;
-   
+
    int ct1 = 0;
    int ct2 = 0;
-   
+
    for (int i = 0; i < args.size(); ++i) {
       JcompType t0 = args.get(i);
       JcompType t1 = m1args.get(i);
@@ -181,10 +181,10 @@ static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
     }
    if (ct1 < ct2) return true;
    if (ct1 > ct2) return false;
-   
+
    if (mth1.isAbstract() && !mth2.isAbstract()) return false;
    if (mth2.isAbstract() && !mth1.isAbstract()) return true;
-   
+
    int ctx = getTypeDepth(mth1.getClassType(),mth2.getClassType());
    if (ctx == 0) {
       if ((mth1.getModifiers() & Opcodes.ACC_BRIDGE) != 0) return false;
@@ -195,7 +195,7 @@ static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
    if (ctx >= 0) return true;
    ctx = getTypeDepth(mth2.getClassType(),mth1.getClassType());
    if (ctx >= 0) return false;
-   
+
    return false;
 }
 
@@ -207,16 +207,16 @@ private static int typeComparison(JcompType tto,JcompType tfrom)
    if (tto.isNumericType()) {
       if (!tfrom.isNumericType()) return 20;
       if (tto.isFloatingType()) {
-         if (tfrom.isFloatingType()) return 5;
-         else return 10;
+	 if (tfrom.isFloatingType()) return 5;
+	 else return 10;
        }
       else return 5;
     }
    else if (tfrom.isNumericType()) return 10;
-  
+
    int ct = getTypeDepth(tto,tfrom);
    if (ct > 0) return 11+ct;
-   
+
    return 20;
 }
 
@@ -225,16 +225,16 @@ static int getTypeDepth(JcompType tgt,JcompType tfrom)
 {
    if (tgt == tfrom) return 0;
    if (tfrom == null) return -1;
-   
+
    int ct = getTypeDepth(tgt,tfrom.getSuperType());
    if (ct >= 0) return ct+1;
    if (tfrom.getInterfaces() != null) {
       for (JcompType t0 : tfrom.getInterfaces()) {
-         ct = getTypeDepth(tgt,t0);
-         if (ct >= 0) return ct+1;
+	 ct = getTypeDepth(tgt,t0);
+	 if (ct >= 0) return ct+1;
        }
     }
-   
+
    return -1;
 }
 

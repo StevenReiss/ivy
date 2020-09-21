@@ -99,12 +99,12 @@ private JcompScopeLookup getLookupScope()		{ return lookup_scope; }
 
 @Override void defineVar(JcompSymbol js)		      { lookup_scope.defineVar(js,this); }
 
-@Override JcompSymbol lookupVariable(String nm)       { return lookup_scope.lookupVariable(nm,this); }
+@Override public JcompSymbol lookupVariable(String nm)	      { return lookup_scope.lookupVariable(nm,this); }
 
 @Override public Collection<JcompSymbol> getDefinedFields()
 {
    Collection<JcompSymbol> rslt = lookup_scope.getDefinedFields(this);
-   
+
    return rslt;
 }
 

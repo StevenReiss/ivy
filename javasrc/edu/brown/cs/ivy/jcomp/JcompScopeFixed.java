@@ -101,7 +101,7 @@ JcompScopeFixed()
 
 
 
-@Override synchronized JcompSymbol lookupVariable(String nm)
+@Override public synchronized JcompSymbol lookupVariable(String nm)
 {
    return var_names.get(nm);
 }
@@ -151,25 +151,25 @@ JcompScopeFixed()
 @Override JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompType base,ASTNode n)
 {
    Collection<JcompSymbol> ljs;
-   
+
    ljs = method_names.get(id);
    if (ljs != null) ljs = new ArrayList<JcompSymbol>(ljs);
 
    if (ljs != null) {
       JcompSymbol bestms = null;
       for (JcompSymbol js : ljs) {
-         if (base != null && n != null) {
-            if (!JcompType.checkProtections(js,base,n)) continue;
-          }
-         if (typer != null) js.getType().defineAll(typer);
+	 if (base != null && n != null) {
+	    if (!JcompType.checkProtections(js,base,n)) continue;
+	  }
+	 if (typer != null) js.getType().defineAll(typer);
 	 if (aty.isCompatibleWith(js.getType())) {
 	    if (bestms == null) bestms = js;
 	    else if (isBetterMethod(aty,js,bestms))
 	       bestms = js;
 	  }
-         else if (bestms == null) {
-            
-          }
+	 else if (bestms == null) {
+
+	  }
        }
       if (bestms != null) return bestms;
     }
