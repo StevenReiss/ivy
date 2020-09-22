@@ -1030,6 +1030,64 @@ private static class FindLocationVisitor extends ASTVisitor {
 
 
 
+
+public static ASTNode findNodeAtLine(ASTNode n,int line)
+{
+   CompilationUnit cu = (CompilationUnit) n.getRoot();
+   int soff = cu.getPosition(line,1);
+   int eoff = cu.getPosition(line+1,1)-1;
+   
+   FindLineVisitor vis = new FindLineVisitor(soff,eoff);
+   n.accept(vis);
+   
+   ASTNode rslt = vis.getMatch();
+   if (rslt == null) rslt = findNodeAtOffset(n,soff);
+   return rslt;
+}
+
+
+
+
+private static class FindLineVisitor extends ASTVisitor {
+
+   private int start_offset;
+   private int end_offset;
+   private ASTNode best_match;
+   
+   FindLineVisitor(int soff,int eoff) {
+      start_offset = soff;
+      end_offset = eoff;
+      best_match = null;
+    }
+   
+   ASTNode getMatch() {
+      return best_match;
+    }
+   
+   @Override public boolean preVisit2(ASTNode n) {
+      int soff = n.getStartPosition();
+      int eoff = soff + n.getLength();
+      if (eoff < start_offset) return false;
+      if (soff > end_offset) return false;
+      if (eoff > end_offset || soff < start_offset) return true;
+      if (best_match == null) {
+         switch (n.getNodeType()) {
+            case ASTNode.JAVADOC :
+            case ASTNode.BLOCK_COMMENT :
+            case ASTNode.LINE_COMMENT :
+               break;
+            default :
+               best_match = n;
+               break;
+          }
+       }
+      return true;
+    }
+
+}	// end of inner class FindLineVisitor
+
+
+
 /********************************************************************************/
 /*										*/
 /*	Check for various circumstances 					*/
