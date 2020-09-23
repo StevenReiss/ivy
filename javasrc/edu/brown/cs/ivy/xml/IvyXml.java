@@ -383,7 +383,7 @@ public synchronized static Document convertStringToDocument(String s)
 
 public static Document convertStringToDocument(String s,boolean nsa)
 {
-   if (s == null) return null;
+   if (s == null || s.trim().length() == 0) return null;
 
    Document xdoc = null;
    XmlParser xp = null;
@@ -404,8 +404,8 @@ public static Document convertStringToDocument(String s,boolean nsa)
       xp.reset();
     }
    catch (Throwable e) {
-      System.err.println("IvyXML: parse error: " + e.getMessage());
-      System.err.println("IvyXML: String: " + s);
+      System.err.println("IvyXml: parse error: " + e.getMessage());
+      System.err.println("IvyXml: String: " + s);
       e.printStackTrace();
     }
 
@@ -429,7 +429,7 @@ public static String convertXmlToString(Node xml)
       addXml(xml,sw);
     }
    catch (IOException e) {
-      System.err.println("IvyXML: write error: " + e.getMessage());
+      System.err.println("IvyXml: write error: " + e.getMessage());
       return null;
     }
 
@@ -1612,7 +1612,7 @@ private static class XmlParser {
          parser_object = dbf.newDocumentBuilder();
        }
       catch (ParserConfigurationException e) {
-         System.err.println("IvyXML: Problem creating java xml parser: " + e.getMessage());
+         System.err.println("IvyXml: Problem creating java xml parser: " + e.getMessage());
          System.exit(1);
        }
     }

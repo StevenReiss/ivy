@@ -703,6 +703,7 @@ public static File getJarFile(Class<?> c)
    URL url = cl.getResource(s);
    if (url == null) return null;
    String file = url.toString();
+   if (!file.endsWith(".jar")) return null;
    if (file.startsWith("jar:file:/")) file = file.substring(9);
    if (file.length() >= 3 && file.charAt(0) == '/' && 
          Character.isLetter(file.charAt(1)) && file.charAt(2) == ':' &&
