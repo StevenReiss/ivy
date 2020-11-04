@@ -417,24 +417,24 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
     private void updateSelection(KeyEvent e) {
       int key = e.getKeyCode();
       int count = getItemCount() - 1;
-
+    
       if (( key == KeyEvent.VK_DOWN ) && ( cur_index < count )){
-	 cur_index += 1;
-	 do_navigate = true;
+         cur_index += 1;
+         do_navigate = true;
        }
       else if(( key == KeyEvent.VK_UP ) && ( cur_index > 0 )){
-	 cur_index -= 1;
-	 do_navigate = true;
+         cur_index -= 1;
+         do_navigate = true;
        }
-
+    
       if ( do_navigate ) {
-	 String selection = (String)getItemAt( cur_index );
-	 try {
-	    insertString( 0, selection, null );
-	    highLightText( 0 );
-	  }
-	 catch(Throwable ex) { }
-	 do_navigate = false;
+         String selection = (String) getItemAt( cur_index );
+         try {
+            insertString( 0, selection, null );
+            highLightText( 0 );
+          }
+         catch(Throwable ex) { }
+         do_navigate = false;
        }
      }
 
