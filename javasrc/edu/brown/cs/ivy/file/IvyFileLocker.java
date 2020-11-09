@@ -56,7 +56,9 @@ package edu.brown.cs.ivy.file;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.FileLock;
+import java.nio.channels.FileLockInterruptionException;
 
 public class IvyFileLocker
 {
@@ -103,7 +105,7 @@ public IvyFileLocker(File f)
       f.setWritable(true,false);
     }
    catch (IOException e) {
-      System.err.println("IVY: lock file " + f + " couldn't be opened");
+      IvyLog.logE("FILE","Lock file " + f + " couldn't be opened");
     }
 }
 
@@ -115,21 +117,29 @@ public IvyFileLocker(File f)
 /*                                                                              */
 /********************************************************************************/
 
-public void lock()
+public boolean lock()
 {
-   if (lock_file == null) return;
-   if (file_lock != null) return;		// assumes only one lock per process
+   if (lock_file == null) return false;
+   if (file_lock != null) return true;		// assumes only one lock per process
    
    for (int i = 0; i < 250; ++i) {
       try {
          file_lock = lock_file.getChannel().lock();
-         return;
+         return true;
+       }
+      catch (FileLockInterruptionException e) { }
+      catch (ClosedChannelException e) {
+         IvyLog.logE("FILE","Lock file closed: " + lock_name);  
+         lock_file = null;
+         return false;
        }
       catch (IOException e) {
-         System.err.println("IVY: File lock failed for " + lock_name + ": " + e);
          e.printStackTrace();
+         IvyLog.logE("FILE","File lock failed for " + lock_name + ": " + e);
        }
     }
+   
+   return false;
 }
 
 
