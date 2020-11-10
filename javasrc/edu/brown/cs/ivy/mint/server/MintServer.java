@@ -378,8 +378,8 @@ private class SocketThread extends Thread {
       super("MintSocketListener");
       server_socket = ss;
       MintLogger.log("MintServer (" + file_name + ") set up on " +
-			server_socket.toString() + " " +
-			server_socket.getInetAddress().isAnyLocalAddress());
+        		server_socket.toString() + " " +
+        		server_socket.getInetAddress().isAnyLocalAddress());
     }
 
    @Override public void run() {
