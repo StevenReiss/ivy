@@ -297,6 +297,8 @@ import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -392,7 +394,7 @@ public static Document convertStringToDocument(String s,boolean nsa)
       if (xp == null) xp = new XmlParser(nsa);
     }
    catch (Throwable t) {
-      System.err.println("IVY: Problem setting up parser: " + t);
+      IvyLog.logE("Problem setting up parser: " + t);
       xp = (nsa ? ns_xml_parser : xml_parser);
     }
 
@@ -404,9 +406,8 @@ public static Document convertStringToDocument(String s,boolean nsa)
       xp.reset();
     }
    catch (Throwable e) {
-      System.err.println("IvyXml: parse error: " + e.getMessage());
-      System.err.println("IvyXml: String: " + s);
-      e.printStackTrace();
+      IvyLog.logE("IvyXml: parse error: " + e.getMessage(),e);
+      IvyLog.logE("IvyXml: String: " + s);
     }
 
    try {
