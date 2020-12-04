@@ -288,6 +288,7 @@ public void setAutoComplete(boolean fg)
       setEditable(true);
       JTextComponent tc = (JTextComponent) getEditor().getEditorComponent();
       tc.setDocument(new AutoCompleteDocument<T>());
+      tc.setCaretPosition(0);
     }
 }
 
@@ -344,8 +345,8 @@ private class ComboBoxCommand extends AbstractUndoableEdit {
 
    @Override public String getPresentationName() {
       if (btn_label == null) {
-	 if (new_item == null) return "ComboBox";
-	 return new_item.toString();
+         if (new_item == null) return "ComboBox";
+         return new_item.toString();
        }
       if (new_item == null) return btn_label;
       return btn_label + "=" + new_item.toString();
@@ -394,24 +395,24 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
      }
 
     void handleFocusGained() {
-       String contents = text_comp.getText();
-       int n = model.getSize();
-       for ( int i = 0; i < n; i++ ){
-	  String currentItem = model.getElementAt( i ).toString();
-	  if (currentItem.toLowerCase().equals( contents.toLowerCase())) {
-	     do_navigate = true;
-	     if ( i > 0 ){
-		cur_index = i - 1;
-		setSelectedItem(model.getElementAt(cur_index).toString());
-	      }
-	     else{
-		cur_index = -1;
-		setSelectedItem(null);
-	      }
-	     do_navigate = false;
-	     break;
-	   }
-	}
+    // String contents = text_comp.getText();
+    // int n = model.getSize();
+    // for ( int i = 0; i < n; i++ ){
+    //    String currentItem = model.getElementAt( i ).toString();
+    //    if (currentItem.toLowerCase().equals( contents.toLowerCase())) {
+    //       do_navigate = true;
+    //       if ( i > 0 ){
+    //          cur_index = i - 1;
+    //          setSelectedItem(model.getElementAt(cur_index).toString());
+    //        }
+    //       else{
+    //          cur_index = -1;
+    //          setSelectedItem(null);
+    //        }
+    //       do_navigate = false;
+    //       break;
+    //     }
+    //  }
      }
 
     private void updateSelection(KeyEvent e) {
@@ -440,21 +441,21 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
 
     @Override public void insertString(int offs,String str,AttributeSet a ) throws BadLocationException {
        if ( do_select ) return;
-       if ( do_navigate ) super.remove( 0, getLength() );
-
+       if ( do_navigate || offs == 0) super.remove( 0, getLength() );
+    
        super.insertString( offs, str, a );
        Object item = lookupItem( getText( 0, getLength() ));
        if ( item != null ){
-	  if (!do_navigate) setSelectedItem(item);
-	  super.remove( 0, getLength() );
-	  super.insertString( 0, item.toString(), a );
-	  highLightText( offs + str.length() );
-	}
+          if (!do_navigate) setSelectedItem(item);
+          super.remove( 0, getLength() );
+          super.insertString( 0, item.toString(), a );
+          // highLightText( offs + str.length() );
+        }
        else{
-	  if(isPopupVisible()) setPopupVisible( false );
-	  text_comp.setSelectionEnd(0);
-	  text_comp.setCaretPosition(text_comp.getText().length());
-	}
+          if (isPopupVisible()) setPopupVisible( false );
+          text_comp.setSelectionEnd(0);
+          text_comp.setCaretPosition(text_comp.getText().length());
+        }
      }
 
     @Override public void remove(int offs,int len) throws BadLocationException {
@@ -470,21 +471,29 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
 
     private Object lookupItem(String pattern) {
        int n = model.getSize();
+       for ( int i = 0; i < n; ++i) {
+          String itm = model.getElementAt(i).toString();
+          if (itm.equals(pattern)) {
+             cur_index = i;
+             return itm;
+           }
+        }
+        
        for ( int i = 0; i < n; i++ ){
-	  String currentItem = model.getElementAt( i ).toString();
-	  if (case_sensitive) {
-	     if (currentItem.contains(pattern)) {
-		cur_index = i;
-		return currentItem;
-	      }
-	   }
-	  else {
-	     if ( currentItem.toLowerCase().contains( pattern.toLowerCase() )) {
-		cur_index = i;
-		return currentItem;
-	      }
-	   }
-	}
+          String currentItem = model.getElementAt( i ).toString();
+          if (case_sensitive) {
+             if (currentItem.contains(pattern)) {
+                cur_index = i;
+                return currentItem;
+              }
+           }
+          else {
+             if ( currentItem.toLowerCase().contains( pattern.toLowerCase() )) {
+                cur_index = i;
+                return currentItem;
+              }
+           }
+        }
        return null;
      }
 
