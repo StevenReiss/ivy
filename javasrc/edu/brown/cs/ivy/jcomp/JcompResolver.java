@@ -1005,11 +1005,11 @@ private class RefPass extends ASTVisitor {
       if (b != null && b.isAssignCompatibleWith(b1)) ;
       else if (b1 != null && b1.isErrorType()) ;
       else {
-	 JcompType str = findType("java.lang.String");
-	 if (b1 == str && n.getOperator() == Assignment.Operator.PLUS_ASSIGN)
-	    b = str;
-	 else
-	    b = findType(TYPE_ERROR);
+         JcompType str = findType("java.lang.String");
+         if (b1 == str && n.getOperator() == Assignment.Operator.PLUS_ASSIGN)
+            b = str;
+         else
+            b = findType(TYPE_ERROR);
        }
       JcompAst.setExprType(n,b);
     }

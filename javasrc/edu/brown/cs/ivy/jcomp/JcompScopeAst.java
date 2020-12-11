@@ -141,6 +141,10 @@ private JcompScopeLookup getLookupScope()		{ return lookup_scope; }
    return lookup_scope.lookupAbstracts(typer);
 }
 
+@Override protected void getAllSymbols(Collection<JcompSymbol> rslt)
+{
+   lookup_scope.getAllSymbols(rslt,this);
+}
 
 }	// end of class JcompScopeAst
 

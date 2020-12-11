@@ -261,6 +261,13 @@ JcompScopeFixed()
 }
 
 
+@Override protected void getAllSymbols(Collection<JcompSymbol> rslt) 
+{
+   rslt.addAll(var_names.values());
+   for (Collection<JcompSymbol> mthds : method_names.values()) {
+      rslt.addAll(mthds);
+    }
+}
 
 
 @Override public synchronized Collection<JcompSymbol> getDefinedMethods()

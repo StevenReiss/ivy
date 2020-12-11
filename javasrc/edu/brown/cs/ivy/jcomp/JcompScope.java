@@ -44,6 +44,7 @@ import org.eclipse.jdt.core.dom.MethodReference;
 import org.objectweb.asm.Opcodes;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -78,6 +79,19 @@ void defineDupVar(JcompSymbol s)
 }
 
 abstract public JcompSymbol lookupVariable(String nm);
+
+public Collection<JcompSymbol> getAllSymbols()
+{
+   Collection<JcompSymbol> rslt = new LinkedHashSet<>();
+   getAllSymbols(rslt);
+   for (JcompScope p = getParent(); p != null; p = p.getParent()) {
+      p.getAllSymbols(rslt);
+    }
+   return rslt;
+}
+
+
+abstract protected void getAllSymbols(Collection<JcompSymbol> rslt);
 
 
 

@@ -127,6 +127,21 @@ Collection<JcompSymbol> getDefinedFields(JcompScope js)
 }
 
 
+protected void getAllSymbols(Collection<JcompSymbol> rslt,JcompScope scp)
+{
+   for (List<VarElement> lve : var_names.values()) {
+      for (VarElement ve : lve) {
+         if (ve.getScope() == scp) {
+            rslt.add(ve.getSymbol());
+          }
+       }
+    }
+   for (List<MethodElement> lme : method_names.values()) {
+      for (MethodElement me : lme) {
+         if (me.getScope() == scp) rslt.addAll(me.getMethods());
+       }
+    }
+}
 
 
 private static class VarElement {
