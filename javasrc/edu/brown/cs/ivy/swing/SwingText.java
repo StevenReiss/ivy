@@ -458,7 +458,10 @@ public static int getMenuShortcutKeyMaskEx()
       if (!s.startsWith("n") && !s.startsWith("f") && !s.startsWith("0")) {
          return InputEvent.META_DOWN_MASK;
        }
-    }
+      else {
+         return InputEvent.CTRL_DOWN_MASK;
+       }
+    }  
    
    Toolkit tk = Toolkit.getDefaultToolkit();
 

@@ -194,6 +194,10 @@ public static void main(String [] args)
 	    p.setProperty("edu.brown.cs.ivy.mint.registryhost","valerie.cs.brown.edu");
 	  }
        }
+      catch (java.rmi.UnknownHostException e) {
+         System.err.println("IVYSETUP: Mint registry host not used");
+         nohost = true;
+       }
       catch (Exception e) {
 	 System.err.println("IVYSETUP: Mint registry host not used");
 	 System.err.println("ERROR: " + e);
