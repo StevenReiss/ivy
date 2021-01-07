@@ -79,7 +79,7 @@ JcompFile(JcompSource rf)
 {
    for_file = rf;
    ast_root = null;
-   for_project = null;
+   for_project = null;											
 }
 
 
@@ -93,10 +93,10 @@ JcompFile(JcompSource rf)
 @Override public ASTNode getAstNode()
 {
    if (ast_root == null) {
-      if (for_file instanceof JcompExtendedSource1) {
-         JcompExtendedSource1 efile = (JcompExtendedSource1) for_file;
-         ast_root = efile.getAstRootNode(for_project.getProjectKey());
-         if (ast_root != null) return ast_root;
+      if (for_file instanceof JcompExtendedSource1 && for_project != null) {
+	 JcompExtendedSource1 efile = (JcompExtendedSource1) for_file;
+	 ast_root = efile.getAstRootNode(for_project.getProjectKey());
+	 if (ast_root != null) return ast_root;
        }
       if (for_file instanceof JcompExtendedSource) {
 	 JcompExtendedSource efile = (JcompExtendedSource) for_file;
@@ -224,6 +224,8 @@ private class ErrorVisitor extends ASTVisitor {
     }
 
 }	// end of inner class ErrorVisitor
+
+
 
 void setRoot(JcompProjectImpl root)
 {
