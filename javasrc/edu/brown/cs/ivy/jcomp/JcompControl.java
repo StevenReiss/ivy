@@ -74,7 +74,7 @@ private JcompContext android_context;
 
 public JcompControl()
 {
-   semantic_map = new WeakHashMap<JcompSource,JcompFile>();
+   semantic_map = new WeakHashMap<>();
    base_context = new JcompContextAsm(null);
    system_typer = new JcompTyper(base_context);
    android_context = null;
@@ -83,7 +83,7 @@ public JcompControl()
 
 public JcompControl(JcodeFactory jf)
 {
-   semantic_map = new WeakHashMap<JcompSource,JcompFile>();
+   semantic_map = new WeakHashMap<>();
    base_context = new JcompContextCode(jf);
    system_typer = new JcompTyper(base_context);
    android_context = null;
@@ -284,8 +284,8 @@ public synchronized JcompProject getProject(JcodeFactory jf,Collection<JcompSour
        }
       root.addFile(rjf);
     }
-   
-   return root; 
+
+   return root;
 }
 
 
@@ -294,7 +294,7 @@ public synchronized JcompProject getProject(JcodeFactory jf,Collection<JcompSour
 public void freeProject(JcompProject proj)
 {
    if (proj == null) return;
-   
+
    for (JcompSemantics sem : proj.getSources()) {
       JcompSource src = sem.getFile();
       semantic_map.remove(src);

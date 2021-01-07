@@ -262,9 +262,8 @@ bubbles:
 	mv ivylib.jar /pro/bubbles/
 	cp lib/eclipsejar/*.jar /pro/bubbles/eclipsejar
 
+
 #	cp lib/eclipsejar/version /pro/bubbles/eclipsejar
-
-
 #	   rm -rf javasrc/edu/brown/cs/ivy/$$x/Makefile; \
 #	   ln -s ../../../../../data/Make.pass javasrc/edu/brown/cs/ivy/$$x/Makefile; \
 #	   done
