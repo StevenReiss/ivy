@@ -201,12 +201,12 @@ private Map<Integer,ActiveInfo> reply_hash;
 private Map<Integer,PatternInfo> pattern_hash;
 private int reply_counter;
 private int pat_counter;
-private AtomicInteger thread_counter;
 private MintErrorHandler error_handler;
 private String mint_name;
 private ExecutorService thread_pool;
 
 private static int process_counter;
+private static AtomicInteger thread_counter = new AtomicInteger(0);
 
 private Object	write_lock;
 
@@ -235,7 +235,6 @@ public MintClient(String id,MintSyncMode mode)
    pat_counter = 1;
    mint_name = id;
    write_lock = new Object();
-   thread_counter = new AtomicInteger();
    thread_pool = null;
 
    server_reader = null;
@@ -643,7 +642,7 @@ private void asynchProcessMessage(Object o)
 private class RunThreadFactory implements ThreadFactory {
 
    @Override public Thread newThread(Runnable r) {
-      return new Thread(r,"MintRunThread_" + mint_name + "_" + thread_counter.addAndGet(1));
+      return new Thread(r,"MintRunThread_" + mint_name + "_" + thread_counter.incrementAndGet());
    }
 
 }	// end of inner class RunThreadFactory

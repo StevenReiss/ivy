@@ -62,6 +62,7 @@ private boolean 	  is_resolved;
 private Set<JcompType>	  all_types;
 private JcompTyper        resolve_typer;
 private boolean           is_sorted;
+private Object            project_key;
 
 
 
@@ -80,6 +81,7 @@ JcompProjectImpl(JcompContext ctx)
    resolve_typer = null;
    all_types = null;
    is_sorted = false;
+   project_key = null;
 }
 
 
@@ -185,6 +187,18 @@ public List<String> getClassPath()
 }
 
 
+
+@Override public void setProjectKey(Object key)
+{
+   project_key = key;
+}
+
+
+Object getProjectKey()
+{
+   if (project_key != null) return project_key;
+   return this;
+}
 
 
 /********************************************************************************/

@@ -201,7 +201,7 @@ private static int showMessages(String what,JcompProject proj)
       t.printStackTrace();
       return -1;
     }
-   
+
    for (JcompMessage msg : proj.getMessages()) {
       System.err.println("MSG:" + msg.getSeverity() + " " + msg.getSource() + ":" +
 			    msg.getLineNumber() + " (" +
@@ -603,13 +603,13 @@ public void jcompTest29() throws Exception
 {
    File f29 = new File("/pro/ivy/jcomp/src/test29");
    File f29a = new File("/pro/ivy/jcomp/src/test29a");
-   
+
    String cnts = IvyFile.loadFile(f29);
    String cntsa = IvyFile.loadFile(f29a);
-   
+
    StringSource s29 = new StringSource("test29",cnts);
    StringSource s29a = new StringSource("test29a",cntsa);
-   
+
    List<JcompSource> srcs = new ArrayList<>();
    srcs.add(s29);
    srcs.add(s29a);

@@ -58,6 +58,8 @@ void resolve();
 
 boolean isResolved();
 
+void setProjectKey(Object key);
+
 JcompTyper getResolveTyper();
 
 

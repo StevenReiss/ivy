@@ -437,50 +437,50 @@ private class TransitionDialog implements ActionListener
    void process(Component c) {
       boolean done = false;
       while (!done) {
-	 layoutPanel();
-	 String [] opts = new String[] { "OK", "Cancel" };
-	 option_pane = new JOptionPane(message_box,JOptionPane.PLAIN_MESSAGE,
-					  JOptionPane.DEFAULT_OPTION,
-					  null,opts,null);
-	 option_pane.setValue(null);
-	 new_event = null;
-	 current_dialog = option_pane.createDialog(c,"Transition Editor");
-	 current_dialog.setVisible(true);
-	 current_dialog = null;
-	 String sts = (String) option_pane.getValue();
-	 option_pane = null;
-	 if (sts == null || sts.equals("Cancel")) done = true;
-	 else if (sts.equals("OK")) {
-	    if (when_field != null) {
-	       String s = when_field.getText().trim();
-	       if (s.length() == 0) for_transition.setCondition(null);
-	       else if (!for_transition.setCondition(s)) {
-		  JOptionPane.showMessageDialog(c,"Condition is invalid");
-		}
-	     }
-	    if (action_panel != null) {
-	       arc_actions.clear();
-	       for (Action a : action_panel.getItemSet()) arc_actions.add(a);
-	     }
-	    if (new_event == null) done = true;
-	    else {
-	       for_transition.addEvent(new_event);
-	     }
-	  }
-	 else if (sts.startsWith("REMOVE-")) {
-	    int idx = Integer.parseInt(sts.substring(7));
-	    for_transition.removeEvent(idx);
-	  }
-	 else if (sts.startsWith("UP-")) {
-	    int idx = Integer.parseInt(sts.substring(3));
-	    for_transition.moveUp(idx);
-	  }
-	 else if (sts.startsWith("DOWN-")) {
-	    int idx = Integer.parseInt(sts.substring(5));
-	    for_transition.moveDown(idx);
-	  }
-
-	 message_box = null;
+         layoutPanel();
+         String [] opts = new String[] { "OK", "Cancel" };
+         option_pane = new JOptionPane(message_box,JOptionPane.PLAIN_MESSAGE,
+        				  JOptionPane.DEFAULT_OPTION,
+        				  null,opts,null);
+         option_pane.setValue(null);
+         new_event = null;
+         current_dialog = option_pane.createDialog(c,"Transition Editor");
+         current_dialog.setVisible(true);
+         current_dialog = null;
+         String sts = (String) option_pane.getValue();
+         option_pane = null;
+         if (sts == null || sts.equals("Cancel")) done = true;
+         else if (sts.equals("OK")) {
+            if (when_field != null) {
+               String s = when_field.getText().trim();
+               if (s.length() == 0) for_transition.setCondition(null);
+               else if (!for_transition.setCondition(s)) {
+        	  JOptionPane.showMessageDialog(c,"Condition is invalid");
+        	}
+             }
+            if (action_panel != null) {
+               arc_actions.clear();
+               for (Action a : action_panel.getItemSet()) arc_actions.add(a);
+             }
+            if (new_event == null) done = true;
+            else {
+               for_transition.addEvent(new_event);
+             }
+          }
+         else if (sts.startsWith("REMOVE-")) {
+            int idx = Integer.parseInt(sts.substring(7));
+            for_transition.removeEvent(idx);
+          }
+         else if (sts.startsWith("UP-")) {
+            int idx = Integer.parseInt(sts.substring(3));
+            for_transition.moveUp(idx);
+          }
+         else if (sts.startsWith("DOWN-")) {
+            int idx = Integer.parseInt(sts.substring(5));
+            for_transition.moveDown(idx);
+          }
+   
+         message_box = null;
        }
     }
 

@@ -93,6 +93,11 @@ JcompFile(JcompSource rf)
 @Override public ASTNode getAstNode()
 {
    if (ast_root == null) {
+      if (for_file instanceof JcompExtendedSource1) {
+         JcompExtendedSource1 efile = (JcompExtendedSource1) for_file;
+         ast_root = efile.getAstRootNode(for_project.getProjectKey());
+         if (ast_root != null) return ast_root;
+       }
       if (for_file instanceof JcompExtendedSource) {
 	 JcompExtendedSource efile = (JcompExtendedSource) for_file;
 	 ast_root = efile.getAstRootNode();
