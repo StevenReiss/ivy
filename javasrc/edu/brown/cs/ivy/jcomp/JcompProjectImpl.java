@@ -88,12 +88,13 @@ JcompProjectImpl(JcompContext ctx)
 
 void clear()
 {
-   file_nodes.clear();
+   file_nodes = null;
    is_resolved = false;
    all_types = null;
    resolve_typer = null;
    is_sorted = false;
    base_context = null;
+   project_key = null;
 }
 
 

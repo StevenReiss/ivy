@@ -214,7 +214,7 @@ static public JcompType createArrayType(JcompType jt)
 
 
 
-public static JcompType createMethodType(JcompType jt,List<JcompType> aty,boolean varargs,
+static JcompType createMethodType(JcompType jt,List<JcompType> aty,boolean varargs,
 	String signature)
 {
    return new MethodType(jt,aty,varargs,signature);
@@ -1731,8 +1731,7 @@ private static abstract class ClassInterfaceType extends JcompType {
    
       List<JcompType> prms = new ArrayList<JcompType>();
       prms.add(typ);
-      JcompType atyp = createMethodType(null,prms,false,null);
-      atyp = typer.fixJavaType(atyp);
+      JcompType atyp = typer.createMethodType(null,prms,false,null);
       JcompSymbol sym = lookupMethod(typer,"<init>",atyp);
    
       if (sym != null && !sym.isPrivate()) {
@@ -1746,8 +1745,7 @@ private static abstract class ClassInterfaceType extends JcompType {
 
    @Override List<JcompSymbol> isConformableTo(JcompTyper typer,JcompType typ) {
       List<JcompType> prms = new ArrayList<JcompType>();
-      JcompType atyp = createMethodType(typ,prms,false,null);
-      atyp = typer.fixJavaType(atyp);
+      JcompType atyp = typer.createMethodType(typ,prms,false,null);
    
       Set<JcompSymbol> rslt = new HashSet<JcompSymbol>();
       if (getScope() != null) {
@@ -2350,8 +2348,7 @@ private static class EnumType extends CompiledClassInterfaceType {
       if (id.equals("values") && atyps.getComponents().size() == 0) {
          if (values_method == null) {
             JcompType typ1 = typer.findArrayType(this);
-            JcompType typ2 = JcompType.createMethodType(typ1,new ArrayList<JcompType>(),false,null);
-            typ2 = typer.fixJavaType(typ2);
+            JcompType typ2 = typer.createMethodType(typ1,new ArrayList<JcompType>(),false,null);
             int acc = Modifier.PUBLIC | Modifier.STATIC;
             values_method = JcompSymbol.createBinaryMethod("values",typ2,this,acc,null,false);
           }
@@ -2361,8 +2358,7 @@ private static class EnumType extends CompiledClassInterfaceType {
          if (valueof_method == null) {
             List<JcompType> types = new ArrayList<>();
             types.add(typer.findSystemType("java.lang.String"));
-            JcompType typ2 = JcompType.createMethodType(this,types,false,null);
-            typ2 = typer.fixJavaType(typ2);
+            JcompType typ2 = typer.createMethodType(this,types,false,null);
             int acc = Modifier.PUBLIC | Modifier.STATIC;
             valueof_method = JcompSymbol.createBinaryMethod("valueOf",typ2,this,acc,null,false);
           }

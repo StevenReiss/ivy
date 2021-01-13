@@ -235,7 +235,7 @@ private int compatiblityScore(JcompTyper typer,JcompType argtyp,JcodeMethod jm)
       all_defined.put(jc,defd);
     }
    if (!defd.add(scp)) return;
-
+   
    for (JcodeField jf : jc.findAllFields(null)) {
       JcompSymbol js = createField(typer,jf,null);
       if (scp.lookupVariable(jf.getName()) == null) {
@@ -407,8 +407,7 @@ private JcompType getMethodType(JcompTyper typer,JcodeMethod jm,JcompType rt)
       atys.add(JcompControl.convertType(typer,jm.getArgType(i)));
     }
    boolean var = jm.isVarArgs();
-   JcompType mt = JcompType.createMethodType(rt,atys,var,jm.signature);
-   mt = typer.fixJavaType(mt);
+   JcompType mt = typer.createMethodType(rt,atys,var,jm.signature);
 
    return mt;
 }

@@ -133,11 +133,11 @@ JcompScopeFixed()
 {
    Collection<JcompSymbol> ms = method_names.get(js.getName());
    if (ms == null) {
-      ms = new ArrayList<JcompSymbol>();
+      ms = new ArrayList<>();
       method_names.put(js.getName(),ms);
     }
    if (ms.size() > 200) {
-      System.err.println("Number of methods for " + js.getName() + " = " + ms.size());
+      System.err.println("Number of methods for " + js.getName() + " = " + ms.size() + " " + this);
       if (js.getDefinitionNode() != null) {
 	 System.err.println("   FOR: " + js.getDefinitionNode());
        }

@@ -277,7 +277,7 @@ public String getReportName()			{ return getName(); }
 
 public abstract JcompType getType();
 public void setType(JcompType typ)			{ }
-public JcompType getDeclaredType()		{ return getType(); }
+public JcompType getDeclaredType(JcompTyper typer)      { return getType(); }
 
 
 
@@ -1167,14 +1167,14 @@ private static class MethodSymbol extends JcompSymbol {
       return proj + "#" + getFullName() + getType().getJavaTypeName();
     }
 
-   @Override public JcompType getDeclaredType() {
+   @Override public JcompType getDeclaredType(JcompTyper typer) {
       JcompType jt = getType();
       if (isConstructorSymbol()) {
          JcompType ct = getClassType();
          if (ct != null && ct.needsOuterClass()) {
             List<JcompType> atys = new ArrayList<>(jt.getComponents());
             atys.remove(0);
-            JcompType njt = JcompType.createMethodType(jt.getBaseType(),atys,jt.isVarArgs(),jt.getSignature());
+            JcompType njt = typer.createMethodType(jt.getBaseType(),atys,jt.isVarArgs(),jt.getSignature());
             return njt;
           }
        }

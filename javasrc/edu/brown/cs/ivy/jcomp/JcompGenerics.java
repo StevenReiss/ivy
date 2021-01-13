@@ -1039,9 +1039,8 @@ private static class MethodDeriver extends GenericSignatureVisitor {
       if (!chng) return original_type;
       // System.err.println("METHOD " + nsgn + " " + original_type.getSignature());
       
-      JcompType jty = JcompType.createMethodType(return_type,arg_types,
+      JcompType jty = type_data.createMethodType(return_type,arg_types,
             original_type.isVarArgs(),nsgn);
-      jty = type_data.fixJavaType(jty);
       return jty;
     }
 

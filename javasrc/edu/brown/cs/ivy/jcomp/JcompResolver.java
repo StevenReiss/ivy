@@ -1294,23 +1294,22 @@ private class RefPass extends ASTVisitor {
    public @Override void endVisit(LambdaExpression e) {
       List<JcompType> argtypes = new ArrayList<JcompType>();
       for (Object o : e.parameters()) {
-	 JcompType jt = type_data.findSystemType("?");
-	 if (o instanceof SingleVariableDeclaration) {
-	    SingleVariableDeclaration svd = (SingleVariableDeclaration) o;
-	    jt = JcompAst.getJavaType(svd.getType());
-	  }
-	 else {
-	    VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
-	    JcompSymbol js = JcompAst.getDefinition(vdf);
-	    if (js != null) jt = js.getType();
-	  }
-
-	 argtypes.add(jt);
+         JcompType jt = type_data.findSystemType("?");
+         if (o instanceof SingleVariableDeclaration) {
+            SingleVariableDeclaration svd = (SingleVariableDeclaration) o;
+            jt = JcompAst.getJavaType(svd.getType());
+          }
+         else {
+            VariableDeclarationFragment vdf = (VariableDeclarationFragment) o;
+            JcompSymbol js = JcompAst.getDefinition(vdf);
+            if (js != null) jt = js.getType();
+          }
+   
+         argtypes.add(jt);
        }
       JcompSymbol fsym = JcompAst.getDefinition(e);
       JcompType rettype = JcompAst.getExprType(e.getBody());
-      JcompType methodtype = JcompType.createMethodType(rettype,argtypes,false,null);
-      methodtype = type_data.fixJavaType(methodtype);
+      JcompType methodtype = type_data.createMethodType(rettype,argtypes,false,null);
       JcompType reftype = JcompType.createFunctionRefType(methodtype,null,fsym);
       JcompAst.setExprType(e,reftype);
       JcompAst.setJavaType(e,reftype);
@@ -1398,16 +1397,14 @@ private class RefPass extends ASTVisitor {
       if (ref) {
          List<JcompType> comps = new ArrayList<>(rtyp.getComponents());
          comps.add(0,typ);
-         ctyp = JcompType.createMethodType(rtyp.getBaseType(),comps,rtyp.isVarArgs(),null);
-         ctyp = type_data.fixJavaType(ctyp);
+         ctyp = type_data.createMethodType(rtyp.getBaseType(),comps,rtyp.isVarArgs(),null);
        }
       if (rtyp.getComponents().size() >= 1) {
          List<JcompType> comps = new ArrayList<>(rtyp.getComponents());
          if (comps.get(0).isCompatibleWith(typ)) {
             comps.remove(0);
-            mtyp = JcompType.createMethodType(rtyp.getBaseType(),comps,
-        	  rtyp.isVarArgs(),null);
-            mtyp = type_data.fixJavaType(mtyp);
+            mtyp = type_data.createMethodType(rtyp.getBaseType(),comps,
+                  rtyp.isVarArgs(),null);
           }
        }
       // should handle type arguments
@@ -1450,9 +1447,8 @@ private class RefPass extends ASTVisitor {
             List<JcompType> comps = new ArrayList<>(styp.getComponents());
             comps.add(0,js.getClassType());
             nstype = styp;
-            styp = JcompType.createMethodType(styp.getBaseType(),comps,
+            styp = type_data.createMethodType(styp.getBaseType(),comps,
         	  styp.isVarArgs(),null);
-            styp = type_data.fixJavaType(styp);
           }
          JcompSymbol rsym = JcompAst.getDefinition(r);
          JcompType reftype = JcompType.createFunctionRefType(styp,nstype,rsym,js);
@@ -1483,8 +1479,7 @@ private class RefPass extends ASTVisitor {
       for (int i = 0; i < 2; ++i) {
          JcompType mtyp = null;
          try {
-            mtyp = JcompType.createMethodType(null,atyp,false,null);
-            mtyp = type_data.fixJavaType(mtyp);
+            mtyp = type_data.createMethodType(null,atyp,false,null);
           }
          catch (Throwable t) {
             IvyLog.logE("JCOMP","PROBLEM CREATING METHOD TYPE: " + t);

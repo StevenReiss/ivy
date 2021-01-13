@@ -345,6 +345,15 @@ private JcompType findParameterizedSystemType(String t0,String args)
 
 
 
+public JcompType createMethodType(JcompType rettyp,List<JcompType> argtyps,boolean varargs,String signature)
+{
+   JcompType jt = JcompType.createMethodType(rettyp,argtyps,varargs,signature);
+   JcompType jt1 = fixJavaType(jt);
+   
+   return jt1;
+}
+
+
 public Collection<JcompType> getAllTypes()
 {
    return type_map.values();
@@ -1004,7 +1013,7 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       String nm = t.getPrimitiveTypeCode().toString().toLowerCase();
       JcompType jt = type_map.get(nm);
       if (jt == null)
-	 System.err.println("PRIMITIVE TYPE " + nm + " NOT FOUND");
+         System.err.println("PRIMITIVE TYPE " + nm + " NOT FOUND");
       setJavaType(t,jt);
     }
 
@@ -1739,8 +1748,7 @@ private class TypeSetter extends AbstractTypeSetter {
        }
    
       String sgn = getMethodSignature(t,jt,ljt);
-      JcompType mt = JcompType.createMethodType(jt,ljt,t.isVarargs(),sgn);
-      mt = fixJavaType(mt);
+      JcompType mt = createMethodType(jt,ljt,t.isVarargs(),sgn);
       setJavaType(t,mt);
    
       return false;
@@ -1755,8 +1763,7 @@ private class TypeSetter extends AbstractTypeSetter {
       visitItem(t.getDefault());
       JcompType jt = JcompAst.getJavaType(t.getType());
       List<JcompType> ljt = new ArrayList<>();
-      JcompType mt = JcompType.createMethodType(jt,ljt,false,null);
-      mt = fixJavaType(mt);
+      JcompType mt = createMethodType(jt,ljt,false,null);
       setJavaType(t,mt);
       return false;
    }
