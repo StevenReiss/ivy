@@ -1414,10 +1414,15 @@ static public String getText(Node xml,boolean trim)
       StringBuffer buf = new StringBuffer();
 
       for (int i = 0; ; ++i) {
-	 Node nc = nl.item(i);
-	 if (nc == null) break;
-	 String s = getText(nc);
-	 if (s != null) buf.append(s);
+         try {
+            Node nc = nl.item(i);
+            if (nc == null) break;
+            String s = getText(nc);
+            if (s != null) buf.append(s);
+          }
+         catch (Throwable t) {
+            System.err.println("Some problem");
+          }
        }
 
       if (buf.length() == 0) return null;
