@@ -129,14 +129,54 @@ public static CompilationUnit parseSourceFile(char [] buf)
 public static ASTNode parseStatement(String text)
 {
    ASTParser parser = ASTParser.newParser(AST.JLS12);
-   parser.setKind(ASTParser.K_COMPILATION_UNIT);
+   parser.setKind(ASTParser.K_STATEMENTS);
+   Map<String,String> options = JavaCore.getOptions();
+   JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
+   options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
+   options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
+   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");  
+   parser.setCompilerOptions(options);
+   parser.setResolveBindings(false);
+   parser.setStatementsRecovery(true);
+   parser.setSource(text.toCharArray());
+   Block blk = (Block) parser.createAST(null);
+   if (blk.statements().size() == 1) {
+      return (ASTNode) blk.statements().get(0);
+    }
+   else if (blk.statements().size() == 0) return null;
+
+   return blk;
+}
+
+
+
+public static Expression parseExpression(String text)
+{
+   ASTParser parser = ASTParser.newParser(AST.JLS12);
+   parser.setKind(ASTParser.K_EXPRESSION);
    Map<String,String> optsion = JavaCore.getOptions();
    // JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,optsion);
    parser.setCompilerOptions(optsion);
    parser.setSource(text.toCharArray());
-   CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+   Expression exp = (Expression) parser.createAST(null);
+   
+   return exp;
+}
 
-   return cu;
+
+public static ASTNode parseDeclarations(String text)
+{
+   ASTParser parser = ASTParser.newParser(AST.JLS12);
+   parser.setKind(ASTParser.K_CLASS_BODY_DECLARATIONS);
+   Map<String,String> optsion = JavaCore.getOptions();
+   // JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,optsion);
+   parser.setCompilerOptions(optsion);
+   parser.setSource(text.toCharArray());
+   TypeDeclaration typ = (TypeDeclaration) parser.createAST(null);
+   if (typ.bodyDeclarations().size() == 1) {
+      return (ASTNode) typ.bodyDeclarations().get(0);
+    }
+   return typ;
 }
 
 
