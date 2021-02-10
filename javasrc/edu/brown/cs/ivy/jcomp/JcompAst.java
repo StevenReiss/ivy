@@ -139,6 +139,7 @@ public static ASTNode parseStatement(String text)
    parser.setResolveBindings(false);
    parser.setStatementsRecovery(true);
    parser.setSource(text.toCharArray());
+   
    Block blk = (Block) parser.createAST(null);
    if (blk.statements().size() == 1) {
       return (ASTNode) blk.statements().get(0);
@@ -154,10 +155,15 @@ public static Expression parseExpression(String text)
 {
    ASTParser parser = ASTParser.newParser(AST.JLS12);
    parser.setKind(ASTParser.K_EXPRESSION);
-   Map<String,String> optsion = JavaCore.getOptions();
-   // JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,optsion);
-   parser.setCompilerOptions(optsion);
+   Map<String,String> options = JavaCore.getOptions();
+   options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
+   options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
+   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");  
+   parser.setCompilerOptions(options);
+   parser.setResolveBindings(false);
+   parser.setStatementsRecovery(true);
    parser.setSource(text.toCharArray());
+   
    Expression exp = (Expression) parser.createAST(null);
    
    return exp;
@@ -168,14 +174,21 @@ public static ASTNode parseDeclarations(String text)
 {
    ASTParser parser = ASTParser.newParser(AST.JLS12);
    parser.setKind(ASTParser.K_CLASS_BODY_DECLARATIONS);
-   Map<String,String> optsion = JavaCore.getOptions();
-   // JavaCore.setComplianceOptions(JavaCore.VERSION_1_8,optsion);
-   parser.setCompilerOptions(optsion);
+   Map<String,String> options = JavaCore.getOptions();
+   options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
+   options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
+   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");   
+   parser.setCompilerOptions(options);
+   parser.setResolveBindings(false);
+   parser.setStatementsRecovery(true);
    parser.setSource(text.toCharArray());
+   
    TypeDeclaration typ = (TypeDeclaration) parser.createAST(null);
    if (typ.bodyDeclarations().size() == 1) {
       return (ASTNode) typ.bodyDeclarations().get(0);
     }
+   else if (typ.bodyDeclarations().size() == 0) return null;
+   
    return typ;
 }
 
