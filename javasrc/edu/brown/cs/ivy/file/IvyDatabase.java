@@ -211,6 +211,18 @@ public static void setProperties(String dflt) throws SQLException
 }
 
 
+public static void setProperties(InputStream ins) throws SQLException
+{
+   Properties p = new Properties();
+   try {
+      p.loadFromXML(ins);
+      ins.close();
+    }
+   catch (IOException e) { }
+   setupProperties(p);
+}
+
+
 
 /********************************************************************************/
 /*										*/
@@ -218,15 +230,20 @@ public static void setProperties(String dflt) throws SQLException
 /*										*/
 /********************************************************************************/
 
-private static void setup(String dflt) throws SQLException
+private static void setup(String user) throws SQLException
+{
+   Properties p0 = null;
+   
+   if (user != null) p0 = getProperties(new File(user));
+   
+   setupProperties(p0);
+}
+
+
+private static void setupProperties(Properties p0) throws SQLException
 {
    if (dbms_type != DbmsType.UNKNOWN) return;
 
-   File db0 = null;
-   if (dflt != null) {
-      db0 = new File(dflt);
-      if (!db0.exists()) db0 = null;
-    }
    File db1 = new File(IvyFile.expandName(HOME_FILE));
    File db2 = new File(IvyFile.expandName(SYSTEM_FILE));
 
@@ -237,8 +254,7 @@ private static void setup(String dflt) throws SQLException
       String pv = p1.getProperty(pn);
       p2.setProperty(pn,pv);
     }
-   if (db0 != null) {
-      Properties p0 = getProperties(db0);
+   if (p0 != null) {
       for (Object opn : p0.keySet()) {
 	 String pn = (String) opn;
 	 String pv = p0.getProperty(pn);

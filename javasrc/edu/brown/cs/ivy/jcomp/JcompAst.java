@@ -154,7 +154,6 @@ public static ASTNode parseStatement(String text)
 public static Expression parseExpression(String text)
 {
    ASTParser parser = ASTParser.newParser(AST.JLS12);
-   parser.setKind(ASTParser.K_EXPRESSION);
    Map<String,String> options = JavaCore.getOptions();
    options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
    options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
@@ -163,6 +162,7 @@ public static Expression parseExpression(String text)
    parser.setResolveBindings(false);
    parser.setStatementsRecovery(true);
    parser.setSource(text.toCharArray());
+   parser.setKind(ASTParser.K_EXPRESSION);
    
    Expression exp = (Expression) parser.createAST(null);
    
