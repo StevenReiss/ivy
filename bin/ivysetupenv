@@ -36,7 +36,6 @@ else
       echo "Can't locate ivysetupenv"
       exit 1
     endif
-
    set y1 = ${x:h}
    if ($y1 == ".") then
       set y1 = `pwd`

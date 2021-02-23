@@ -1,0 +1,19 @@
+#
+# LEASH -- cocker interface
+#
+# Copyright 2007 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= leash
+
+
+SFILES= \
+	LeashConstants.java \
+	LeashIndex.java \
+	LeashConnection.java \
+	LeashResult.java \
+
+
+
+LOCALJAVAFLAGS= $(J8FLAGS)
+

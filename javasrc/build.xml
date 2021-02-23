@@ -16,6 +16,7 @@
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/jcomp" />
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/jannot" />
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/limbo" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/leash" />
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/project" />
    </target>
 
@@ -38,6 +39,7 @@
 	 <package name='edu.brown.cs.ivy.jcomp' />
 	 <package name='edu.brown.cs.ivy.jannot' />
 	 <package name='edu.brown.cs.ivy.limbo' />
+	 <package name='edu.brown.cs.ivy.leash' />
 	 <package name='edu.brown.cs.ivy.project' />
       </javadoc>
    </target>
