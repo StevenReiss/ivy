@@ -36,6 +36,9 @@
 package edu.brown.cs.ivy.leash;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class LeashResult implements LeashConstants, Comparable<LeashResult>
 {
@@ -49,8 +52,8 @@ public class LeashResult implements LeashConstants, Comparable<LeashResult>
 
 private LeashConnection for_connection;
 private File            result_file;
-private int             result_line;
-private int             result_column;
+private List<Integer>   result_lines;
+private List<Integer>   result_columns;
 private double          result_score;
 
 
@@ -65,19 +68,22 @@ LeashResult(LeashConnection conn,String file,String loc,double score)
    for_connection = conn;
    result_file = new File(file);
    result_score = score;
-   result_line = 0;
-   result_column = 0;
+   result_lines = new ArrayList<>();
+   result_columns = new ArrayList<>();
    
-   if (loc.startsWith("slc:")) {
-      loc = loc.substring(4);
-      int idx = loc.indexOf(",");
-      if (idx > 0) {
-         result_line = Integer.parseInt(loc.substring(0,idx));
-         result_column = Integer.parseInt(loc.substring(idx+1));
-       }
-      else {
-         result_line = Integer.parseInt(loc);
-         result_column = 0;
+   for (StringTokenizer tok = new StringTokenizer(loc,";"); tok.hasMoreTokens(); ) {
+      String loc1 = tok.nextToken();
+      if (loc1.startsWith("slc:")) {
+         loc1 = loc1.substring(4);
+         int idx = loc1.indexOf(",");
+         if (idx > 0) {
+            result_lines.add(Integer.parseInt(loc1.substring(0,idx)));
+            result_columns.add(Integer.parseInt(loc1.substring(idx+1)));
+          }
+         else {
+            result_lines.add(Integer.parseInt(loc1));
+            result_columns.add(0);
+          }
        }
     }
 }
@@ -97,15 +103,15 @@ public File getFilePath()
 }
 
 
-public int getLine()
+public List<Integer> getLines()
 {
-   return result_line;
+   return result_lines;
 }
 
 
-public int getColumn()
+public List<Integer> getColumns()
 {
-   return result_column;
+   return result_columns;
 }
 
 

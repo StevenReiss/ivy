@@ -191,6 +191,8 @@ public static Connection openDatabase(String name) throws SQLException
    if (dbms_host != null) nm += "//" + dbms_host + "/";
    nm += name;
 
+   IvyLog.logD("Connect to database " + nm + " " + dbms_user + " " + dbms_password);
+   
    Connection conn = DriverManager.getConnection(nm,dbms_user,dbms_password);
 
    return conn;

@@ -40,6 +40,7 @@ import org.w3c.dom.Element;
 
 import edu.brown.cs.ivy.exec.IvyExec;
 import edu.brown.cs.ivy.exec.IvyExecQuery;
+import edu.brown.cs.ivy.file.IvyLog;
 import edu.brown.cs.ivy.file.IvyFile;
 import edu.brown.cs.ivy.mint.MintConstants.CommandArgs;
 import edu.brown.cs.ivy.xml.IvyXml;
@@ -64,9 +65,9 @@ private File		index_directory;
 private String		host_name;
 private int		port_number;
 
-private boolean         is_local;
-private boolean         is_active;
-private String          database_name; 
+private boolean 	is_local;
+private boolean 	is_active;
+private String		database_name;
 
 private Map<File,String> file_contents;
 
@@ -108,9 +109,9 @@ LeashConnection(String host,int port)
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Access methods                                                          */
-/*                                                                              */
+/*										*/
+/*	Access methods								*/
+/*										*/
 /********************************************************************************/
 
 String getDatabaseName()
@@ -127,93 +128,90 @@ boolean isLocal()
 
 boolean isActive()
 {
-   return is_active; 
+   return is_active;
 }
 
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Server action methods                                                   */
-/*                                                                              */
+/*										*/
+/*	Server action methods							*/
+/*										*/
 /********************************************************************************/
 
 boolean startServer()
 {
    if (is_active) return true;
-   
+   if (host_name == null) return false;
+
    if (!host_name.equals("localhost") && !host_name.equals(IvyExecQuery.getHostName())) {
       return false;
-    }  
-   
+    }
+
    try {
       String cp = System.getProperty("java.class.path");
-      
+
       StringBuffer cpbuf = new StringBuffer();
-      
+
       for (StringTokenizer tok1 = new StringTokenizer(LEASH_CLASS_PATH); tok1.hasMoreTokens(); ) {
-         String fnm = tok1.nextToken();
-         if (fnm.equals("cocker.jar")) {
-            File f1 = IvyFile.expandFile("$(PRO)/cocker/cocker.jar");
-            File f2 = IvyFile.expandFile("$(IVY)/lib/cocker.jar");
-            if (f1.exists()) cpbuf.append(f1.getPath());
-            else cpbuf.append(f2.getPath());
-          }
-         else if (fnm.equals("ivy")) {
-            for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator); tok2.hasMoreTokens(); ) {
-               String p2 = tok2.nextToken();
-               if (p2.endsWith("ivy.jar") || p2.endsWith("ivy/java")) {
-                  cpbuf.append(p2);
-                }
-             }
-          }
-         else {
-            int ct = 0;
-            for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator); tok2.hasMoreTokens(); ) {
-               String p2 = tok2.nextToken();
-               if (p2.contains("fnm")) {
-                  if (ct++ > 0) cpbuf.append(File.pathSeparator);
-                  cpbuf.append(p2);
-                }
-             }
-          }
-         cpbuf.append(File.pathSeparator);
+	 String fnm = tok1.nextToken();
+	 if (fnm.equals("cocker.jar")) {
+	    File f1 = IvyFile.expandFile("$(PRO)/cocker/cocker.jar");
+	    File f2 = IvyFile.expandFile("$(IVY)/lib/cocker.jar");
+	    if (f1.exists()) cpbuf.append(f1.getPath());
+	    else cpbuf.append(f2.getPath());
+	  }
+	 else if (fnm.equals("ivy")) {
+	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator); tok2.hasMoreTokens(); ) {
+	       String p2 = tok2.nextToken();
+	       if (p2.endsWith("ivy.jar") || p2.endsWith("ivy/java") || p2.endsWith("ivy/bin")) {
+		  cpbuf.append(p2);
+		}
+	     }
+	  }
+	 else {
+	    int ct = 0;
+	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator); tok2.hasMoreTokens(); ) {
+	       String p2 = tok2.nextToken();
+	       if (p2.contains(fnm)) {
+		  if (ct++ > 0) cpbuf.append(File.pathSeparator);
+		  cpbuf.append(p2);
+		}
+	     }
+	  }
+	 cpbuf.append(File.pathSeparator);
        }
-      
+
       StringBuffer cmd = new StringBuffer();
-      
-      
       cmd.append("java");
       cmd.append(" -cp '" + cpbuf.toString() + "'");
       cmd.append(" edu.brown.cs.cocker.cocker.CockerServer");
       if (port_number > 0) cmd.append(" -port " + port_number);
       cmd.append(" -analysis " + analysis_type);
       if (index_directory != null) {
-         cmd.append(" -dir " + index_directory.getPath());
+	 cmd.append(" -dir " + index_directory.getPath());
        }
-      
-      // cmd.append(" > /vol/cocker/server_" + AnalysisConstants.Factory.getAnalysisType().toString());
-      
-      // set thread pool size, timeout
-      System.err.println("RUN SERVER: " + cmd);
+
+      IvyLog.logI("LEASH","RUN SERVER: " + cmd);
+
       new IvyExec(cmd.toString());
-      
+
       for (int i = 0; i < 10; ++i) {
 	 try {
 	    Thread.sleep(i*1000);
 	  }
 	 catch (InterruptedException e) { }
-         getServerInformation();
-         if (is_active) return true;
+	 getServerInformation();
+	 if (is_active) return true;
        }
-      
+
       throw new IOException("Server not started");
     }
    catch (IOException ioe) {
       System.err.println("Could not start server.");
       System.err.println("Error: " + ioe.getMessage());
     }
-   
+
    return false;
 }
 
@@ -247,6 +245,7 @@ private void findActiveHostAndPort()
       getServerInformation();
       if (port_number == 0) is_active = false;
     }
+   else is_active = false;
 }
 
 
@@ -269,21 +268,21 @@ private void getServerInformation()
       port_number = IvyXml.getAttrInt(pong,"PORT");
       if (analysis_type == null) analysis_type = IvyXml.getAttrString(pong,"TYPE");
       if (index_directory == null) {
-         String dnm = IvyXml.getAttrString(pong,"DIR");
-         if (dnm != null) index_directory = new File(dnm);
+	 String dnm = IvyXml.getAttrString(pong,"DIR");
+	 if (dnm != null) index_directory = new File(dnm);
        }
       database_name = IvyXml.getAttrString(pong,"DB");
       return;
     }
-   
+
 }
 
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Send message to cocker and get reply                                    */
-/*                                                                              */
+/*										*/
+/*	Send message to cocker and get reply					*/
+/*										*/
 /********************************************************************************/
 
 Element sendCommand(String cmd)
@@ -298,9 +297,9 @@ Element sendCommand(String cmd,CommandArgs args,String body)
       xw.begin("COMMAND");
       xw.field("CMD",cmd);
       if (args != null) {
-         for (Map.Entry<String,Object> ent : args.entrySet()) {
-            xw.field(ent.getKey(),ent.getValue());
-          }
+	 for (Map.Entry<String,Object> ent : args.entrySet()) {
+	    xw.field(ent.getKey(),ent.getValue());
+	  }
        }
       if (body != null) xw.xmlText(body);
       xw.end("COMMAND");
@@ -323,9 +322,9 @@ Element sendRequest(String req)
  List<Element> sendRequests(String req,int ct)
 {
    if (!is_active) return null;
-   
+
    List<Element> rslts = new ArrayList<>();
-   
+
    try (Socket s = new Socket(host_name,port_number)) {
       s.setSoTimeout(LEASH_REQUEST_TIMEOUT);
       PrintWriter pw = new PrintWriter(s.getOutputStream());
@@ -336,8 +335,8 @@ Element sendRequest(String req)
       xr.close();
       pw.close();
       for (int i = 0; i < ct; ++i) {
-         if (rslttxt == null) rslts.add(null);
-         else rslts.add(IvyXml.convertStringToXml(rslttxt));
+	 if (rslttxt == null) rslts.add(null);
+	 else rslts.add(IvyXml.convertStringToXml(rslttxt));
        }
     }
    catch (IOException e) {
@@ -350,18 +349,18 @@ Element sendRequest(String req)
 
 
  /********************************************************************************/
-/*                                                                              */
-/*      Remote file mehtods                                                     */
-/*                                                                              */
+/*										*/
+/*	Remote file mehtods							*/
+/*										*/
 /********************************************************************************/
 
 String getFileContents(File f)
 {
    if (is_local) return null;
- 
+
    String cnts = file_contents.get(f);
    if (cnts != null) return cnts;
-   
+
    CommandArgs args = new CommandArgs("FILE",f.getPath());
    Element rslt = sendCommand("GETFILE",args,null);
    byte [] arr = IvyXml.getBytesElement(rslt,"CONTENTS");
@@ -369,13 +368,13 @@ String getFileContents(File f)
       cnts = new String(arr);
     }
    if (cnts == null) cnts = "";
-   
+
    synchronized (file_contents) {
       file_contents.putIfAbsent(f,cnts);
     }
-   
+
    if (cnts.length() == 0) return null;
-   
+
    return cnts;
 }
 

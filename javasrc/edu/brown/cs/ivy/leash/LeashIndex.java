@@ -91,10 +91,15 @@ public boolean setup()
 
 public boolean start()
 {
-   if (cocker_connect.isActive()) return true;
+   if (cocker_connect.isActive()) return false;
    
    cocker_connect.startServer();
    
+   return cocker_connect.isActive();
+}
+
+public boolean isActive()
+{
    return cocker_connect.isActive();
 }
 
@@ -148,6 +153,20 @@ public boolean blackList(File ... dir)
    return fileCommand("BLACKLIST",dir);
 }
 
+
+public List<File> getTopFiles()
+{
+   Element crslt = cocker_connect.sendCommand("FILES");
+   List<File> rslt = new ArrayList<>();
+   if (!IvyXml.isElement(crslt,"FILEDATA")) crslt = IvyXml.getChild(crslt,"FILEDATA");
+   for (Element inc : IvyXml.children(crslt,"INCLUDE")) {
+      String fnm = IvyXml.getAttrString(inc,"NAME");
+      File f = new File(fnm);
+      rslt.add(f);
+    }
+   
+   return rslt;
+}
 
 
 
@@ -262,8 +281,6 @@ private boolean checkStatus(Element rslt)
    
    return "OK".equals(IvyXml.getAttrString(rslt,"STATUS"));
 }
-
-
 
 
 }	// end of class LeashIndex
