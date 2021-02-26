@@ -90,6 +90,11 @@ LeashConnection(String typ,File dir)
    is_active = true;
    database_name = null;
    findActiveHostAndPort();
+   if (is_active == false) {
+      String nm = "cocker.props." + analysis_type.toLowerCase();;
+      File pfile = new File(index_directory,nm);
+      pfile.delete();
+    }
 }
 
 
@@ -186,8 +191,8 @@ boolean startServer()
       cmd.append("java");
       cmd.append(" -cp '" + cpbuf.toString() + "'");
       cmd.append(" edu.brown.cs.cocker.cocker.CockerServer");
-      if (port_number > 0) cmd.append(" -port " + port_number);
       cmd.append(" -analysis " + analysis_type);
+      if (port_number != 0 && !is_local) cmd.append("-port " + port_number);
       if (index_directory != null) {
 	 cmd.append(" -dir " + index_directory.getPath());
        }
@@ -201,7 +206,7 @@ boolean startServer()
 	    Thread.sleep(i*1000);
 	  }
 	 catch (InterruptedException e) { }
-	 getServerInformation();
+	 findActiveHostAndPort();
 	 if (is_active) return true;
        }
 
@@ -225,8 +230,9 @@ boolean startServer()
 
 private void findActiveHostAndPort()
 {
-   String nm = ".cocker." + analysis_type;
+   String nm = "cocker.props." + analysis_type.toLowerCase();
    File pfile = new File(index_directory,nm);
+   IvyLog.logI("LEASH","Use property file " + pfile + " " + pfile.exists());
    host_name = "localhost";
    port_number = 0;
 
@@ -241,9 +247,14 @@ private void findActiveHostAndPort()
     }
    catch (IOException e) { }
 
+   IvyLog.logI("LEASH","Connect to " + host_name + " " + port_number);
+
    if (port_number != 0) {
       getServerInformation();
-      if (port_number == 0) is_active = false;
+      if (!is_active) {
+	 port_number = 0;
+	 host_name = "localhost";
+       }
     }
    else is_active = false;
 }
@@ -258,7 +269,12 @@ private void findActiveHostAndPort()
 
 private void getServerInformation()
 {
+   IvyLog.logI("LEASH","Sending info request to server " + port_number + " " + host_name);
+  
+   is_active = true;
    Element pong = sendRequest("<PING/>");
+   IvyLog.logI("LEAST","Ping returned " + IvyXml.convertXmlToString(pong));
+
    if (pong == null) {
       is_active = false;
     }
@@ -274,7 +290,6 @@ private void getServerInformation()
       database_name = IvyXml.getAttrString(pong,"DB");
       return;
     }
-
 }
 
 
@@ -327,11 +342,13 @@ Element sendRequest(String req)
 
    try (Socket s = new Socket(host_name,port_number)) {
       s.setSoTimeout(LEASH_REQUEST_TIMEOUT);
+      IvyLog.logI("LEASH","Send to " + host_name + ":" + port_number + " " + req);
       PrintWriter pw = new PrintWriter(s.getOutputStream());
       IvyXmlReader xr = new IvyXmlReader(s.getInputStream());
       pw.println(req);
       pw.flush();
       String rslttxt = xr.readXml();
+      IvyLog.logI("LEASH","Reply " + rslttxt);
       xr.close();
       pw.close();
       for (int i = 0; i < ct; ++i) {
@@ -340,6 +357,7 @@ Element sendRequest(String req)
        }
     }
    catch (IOException e) {
+      IvyLog.logI("LEASH","Connect to socket failed for " + host_name + " " + port_number + ": " + e);
       is_active = false;
       return null;
     }

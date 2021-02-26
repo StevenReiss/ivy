@@ -261,6 +261,8 @@ bubbles:
 	jar cf ivylib.jar lib/*.props lib/*.jar lib/androidjar lib/eclipsejar lib/*.xml
 	mv ivylib.jar /pro/bubbles/
 	cp lib/eclipsejar/*.jar /pro/bubbles/eclipsejar
+	cp ivybin.jar /pro/cocker/lib/ivy.jar
+
 
 
 #	cp lib/eclipsejar/version /pro/bubbles/eclipsejar

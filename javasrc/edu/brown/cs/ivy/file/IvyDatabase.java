@@ -191,7 +191,7 @@ public static Connection openDatabase(String name) throws SQLException
    if (dbms_host != null) nm += "//" + dbms_host + "/";
    nm += name;
 
-   IvyLog.logD("Connect to database " + nm + " " + dbms_user + " " + dbms_password);
+   IvyLog.logD("Connect to database " + nm);
    
    Connection conn = DriverManager.getConnection(nm,dbms_user,dbms_password);
 
@@ -331,6 +331,8 @@ private static void setupProperties(Properties p0) throws SQLException
     }
 
    dbms_files = Boolean.parseBoolean(getProperty(p2,FILE_PROP,Boolean.toString(dbms_files)));
+   
+   
 }
 
 

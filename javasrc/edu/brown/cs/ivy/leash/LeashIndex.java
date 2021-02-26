@@ -172,7 +172,7 @@ public List<File> getTopFiles()
 
 private boolean fileCommand(String cmd,File [] dir)
 {
-   if (!start()) return false;
+   if (!isActive() && !start()) return false;
    
    StringBuffer buf = new StringBuffer();
    for (File f : dir) {
