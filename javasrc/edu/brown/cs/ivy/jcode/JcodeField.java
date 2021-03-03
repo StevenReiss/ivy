@@ -67,7 +67,7 @@ private JcodeClass	in_class;
 
 JcodeField(JcodeClass cls,int a,String n,String d,String s,Object val)
 {
-   super(ASM6,a,n,d,s,val);
+   super(ASM_API,a,n,d,s,val);
 
    in_class = cls;
 }

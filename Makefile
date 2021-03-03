@@ -257,12 +257,16 @@ bubbles:
 	(cd java; jar cf ../ivybin.jar `cat ../bin.files` )
 	rm -rf bin.files
 	cp ivybin.jar /pro/bubbles/suds/lib/ivy.jar
-	-cp ivybin.jar /pro/cocker/lib/ivy.jar
-	mv ivybin.jar /pro/bubbles/lib/ivy.jar
+	cp ivybin.jar /pro/bubbles/lib/ivy.jar
 	jar cf ivylib.jar lib/*.props lib/*.jar lib/androidjar lib/eclipsejar lib/*.xml
-	mv ivylib.jar /pro/bubbles/
-	cp lib/eclipsejar/*.jar /pro/bubbles/eclipsejar
-
+	-cp ivylib.jar /pro/bubbles/
+	-cp lib/eclipsejar/*.jar /pro/bubbles/eclipsejar
+	-cp lib/asm.jar /pro/bubbles/lib
+	-cp ivybin.jar /pro/cocker/lib/ivy.jar
+	-cp lib/asm.jar /pro/cocker/lib/asm.jar
+	-cp lib/eclipsejar/*.jar /pro/cocker/lib/eclipsejar
+	rm ivybin.jar
+	rm ivylib.jar
 
 
 #	cp lib/eclipsejar/version /pro/bubbles/eclipsejar

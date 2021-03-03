@@ -35,6 +35,7 @@
 package edu.brown.cs.ivy.jcomp;
 
 import edu.brown.cs.ivy.exec.IvyExecQuery;
+import edu.brown.cs.ivy.jcode.JcodeConstants;
 
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
@@ -396,7 +397,7 @@ private class KnownClassVisitor extends ClassVisitor {
    private AsmClass asm_data;
 
    KnownClassVisitor() {
-      super(Opcodes.ASM4);
+      super(JcodeConstants.ASM_API);
       asm_data = null;
     }
 

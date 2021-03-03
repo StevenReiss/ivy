@@ -64,7 +64,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class JcodeMethod extends MethodNode
+public class JcodeMethod extends MethodNode implements JcodeConstants
 {
 
 
@@ -94,7 +94,7 @@ private Collection<JcodeTryCatchBlock> try_blocks;
 
 JcodeMethod(JcodeFactory bf,JcodeClass cls,int a,String n,String d,String s,String [] ex)
 {
-   super(Opcodes.ASM6,a,n,d,s,ex);
+   super(ASM_API,a,n,d,s,ex);
    bcode_factory = bf;
    in_class = cls;
    match_name = null;

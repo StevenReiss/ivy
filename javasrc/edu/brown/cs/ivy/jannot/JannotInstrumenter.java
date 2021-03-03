@@ -57,6 +57,8 @@ import org.objectweb.asm.util.Printer;
 import org.objectweb.asm.util.Textifier;
 import org.objectweb.asm.util.TraceMethodVisitor;
 
+import edu.brown.cs.ivy.jcode.JcodeConstants;
+
 public class JannotInstrumenter implements JannotConstants, ClassFileTransformer
 {
 
@@ -87,7 +89,7 @@ private JannotInstrumenter       our_instrumenter;
 
 private static JannotInstrumenter the_control = null;
 private static boolean do_debug = true;
-private static int ASM_API = Opcodes.ASM6;
+private static int ASM_API = JcodeConstants.ASM_API;
 
 
 

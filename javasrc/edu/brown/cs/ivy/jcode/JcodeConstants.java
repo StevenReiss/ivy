@@ -43,6 +43,9 @@ public interface JcodeConstants extends Opcodes
 {
 
 
+int ASM_API = Opcodes.ASM9;
+
+
 /********************************************************************************/
 /*										*/
 /*	Other op codes (skipped in ASM)					*/

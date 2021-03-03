@@ -10,7 +10,6 @@
 
 package edu.brown.cs.ivy.jcomp;
 
-import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.signature.SignatureReader;
 import org.objectweb.asm.signature.SignatureVisitor;
 import org.objectweb.asm.signature.SignatureWriter;
@@ -400,7 +399,7 @@ private static class TypeVarNameFinder extends SignatureVisitor {
    private List<String> other_names;
 
    TypeVarNameFinder() {
-      super(Opcodes.ASM6);
+      super(ASM_API);
       var_names = new ArrayList<>();
       other_names = new ArrayList<>();
     }
@@ -430,7 +429,7 @@ private static class TypeVarNameFinder extends SignatureVisitor {
 private static class SkipVisitor extends SignatureVisitor {
 
    SkipVisitor() {
-      super(Opcodes.ASM6);
+      super(ASM_API);
     }
 
 }	// end of inner class SkipVisitor
@@ -456,7 +455,7 @@ private static abstract class GenericSignatureVisitor extends SignatureVisitor {
 
    GenericSignatureVisitor(JcompTyper typer,JcompType base,Map<String,JcompType> tmap,
          SignatureWriter sgnw) {
-      super(Opcodes.ASM6);
+      super(ASM_API);
       type_data = typer;
       base_type = base;
       type_map = new TreeMap<>();
@@ -763,7 +762,7 @@ private static class MethodVarFinder extends SignatureVisitor {
    private int var_index;
 
    MethodVarFinder(JcompTyper typer,List<JcompType> parms,Map<String,JcompType> typs,List<JcompType> typargs) {
-      super(Opcodes.ASM6);
+      super(ASM_API);
       type_data = typer;
       type_map = new HashMap<>();
       if (typs != null) type_map.putAll(typs);
@@ -845,7 +844,7 @@ private static class MethodVarTypeFinder extends SignatureVisitor {
    private JcompType cur_type;
     
    MethodVarTypeFinder(JcompTyper typer,JcompType typ,Map<String,JcompType> typs) {
-      super(Opcodes.ASM6);
+      super(ASM_API);
       type_data = typer;
       type_map = typs;
       if (typ == null) typ = typer.findSystemType("java.lang.Object");

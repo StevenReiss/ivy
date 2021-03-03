@@ -179,9 +179,9 @@ if ($?BROWN_IVY_DBMS == 0) then
    endif
 endif
 
-set xxx = `echo $CLASSPATH | fgrep asm6.jar`
+set xxx = `echo $CLASSPATH | fgrep asm.jar`
 if ( "X$xxx" == X ) then
-   setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/asm6.jar"
+   setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/asm.jar"
 endif
 
 set xxx = `echo $CLASSPATH | fgrep javax.servlet.jar`

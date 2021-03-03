@@ -41,7 +41,7 @@ public interface LeashConstants {
 
 int LEASH_REQUEST_TIMEOUT = 2*60*1000;
 
-String LEASH_CLASS_PATH = "cocker.jar ivy eclipsejar asm6.jar postgresql.jar mysql.jar";
+String LEASH_CLASS_PATH = "cocker.jar ivy eclipsejar asm.jar postgresql.jar mysql.jar";
 
 
 

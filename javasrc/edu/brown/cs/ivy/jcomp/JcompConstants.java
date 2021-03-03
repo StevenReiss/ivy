@@ -35,6 +35,7 @@
 
 package edu.brown.cs.ivy.jcomp;
 
+import edu.brown.cs.ivy.jcode.JcodeConstants;
 
 public interface JcompConstants {
 
@@ -70,6 +71,7 @@ String PROP_JAVA_PROJECT = "JCOMP$Project";
 String TYPE_ANY_CLASS = "*ANY*";
 String TYPE_ERROR = "*ERROR*";
 
+int ASM_API = JcodeConstants.ASM_API;
 
 }	// end of interface JcompConstants
 

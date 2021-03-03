@@ -6,7 +6,7 @@
    <target name='init' >
       <path id='ivy.classpath'>
 	 <pathelement location='${IVY}/java' />
-	 <pathelement location='${IVY}/lib/asm6.jar' />
+	 <pathelement location='${IVY}/lib/asm.jar' />
 	 <pathelement location='${IVY}/lib/junit.jar' />
       </path>
       <path id='test.classpath'>

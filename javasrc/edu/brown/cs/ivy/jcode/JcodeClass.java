@@ -50,7 +50,7 @@ import java.util.List;
 
 
 
-public class JcodeClass extends ClassNode
+public class JcodeClass extends ClassNode implements JcodeConstants
 {
 
 
@@ -73,7 +73,7 @@ private JcodeFileInfo from_file;
 
 JcodeClass(JcodeFactory bf,JcodeFileInfo fi,boolean proj)
 {
-   super(Opcodes.ASM6);
+   super(ASM_API);
    bcode_factory = bf;
    from_file = fi;
    base_type = null;
