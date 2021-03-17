@@ -91,7 +91,7 @@ LeashConnection(String typ,File dir)
    database_name = null;
    findActiveHostAndPort();
    if (is_active == false) {
-      String nm = "cocker.props." + analysis_type.toLowerCase();;
+      String nm = "cocker." + analysis_type.toLowerCase() + ".props";
       File pfile = new File(index_directory,nm);
       pfile.delete();
     }
@@ -176,13 +176,20 @@ boolean startServer()
 	  }
 	 else {
 	    int ct = 0;
+            boolean fnd = false;
 	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator); tok2.hasMoreTokens(); ) {
 	       String p2 = tok2.nextToken();
 	       if (p2.contains(fnm)) {
 		  if (ct++ > 0) cpbuf.append(File.pathSeparator);
 		  cpbuf.append(p2);
+                  fnd = true;
 		}
 	     }
+            if (!fnd) {
+               IvyLog.logD("LEASH","Path element " + fnm + " not found in " + cp);
+               File f1 = IvyFile.expandFile("$(IVY)/lib/" + fnm);
+               if (f1.exists()) cpbuf.append(f1.getPath());
+             }
 	  }
 	 cpbuf.append(File.pathSeparator);
        }
@@ -230,7 +237,7 @@ boolean startServer()
 
 private void findActiveHostAndPort()
 {
-   String nm = "cocker.props." + analysis_type.toLowerCase();
+   String nm = "cocker." + analysis_type.toLowerCase() + ".props";
    File pfile = new File(index_directory,nm);
    IvyLog.logI("LEASH","Use property file " + pfile + " " + pfile.exists());
    host_name = "localhost";

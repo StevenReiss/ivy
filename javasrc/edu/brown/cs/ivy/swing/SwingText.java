@@ -294,6 +294,13 @@ public static Font deriveLarger(Font f)
 }
 
 
+public static Font deriveSmaller(Font f)
+{
+   float sz = f.getSize2D();
+   return f.deriveFont(sz-2f);
+}
+
+
 
 
 /********************************************************************************/
