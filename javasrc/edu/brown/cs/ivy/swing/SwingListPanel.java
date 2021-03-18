@@ -170,6 +170,12 @@ public void setVisibleRowCount(int ct)
 }
 
 
+public SwingListSet<T> getListModel()
+{
+   return item_set;
+}
+
+
 public void setBackground(Color c) 
 {
    super.setBackground(c);
@@ -249,7 +255,7 @@ private void fixButtons()
 	    if (itm == sels.get(0)) item_set.editElement(itm);
 	    else {
 	       T oitm = deleteItem(sels.get(0));
-	       item_set.removeElement(oitm);
+	       if (oitm != null) item_set.removeElement(oitm);
 	       item_set.addElement(itm);
 	       item_list.setSelectedValue(itm,true);
 	       triggerActionEvent("ListUpdated");
