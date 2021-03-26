@@ -36,7 +36,6 @@
 package edu.brown.cs.ivy.jannot.tree;
 
 import edu.brown.cs.ivy.jannot.JannotName;
-import edu.brown.cs.ivy.jannot.tree.JannotTreeJCExpression;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Name;

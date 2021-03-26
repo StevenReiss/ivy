@@ -259,6 +259,7 @@ public class SwingGridPanel extends JPanel
 protected int	  y_count;
 protected HashMap<String,Object> value_map;
 protected HashMap<Object,String> tag_map;
+protected HashMap<Object,JLabel> label_map;
 protected Insets  inset_values;
 
 private Box			bottom_box;
@@ -301,7 +302,9 @@ public SwingGridPanel(UndoableEditSupport ued)
    banner_prototype = null;
    section_prototype = null;
    label_prototype = null;
-   chooser_map = new HashMap<Object,JFileChooser>();
+   chooser_map = new HashMap<>();
+   label_map = new HashMap<>();
+   tag_map = new HashMap<>();
 
    beginLayout();
 }
@@ -319,6 +322,11 @@ public final String getLabelForComponent(Object c)
    return tag_map.get(c);
 }
 
+
+public final JLabel getJLabelForComponent(Object c)
+{
+   return label_map.get(c);
+}
 
 
 public final Object getComponentForLabel(String c)
@@ -451,7 +459,8 @@ public final void beginLayout()
 {
    y_count = 0;
    value_map = null;
-   tag_map = new HashMap<Object,String>();
+   tag_map = new HashMap<>();
+   label_map = new HashMap<>();
    bottom_box = null;
    removeAll();
 }
@@ -520,10 +529,11 @@ public final Component addRawComponent(String lbl, Component c)
    if (lbl != null) {
       JLabel tag = createLabel(lbl);
       addGBComponent(tag,0,y_count,1,1,0,0);
+      tag_map.put(c,lbl);
+      label_map.put(c,tag);
     }
 
    addGBComponent(c,1,y_count++,0,1,10,0);
-   tag_map.put(c,lbl);
 
    return c;
 }
@@ -575,6 +585,7 @@ public final <T> SwingComboBox<T> addChoice(String lbl,Collection<T> data,int id
    addGBComponent(cbx,1,y_count++,1,1,10,0);
 
    tag_map.put(cbx,lbl);
+   label_map.put(cbx,tag);
    
    cbx.setActionCommand(lbl);
    if (cb != null) cbx.addActionListener(cb);
@@ -604,6 +615,7 @@ public final <T> SwingComboBox<T> addChoice(String lbl,T [] data,int idx,boolean
    addGBComponent(cbx,1,y_count++,1,1,10,0);
 
    tag_map.put(cbx,lbl);
+   label_map.put(cbx,tag);
 
    return cbx;
 }
@@ -704,7 +716,8 @@ public final JCheckBox addBoolean(String lbl,boolean val,ActionListener cb)
    addGBComponent(cbx,1,y_count++,1,1,0,0);
 
    tag_map.put(cbx,lbl);
-
+   label_map.put(cbx,tag);
+   
    return cbx;
 }
 
@@ -739,6 +752,7 @@ public final JList<String> addButtonSet(String lbl,Map<String,Boolean> values,Li
    addGBComponent(lst,1,y_count++,1,1,0,0);
    
    tag_map.put(lst,lbl);
+   label_map.put(lst,tag);
    
    return lst;
 }
@@ -769,7 +783,8 @@ public final SwingNumericField addNumericField(String lbl,double min,double max,
    addGBComponent(tfld,1,y_count++,0,1,10,0);
 
    tag_map.put(tfld,lbl);
-
+   label_map.put(tfld,tag);
+   
    return tfld;
 }
 
@@ -790,7 +805,8 @@ public final SwingNumericField addNumericField(String lbl,int min,int max,int va
    addGBComponent(tfld,1,y_count++,0,1,10,0);
 
    tag_map.put(tfld,lbl);
-
+   label_map.put(tfld,tag);
+   
    return tfld;
 }
 
@@ -809,7 +825,8 @@ public final SwingRangeSlider addRange(String lbl,int min,int max,int dec,int va
    addGBComponent(sldr,1,y_count++,0,1,10,0);
 
    tag_map.put(sldr,lbl);
-
+   label_map.put(sldr,tag);
+   
    return sldr;
 }
 
@@ -827,7 +844,8 @@ public final SwingDimensionChooser addDimensionField(String lbl,int w,int h,Acti
    addGBComponent(tfld,1,y_count++,0,1,10,0);
 
    tag_map.put(tfld,lbl);
-
+   label_map.put(tfld,tag);
+   
    return tfld;
 }
 
@@ -868,7 +886,9 @@ public final JTextField addTextField(String lbl,String val,int wid,ActionListene
 
    tag_map.put(tfld,lbl);
    tag_map.put(doc,lbl);
-
+   label_map.put(tfld,tag);
+   label_map.put(doc,tag);
+   
    return tfld;
 }
 
@@ -897,7 +917,9 @@ public final JTextArea addTextArea(String lbl,String val,int row,int col,Undoabl
 
    tag_map.put(tarea,lbl);
    tag_map.put(doc,lbl);
-
+   label_map.put(tarea,tag);
+   label_map.put(doc,tag);
+   
    return tarea;
 }
 
@@ -1067,6 +1089,8 @@ private JTextField localAddFileField(String lbl,String val,int md,
 
    tag_map.put(tfld,lbl);
    tag_map.put(doc,lbl);
+   label_map.put(tfld,tag);
+   label_map.put(doc,tag);
 
    return tfld;
 }
@@ -1100,7 +1124,8 @@ public final SwingColorButton addColorField(String lbl,Color val,boolean alpha,A
    addGBComponent(btn,1,y_count++,0,1,10,0);
 
    tag_map.put(btn,lbl);
-
+   label_map.put(btn,tag);
+   
    return btn;
 }
 
@@ -1116,6 +1141,7 @@ public final SwingColorRangeChooser addColorRangeField(String lbl,Color c1,Color
    addGBComponent(btn,1,y_count++,0,1,10,0);
 
    tag_map.put(btn,lbl);
+   label_map.put(btn,tag);
 
    return btn;
 }
@@ -1139,7 +1165,8 @@ public final SwingFontChooser addFontField(String lbl,Font font,Color c,int opts
    addGBComponent(fc,1,y_count++,0,1,10,0);
 
    tag_map.put(fc,lbl);
-
+   label_map.put(fc,tag);
+   
    return fc;
 }
 
@@ -1188,7 +1215,7 @@ public final JButton addBottomButton(String nm,String tag,boolean enabled,Action
    btn.setEnabled(enabled);
    bottom_box.add(btn);
    bottom_box.add(Box.createHorizontalGlue());
-   tag_map.put(btn, tag);
+   tag_map.put(btn,tag);
 
    return btn;
 }
@@ -1209,7 +1236,7 @@ public final JToggleButton addBottomToggle(String nm,String tag,boolean st,Chang
    btn.setEnabled(true);
    bottom_box.add(btn);
    bottom_box.add(Box.createHorizontalGlue());
-   tag_map.put(btn, tag);
+   tag_map.put(btn,tag);
 
    return btn;
 }

@@ -799,16 +799,16 @@ private class MatchComboModel extends AbstractListModel<Object> implements Combo
     }
 
     @Override public void setSelectedItem(Object o) {
-	if (o == MATCH_NONE || o == null) {
-	    selected = null;
-	    update(0);
-	} else if (o == MATCH_NEW) {
-	    selected = newEventMatch(this);
-	    update();
-	} else {
-	    selected = (String) o;
-	    update(matchClasses.indexOf(selected) + 2);
-	}
+        if (o == MATCH_NONE || o == null) {
+            selected = null;
+            update(0);
+        } else if (o == MATCH_NEW) {
+            selected = newEventMatch(this);
+            update();
+        } else {
+            selected = (String) o;
+            update(matchClasses.indexOf(selected) + 2);
+        }
     }
 
     @Override public Object getElementAt(int index) {
