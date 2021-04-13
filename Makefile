@@ -260,7 +260,9 @@ bubbles:
 	cp ivybin.jar /pro/bubbles/lib/ivy.jar
 	jar cf ivylib.jar lib/*.props lib/*.jar lib/androidjar lib/eclipsejar lib/*.xml
 	-cp ivylib.jar /pro/bubbles/
+	-mkdir eclipsejar
 	-cp lib/eclipsejar/*.jar /pro/bubbles/eclipsejar
+	-cp lib/cocker.jar /pro/bubbles/lib
 	-cp lib/asm.jar /pro/bubbles/lib
 	-cp ivybin.jar /pro/cocker/lib/ivy.jar
 	-cp lib/asm.jar /pro/cocker/lib/asm.jar

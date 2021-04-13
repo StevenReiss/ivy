@@ -90,6 +90,7 @@ public class MintLogger implements MintConstants {
 private PrintStream	log_output;
 private String		user_pid;
 
+private static boolean    use_stderr = false;
 private static MintLogger the_logger = null;
 
 
@@ -155,7 +156,7 @@ private void logMessage(String msg)
 {
    if (log_output != null) log_output.println(user_pid + ": " + msg);
 
-   System.err.println("MINT: " + msg);
+   if (use_stderr) System.err.println("MINT: " + msg);
 }
 
 
@@ -165,11 +166,11 @@ private void logMessage(String msg,Throwable t)
 {
    if (log_output != null) log_output.println(user_pid + ": " + msg);
 
-   System.err.println("MINT: " + msg);
+   if (use_stderr) System.err.println("MINT: " + msg);
 
    if (t != null) {
       if (log_output != null) t.printStackTrace(log_output);
-      t.printStackTrace();
+      if (use_stderr) t.printStackTrace();
     }
 }
 

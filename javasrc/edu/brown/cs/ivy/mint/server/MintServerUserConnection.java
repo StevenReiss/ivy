@@ -360,22 +360,22 @@ private class MessageThread extends Thread {
 
    @Override public void run() {
       try {
-	 OutputStream ots = client_socket.getOutputStream();
-	 BufferedOutputStream bots = new BufferedOutputStream(ots);
-	 OutputStreamWriter osw = new OutputStreamWriter(bots);
-	 PrintWriter pw = new PrintWriter(osw,true);
-
-	 for ( ; ; ) {
-	    ClientData cd = getNextMessage();
-	    if (cd == null) break;
-	    if (debug_output) MintLogger.log("Send " + cd);
-	    cd.sendData(pw);
-	    if (pw.checkError()) {
-	       MintLogger.log("Error sending message " + cd);
-	       addToQueue(cd);
-	       break;
-	     }
-	  }
+         OutputStream ots = client_socket.getOutputStream();
+         BufferedOutputStream bots = new BufferedOutputStream(ots);
+         OutputStreamWriter osw = new OutputStreamWriter(bots);
+         PrintWriter pw = new PrintWriter(osw,true);
+   
+         for ( ; ; ) {
+            ClientData cd = getNextMessage();
+            if (cd == null) break;
+            if (debug_output) MintLogger.log("Send " + cd);
+            cd.sendData(pw);
+            if (pw.checkError()) {
+               MintLogger.log("Error sending message " + cd);
+               addToQueue(cd);
+               break;
+             }
+          }
        }
       catch (IOException e) { }
     }

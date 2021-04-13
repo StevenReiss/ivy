@@ -220,9 +220,14 @@ public boolean setAutoUpdateTime(long time,Date d)
 public List<LeashResult> queryStatements(File f,int line,int col)
 {
    try {
-      String cnts = IvyFile.loadFile(f);
       String loc = "slc:" + line + "," + col;
-      return issueQuery("STATEMENTS",loc,cnts);
+      if (cocker_connect.isLocal()) {
+         return issueQuery("STATEMENTS",loc,null,f.getPath());
+       }
+      else {
+         String cnts = IvyFile.loadFile(f);
+         return issueQuery("STATEMENTS",loc,cnts,null);
+       }
     }
    catch (IOException e) {
       return null;
@@ -234,21 +239,22 @@ public List<LeashResult> queryStatements(File f,int line,int col)
 public List<LeashResult> queryStatements(String filecnts,int line,int col)
 {
    String loc = "slc:" + line + "," + col;
-   return issueQuery("STATEMENTS",loc,filecnts);
+   return issueQuery("STATEMENTS",loc,filecnts,null);
 }
 
 
 
-private List<LeashResult> issueQuery(String typ,String srcloc,String cnts)
+private List<LeashResult> issueQuery(String typ,String srcloc,String cnts,String srcfile)
 {
-   cnts = cnts.replace("]]>","] ]>");
+   if (cnts != null) cnts = cnts.replace("]]>","] ]>");
 
    IvyXmlWriter xw = new IvyXmlWriter();
    xw.begin("COMMAND");
    xw.field("CMD","CODEQUERY");
    xw.field("TYPE",typ);
    if (srcloc != null) xw.field("DATA",srcloc);
-   xw.cdataElement("CODE",cnts);
+   if (srcfile != null) xw.textElement("FILE",srcfile);
+   if (cnts != null) xw.cdataElement("CODE",cnts);
    xw.end("COMMAND");
    String msg = xw.toString();
    xw.close();

@@ -721,10 +721,10 @@ private static class OurSocketFactory extends RMISocketFactory {
       if (base_factory == null) base_factory = RMISocketFactory.getDefaultSocketFactory();
       if (base_factory instanceof OurSocketFactory) return;
       try {
-	 RMISocketFactory.setSocketFactory(this);
+         RMISocketFactory.setSocketFactory(this);
        }
       catch (Exception e) {
-	 MintLogger.log("Problem setting RMI socket factory",e);
+         MintLogger.log("Problem setting RMI socket factory",e);
        }
     }
 
