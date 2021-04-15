@@ -43,7 +43,7 @@ public interface JcodeConstants extends Opcodes
 {
 
 
-int ASM_API = Opcodes.ASM9;
+int ASM_API = Opcodes.ASM8;
 
 
 /********************************************************************************/
