@@ -2037,7 +2037,7 @@ private static abstract class ClassInterfaceType extends JcompType {
 
    @Override public boolean isThrowable() {
       for (JcompType jt = this; jt != null; jt = jt.getSuperType()) {
-	 if (jt.getName().equals("java.lang.Throwable")) return true;
+         if (jt.getName().equals("java.lang.Throwable")) return true;
        }
       return false;
     }
