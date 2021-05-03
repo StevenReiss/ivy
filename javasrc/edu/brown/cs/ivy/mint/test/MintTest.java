@@ -163,7 +163,7 @@ private void testA()
    MintControl mc = MintControl.create(null,MintSyncMode.REPLIES);
 
    addMessage(5);	       // # messages expected back
-   mc.send("<MINT><WEB KEY='hello' URL='http://conifer.cs.brown.edu:8180/mint/mint' ID='spr' /></MINT>");
+   mc.send("<MINT><WEB KEY='hello' URL='http://conifer2.cs.brown.edu:8180/mint/mint' ID='spr' /></MINT>");
 
    mc.register(
       "<Sample Field1='_VAR_0'> <Subarg1 SubField1='_VAR_1' /> </Sample>",

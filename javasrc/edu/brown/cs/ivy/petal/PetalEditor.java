@@ -356,6 +356,7 @@ private static final int	ARC_CREATE = -2;		// count for creating arc
 private static final int	IGNORE = -3;			// count to ignore
 private static final int	RESIZE = -4;			// count for resizing
 private static final int	PIVOT = -5;			// count for creating/moving pivot
+private static final int        PAN = -6;                       // count for pan
 
 private static final int	MIN_NODE_SIZE = 40;		// size for determining position
 
@@ -574,7 +575,7 @@ private synchronized void localUpdate()
 private PetalNode findNodeHelper(Point p, MouseEvent evt)
 {
    PetalNode [] nodes = graph_model.getNodes();
-   if ( nodes.length == 0 ) return null;
+   if (nodes.length == 0) return null;
    Point p1 = null;
    PetalNode topNode = null;
    int topPosition = -2;
@@ -600,7 +601,7 @@ private PetalNode findNodeHelper(Point p, MouseEvent evt)
 
    if (topIndex == -1) return topNode;
    topNode = nodes[topIndex];
-   if ( topNode == null ) return topNode;
+   if (topNode == null) return topNode;
    PetalNode nextNode;
    PetalNode tempNode;
    if (evt != null && evt.getClickCount() == 2 ) {
@@ -876,7 +877,7 @@ synchronized void handleClick(MouseEvent evt)
 /*										*/
 /********************************************************************************/
 
-synchronized private int handleDrag(MouseEvent evt,Point down,int ctr,boolean release)
+synchronized private int handleDrag(MouseEvent evt,Point down,Point last,int ctr,boolean release)
 {
    Rectangle r = new Rectangle(evt.getX(),evt.getY(),1,1);
    scrollRectToVisible(r);
@@ -885,20 +886,28 @@ synchronized private int handleDrag(MouseEvent evt,Point down,int ctr,boolean re
       handleDragSelect(evt,down,release);
       return ctr;
     }
-   if (ctr == ARC_CREATE) {
+   else if (ctr == ARC_CREATE) {
       handleArcCreate(evt,down,release);
       return ctr;
     }
-   if (ctr == RESIZE) {
+   else if (ctr == RESIZE) {
       handleResize(evt,down,release);
       return ctr;
     }
-   if (ctr == PIVOT) {
+   else if (ctr == PIVOT) {
       handlePivot(evt,down,release);
       return ctr;
     }
-   if (ctr == IGNORE) return ctr;
+   else if (ctr == IGNORE) return ctr;
+   else if (ctr == PAN) {
+      handleDragPan(evt,down,last,release);
+      return ctr;
+    }
    if (ctr == 0) {
+      int mods = evt.getModifiersEx();
+      if ((mods & (InputEvent.CTRL_DOWN_MASK | InputEvent.META_DOWN_MASK)) != 0) {
+         return PAN;
+       }
       PetalNode pn = findNode(down);
       PetalArc pa = null;
       if (pn == null) pa = findArc(down);
@@ -1043,6 +1052,18 @@ private void handleDragSelect(MouseEvent evt,Point dp,boolean release)
 }
 
 
+private void handleDragPan(MouseEvent evt,Point dpt,Point lpt,boolean release)
+{
+   JViewport vp = getViewport();
+   if (vp == null) return;
+   
+   Point vpt = vp.getViewPosition();
+   Point cpt = evt.getPoint();
+   int x = Math.max(0,vpt.x + (lpt.x - cpt.x));
+   int y = Math.max(0,vpt.y + (lpt.y - cpt.y));
+   Point nvp = new Point(x,y);
+   vp.setViewPosition(nvp);
+}
 
 
 private void handleArcCreate(MouseEvent evt,Point dp,boolean release)
@@ -1341,11 +1362,13 @@ private void issueCommandDone()
 private class Mouser extends MouseInputAdapter {
 
    private Point down_point;
+   private Point last_point;
    private int move_count;
    private boolean doing_popup;
 
    Mouser() {
       down_point = null;
+      last_point = null;
       move_count = -1;
       doing_popup = false;
     }
@@ -1358,23 +1381,25 @@ private class Mouser extends MouseInputAdapter {
    @Override public void mousePressed(MouseEvent evt) {
       grabFocus();
       down_point = evt.getPoint();
+      last_point = down_point;
       move_count = 0;
       if (evt.isPopupTrigger()) {
-	 PetalNode pn = findNode(down_point);
-	 PetalArc pa = null;
-	 if (pn == null) pa = findArc(down_point);
-	 if (graph_model.handlePopupRequest(pn,pa,evt)) doing_popup = true;
+         PetalNode pn = findNode(down_point);
+         PetalArc pa = null;
+         if (pn == null) pa = findArc(down_point);
+         if (graph_model.handlePopupRequest(pn,pa,evt)) doing_popup = true;
        }
     }
 
    @Override public void mouseDragged(MouseEvent evt) {
       if (doing_popup) return;
-      move_count = handleDrag(evt,down_point,move_count,false);
+      move_count = handleDrag(evt,down_point,last_point,move_count,false);
+      last_point = evt.getPoint();
     }
 
    @Override public void mouseReleased(MouseEvent evt) {
       if (doing_popup) doing_popup = false;
-      else if (move_count != 0) handleDrag(evt,down_point,move_count,true);
+      else if (move_count != 0) handleDrag(evt,down_point,last_point,move_count,true);
       else if (evt.isPopupTrigger()) {
 	 PetalNode pn = findNode(down_point);
 	 PetalArc pa = null;
