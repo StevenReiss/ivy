@@ -362,11 +362,11 @@ private static class MemberDigest {
 
    MemberDigest(BT_Method bm) {
       try {
-	 message_digest = MessageDigest.getInstance("MD5");
+         message_digest = MessageDigest.getInstance("MD5");
        }
       catch (NoSuchAlgorithmException e) {
-	 System.err.println("JFLOW: Can't find md5 digest algorithm: " + e);
-	 System.exit(1);
+         System.err.println("JFLOW: Can't find md5 digest algorithm: " + e);
+         System.exit(1);
        }
       addToDigest(bm.getSignature());
       addToDigest(bm.flags);
@@ -377,11 +377,11 @@ private static class MemberDigest {
 
    MemberDigest(BT_Field bf) {
       try {
-	 message_digest = MessageDigest.getInstance("MD5");
+         message_digest = MessageDigest.getInstance("MD5");
        }
       catch (NoSuchAlgorithmException e) {
-	 System.err.println("JFLOW: Can't find md5 digest algorithm: " + e);
-	 System.exit(1);
+         System.err.println("JFLOW: Can't find md5 digest algorithm: " + e);
+         System.exit(1);
        }
       addToDigest(bf.type);
       byte_value = message_digest.digest();
