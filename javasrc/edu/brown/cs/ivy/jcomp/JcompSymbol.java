@@ -845,16 +845,16 @@ private static class VariableSymbol extends JcompSymbol {
 
    @Override public boolean isFieldSymbol() {
       for (ASTNode p = ast_node; p != null; p = p.getParent()) {
-	 switch (p.getNodeType()) {
-	    case ASTNode.FIELD_DECLARATION :
-	       return true;
-	    case ASTNode.METHOD_DECLARATION :
-	       return false;
-	    case ASTNode.CATCH_CLAUSE :
-	       return false;
-	    case ASTNode.LAMBDA_EXPRESSION :
-	       return false;
-	  }
+         switch (p.getNodeType()) {
+            case ASTNode.FIELD_DECLARATION :
+               return true;
+            case ASTNode.METHOD_DECLARATION :
+               return false;
+            case ASTNode.CATCH_CLAUSE :
+               return false;
+            case ASTNode.LAMBDA_EXPRESSION :
+               return false;
+          }
        }
       return false;
     }
