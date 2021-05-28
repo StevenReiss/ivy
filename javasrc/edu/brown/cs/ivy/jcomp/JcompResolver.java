@@ -231,7 +231,7 @@ private JcompType findArrayType(JcompType jt)
 private JcompType findNumberType(String n)
 {
    boolean ishex = false;
-   boolean isoctal = false;
+   @SuppressWarnings("unused") boolean isoctal = false;
    boolean isreal = false;
    String type = null;
 
@@ -268,25 +268,27 @@ private JcompType findNumberType(String n)
    if (type == null) {
       if (isreal) type = "double";
       else {
-	 type = "int";
-	 try {
-	    int base = 10;
-	    if (isoctal) base = 8;
-	    else if (ishex) {
-	       base = 16;
-	       if (n.startsWith("0x")) n = n.substring(2);
-	     }
-	    int v = Integer.parseInt(n,base);
-	    if (v >= 0) {
-	       if (v <= Byte.MAX_VALUE) type = "byte";
-	       else if (v <= Short.MAX_VALUE) type = "short";
-	     }
-	    else {
-	       if (v >= Byte.MIN_VALUE) type = "byte";
-	       else if (v >= Short.MIN_VALUE) type = "short";
-	     }
-	  }
-	 catch (NumberFormatException e) { }
+         // default is int, can be cast to others
+         // probably should introduce an intconst type here
+         type = "int";
+//       try {
+//          int base = 10;
+//          if (isoctal) base = 8;
+//          else if (ishex) {
+//             base = 16;
+//             if (n.startsWith("0x")) n = n.substring(2);
+//           }
+//          int v = Integer.parseInt(n,base);
+//          if (v >= 0) {
+//             if (v <= Byte.MAX_VALUE) type = "byte";
+//             else if (v <= Short.MAX_VALUE) type = "short";
+//           }
+//          else {
+//             if (v >= Byte.MIN_VALUE) type = "byte";
+//             else if (v >= Short.MIN_VALUE) type = "short";
+//           }
+//        }
+//       catch (NumberFormatException e) { }
        }
     }
 

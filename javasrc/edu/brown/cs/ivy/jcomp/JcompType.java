@@ -1453,43 +1453,46 @@ private static class PrimType extends JcompType {
       if (jt == this) return true;
       if (jt == null) return false;
       if (jt.isPrimitiveType()) {
-	 PrimType pt = (PrimType) jt;
-	 if (type_code == PrimitiveType.BYTE) {
-	    if (pt.type_code == PrimitiveType.BYTE || pt.type_code == PrimitiveType.SHORT ||
-		   pt.type_code == PrimitiveType.CHAR || pt.type_code == PrimitiveType.INT ||
-		   pt.type_code == PrimitiveType.LONG ||
-		   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-	       return true;
-	  }
-	 else if (type_code == PrimitiveType.SHORT || type_code == PrimitiveType.CHAR) {
-	    if (pt.type_code == PrimitiveType.SHORT ||
-		   pt.type_code == PrimitiveType.CHAR || pt.type_code == PrimitiveType.INT ||
-		   pt.type_code == PrimitiveType.LONG ||
-		   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-	       return true;
-	  }
-	 else if (type_code == PrimitiveType.INT) {
-	    if (pt.type_code == PrimitiveType.INT ||
-		   pt.type_code == PrimitiveType.LONG ||
-		   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-	       return true;
-	  }
-	 else if (type_code == PrimitiveType.LONG) {
-	    if (pt.type_code == PrimitiveType.LONG ||
-		   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-	       return true;
-	  }
-	 else if (type_code == PrimitiveType.FLOAT) {
-	    if (pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
-	       return true;
-	  }
+         PrimType pt = (PrimType) jt;
+         if (type_code == PrimitiveType.BYTE) {
+            if (pt.type_code == PrimitiveType.BYTE || pt.type_code == PrimitiveType.SHORT ||
+                  pt.type_code == PrimitiveType.CHAR || pt.type_code == PrimitiveType.INT ||
+                  pt.type_code == PrimitiveType.LONG ||
+                  pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+               return true;
+          }
+         else if (type_code == PrimitiveType.SHORT || type_code == PrimitiveType.CHAR) {
+            if (pt.type_code == PrimitiveType.SHORT ||
+                  pt.type_code == PrimitiveType.BYTE ||            // allow trunc for constants
+                  pt.type_code == PrimitiveType.CHAR || pt.type_code == PrimitiveType.INT ||
+                  pt.type_code == PrimitiveType.LONG ||
+                  pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+               return true;
+          }
+         else if (type_code == PrimitiveType.INT) {
+            if (pt.type_code == PrimitiveType.INT ||
+                  pt.type_code == PrimitiveType.SHORT ||           // allow trunc for constants
+                  pt.type_code == PrimitiveType.BYTE ||            // allow trunc for constants
+                  pt.type_code == PrimitiveType.LONG ||
+                  pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+               return true;
+          }
+         else if (type_code == PrimitiveType.LONG) {
+            if (pt.type_code == PrimitiveType.LONG ||
+                  pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+               return true;
+          }
+         else if (type_code == PrimitiveType.FLOAT) {
+            if (pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
+               return true;
+          }
        }
       else if (jt.getAssociatedType() != null) {
-	 JcompType assoctype = jt.getAssociatedType();
-	 if (isCompatibleWith(assoctype)) return true;
+         JcompType assoctype = jt.getAssociatedType();
+         if (isCompatibleWith(assoctype)) return true;
        }
       else if (object_type != null && jt.getName().startsWith("java.lang.")) {
-	 return object_type.isCompatibleWith(jt);
+         return object_type.isCompatibleWith(jt);
        }
       return false;
     }
@@ -2559,8 +2562,8 @@ private static class ParamType extends ClassInterfaceType {
    @Override public boolean isAssignCompatibleWith(JcompType jt) {
       if (jt == this) return true;
       if (jt.isParameterizedType()) {
-	 if (!getBaseType().isCompatibleWith(jt.getBaseType())) return false;
-	 return true;
+         if (!getBaseType().isCompatibleWith(jt.getBaseType())) return false;
+         return true;
        }
       return getBaseType().isCompatibleWith(jt);
     }
