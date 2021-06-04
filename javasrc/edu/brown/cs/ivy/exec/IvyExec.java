@@ -163,6 +163,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class IvyExec
@@ -198,6 +199,7 @@ private ReaderThread error_thread;
 
 private static IvyExecFiles exec_poller = new IvyExecFiles();
 private static boolean	use_polling = false;
+private static AtomicInteger thread_counter =  new AtomicInteger(0); 
 
 
 
@@ -343,7 +345,7 @@ private void doExec(String [] args,String [] env,File cwd,int flags) throws IOEx
       else pst = System.out;
       if (use_polling) exec_poller.createCopyist(ist,pst);
       else {
-	 output_thread = new ReaderThread(ist,pst,cnm);
+	 output_thread = new ReaderThread(ist,pst,cnm,"OUTPUT");
 	 output_thread.setDaemon(daemon);
 	 output_thread.start();
        }
@@ -357,7 +359,7 @@ private void doExec(String [] args,String [] env,File cwd,int flags) throws IOEx
       else pst = System.err;
       if (use_polling) exec_poller.createCopyist(ist,pst);
       else {
-	 error_thread = new ReaderThread(ist,pst,cnm);
+	 error_thread = new ReaderThread(ist,pst,cnm,"ERROR");
 	 error_thread.setDaemon(daemon);
 	 error_thread.start();
        }
@@ -682,8 +684,8 @@ private static class ReaderThread extends Thread {
    private BufferedReader input_reader;
    private PrintStream output_writer;
 
-   ReaderThread(InputStream ist,PrintStream ost,String cmd) {
-      super("IvyExecRdr-" + cmd);
+   ReaderThread(InputStream ist,PrintStream ost,String cm,String what) {
+      super("IvyExecRdr-" + cm + "_" + what + "_" + thread_counter.incrementAndGet());
       input_reader = new BufferedReader(new InputStreamReader(ist));
       output_writer = ost;
     }
