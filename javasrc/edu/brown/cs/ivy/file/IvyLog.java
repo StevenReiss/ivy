@@ -81,7 +81,7 @@ static {
    log_writer = null;
    trace_execution = false;
    default_package = "IVY";
-   trace_thread = false;;
+   trace_thread = false;
 }
 
 
@@ -142,6 +142,8 @@ public static boolean isDebug()
 }
 
 public static void setTracing(boolean fg)	{ trace_execution = fg; }
+
+public static LogLevel getLogLevel()            { return log_level; }
 
 
 
@@ -211,6 +213,15 @@ public static void logS(String msg)
 }
 
 
+public static void logT(Object msg)
+{
+   if (trace_execution) {
+      logD("EXEC: " + msg);
+    }
+}
+
+
+
 /********************************************************************************/
 /*                                                                              */
 /*      Package-specific logging methods                                        */
@@ -277,11 +288,18 @@ public static void logS(String pkg,String msg)
 }
 
 
+public static void logT(String pkg,String msg)
+{
+   if (trace_execution) {
+      log(LogLevel.DEBUG,pkg,0,msg,null);
+    }
+}
+
 
 
 /********************************************************************************/
 /*                                                                              */
-/*      <comment here>                                                          */
+/*      Actual logging routines                                                 */
 /*                                                                              */
 /********************************************************************************/
 
