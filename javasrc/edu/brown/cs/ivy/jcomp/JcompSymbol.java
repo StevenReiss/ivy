@@ -461,7 +461,13 @@ public JcompType getClassType() 	{ return null; }
  *	Get the fully qualified name for a symbol.
  **/
 
-public String getFullName()
+final public String getFullName()
+{
+   return getFullName(false);
+}
+
+
+protected String getFullName(boolean removegenerics)
 {
    ASTNode dn = getDefinitionNode();
    if (isNonLocalDef(dn)) {
@@ -472,7 +478,10 @@ public String getFullName()
 	    case ASTNode.ANNOTATION_TYPE_DECLARATION :
 	    case ASTNode.ENUM_DECLARATION :
 	       JcompType jt = JcompAst.getJavaType(p);
-	       if (jt != null) return jt.getName() + "." + getName();
+	       if (jt != null) {
+                  String tnm = (removegenerics ? jt.getNongenericName() : jt.getName());
+                  return tnm + "." + getName();
+                }
 	       break;
 	  }
        }
@@ -510,6 +519,16 @@ public String getFullReportName()
 public String getCompleteName()
 {
    return getFullName();
+}
+
+
+/**
+ *      Get non-generic name
+ **/
+
+final public String getNongenericName()
+{
+   return getFullName(true);
 }
 
 
@@ -763,8 +782,9 @@ private static class BinaryField extends JcompSymbol {
    @Override public int getModifiers()		{ return access_info; }
    @Override String getSignature()		{ return field_signature; }
 
-   @Override public String getFullName() {
-      return class_type.getName() + "." + field_name;
+   @Override protected String getFullName(boolean nogen) {
+      String tnm = (nogen ? class_type.getNongenericName() : class_type.getName());
+      return tnm + "." + field_name;
     }
 
 
@@ -961,8 +981,9 @@ private static class NestedThisSymbol extends JcompSymbol {
     }
 
    @Override public String getName()		{ return "this$0"; }
-   @Override public String getFullName() {
-      return class_type.getName() + ".this$0";
+   @Override protected String getFullName(boolean nogen) {
+      String tnm = (nogen ? class_type.getNongenericName() : class_type.getName());   
+      return tnm + ".this$0";
     }
    @Override public JcompType getType() 	{ return java_type; }
 
@@ -1210,9 +1231,10 @@ private static class BinaryMethod extends JcompSymbol {
     }
 
    @Override public String getName()			{ return method_name; }
-   @Override public String getFullName() {
-      return class_type.getName() + "." + method_name;
-   }
+   @Override protected String getFullName(boolean nogen) {
+      String tnm = (nogen ? class_type.getNongenericName() : class_type.getName());
+      return tnm + "." + method_name;
+    }
    @Override public JcompType getType() 		{ return method_type; }
    @Override public boolean isBinarySymbol()		{ return true; }
    @Override public boolean isMethodSymbol()		{ return true; }
@@ -1269,9 +1291,11 @@ private static class TypeSymbol extends JcompSymbol {
    @Override public ASTNode getNameNode()		{ return ast_node; }
    @Override public boolean isTypeSymbol()		{ return true; }
 
-   @Override public String getFullName() {
+   @Override protected String getFullName(boolean nogen) {
       JcompType t = getType();
-      if (t != null) return t.getName();
+      if (t != null) {
+         return (nogen ? t.getNongenericName() : t.getName());
+       }
       return ast_node.getName().getIdentifier();
     }
 
@@ -1313,7 +1337,8 @@ private static class AsmTypeSymbol extends JcompSymbol {
    @Override public boolean isTypeSymbol()		{ return true; }
    @Override public int getModifiers()			{ return access_info; }
 
-   @Override public String getFullName() {
+   @Override protected String getFullName(boolean nogen) {
+      if (nogen) return for_type.getNongenericName();
       return for_type.getName();
     }
 

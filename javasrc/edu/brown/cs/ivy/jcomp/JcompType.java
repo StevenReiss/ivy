@@ -301,6 +301,14 @@ protected JcompType(String s)
 public String getName() 		{ return type_name; }
 
 
+
+/**
+ *      Return the full name of non-generic version of the type
+ **/
+
+public String getNongenericName()       { return type_name; }  
+
+
 /**
  *	Return true if this is a primitive type
  **/
@@ -2462,6 +2470,7 @@ private static class ParamType extends ClassInterfaceType {
    }
    
    @Override public boolean isInterfaceType()		{ return base_type.isInterfaceType(); }
+   @Override public String getNongenericName()          { return base_type.getNongenericName(); }
    
    @Override public List<JcompType> getComponents() {  
       List<JcompType> comps = new ArrayList<>();
