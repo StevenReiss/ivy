@@ -100,6 +100,7 @@
 package edu.brown.cs.ivy.file;
 
 import java.text.DecimalFormat;
+import java.util.Formatter;
 
 
 
@@ -267,6 +268,73 @@ public static String formatNumber(double v)
    return NUMBER_FORMAT.format(v);
 }
 
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Format String                                                           */
+/*                                                                              */
+/********************************************************************************/
+
+public static String formatString(String s) 
+{
+   return formatString(s,false);
+}
+
+
+public static String formatChar(String s)
+{
+   return formatString(s,true);
+}
+
+
+public static String formatString(String s,boolean ischar)
+{
+   if (s == null) return null;
+   
+   StringBuffer buf = new StringBuffer();
+   try (Formatter f = new Formatter(buf)) {
+      for (int i = 0; i < s.length(); ++i) {
+         char c = s.charAt(i);
+         switch (c) {
+            case '"' :
+               if (!ischar) buf.append("\\\"");
+               else buf.append(c);
+               break;
+            case '\'' :
+               if (ischar) buf.append("\\\'");
+               else buf.append(c);
+               break;
+            case '\\' :
+               buf.append("\\\\");
+               break;
+            case '\t' :
+               buf.append("\\t");
+               break;
+            case '\n' :
+               buf.append("\\n");
+               break;
+            case '\b' :
+               buf.append("\\b");
+               break;
+            case '\r' :
+               buf.append("\\r");
+               break;
+            case 'f' :
+               buf.append("\\f");
+               break;
+            default :
+               if (c < 32 || c >= 128) {
+                  f.format("\\u%04x",(int) c);
+                }
+               else buf.append(c);
+               break;
+          }
+       }
+    }
+   
+   return buf.toString();
+}
 
 
 /********************************************************************************/
