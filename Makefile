@@ -205,9 +205,11 @@ jar:
 		fgrep -v .AppleDouble | \
 		fgrep -v tea/iced > ../jar.files )
 	cp javasrc/fait.xml java
-	(cd java; jar cf ../lib/ivy.jar `cat ../jar.files` fait.xml )
-	(cd java; jar cfm ../lib/ivyfull.jar ../setupmanifest.mf `cat ../jar.files` fait.xml )
+	cp lib/words java
+	(cd java; jar cf ../lib/ivy.jar `cat ../jar.files` fait.xml words )
+	(cd java; jar cfm ../lib/ivyfull.jar ../setupmanifest.mf `cat ../jar.files` fait.xml words )
 	rm -rf jar.files java/fait.xml
+	-cp lib/ivy.jar /pro/sharpFix/lib
 
 world:
 	$(MAKE) realclean
@@ -227,6 +229,8 @@ setup:
 	for x in $(JCOMPONENTS); do \
 	   bin/ivycreatejava $$x; \
 	 done
+	-cp lib/words java
+
 
 
 javadoc:

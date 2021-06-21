@@ -106,6 +106,8 @@ JannotTreeJCInstanceOf(InstanceofExpression n)
 }
 
 
+// public PatternTree getPattern()                 { return null; }
+
 @Override public JannotTree getType()
 {
    return createTree(getNode().getRightOperand()); 

@@ -112,6 +112,15 @@ JannotTreeJCCase(SwitchCase n)
    return null;
 }
 
+public List<JannotTreeJCExpression> getExpressions()
+{
+   List<JannotTreeJCExpression> rslt = new ArrayList<>();
+   for (Object o : getCase().expressions()) {
+      rslt.add((JannotTreeJCExpression) createTree((ASTNode) o));
+    }
+   return rslt;
+}
+
 
 @Override public List<JannotTreeJCStatement> getStatements()
 {

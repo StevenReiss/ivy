@@ -500,6 +500,9 @@ private class FileSorter {
       String pfx = null;
       for (JcompFile ff : base_list) {
          CompilationUnit cu = (CompilationUnit) ff.getAstNode();
+         if (cu == null) {
+            continue;
+          }
          if (cu.getPackage() != null) {
             pfx = cu.getPackage().getName().getFullyQualifiedName();
           }

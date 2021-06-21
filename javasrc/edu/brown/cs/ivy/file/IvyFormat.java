@@ -320,7 +320,7 @@ public static String formatString(String s,boolean ischar)
             case '\r' :
                buf.append("\\r");
                break;
-            case 'f' :
+            case '\f' :
                buf.append("\\f");
                break;
             default :

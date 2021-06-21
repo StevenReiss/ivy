@@ -1,10 +1,15 @@
 package gm.benchmarks.jeeg;
 import org.brics.gm.jeeg.formulae.*;
 import org.brics.gm.jeeg.events.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class Extreme20 {
-   
+
    boolean empty = false;
 
 	protected SyncManager _sync = null;
@@ -13,10 +18,10 @@ public class Extreme20 {
 		s.makeStep();
 	}
 
-protected class SyncManager { 
+protected class SyncManager {
 
 	public SyncManager() {
-	} 
+	}
 
 	protected class getProp1 implements org.brics.gm.jeeg.formulae.PropositionalFormula {
 		public boolean eval() {
@@ -163,28 +168,28 @@ protected class SyncManager {
 		getConstr.eval();
 	}
 	public boolean get20pre() {
-		return get20Constr.getCurrentValue(); 
+		return get20Constr.getCurrentValue();
 	}
 	public void acquireget20() throws Exception {
-		while (! get20pre()) { 
+		while (! get20pre()) {
 			Extreme20.this.wait();
 		}
 		event = new Event(get20, System.currentTimeMillis());
-	} 
+	}
 	public void releaseget20() throws Exception {
 		event.setEndTime(System.currentTimeMillis());
 		makeStep();
 		Extreme20.this.notifyAll();
 	}
 	public boolean getpre() {
-		return getConstr.getCurrentValue(); 
+		return getConstr.getCurrentValue();
 	}
 	public void acquireget() throws Exception {
-		while (! getpre()) { 
+		while (! getpre()) {
 			Extreme20.this.wait();
 		}
 		event = new Event(get, System.currentTimeMillis());
-	} 
+	}
 	public void releaseget() throws Exception {
 		event.setEndTime(System.currentTimeMillis());
 		makeStep();
@@ -193,23 +198,43 @@ protected class SyncManager {
 } //SyncManger
 
 
-	public  Extreme20  (  int max) {
+	public	Extreme20  (  int max) {
 		this._registerSyncManager(new SyncManager());
 	}
 
     public synchronized int get() throws Exception {
-        ((SyncManager) _sync).acquireget();
+	((SyncManager) _sync).acquireget();
 
-        ((SyncManager) _sync).releaseget();
+	((SyncManager) _sync).releaseget();
 
-        return 1;//super.get();
+	return 1;//super.get();
     }
-    
+
     public synchronized int get20() throws Exception {
-        ((SyncManager) _sync).acquireget20();
+	((SyncManager) _sync).acquireget20();
 
-        ((SyncManager) _sync).releaseget20();
+	((SyncManager) _sync).releaseget20();
 
-        return 1;//super.get();
+	return 1;//super.get();
     }
+
+public static int lcs_length(String s, String t) {
+   Map<List<String>,Integer> dp = new HashMap<>();
+   dp.put(new ArrayList<String>(Arrays.asList("A","C")),3);
+   dp.put(new ArrayList<String>(Arrays.asList("A","F")),5);
+   dp.put(new ArrayList<String>(Arrays.asList("C","B")),-2);
+   Map<String,Integer> weight_by_node = new HashMap<String,Integer>();
+   weight_by_node = shortest_paths("A",dp);
+   String resultStr = "";
+   for (String node : weight_by_node.keySet()) {
+      resultStr += "(" + node + "," + weight_by_node.get(node) + ")";
+    }
+   assert resultStr.equals("(A,0)");
 }
+
+
+
+
+
+}
+
