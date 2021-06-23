@@ -334,35 +334,35 @@ private class FindSymbolVisitor extends ASTVisitor {
       int lvl = 0;
       int spos = -1;
       for (int i = 0; i < pat.length(); ++i) {
-	 char c = pat.charAt(i);
-	 if (c == '(') continue;
-	 else if (c == ')') {
-	    if (spos >= 0) parameters_pattern.add(pat.substring(spos,i));
-	    spos = -1;
-	    break;
-	  }
-	 else if (c == '*') {
-	    if (spos >= 0) parameters_pattern.add(pat.substring(spos,i));
-	    spos = -1;
-	    extra_parameters = true;
-	    break;
-	  }
-	 else if (c == ',') {
-	    if (spos >= 0) parameters_pattern.add(pat.substring(spos,i));
-	    spos = -1;
-	  }
-	 else if (c == '<') {
-	    if (spos >= 0) parameters_pattern.add(pat.substring(spos,i));
-	    ++lvl;
-	    spos = -1;
-	  }
-	 else if (c == '>') {
-	    if (lvl > 0) --lvl;
-	    spos = -1;
-	  }
-	 else if (spos < 0 && lvl == 0) {
-	    spos = i;
-	  }
+         char c = pat.charAt(i);
+         if (c == '(') continue;
+         else if (c == ')') {
+            if (spos >= 0) parameters_pattern.add(pat.substring(spos,i));
+            spos = -1;
+            break;
+          }
+         else if (c == '*') {
+            if (spos >= 0) parameters_pattern.add(pat.substring(spos,i));
+            spos = -1;
+            extra_parameters = true;
+            break;
+          }
+         else if (c == ',') {
+            if (spos >= 0) parameters_pattern.add(pat.substring(spos,i));
+            spos = -1;
+          }
+         else if (c == '<') {
+            if (spos >= 0) parameters_pattern.add(pat.substring(spos,i));
+            ++lvl;
+            spos = -1;
+          }
+         else if (c == '>') {
+            if (lvl > 0) --lvl;
+            spos = -1;
+          }
+         else if (spos < 0 && lvl == 0) {
+            spos = i;
+          }
        }
       if (spos > 0) parameters_pattern.add(pat.substring(spos));
     }

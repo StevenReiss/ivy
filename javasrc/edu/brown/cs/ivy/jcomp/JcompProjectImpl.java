@@ -526,6 +526,7 @@ private class FileSorter {
    private void addDepends(JcompFile ff,CompilationUnit cu) {
       List<String> pfxs = new ArrayList<String>();
       List<String> known = new ArrayList<String>();
+      if (cu == null) return;
       if (cu.getPackage() != null) {
          pfxs.add(cu.getPackage().getName().getFullyQualifiedName());
        }

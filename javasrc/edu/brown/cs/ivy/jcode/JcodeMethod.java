@@ -54,8 +54,6 @@ import org.objectweb.asm.tree.TryCatchBlockNode;
 import org.objectweb.asm.tree.TypeAnnotationNode;
 
 import java.lang.reflect.Modifier;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -517,32 +515,32 @@ JcodeInstruction findInstruction(Label l)
 
 private void computeDigest()
 {
-   MessageDigest md = null;
-   try {
-      md = MessageDigest.getInstance("MD5");
-    }
-   catch (NoSuchAlgorithmException e) {
-      System.err.println("FAIT: Can't find MD5 digest");
-      System.exit(1);
-    }
-
-   addToDigest(md,name);
-   addToDigest(md,desc);
-   addToDigest(md,signature);
-   for (int i = 0; i < instructions.size(); ++i) {
-      AbstractInsnNode ain = instructions.get(i);
-      String ins = JcodeInstruction.getString(ain,this);
-      addToDigest(md,ins);
-    }
-
+// MessageDigest md = null;
+// try {
+//    md = MessageDigest.getInstance("MD5");
+//  }
+// catch (NoSuchAlgorithmException e) {
+//    System.err.println("FAIT: Can't find MD5 digest");
+//    System.exit(1);
+//  }
+// 
+// addToDigest(md,name);
+// addToDigest(md,desc);
+// addToDigest(md,signature);
+// for (int i = 0; i < instructions.size(); ++i) {
+//    AbstractInsnNode ain = instructions.get(i);
+//    String ins = JcodeInstruction.getString(ain,this);
+//    addToDigest(md,ins);
+//  }
+// 
    // message_digest = md.digest();
 }
 
 
-private void addToDigest(MessageDigest md,String s)
-{
-   if (s != null) md.update(s.getBytes());
-}
+// private void addToDigest(MessageDigest md,String s)
+// {
+// if (s != null) md.update(s.getBytes());
+// }
 
 
 

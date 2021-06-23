@@ -70,7 +70,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -92,7 +91,6 @@ abstract public class JcompSymbol implements JcompConstants {
 /********************************************************************************/
 
 private static AtomicInteger lambda_var_counter = new AtomicInteger();
-private static Map<JcompSymbol,JcompSymbol> original_methods = new ConcurrentHashMap<>();
 
 
 
@@ -627,7 +625,7 @@ JcompSymbol parameterize(JcompTyper typer,JcompType ptype,
       JcompType jty = JcompGenerics.deriveMethodType(typer,getType(),ptype,nouters);
       if (jty == null || jty == getType()) return this;
       newsym = createParameterized(ptype,jty);
-      if (newsym != this) original_methods.put(newsym,this);
+      if (newsym != null) newsym.setOriginalMethod(this);
     }
    else if (isFieldSymbol()) {
       String sgn = getSignature();
@@ -644,10 +642,10 @@ JcompSymbol parameterize(JcompTyper typer,JcompType ptype,
 
 public JcompSymbol getOriginalMethod()
 {
-   JcompSymbol orig = original_methods.get(this);
-   if (orig != null) return orig.getOriginalMethod();
    return this;
 }
+
+void setOriginalMethod(JcompSymbol js)          { }
 
 
 JcompSymbol createParameterized(JcompType classtype,JcompType symtype)
@@ -1107,6 +1105,7 @@ private static class MethodSymbol extends JcompSymbol {
    private boolean in_annotation;
    private JcompType method_type;
    private JcompType class_type;
+   private JcompSymbol original_method;
 
    MethodSymbol(MethodDeclaration n) {
       ast_node = n;
@@ -1115,6 +1114,7 @@ private static class MethodSymbol extends JcompSymbol {
       in_annotation = false;
       method_type = null;
       class_type = null;
+      original_method = null;
       if (JcompAst.isInInterface(n)) {
          symbol_mods |= Modifier.PUBLIC;
          if (n.getBody() == null) symbol_mods |= Modifier.ABSTRACT;
@@ -1127,6 +1127,7 @@ private static class MethodSymbol extends JcompSymbol {
       symbol_mods = n.getModifiers();
       symbol_mods |= Modifier.PUBLIC;
       in_annotation = true;
+      original_method = null;
    }
 
    MethodSymbol(MethodSymbol frm,JcompType ctyp,JcompType mtyp) {
@@ -1136,6 +1137,7 @@ private static class MethodSymbol extends JcompSymbol {
       in_annotation = frm.in_annotation;
       method_type = mtyp;
       class_type = ctyp;
+      original_method = null;
     }
 
    @Override JcompSymbol createParameterized(JcompType ctype,JcompType mtype) {
@@ -1202,6 +1204,11 @@ private static class MethodSymbol extends JcompSymbol {
       return jt;
     }
 
+   @Override public JcompSymbol getOriginalMethod() { 
+      if (original_method == null) return this;
+      return original_method.getOriginalMethod();
+    }
+   @Override void setOriginalMethod(JcompSymbol js)     { original_method = js.getOriginalMethod(); }
 
 }	// end of subclass MethodSymbol
 
@@ -1215,6 +1222,7 @@ private static class BinaryMethod extends JcompSymbol {
    private List<JcompType> declared_exceptions;
    private JcompType class_type;
    private boolean is_generic;
+   private JcompSymbol original_method;
 
    BinaryMethod(String nm,JcompType typ,JcompType cls,int acc,List<JcompType> excs,boolean gen) {
       method_name = nm;
@@ -1224,6 +1232,7 @@ private static class BinaryMethod extends JcompSymbol {
       declared_exceptions = excs;
       class_type = cls;
       is_generic = gen;
+      original_method = null;
     }
 
    @Override JcompSymbol createParameterized(JcompType ctype,JcompType mtype) {
@@ -1262,6 +1271,12 @@ private static class BinaryMethod extends JcompSymbol {
       return this;
     }
 
+   @Override public JcompSymbol getOriginalMethod() { 
+      if (original_method == null) return this;
+      return original_method.getOriginalMethod();
+    }
+   @Override void setOriginalMethod(JcompSymbol js)     { original_method = js.getOriginalMethod(); }
+   
 }	// end of subclass KnownMethod
 
 

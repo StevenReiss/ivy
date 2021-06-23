@@ -1062,19 +1062,20 @@ private static class FindLocationVisitor extends ASTVisitor {
    @Override public boolean preVisit2(ASTNode n) {
       int soff = n.getStartPosition();
       int eoff = soff + n.getLength();
+      if (soff < 0) return true;
       if (eoff < start_offset) return false;
       if (soff > start_offset) return false;
       if (best_match == null) best_match = n;
       else {
-	 switch (n.getNodeType()) {
-	    case ASTNode.JAVADOC :
-	    case ASTNode.BLOCK_COMMENT :
-	    case ASTNode.LINE_COMMENT :
-	       break;
-	    default :
-	       best_match = n;
-	       break;
-	  }
+         switch (n.getNodeType()) {
+            case ASTNode.JAVADOC :
+            case ASTNode.BLOCK_COMMENT :
+            case ASTNode.LINE_COMMENT :
+               break;
+            default :
+               best_match = n;
+               break;
+          }
        }
       return true;
     }
