@@ -2704,7 +2704,7 @@ private static class ParamType extends ClassInterfaceType {
       
       String nsgn = JcompGenerics.deriveClassTypeSignature(typer,this,param_values);
       if (nsgn != null) setSignature(nsgn);
-      IvyLog.logD("JCOMP","APPLY PARAMETERS " + getName() + " " + nsgn);
+   // IvyLog.logD("JCOMP","APPLY PARAMETERS " + getName() + " " + nsgn);
    
       if (base_type.getScope() != null && base_type.getScope().getDefinedMethods() != null) {
          for (JcompSymbol js : base_type.getScope().getDefinedMethods()) {
