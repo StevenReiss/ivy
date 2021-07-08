@@ -454,8 +454,8 @@ static void setExprType(ASTNode n,JcompType t)
    if (t == null) {
       // System.err.println("ASSIGN NULL to " + n);
     }
-   // if (t != null && t.isErrorType())
-      // System.err.println("ASSIGN ERROR");
+// if (t != null && t.isErrorType())
+//    System.err.println("ASSIGN ERROR: " + n);
    n.setProperty(PROP_JAVA_ETYPE,t);
 }
 

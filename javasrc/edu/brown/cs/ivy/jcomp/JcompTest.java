@@ -34,6 +34,7 @@ private static String test2 = "public class A {\n" +
 	"   int x = 3;\n" +
 	"   B b;\n" +
 	"   double x = Math.PI;\n" +
+        "   double y = 0x1.0p-52d;\n" +
 	"}\n";
 
 
@@ -616,6 +617,35 @@ public void jcompTest29() throws Exception
    String jar = "/pro/ivy/jcomp/src/test29.jar";
    JcompProject proj = jcomp_control.getProject(jar,srcs);
    int ct = showMessages("test29",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
+
+@Test
+public void jcompTest30() throws Exception
+{
+   File f30 = new File("/pro/ivy/jcomp/src/test30");
+   String cnts = IvyFile.loadFile(f30);
+   StringSource s30 = new StringSource("test30",cnts);
+   List<JcompSource> srcs = new ArrayList<>();
+   srcs.add(s30);
+   JcompProject proj = jcomp_control.getProject(srcs);
+   int ct = showMessages("test30",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
+@Test
+public void jcompTest31() throws Exception
+{
+   File f31 = new File("/pro/ivy/jcomp/src/test31");
+   String cnts = IvyFile.loadFile(f31);
+   StringSource s31 = new StringSource("test31",cnts);
+   List<JcompSource> srcs = new ArrayList<>();
+   srcs.add(s31);
+   JcompProject proj = jcomp_control.getProject(srcs);
+   int ct = showMessages("test31",proj);
    Assert.assertEquals(0,ct);
 }
 

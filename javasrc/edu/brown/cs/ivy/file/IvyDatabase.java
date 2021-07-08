@@ -108,6 +108,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -157,6 +158,11 @@ private static final String FILE_PROP = "edu.brown.cs.ivy.file.dbmsfiles";
 
 private static boolean postgres_usestdin = true;
 
+public static final OutputStream NULL_STREAM = new NullOutputStream();
+
+static {
+   System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
+}
 
 
 
@@ -195,6 +201,8 @@ public static Connection openDatabase(String name) throws SQLException
    
    Connection conn = DriverManager.getConnection(nm,dbms_user,dbms_password);
 
+   Runtime.getRuntime().addShutdownHook(new DatabaseCloser(conn));
+   
    return conn;
 }
 
@@ -315,7 +323,15 @@ private static void setupProperties(Properties p0) throws SQLException
 	 dbms_files = true;		// MYSQL supports external files
 	 break;
       case DERBY :
-	 dbms_prefix = DERBY_PREFIX;
+         File f1 = new File(System.getProperty("user.home"));
+         File f2 = new File(f1,"derby.log");
+         System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
+         System.setProperty("derby.stream.error.file",f2.getPath());
+         System.setProperty("derby.system.home",f1.getPath());
+         File f3 = new File(System.getProperty("user.dir"));
+         File f4 = new File(f3,"derby.log");
+         f4.deleteOnExit();
+         dbms_prefix = DERBY_PREFIX;
 	 dbms_default = null;
 	 dbms_files = false;
 	 if (dbms_host == null) dbms_host = "localhost:1527";
@@ -507,9 +523,54 @@ public static String getIdDefType()
 
 
 
+/********************************************************************************/
+/*                                                                              */
+/*      Dummy log file for DERBY                                                */
+/*                                                                              */
+/********************************************************************************/
+
+
+public static final class NullOutputStream extends OutputStream {
+   
+   public void write(int b) { }
+   public void write(byte[] b) { }
+   public void write(byte[] b,int off,int len) { }
+   
+}       // end of inner class NullOutputStream
 
 
 
+
+/********************************************************************************/
+/*                                                                              */
+/*      Database closer                                                         */
+/*                                                                              */
+/********************************************************************************/
+
+private static class DatabaseCloser extends Thread {
+   
+   private Connection for_database;
+   
+   DatabaseCloser(Connection c) {
+      for_database = c;
+    }
+   
+   @Override public void run() {
+      try {
+         if (for_database.isClosed()) return;
+         if (!for_database.getAutoCommit()) {
+            for_database.commit();
+          }
+       }
+      catch (SQLException e) { }
+      try {
+         if (for_database.isClosed()) return;
+         for_database.close();
+       }
+      catch (SQLException e) { }
+    }
+   
+}       // end of inner class DataabseCloser
 
 
 }	// end of class IvyDatabase

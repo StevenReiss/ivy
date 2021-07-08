@@ -629,9 +629,10 @@ JcompSymbol parameterize(JcompTyper typer,JcompType ptype,
     }
    else if (isFieldSymbol()) {
       String sgn = getSignature();
-      if (sgn == null) sgn = getType().getSignature();
+      JcompType ftyp = getType();
+      if (sgn == null) sgn = ftyp.getSignature();
       if (sgn == null) return this;
-      JcompType jty = JcompGenerics.deriveFieldType(typer,getType(),sgn,
+      JcompType jty = JcompGenerics.deriveFieldType(typer,ftyp,sgn,
 	    ptype,nouters);
       if (jty == null || jty == getType()) return this;
       newsym = createParameterized(ptype,jty);

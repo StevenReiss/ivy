@@ -1321,10 +1321,10 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    protected String findOuterTypeName(String nm)
    {
       if (!canbe_type) return null;
-
+   
       String s1 = checkParentType(nm,outer_type,true,new HashSet<JcompType>());
       if (s1 != null) return s1;
-
+   
       return null;
    }
 
@@ -1643,25 +1643,26 @@ private class TypeSetter extends AbstractTypeSetter {
       String nm = t.getName().getIdentifier();
       if (type_prefix != null) nm = type_prefix + "." + nm;
       type_prefix = nm;
-
+      
       canbe_type = true;
+      visitList(t.modifiers());
       visitList(t.superInterfaceTypes());
       visitItem(t.getName());
       canbe_type = false;
       visitList(t.enumConstants());
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
-
+   
       JcompType jt = JcompAst.getJavaType(t);
       for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-	 Type ity = (Type) it.next();
-	 jt.addInterface(JcompAst.getJavaType(ity));
+         Type ity = (Type) it.next();
+         jt.addInterface(JcompAst.getJavaType(ity));
        }
-
+   
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-
+   
       return false;
     }
 
@@ -1890,6 +1891,7 @@ private class TypeSetter extends AbstractTypeSetter {
       canbe_type = set_types;
       visitItem(t.getTypeName());
       forceType(t.getTypeName());
+      
       canbe_type = false;
       return false;
     }

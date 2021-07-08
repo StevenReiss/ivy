@@ -367,7 +367,6 @@ private AsmClass checkKnownType(String name)
 private AsmClass findKnownClassType(String name)
 {
    String fnm = name.replace('.','/') + ".class";
-
    InputStream ins = getInputStream(fnm);
    if (ins == null) return null;
 
@@ -990,15 +989,15 @@ private static class JmodClassPathEntry extends ClassPathEntry {
       String usename = "classes/" + name;
       ZipEntry ent = jmod_file.getEntry(usename);
       if (ent != null) {
-	 try {
-	    return jmod_file.getInputStream(ent);
-	  }
-	 catch (ZipException e) {
-	    System.err.println("JCOMP: Problem with system zip file: " + e);
-	  }
-	 catch (IOException e) {
-	    System.err.println("JCOMP: Problem opening system jmod entry: " + e);
-	  }
+         try {
+            return jmod_file.getInputStream(ent);
+          }
+         catch (ZipException e) {
+            System.err.println("JCOMP: Problem with system zip file: " + e);
+          }
+         catch (IOException e) {
+            System.err.println("JCOMP: Problem opening system jmod entry: " + e);
+          }
        }
       return null;
     }

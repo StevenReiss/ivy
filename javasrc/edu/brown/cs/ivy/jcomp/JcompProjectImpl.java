@@ -37,6 +37,8 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -108,7 +110,8 @@ void clear()
 void addFile(JcompFile jf)
 {
    if (file_nodes.contains(jf)) return;
-
+   IvyLog.logD("JCOMP","ADD SOURCE FILE " + jf.getFile());
+   
    file_nodes.add(jf);
    jf.setRoot(this);
    is_sorted = false;

@@ -133,7 +133,7 @@ static void fixupTypeVariable(JcompType var,List<TypeDeriver> bounds)
    if (var == null || bounds == null || bounds.isEmpty()) return;
    for (TypeDeriver td : bounds) {
       // Might need to handle multiple supertypes, intersection types
-      JcompType btyp = td.getResultType();
+      JcompType btyp = td.getResultType(false);
       if (btyp == null) continue;
       if (btyp.isInterfaceType()) var.addInterface(btyp);
       else var.setSuperType(btyp);
@@ -336,7 +336,7 @@ static JcompType deriveFieldType(JcompTyper typer,JcompType fty,String fsign,Jco
    TypeDeriver tdr = new TypeDeriver(typer,cty,typemap,fty,sgr);
    SignatureReader sr1 = new SignatureReader(fsign);
    sr1.accept(tdr);
-   JcompType ntype = tdr.getResultType();
+   JcompType ntype = tdr.getResultType(true);
    if (ntype != null) return ntype;
 
    return fty;
@@ -562,7 +562,7 @@ private static abstract class GenericSignatureVisitor extends SignatureVisitor {
              }
             else {
                String s1 = getInternalJavaName(pt);
-               buf.append("L");
+               if (!s1.startsWith("[")) buf.append("L");
                buf.append(s1);
              }
           }
@@ -956,13 +956,13 @@ private static class SuperDeriver extends GenericSignatureVisitor {
 
    JcompType getSuperType() {
       if (super_deriver == null) return super_type;
-      return super_deriver.getResultType();
+      return super_deriver.getResultType(false);
     }
 
    List<JcompType> getInterfaces() {
        List<JcompType> rslt = new ArrayList<>();
        for (TypeDeriver td : iface_derivers) {
-          rslt.add(td.getResultType());
+          rslt.add(td.getResultType(false));
         }
        return rslt;
     }
@@ -1017,7 +1017,7 @@ private static class MethodDeriver extends GenericSignatureVisitor {
       boolean chng = false;
       for (int i = 0; i < arg_types.size(); ++i) {
          JcompType oty = arg_types.get(i);
-         JcompType nty = arg_derivers.get(i).getResultType();
+         JcompType nty = arg_derivers.get(i).getResultType(false);
          if (nty == null) nty = oty;
          if (oty != nty) {
             arg_types.set(i,nty);
@@ -1025,7 +1025,7 @@ private static class MethodDeriver extends GenericSignatureVisitor {
           }
          else if (arg_derivers.get(i).isChanged()) chng = true;
        }
-      JcompType rty = return_deriver.getResultType();
+      JcompType rty = return_deriver.getResultType(false);
       if (rty == null) rty = return_type;
       if (rty != return_type) {
          return_type = rty;
@@ -1080,7 +1080,7 @@ private static class TypeDeriver extends GenericSignatureVisitor {
    private int array_count;
    private List<TypeDeriver> param_types;
    private boolean is_changed;
-
+   
    TypeDeriver(JcompTyper typer,JcompType base,Map<String,JcompType> tmap,JcompType bty,SignatureWriter writer) {
       super(typer,base,tmap,writer);
       original_type = bty;
@@ -1094,7 +1094,8 @@ private static class TypeDeriver extends GenericSignatureVisitor {
       outer_type = null;
     }
 
-   JcompType getResultType() {
+   JcompType getResultType(boolean ignoretype) {
+      if (original_type != null && ignoretype) new_type = null;
       if (new_type == null) new_type = original_type;
       else {
          for (int i = 0; i < array_count; ++i) {
@@ -1131,7 +1132,7 @@ private static class TypeDeriver extends GenericSignatureVisitor {
       if (param_types != null) {
          for (TypeDeriver tdv : param_types) {
             if (tdv.isChanged()) is_changed = true;
-            JcompType jty = tdv.getResultType();
+            JcompType jty = tdv.getResultType(false);
             if (jty == null || jty.isTypeVariable() || jty.isWildcardType()) ++nvar;
             if (jty == null || jty.isWildcardType())
                jty = type_data.ANY_TYPE;
@@ -1180,18 +1181,23 @@ private static class TypeDeriver extends GenericSignatureVisitor {
       return super.visitArrayType();
     }
 
-
    @Override public void visitClassType(String name) {
       super.visitClassType(name);
-      new_type = lookupClassType(type_data,name);
+      if (new_type == null) 
+         new_type = lookupClassType(type_data,name);
       if (new_type == null) {
          IvyLog.logD("JCOMP","TYPE " + name + " not found");
        }
     }
-
+   
+   @Override public SignatureVisitor visitInterface()
+   {
+      return super.visitInterface();
+   }
+   
    @Override public void visitInnerClassType(String name) {
       if (param_types != null) {
-         outer_type = getResultType();
+         outer_type = getResultType(false);
          param_types = null;
        }
       else {

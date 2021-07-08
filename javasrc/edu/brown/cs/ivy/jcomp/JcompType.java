@@ -621,6 +621,11 @@ public void defineAll(JcompTyper typer)
    if (getOuterType() != null) {
       getOuterType().defineAll(typer);
     }
+   if (getInterfaces() != null) {
+      for (JcompType jt : getInterfaces()) {
+         jt.defineAll(typer);
+       }
+    }
 }
 
 void addInterface(JcompType jt) 		{ }
@@ -826,7 +831,10 @@ public boolean isCompatibleWith(JcompType jt)
 
 public boolean isAssignCompatibleWith(JcompType jt)
 {
-   return isCompatibleWith(jt);
+   if (isCompatibleWith(jt)) return true;
+   if (isNumericType() && jt.isNumericType()) return true;
+   
+   return false;
 }
 
 
@@ -1256,13 +1264,6 @@ public JcompType findChildForInterface(JcompTyper typer,JcompType ity)
 
 
 
-
-
-
-      
-
-
-
 void applyParametersToType(JcompTyper typer)                    { }
 
 
@@ -1332,6 +1333,7 @@ static boolean checkProtections(JcompSymbol js,JcompType basetype,ASTNode n)
    if (js == null || js.isPublic()) return true;
    JcompType fromtype = null;
    List<JcompType> outertypes = null;
+  
    for (ASTNode p = n; p != null; p = p.getParent()) {
       switch (p.getNodeType()) {
 	 case ASTNode.TYPE_DECLARATION :
@@ -1344,6 +1346,26 @@ static boolean checkProtections(JcompSymbol js,JcompType basetype,ASTNode n)
 	       outertypes.add(ctyp);
 	     }
 	    break;
+         case ASTNode.CLASS_INSTANCE_CREATION :
+            ClassInstanceCreation cnod = (ClassInstanceCreation) p;
+            if (cnod.getAnonymousClassDeclaration() != null) {
+               JcompType jt = JcompAst.getJavaType(cnod.getType());
+               if (jt != null) {
+                  if (outertypes == null) outertypes = new ArrayList<>();
+                  outertypes.add(jt);
+                }
+             }
+            break;
+         case ASTNode.ANONYMOUS_CLASS_DECLARATION :
+            if (p.getParent() instanceof ClassInstanceCreation) {
+               ClassInstanceCreation cic = (ClassInstanceCreation) p.getParent();
+               JcompType jt = JcompAst.getJavaType(cic.getType());
+               if (jt != null) {
+                  if (outertypes == null) outertypes = new ArrayList<>();
+                  outertypes.add(jt);
+                }
+             }
+            break;
        }
     }
    if (fromtype == null) return true;
@@ -1480,6 +1502,7 @@ private static class PrimType extends JcompType {
          else if (type_code == PrimitiveType.INT) {
             if (pt.type_code == PrimitiveType.INT ||
                   pt.type_code == PrimitiveType.SHORT ||           // allow trunc for constants
+                  pt.type_code == PrimitiveType.CHAR ||           // allow trunc for constants
                   pt.type_code == PrimitiveType.BYTE ||            // allow trunc for constants
                   pt.type_code == PrimitiveType.LONG ||
                   pt.type_code == PrimitiveType.FLOAT || pt.type_code == PrimitiveType.DOUBLE)
@@ -1679,6 +1702,20 @@ private static abstract class ClassInterfaceType extends JcompType {
       interface_types.add(t);
       t.addChild(this);
     }
+   
+   protected synchronized void setInterfaces(Collection<JcompType> ifs) {
+      if (interface_types != null) {
+         for (JcompType oty : interface_types) {
+            child_types.remove(oty.getName());
+         }
+       }
+      interface_types = null;
+      if (ifs != null) {
+         for (JcompType jt : ifs) {
+            addInterface(jt);
+          }
+       }
+   }
 
    @Override public synchronized Collection<JcompType> getInterfaces() {
       if (interface_types == null) return null;
@@ -1857,8 +1894,8 @@ private static abstract class ClassInterfaceType extends JcompType {
                js = it.lookupMethod(typer,id,atyps,basetype,n);
                if (js != null && !js.isAbstract()) return js;
                else if (js != null) {
-        	  return js;
-        	}
+                  return js;
+                }
              }
           }
        }
@@ -2191,7 +2228,7 @@ private static abstract class CompiledClassInterfaceType extends ClassInterfaceT
    @Override JcompSymbol lookupField(JcompTyper typs,String id,int lvl) {
       JcompSymbol js = super.lookupField(typs,id,lvl+1);
       if (js != null) {
-	 field_names.add(id);
+         field_names.add(id);
        }
       return js;
     }
@@ -2448,6 +2485,17 @@ private static class ParamType extends ClassInterfaceType {
             // System.err.println("NULL PARAM TYPE " + s);
           }
        }
+      
+      JcompType sjt = parameterizeSuper(getSuperType());
+      setSuperType(sjt);
+      List<JcompType> ifs = new ArrayList<>();
+      if (getInterfaces() != null) {
+         for (JcompType ijt : getInterfaces()) {
+            ifs.add(parameterizeSuper(ijt));
+          }
+         setInterfaces(ifs);
+       }
+      
       local_scope = new JcompScopeFixed();
       parameters_applied = false;
     }
@@ -2701,7 +2749,6 @@ private static class ParamType extends ClassInterfaceType {
     }
 
    private void applyParameters(JcompTyper typer) {
-      
       String nsgn = JcompGenerics.deriveClassTypeSignature(typer,this,param_values);
       if (nsgn != null) setSignature(nsgn);
    // IvyLog.logD("JCOMP","APPLY PARAMETERS " + getName() + " " + nsgn);
@@ -2725,8 +2772,7 @@ private static class ParamType extends ClassInterfaceType {
        }
     }
    
-   @Override void applyParametersToType(JcompTyper typer) 
-   {
+   @Override void applyParametersToType(JcompTyper typer) {
       String nsgn = JcompGenerics.deriveClassTypeSignature(typer,this,param_values);
       if (nsgn != null) setSignature(nsgn);
       // NOTE THAT THIS REQUIRES PARAMETER MAP BEING CORRECT
@@ -2741,7 +2787,11 @@ private static class ParamType extends ClassInterfaceType {
           }
        }
    }
-
+   
+   private JcompType parameterizeSuper(JcompType t) {
+      return t;
+    }
+   
 }	// end of subclase ParamType
 
 
@@ -2769,7 +2819,7 @@ private static class VarType extends ClassInterfaceType {
    
    @Override void setSuperType(JcompType jt) {
       super.setSuperType(jt);
-      // recomputer type name
+      // recompute type name
     }
    @Override synchronized void addInterface(JcompType jt) {
       super.addInterface(jt);
