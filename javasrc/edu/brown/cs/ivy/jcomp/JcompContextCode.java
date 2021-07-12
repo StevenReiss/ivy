@@ -344,8 +344,11 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
        }
     }
 
-   jt = typer.fixJavaType(jt);
-   return jt;
+   JcompType jt1 = typer.fixJavaType(jt);
+   if (jt1 != jt) {
+      type_map.put(jc,jt1);
+    }
+   return jt1;
 }
 
 
