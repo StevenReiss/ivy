@@ -203,6 +203,17 @@ public static Connection openDatabase(String name) throws SQLException
 
    Runtime.getRuntime().addShutdownHook(new DatabaseCloser(conn));
    
+   switch (dbms_type) {
+      case DERBY :
+      case DERBY_EMBED :
+         File f3 = new File(System.getProperty("user.dir"));
+         File f4 = new File(f3,"derby.log");
+         f4.deleteOnExit();
+         break;
+      default :
+         break;
+    }
+   
    return conn;
 }
 
@@ -328,15 +339,17 @@ private static void setupProperties(Properties p0) throws SQLException
          System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
          System.setProperty("derby.stream.error.file",f2.getPath());
          System.setProperty("derby.system.home",f1.getPath());
-         File f3 = new File(System.getProperty("user.dir"));
-         File f4 = new File(f3,"derby.log");
-         f4.deleteOnExit();
          dbms_prefix = DERBY_PREFIX;
 	 dbms_default = null;
 	 dbms_files = false;
 	 if (dbms_host == null) dbms_host = "localhost:1527";
 	 break;
       case DERBY_EMBED :
+         File f3 = new File(System.getProperty("user.home"));
+         File f4 = new File(f3,"derby.log");
+         System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
+         System.setProperty("derby.stream.error.file",f4.getPath());
+         System.setProperty("derby.system.home",f4.getPath());
 	 dbms_prefix = DERBY_PREFIX;
 	 dbms_default = null;
 	 dbms_files = false;
@@ -347,8 +360,6 @@ private static void setupProperties(Properties p0) throws SQLException
     }
 
    dbms_files = Boolean.parseBoolean(getProperty(p2,FILE_PROP,Boolean.toString(dbms_files)));
-   
-   
 }
 
 
