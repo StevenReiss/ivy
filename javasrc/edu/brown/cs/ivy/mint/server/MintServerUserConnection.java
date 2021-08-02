@@ -415,8 +415,17 @@ private class MessageInfo extends ClientData {
 
    @Override void sendData(PrintWriter pw) {
       pw.println(MINT_HEADER_GET + " " + pattern_id + " " +
-		    for_message.getReplyId());
-      pw.println(for_message.getText());
+        	    for_message.getReplyId());
+      
+   // pw.println(for_message.getText());
+      String s = for_message.getText();
+      for (int i = 0; i < s.length(); i += 16384) {
+         int len = s.length() - i;
+         if (len > 16384) len = 16384;   
+         pw.write(s,i,len);
+       }
+      pw.println();
+      
       pw.println(MINT_TRAILER);
       pw.flush();
     }

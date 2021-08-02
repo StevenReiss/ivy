@@ -1,0 +1,51 @@
+package test;
+
+public class Test32 {
+
+public int getValue(Comparable<?> v)
+{
+   return 0;
+}
+
+
+public int getValue(long v)
+{
+   return getValue(Long.valueOf(v));
+}
+
+
+
+
+}	// end of class Test30
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

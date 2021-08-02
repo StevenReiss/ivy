@@ -640,6 +640,19 @@ public Map<String,JcompType> getFields()
    return getFields(null);
 }
 
+public List<JcompSymbol> getDefinedMethods(JcompTyper typer)
+{
+   if (typer != null) defineAll(typer);
+   
+   List<JcompSymbol> rslt = new ArrayList<>();
+   if (assoc_scope != null) {
+      Collection<JcompSymbol> ms = assoc_scope.getDefinedMethods();
+      rslt.addAll(ms);
+    }
+   
+   return rslt;
+}
+
 
 public Map<String,JcompType> getFields(JcompTyper typer)
 {
@@ -2645,12 +2658,17 @@ private static class ParamType extends ClassInterfaceType {
          JcompType basetype,ASTNode n) {
       JcompSymbol js = local_scope.lookupMethod(typer,id,atyps,basetype,n);
       if (js != null) return js;
-      js = super.lookupMethod(typer,id,atyps,basetype,n);
-      if (js != null) return js;
+      
       JcompType bt = basetype;
       if (bt == this) bt = base_type;
+      
+      js = super.lookupMethod(typer,id,atyps,basetype,n);
+      if (js != null) return js;
+      
       js = base_type.lookupMethod(typer,id,atyps,bt,n);
-      return js;
+      if (js != null) return js;
+      
+      return null;
     }
 
    @Override protected Set<JcompSymbol> lookupAbstracts(JcompTyper typer) {
@@ -2757,7 +2775,7 @@ private static class ParamType extends ClassInterfaceType {
          for (JcompSymbol js : base_type.getScope().getDefinedMethods()) {
             if (js.getClassType() != base_type) continue;
             if (js.getName().equals("<clinit>")) continue;
-            if (js.isStatic()) continue;
+//          if (js.isStatic()) continue;
             js = js.parameterize(typer,this,param_values);
             local_scope.defineMethod(js);
           }
@@ -3193,7 +3211,7 @@ private static class IntersectionType extends JcompType {
     }
 
    @Override protected JcompSymbol lookupMethod(JcompTyper typer,
-	 String id,JcompType atyps,JcompType basetype,ASTNode n) {
+         String id,JcompType atyps,JcompType basetype,ASTNode n) {
       JcompType jt = findCommonParent(typer,base_types);
       return jt.lookupMethod(typer,id,atyps,basetype,n);
     }
@@ -3251,12 +3269,12 @@ private static class FunctionRefType extends JcompType {
     }
 
    @Override public JcompSymbol lookupMethod(JcompTyper typer,String name,JcompType typ,
-	 JcompType base,ASTNode n) {
+         JcompType base,ASTNode n) {
       if (method_symbol != null && method_type.isCompatibleWith(typ)) {
-	 return method_symbol;
+         return method_symbol;
        }
       if (method_symbol != null && nonstatic_type != null && nonstatic_type.isCompatibleWith(typ)) {
-	 return method_symbol;
+         return method_symbol;
        }
       return super.lookupMethod(typer,name,typ,base,n);
     }

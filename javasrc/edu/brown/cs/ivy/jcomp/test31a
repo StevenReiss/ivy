@@ -1,0 +1,20 @@
+interface A<T> {
+   T negate();
+}
+
+
+interface B<T> extends A<T> {
+   T fct();
+}
+
+
+class C<T extends B<T>> {
+
+   private T var;
+   private Object v1;
+
+   @Deprecated
+   void test() {
+      var.negate().fct();
+    }
+}

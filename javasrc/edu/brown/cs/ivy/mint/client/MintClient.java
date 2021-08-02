@@ -968,31 +968,31 @@ private class ReaderThread extends Thread {
 
    @Override public void run() {
       if (line_reader == null) return;
-
+      
       try {
-	 for ( ; ; ) {
-	    String hdr = line_reader.readLine();
-	    if (hdr == null) break;
-	    StringBuffer body = null;
-	    for ( ; ; ) {
-	       String s = line_reader.readLine();
-	       if (s == null || s.equals(MINT_TRAILER)) break;
-	       if (body == null) body = new StringBuffer(s);
-	       else {
-		  body.append('\n');
-		  body.append(s);
-		}
-	     }
-	    String s = (body == null ? null : body.toString());
-	    processItem(hdr,s);
-	  }
+         for ( ; ; ) {
+            String hdr = line_reader.readLine();
+            if (hdr == null) break;
+            StringBuffer body = null;
+            for ( ; ; ) {
+               String s = line_reader.readLine();
+               if (s == null || s.equals(MINT_TRAILER)) break;
+               if (body == null) body = new StringBuffer(s);
+               else {
+                  body.append('\n');
+                  body.append(s);
+                }
+             }
+            String s = (body == null ? null : body.toString());
+            processItem(hdr,s);
+          }
        }
       catch (InterruptedIOException e) {
-	 return;
+         return;
        }
       catch (IOException e) {
-	 serverError(e.getMessage());
-	 return;
+         serverError(e.getMessage());
+         return;
        }
       serverError("End of file from the server");
     }

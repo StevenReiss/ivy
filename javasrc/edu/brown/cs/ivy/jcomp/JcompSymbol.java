@@ -911,31 +911,31 @@ private static class VariableSymbol extends JcompSymbol {
       int mods = 0;
       boolean done = false;
       for (ASTNode p = ast_node; p != null; p = p.getParent()) {
-	 done = true;
-	 switch (p.getNodeType()) {
-	    case ASTNode.SINGLE_VARIABLE_DECLARATION :
-	       SingleVariableDeclaration svd = (SingleVariableDeclaration) p;
-	       mods = svd.getModifiers();
-	       break;
-	    case ASTNode.VARIABLE_DECLARATION_STATEMENT :
-	       VariableDeclarationStatement vds = (VariableDeclarationStatement) p;
-	       mods = vds.getModifiers();
-	       break;
-	    case ASTNode.FOR_STATEMENT :
-	       break;
-	    case ASTNode.FIELD_DECLARATION :
-	       FieldDeclaration fd = (FieldDeclaration) p;
-	       mods = fd.getModifiers();
-	       JcompType jt = getClassType();
-	       if (jt.isInterfaceType()) mods |= Modifier.STATIC | Modifier.FINAL;
-	       break;
-	    default :
-	       done = false;
-	       break;
-	  }
-	 if (done) break;
+         done = true;
+         switch (p.getNodeType()) {
+            case ASTNode.SINGLE_VARIABLE_DECLARATION :
+               SingleVariableDeclaration svd = (SingleVariableDeclaration) p;
+               mods = svd.getModifiers();
+               break;
+            case ASTNode.VARIABLE_DECLARATION_STATEMENT :
+               VariableDeclarationStatement vds = (VariableDeclarationStatement) p;
+               mods = vds.getModifiers();
+               break;
+            case ASTNode.FOR_STATEMENT :
+               break;
+            case ASTNode.FIELD_DECLARATION :
+               FieldDeclaration fd = (FieldDeclaration) p;
+               mods = fd.getModifiers();
+               JcompType jt = getClassType();
+               if (jt.isInterfaceType()) mods |= Modifier.STATIC | Modifier.FINAL;
+                  break;
+            default :
+               done = false;
+               break;
+          }
+         if (done) break;
        }
-
+   
       return mods;
     }
 

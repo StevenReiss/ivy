@@ -1,0 +1,52 @@
+package test;
+
+import java.util.List;
+
+public class Test30<E extends List> {
+
+private E our_list;
+private Test30<E> parent;
+
+public void test(E var,Test30 p)
+{
+   Test30<E> par;
+   par.parent.our_list.size();
+}
+
+
+
+
+
+}	// end of class Test30
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

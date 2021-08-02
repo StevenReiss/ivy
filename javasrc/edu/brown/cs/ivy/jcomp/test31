@@ -1,0 +1,8 @@
+package xyz;
+
+import java.io.Serializable;
+
+@Deprecated
+public enum GoalType implements Serializable {
+	MAXIMIZE, MINIMIZE
+}

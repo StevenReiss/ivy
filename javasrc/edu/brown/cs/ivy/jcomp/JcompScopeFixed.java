@@ -162,7 +162,7 @@ JcompScopeFixed()
 	    if (!JcompType.checkProtections(js,base,n)) continue;
 	  }
 	 if (typer != null) js.getType().defineAll(typer);
-	 if (aty.isCompatibleWith(js.getType())) {
+	 if (aty == null || aty.isCompatibleWith(js.getType())) {
 	    if (bestms == null) bestms = js;
 	    else if (isBetterMethod(aty,js,bestms))
 	       bestms = js;

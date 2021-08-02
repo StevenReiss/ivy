@@ -650,6 +650,20 @@ public void jcompTest31() throws Exception
 }
 
 
+@Test
+public void jcompTest32() throws Exception
+{
+   File f32 = new File("/pro/ivy/jcomp/src/test32");
+   String cnts = IvyFile.loadFile(f32);
+   StringSource s32 = new StringSource("test32",cnts);
+   List<JcompSource> srcs = new ArrayList<>();
+   srcs.add(s32);
+   JcompProject proj = jcomp_control.getProject(srcs);
+   int ct = showMessages("test32",proj);
+   Assert.assertEquals(0,ct);
+}
+
+
 
 
 /********************************************************************************/

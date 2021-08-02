@@ -244,6 +244,14 @@ static int getTypeDepth(JcompType tgt,JcompType tfrom)
 {
    if (tgt == tfrom) return 0;
    if (tfrom == null) return -1;
+   if (tgt.isParameterizedType() || tfrom.isParameterizedType()) {
+      JcompType ptgt = tgt;
+      if (tgt.isParameterizedType()) ptgt = tgt.getBaseType();
+      JcompType pfrom = tfrom;
+      if (tfrom.isParameterizedType()) pfrom = tfrom.getBaseType();
+      return getTypeDepth(ptgt,pfrom);
+    }
+   if (tgt.getName().equals(tfrom.getName())) return 0;
 
    int ct = getTypeDepth(tgt,tfrom.getSuperType());
    if (ct >= 0) return ct+1;

@@ -11,7 +11,8 @@ endif
 
 setenv CLASSPATH $BROWN_IVY_IVY/java:$BROWN_IVY_IVY/lib/jikesbt.jar
 
-set args = -Xmx512m
+set args =
+# set args = -Xmx512m
 set croot = -Dedu.brown.cs.ivy.IVY=$BROWN_IVY_IVY
 
 set cmd = java

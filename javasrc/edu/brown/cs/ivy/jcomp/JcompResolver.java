@@ -332,6 +332,9 @@ private JcompType getImpliedBaseType(ASTNode n)
       case ASTNode.NORMAL_ANNOTATION :
          rslt = type_data.findType("java.lang.String");
          break;
+      case ASTNode.MEMBER_VALUE_PAIR :
+         rslt = type_data.findType("java.lang.String");
+         break;
       default :
 	 IvyLog.logE("JCOMP","UNKNOWN PARENT TYPE");
 	 break;
