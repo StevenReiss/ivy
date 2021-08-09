@@ -361,10 +361,9 @@ public static void setReference(ASTNode n,JcompSymbol js)
 {
    n.setProperty(PROP_JAVA_REF,js);
    js.noteUsed();
-   if (!js.isRead()) {
-      if (canBeRead(n))
-	 js.noteRead();
-    }}
+   if (canBeRead(n))
+      js.noteRead();
+}
 
 
 

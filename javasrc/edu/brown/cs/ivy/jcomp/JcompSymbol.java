@@ -375,13 +375,15 @@ public JcompSymbolKind getSymbolKind()
 
 public boolean isUsed() 			{ return true; }
 
-
+public int getUseCount()                        { return 0; }
 
 /**
  *	Return true if the symbol's value is used (the symbol is read).
  **/
 
 public boolean isRead() 			{ return true; }
+
+public int getReadCount()                       { return 0; }
 
 
 void noteUsed() 				{ }
@@ -804,15 +806,15 @@ private static class VariableSymbol extends JcompSymbol {
    private VariableDeclaration ast_node;
    private JcompType java_type;
    private JcompType class_type;
-   private boolean is_used;
-   private boolean is_read;
+   private int is_used;
+   private int is_read;
 
    VariableSymbol(VariableDeclaration n,JcompType t,int mods,JcompType clstyp) {
       ast_node = n;
       java_type = t;
       class_type = null;
-      is_used = false;
-      is_read = false;
+      is_used = 0;
+      is_read = 0;
     }
 
    VariableSymbol(VariableSymbol frm,JcompType ctyp,JcompType typ) {
@@ -837,10 +839,12 @@ private static class VariableSymbol extends JcompSymbol {
     }
    
    @Override public JcompType getType() { return java_type; }
-   @Override public boolean isUsed()	{ return is_used; }
-   @Override public boolean isRead()	{ return is_read; }
-   @Override void noteUsed()			{ is_used = true; }
-   @Override void noteRead()			{ is_read = true; }
+   @Override public boolean isUsed()	{ return is_used > 0; }
+   @Override public boolean isRead()	{ return is_read > 0; }
+   @Override void noteUsed()			{ is_used++; }
+   @Override void noteRead()			{ is_read++; }
+   @Override public int getReadCount()  { return is_read; }
+   @Override public int getUseCount()   { return is_used; }
 
    @Override public void setType(JcompType typ) {
       java_type = typ;
@@ -1101,7 +1105,7 @@ private static class LabelSymbol extends JcompSymbol {
 private static class MethodSymbol extends JcompSymbol {
 
    private ASTNode ast_node;
-   private boolean is_used;
+   private int is_used;
    private int symbol_mods;
    private boolean in_annotation;
    private JcompType method_type;
@@ -1110,7 +1114,7 @@ private static class MethodSymbol extends JcompSymbol {
 
    MethodSymbol(MethodDeclaration n) {
       ast_node = n;
-      is_used = false;
+      is_used = 0;
       symbol_mods = n.getModifiers();
       in_annotation = false;
       method_type = null;
@@ -1124,7 +1128,7 @@ private static class MethodSymbol extends JcompSymbol {
 
    MethodSymbol(AnnotationTypeMemberDeclaration n) {
       ast_node = n;
-      is_used = false;
+      is_used = 0;
       symbol_mods = n.getModifiers();
       symbol_mods |= Modifier.PUBLIC;
       in_annotation = true;
@@ -1178,8 +1182,9 @@ private static class MethodSymbol extends JcompSymbol {
    @Override public boolean isPublic()			{ return Modifier.isPublic(symbol_mods); }
    @Override public boolean isProtected()		{ return Modifier.isProtected(symbol_mods); }
 
-   @Override public boolean isUsed()			{ return is_used; }
-   @Override public void noteUsed()			{ is_used = true; }
+   @Override public boolean isUsed()			{ return is_used > 0; }
+   @Override public void noteUsed()			{ is_used++; }
+   @Override public int getUseCount()                   { return is_used; }
    @Override public int getModifiers()			{ return symbol_mods; }
 
    @Override public JcompType getClassType() {
