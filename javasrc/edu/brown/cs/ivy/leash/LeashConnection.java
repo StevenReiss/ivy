@@ -239,7 +239,7 @@ private void findActiveHostAndPort()
 {
    String nm = "cocker." + analysis_type.toLowerCase() + ".props";
    File pfile = new File(index_directory,nm);
-   IvyLog.logI("LEASH","Use property file " + pfile + " " + pfile.exists());
+   IvyLog.logD("LEASH","Use property file " + pfile + " " + pfile.exists());
    host_name = "localhost";
    port_number = 0;
 
@@ -276,11 +276,11 @@ private void findActiveHostAndPort()
 
 private void getServerInformation()
 {
-   IvyLog.logI("LEASH","Sending info request to server " + port_number + " " + host_name);
+   IvyLog.logD("LEASH","Sending info request to server " + port_number + " " + host_name);
   
    is_active = true;
    Element pong = sendRequest("<PING/>");
-   IvyLog.logI("LEAST","Ping returned " + IvyXml.convertXmlToString(pong));
+   IvyLog.logD("LEAST","Ping returned " + IvyXml.convertXmlToString(pong));
 
    if (pong == null) {
       is_active = false;
@@ -349,13 +349,13 @@ Element sendRequest(String req)
 
    try (Socket s = new Socket(host_name,port_number)) {
       s.setSoTimeout(LEASH_REQUEST_TIMEOUT);
-      IvyLog.logI("LEASH","Send to " + host_name + ":" + port_number + " " + req);
+      IvyLog.logD("LEASH","Send to " + host_name + ":" + port_number + " " + req);
       PrintWriter pw = new PrintWriter(s.getOutputStream());
       IvyXmlReader xr = new IvyXmlReader(s.getInputStream());
       pw.println(req);
       pw.flush();
-      String rslttxt = xr.readXml();
-      IvyLog.logI("LEASH","Reply " + rslttxt);
+      String rslttxt = xr.readXml(true);
+      IvyLog.logD("LEASH","Reply " + rslttxt);
       xr.close();
       pw.close();
       for (int i = 0; i < ct; ++i) {

@@ -123,24 +123,24 @@ public static void main(String [] args)
 
    if (args != null) {
       for (int i = 0; i < args.length; ++i) {
-         if (args[i].startsWith("-d") && i+1 < args.length) {      // -d <directory>
-            dir = args[++i];
-          }
-         else if (args[i].startsWith("-l")) {                      // -local
-            nohost = true;
-          }
-         else if (args[i].startsWith("-c")) {                      // -cwd
-            dir = System.getProperty("user.dir");
-          }
-         else {
-            System.err.println("IVYSETUP: ivysetup [-d directory]");
-            System.exit(1);
-          }
+	 if (args[i].startsWith("-d") && i+1 < args.length) {      // -d <directory>
+	    dir = args[++i];
+	  }
+	 else if (args[i].startsWith("-l")) {                      // -local
+	    nohost = true;
+	  }
+	 else if (args[i].startsWith("-c")) {                      // -cwd
+	    dir = System.getProperty("user.dir");
+	  }
+	 else {
+	    System.err.println("IVYSETUP: ivysetup [-d directory]");
+	    System.exit(1);
+	  }
        }
     }
 
    if (dir == null) dir = findIvyDirectory();
-   
+
    File libdir = new File(dir,"lib");
    File jarf = new File(libdir,"ivyfull.jar");
    boolean installok = jarf.exists();
@@ -185,7 +185,7 @@ public static void main(String [] args)
 	 System.err.println("IVYSETUP: Problem loading old properties: " + e);
        }
     }
-   
+
    if (!nohost) {
       try {
 	 Registry rmireg = LocateRegistry.getRegistry("valerie");
@@ -195,8 +195,8 @@ public static void main(String [] args)
 	  }
        }
       catch (java.rmi.UnknownHostException e) {
-         System.err.println("IVYSETUP: Mint registry host not used");
-         nohost = true;
+	 System.err.println("IVYSETUP: Mint registry host not used");
+	 nohost = true;
        }
       catch (Exception e) {
 	 System.err.println("IVYSETUP: Mint registry host not used");
@@ -252,10 +252,10 @@ public static void setup()
 
    if (!setup(ivv)) {
       if (findIvyDirectory() == null) return;
-      
+
       main(new String [] { "-local" });
       if (setup(ivv)) return;
-      
+
       System.err.println("IVY: setup file ~/.ivy/Props missing, unreadable or incomplete");
       System.err.println("IVY: try running IvySetup");
       System.exit(1);
@@ -301,9 +301,9 @@ public static boolean setup(File ivv)
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Find Ivy Directory                                                      */
-/*                                                                              */
+/*										*/
+/*	Find Ivy Directory							*/
+/*										*/
 /********************************************************************************/
 
 private static String findIvyDirectory()
@@ -314,24 +314,25 @@ private static String findIvyDirectory()
    while (tok.hasMoreTokens()) {
       String pe = tok.nextToken().trim();
       if (pe.endsWith("ivy.jar") || pe.endsWith("ivyfull.jar")) {
-         File f = new File(pe);
-         File f1 = f.getParentFile();
-         if (f1.getName().equals("lib")) f1 = f1.getParentFile();
-         return f1.getPath();
+	 File f = new File(pe);
+	 File f1 = f.getParentFile();
+	 if (f1 == null) f1 = new File(System.getProperty("user.dir"));
+	 if (f1.getName().equals("lib")) f1 = f1.getParentFile();
+	 return f1.getPath();
        }
       else if (pe.endsWith(".jar")) continue;
       else if (pe.endsWith("java")) {
-         File f1 = new File(pe);
-         File f2 = new File(f1,"edu");
-         File f3 = new File(f2,"brown");
-         File f4 = new File(f3,"cs");
-         File f5 = new File(f4,"ivy");
-         File f6 = new File(f5,"exec");
-         File f7 = new File(f6,"IvySetup.class");
-         if (f7.exists()) {
-            File f8 = f1.getParentFile();
-            return f8.getPath();
-          }
+	 File f1 = new File(pe);
+	 File f2 = new File(f1,"edu");
+	 File f3 = new File(f2,"brown");
+	 File f4 = new File(f3,"cs");
+	 File f5 = new File(f4,"ivy");
+	 File f6 = new File(f5,"exec");
+	 File f7 = new File(f6,"IvySetup.class");
+	 if (f7.exists()) {
+	    File f8 = f1.getParentFile();
+	    return f8.getPath();
+	  }
        }
     }
    return null;
@@ -344,7 +345,7 @@ private static String findIvyDirectory()
 
 /* end of IvySetup.java */
 
-										
+									
 
 
 

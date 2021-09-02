@@ -577,7 +577,7 @@ public static String decodeXmlString(String pcdata)
 {
    if (pcdata == null) return null;
 
-   char c,c1,c2,c3,c4,c5;
+   char c,c1,c2,c3,c4,c5,c6,c7;
    StringBuffer n = new StringBuffer(pcdata.length());
 
    for (int i = 0; i < pcdata.length(); i++) {
@@ -588,6 +588,8 @@ public static String decodeXmlString(String pcdata)
 	 c3 = lookAhead(3,i,pcdata);
 	 c4 = lookAhead(4,i,pcdata);
 	 c5 = lookAhead(5,i,pcdata);
+         c6 = lookAhead(6,i,pcdata);
+         c7 = lookAhead(7,i,pcdata);
 	 if (c1 == 'a' && c2 == 'm' && c3 == 'p' && c4 == ';') {
 	    n.append("&");
 	    i += 4;
@@ -622,6 +624,20 @@ public static String decodeXmlString(String pcdata)
 	    n.append(c0);
 	    i += 4;
 	  }
+         else if (c1 == '#' && c2 == 'x' && c6 == ';') {
+            char [] chrs = new char[] { c3,c4,c5 };
+	    String sc = new String(chrs);
+	    char c0 = (char) Integer.parseInt(sc,16);
+	    n.append(c0);
+	    i += 6;
+          }
+         else if (c1 == '#' && c2 == 'x' && c7 == ';') {
+            char [] chrs = new char[] { c3,c4,c5,c6 };
+	    String sc = new String(chrs);
+	    char c0 = (char) Integer.parseInt(sc,16);
+	    n.append(c0);
+	    i += 7;
+          }
 	 else n.append("&");
        }
       else n.append(c);

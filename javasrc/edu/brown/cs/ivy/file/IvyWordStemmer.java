@@ -622,6 +622,7 @@ private final void step5()
 private final void step6()
 {
    stem_pos1 = stem_pos2;
+   if (stem_pos2 < 0 || stem_pos2 > stem_buffer.length) return;
    if (stem_buffer[stem_pos2] == 'e') {
       int a = m();
       if (a > 1 || a == 1 && !cvc(stem_pos2 - 1)) stem_pos2--;

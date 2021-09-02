@@ -234,6 +234,7 @@ private static int typeComparison(JcompType tto,JcompType tfrom)
    else if (tfrom.isNumericType()) return 10;
 
    int ct = getTypeDepth(tto,tfrom);
+   if (ct == 0) return 1;
    if (ct > 0) return 11+ct;
 
    return 20;

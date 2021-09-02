@@ -702,7 +702,10 @@ void setInnerNonStatic(boolean fg)		{ inner_nonstatic = fg; }
 public JcompType resetType(JcompTyper typer)
 {
    JcompType ntyp = typer.findSystemType(getName());
-   if (ntyp != null) return ntyp;
+   if (ntyp != null && ntyp != this) {
+      ntyp.defineAll(typer);
+      return ntyp;
+    }
    return this;
 }
 

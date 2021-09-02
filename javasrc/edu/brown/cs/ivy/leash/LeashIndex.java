@@ -219,14 +219,21 @@ public boolean setAutoUpdateTime(long time,Date d)
 
 public List<LeashResult> queryStatements(File f,int line,int col)
 {
+   return queryStatements(f,line,col,0);
+}
+
+
+
+public List<LeashResult> queryStatements(File f,int line,int col,int max)
+{
    try {
       String loc = "slc:" + line + "," + col;
       if (cocker_connect.isLocal()) {
-         return issueQuery("STATEMENTS",loc,null,f.getPath());
+         return issueQuery("STATEMENTS",loc,null,f.getPath(),max);
        }
       else {
          String cnts = IvyFile.loadFile(f);
-         return issueQuery("STATEMENTS",loc,cnts,null);
+         return issueQuery("STATEMENTS",loc,cnts,null,max);
        }
     }
    catch (IOException e) {
@@ -238,13 +245,19 @@ public List<LeashResult> queryStatements(File f,int line,int col)
 
 public List<LeashResult> queryStatements(String filecnts,int line,int col)
 {
+   return queryStatements(filecnts,line,col,0);
+}
+
+
+public List<LeashResult> queryStatements(String filecnts,int line,int col,int max)
+{
    String loc = "slc:" + line + "," + col;
-   return issueQuery("STATEMENTS",loc,filecnts,null);
+   return issueQuery("STATEMENTS",loc,filecnts,null,max);
 }
 
 
 
-private List<LeashResult> issueQuery(String typ,String srcloc,String cnts,String srcfile)
+private List<LeashResult> issueQuery(String typ,String srcloc,String cnts,String srcfile,int max)
 {
    if (cnts != null) cnts = cnts.replace("]]>","] ]>");
 
@@ -252,6 +265,7 @@ private List<LeashResult> issueQuery(String typ,String srcloc,String cnts,String
    xw.begin("COMMAND");
    xw.field("CMD","CODEQUERY");
    xw.field("TYPE",typ);
+   if (max > 0) xw.field("MAX",max);
    if (srcloc != null) xw.field("DATA",srcloc);
    if (srcfile != null) xw.textElement("FILE",srcfile);
    if (cnts != null) xw.cdataElement("CODE",cnts);

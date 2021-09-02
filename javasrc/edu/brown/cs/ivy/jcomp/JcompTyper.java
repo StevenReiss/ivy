@@ -81,6 +81,8 @@ import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -1019,10 +1021,11 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
 
    @Override public boolean visit(ParameterizedType t) {
       if (!set_types) return false;
+      boolean fg = canbe_type;
       canbe_type = set_types;
       visitItem(t.getType());
       visitList(t.typeArguments());
-      canbe_type = false;
+      canbe_type = fg;
    
       JcompType jt0 = JcompAst.getJavaType(t.getType());
       List<JcompType> ljt = new ArrayList<JcompType>();
@@ -1207,7 +1210,7 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    
       jt = findSystemType(s);
       if (jt != null && !canbe_type) {
-         System.err.println("FOUND UNEXPECTED TYPE " + s);
+         IvyLog.logW("JCOMP","FOUND UNEXPECTED TYPE " + s);
        }
    
       if (jt == null) {

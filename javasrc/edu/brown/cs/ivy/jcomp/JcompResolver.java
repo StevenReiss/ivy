@@ -1115,7 +1115,12 @@ private class RefPass extends ASTVisitor {
             n.getOperator() == InfixExpression.Operator.NOT_EQUALS ||
             n.getOperator() == InfixExpression.Operator.EQUALS) {
          // check for valid comparison types and generate error if not
-         t1 = findType("boolean");
+         if (t1.isErrorType() || t1.isVoidType() || t2.isErrorType() || t2.isVoidType()) {
+            t1 = findType(TYPE_ERROR);
+          }
+         else {
+            t1 = findType("boolean");
+          }
        }
       else if (n.getOperator() == InfixExpression.Operator.PLUS &&
             t1 != null && t2 != null &&

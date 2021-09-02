@@ -39,7 +39,7 @@ package edu.brown.cs.ivy.leash;
 
 public interface LeashConstants {
 
-int LEASH_REQUEST_TIMEOUT = 2*60*1000;
+int LEASH_REQUEST_TIMEOUT = 1*60*1000;
 
 String LEASH_CLASS_PATH = "cocker.jar ivy eclipsejar asm.jar postgresql.jar mysql.jar";
 
