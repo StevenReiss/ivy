@@ -523,8 +523,9 @@ private JcodeDataType createDataType(Type t)
    JcodeDataType bdt = new JcodeDataType(t,this);
    JcodeDataType obdt = static_map.putIfAbsent(t,bdt);
    if (obdt != null) return obdt;
-   if (t.getSort() != Type.METHOD && t.getClassName() != null)
+   if (t.getSort() != Type.METHOD && t.getClassName() != null) {
       name_map.put(t.getClassName(),bdt);
+    }
    return bdt;
 }
 
@@ -631,7 +632,7 @@ public JcodeField findField(String nm,String cls,String fnm)
 	    cls = nm.substring(0,idx);
 	    fnm = nm.substring(idx+1);
 	  }
-	 JcodeClass bc = known_classes.get(cls);
+	 JcodeClass bc = findClass(cls);
 	 if (bc != null) bf = bc.findField(fnm);
 	 if (bf != null) known_fields.put(nm,bf);
        }
@@ -716,7 +717,7 @@ private class LoadExecutor extends ThreadPoolExecutor implements ThreadFactory {
 
    void workOnClass(String c) {
       if (work_items.putIfAbsent(c,Boolean.TRUE) != null) return;
-
+   
       LoadTask task = new LoadTask(c);
       execute(task);
     }

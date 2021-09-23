@@ -291,7 +291,7 @@ public void jcompTest6() throws Exception
    List<JcompSource> srcs = Collections.singletonList(s6);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test6",proj);
-   Assert.assertEquals(72,ct);
+   Assert.assertEquals(73,ct);
 }
 
 

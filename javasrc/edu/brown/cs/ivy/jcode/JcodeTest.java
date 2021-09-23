@@ -38,6 +38,7 @@ package edu.brown.cs.ivy.jcode;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.Collection;
 
 
@@ -66,8 +67,10 @@ private JcodeFactory	bcode_factory;
 public JcodeTest()
 {
    bcode_factory = new JcodeFactory(1);
-   bcode_factory.addToClassPath("/home/spr/sampler");
-   bcode_factory.findClass("spr.onsets.OnsetMain");
+   File f1 = new File(System.getProperty("user.home"));
+   File f2 = new File(f1,"sampler");
+   bcode_factory.addToClassPath(f2.getPath());
+// bcode_factory.findClass("spr.onsets.OnsetMain");
 }
 
 
@@ -114,6 +117,7 @@ public JcodeTest()
    JcodeDataType y1 = bcode_factory.findJavaType("Lspr/onsets/OnsetTypeSet;");
    Assert.assertNotNull(y1);
    JcodeClass y2 = bcode_factory.findClass("spr.onsets.OnsetTypeSet");
+   Assert.assertNotNull(y2);
    Assert.assertEquals(y1,y2.getDataType());
    JcodeClass y3 = bcode_factory.findClass("spr.onsets.OnsetNumberSet");
    JcodeMethod y4 = y2.findInheritedMethod("check","(I)Z");
@@ -132,7 +136,7 @@ public JcodeTest()
 
 @Test public void lookupField()
 {
-   JcodeField f1 = bcode_factory.findField(null,"spr/onsets/OnsetMain","card_deck");
+   JcodeField f1 = bcode_factory.findField(null,"spr.onsets.OnsetMain","card_deck");
    Assert.assertNotNull(f1);
 
    JcodeMethod m1 = bcode_factory.findMethod(null,

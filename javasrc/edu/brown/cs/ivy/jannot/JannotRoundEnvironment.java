@@ -208,9 +208,11 @@ private Set<JannotElement> getElementsAnnotatedWith(Set<String> keys)
       String tname = js.getName();
       if (keys.contains(tname) || keys.contains("*")) {
          Set<Annotation> srcannots = annot_nodes.get(tname);
-         for (Annotation an : srcannots) {
-            JannotElement parelt = JannotElement.createElement(an);
-            if (parelt != null) rslt.add(parelt);
+         if (srcannots != null) {
+            for (Annotation an : srcannots) {
+               JannotElement parelt = JannotElement.createElement(an);
+               if (parelt != null) rslt.add(parelt);
+             }
           }
        }
     }

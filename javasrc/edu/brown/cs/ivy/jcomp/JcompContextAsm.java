@@ -78,6 +78,7 @@ private Map<String,AsmClass>	known_types;
 private List<ClassPathEntry>	base_files;
 private List<String>            class_path;
 private JcompContextAsm 	my_parent;
+private Map<AsmClass,Set<JcompScope>> all_defined;
 
 
 
@@ -139,6 +140,7 @@ private JcompContextAsm(JcompContext par)
    known_types = new HashMap<>();
    base_files = new ArrayList<>();
    class_path = new ArrayList<>();
+   all_defined = new HashMap<>();
 }
 
 
@@ -288,6 +290,13 @@ void defineAll(JcompTyper typer,String cls,JcompScope scp)
    if (scp == null) return;
    AsmClass ac = findKnownType(typer,cls);
    if (ac == null) return;
+   Set<JcompScope> defd = all_defined.get(ac);
+   if (defd == null) {
+      defd = new HashSet<>();
+      all_defined.put(ac,defd);
+    }
+   if (!defd.add(scp)) return;
+   
    ac.defineAll(typer,scp);
 }
 
@@ -446,7 +455,7 @@ private class AsmClass {
    private List<AsmField> field_data;
    private List<AsmMethod> method_data;
    private Map<JcompTyper,JcompType> base_types;
-   private Set<JcompScope> all_defined;
+   private Set<JcompScope> local_defined;
    private boolean nested_this;
 
    AsmClass(String nm,int acc,String sgn,String sup,String [] ifc) {
@@ -459,7 +468,7 @@ private class AsmClass {
       base_types = new WeakHashMap<>();
       field_data = new ArrayList<AsmField>();
       method_data = new ArrayList<AsmMethod>();
-      all_defined = null;
+      local_defined = null;
       nested_this = false;
     }
 
@@ -635,8 +644,8 @@ private class AsmClass {
     }
 
    synchronized void defineAll(JcompTyper typer,JcompScope scp) {
-      if (all_defined == null) all_defined = new HashSet<>();
-      else if (!all_defined.add(scp)) return;
+      if (local_defined == null) local_defined = new HashSet<>();
+      else if (!local_defined.add(scp)) return;
       
       for (AsmField af : field_data) {
          if (scp.lookupVariable(af.getName()) == null) {

@@ -120,10 +120,10 @@ JannotProjectImpl(JcompProject jp)
        }
     }
    class_loader = new JannotClassLoader(urls);
+   
    annot_processors = new LinkedHashMap<>();
    process_env = new JannotProcessingEnvironment(jp);
    annot_types = new HashSet<>();
-   
 }
 
 
@@ -156,7 +156,9 @@ JannotProjectImpl(JcompProject jp)
 @Override public boolean addAnnotationProcessor(String clazz)
 {
    try {
+      class_loader.setNoInstrument(true);
       Class<?> cz = class_loader.loadClass(clazz);
+      class_loader.setNoInstrument(false);
       Processor p = (Processor) cz.getConstructor().newInstance();
       p.init(process_env);
       Set<String> annots = p.getSupportedAnnotationTypes();
@@ -382,14 +384,17 @@ private class AnnotationPresentFinder extends ASTVisitor {
 private static class JannotClassLoader extends URLClassLoader {
 
    private JannotInstrumenter class_instrumenter;
+   private boolean no_instrument;
+         
    
    JannotClassLoader(URL [] urls) {
       super(urls);
       class_instrumenter = new JannotInstrumenter(null,null);
-      
+      no_instrument = false;
     }
    
    @Override protected Class<?> findClass(String name) throws ClassNotFoundException {
+      if (no_instrument) return super.findClass(name);
       String path = name.replace(".","/").concat(".class");
       InputStream ins = getResourceAsStream(path);
       if (ins != null) {
@@ -403,6 +408,10 @@ private static class JannotClassLoader extends URLClassLoader {
          catch (IOException e) { }
        }
       return super.findClass(name);
+    }
+   
+   void setNoInstrument(boolean fg) {
+      no_instrument = fg;
     }
 
 }	// end of inner class JannotClassLoader

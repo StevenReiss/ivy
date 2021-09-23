@@ -157,10 +157,17 @@ private JannotProject setupTestProject()
 {
    JcompControl ctrl = new JcompControl();
    List<JcompSource> srcs = new ArrayList<>();
-   JcompSource src = new LocalSource("/u/spr/sampler/spr/annotproc/JannotTestMutableClass.java");
+   File f1 = new File(System.getProperty("user.home"));
+   File f2 = new File(f1,"sampler");
+   File f3 = new File(f2,"spr");
+   File f4 = new File(f3,"annotproc");
+   File f5 = new File(f4,"JannotTestMutableClass.java");
+   JcompSource src = new LocalSource(f5.getPath());
    srcs.add(src);
    List<String> jars = new ArrayList<>();
-   jars.add("/u/spr/sampler/spr/annotproc/annotproc.jar");
+   File f6 = new File(f4,"annotproc.jar");
+   jars.add(f6.getPath());
+   assert f6.exists() && f6.canRead();
    jars.add("/pro/ivy/java");
    
    JcompProject jp = ctrl.getProject(jars, srcs);
