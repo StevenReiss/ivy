@@ -287,6 +287,13 @@ public ASTNode getDefinitionNode()		{ return null; }
 
 
 /**
+ *      Return the initializer AST node
+ **/
+
+public Expression getInitializer()              { return null; }
+
+
+/**
  *	Return the AST ndoe where the name comes from in its declaration.
  **/
 
@@ -864,6 +871,19 @@ private static class VariableSymbol extends JcompSymbol {
        }
       return null;
     }
+   
+   @Override public Expression getInitializer() {
+      if (ast_node == null) return null;
+      if (ast_node instanceof VariableDeclarationFragment) {
+         VariableDeclarationFragment vdf = (VariableDeclarationFragment) ast_node;
+         return vdf.getInitializer();
+       }
+      else if (ast_node instanceof SingleVariableDeclaration) {
+         SingleVariableDeclaration svd = (SingleVariableDeclaration) ast_node;
+         return svd.getInitializer();
+       }
+      return null;
+   }
    @Override public ASTNode getNameNode()		{ return ast_node; }
 
    @Override public boolean isFieldSymbol() {

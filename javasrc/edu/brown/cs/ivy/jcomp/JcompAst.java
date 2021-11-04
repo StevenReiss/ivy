@@ -339,6 +339,74 @@ public static String getJavaTypeName(ASTNode n)
 }
 
 
+/********************************************************************************/
+/*                                                                              */
+/*      Constant management methods                                             */
+/*                                                                              */
+/********************************************************************************/
+
+public static Object getNumberValue(NumberLiteral v)
+{
+   Object rslt = null;
+   String ds = v.getToken();
+   boolean isreal = false;
+   boolean isflt = false;
+   boolean ishex = false;
+   boolean islong = false;
+   for (int i = 0; i < ds.length(); ++i) {
+      switch (ds.charAt(i)) { 
+         case 'E' :
+	 case 'e' :
+         case 'f' :
+	 case 'F' :
+            if (!ishex) isreal = true;
+	    break;
+     	 case '.' :
+         case 'P' :
+         case 'p' :
+            isreal = true;
+            break;
+	 case 'l' :
+	 case 'L' :
+	    islong = true;
+	    break;
+	 case 'd' :
+	 case 'D' :
+	    if (!ishex) isreal = true;;
+	    break;
+	 case 'X' :
+	 case 'x' :
+	    ishex = true;
+	    break;
+       }
+    }
+   if (isreal) {
+      if (ds.endsWith("f") || ds.endsWith("F")) {
+         ds = ds.substring(0,ds.length()-1);
+       }
+      if (isflt) {
+         rslt = Float.valueOf(ds);
+       }
+      else {
+         rslt = Double.valueOf(ds);
+       }
+    }
+   else {
+      if (islong) {
+         if (ds.endsWith("l") || ds.endsWith("L")) {
+            ds = ds.substring(0,ds.length()-1);
+            rslt = Long.decode(ds);
+          }
+       }
+      else {
+         rslt = Integer.decode(ds);
+       }
+    }
+   
+   return rslt;
+}
+
+
 
 
 /********************************************************************************/
@@ -534,6 +602,7 @@ static public boolean isKeep(ASTNode n)
 
 public static JcompTyper getTyper(ASTNode n)
 {
+   if (n == null) return null;
    n = n.getRoot();
    return (JcompTyper) n.getProperty(PROP_JAVA_TYPER);
 }
