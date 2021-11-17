@@ -160,6 +160,19 @@ static JcompSymbol createSymbol(VariableDeclarationFragment n,JcompTyper typer)
 }
 
 
+
+public static JcompSymbol createDummyField(JcompSymbol src,JcompType cls)
+{
+   VariableSymbol vs = (VariableSymbol) src;
+   
+   JcompSymbol rslt = new DummyField(vs,cls);
+   
+   cls.getScope().defineVar(rslt);
+   
+   return rslt;
+}
+
+
 static JcompSymbol createNestedThis(JcompType cls,JcompType outer)
 {
    return new NestedThisSymbol(outer,cls);
@@ -986,9 +999,20 @@ private static class VariableSymbol extends JcompSymbol {
       return pfx + jt.getJavaTypeName() + "." + getName();
     }
 
-
-
 }	// end of subclass VariableSymbol
+
+
+private static class DummyField extends VariableSymbol {
+   
+   DummyField(VariableSymbol src,JcompType cls) {
+      super(src,cls,src.getType());
+    }
+   
+   @Override public boolean isFieldSymbol()             { return true; }
+   
+   @Override public int getModifiers()                  { return Modifier.PUBLIC; }
+   
+}
 
 
 

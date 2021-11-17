@@ -1672,43 +1672,43 @@ private class TypeSetter extends AbstractTypeSetter {
    @Override public boolean visit(AnonymousClassDeclaration t) {
       JcompType jt = JcompAst.getJavaType(t);
       type_prefix = jt.getName();
-
+   
       JcompType out = outer_type;
       outer_type = jt;
-
+   
       visitList(t.bodyDeclarations());
-
+   
       if (out != null && jt != null) {
-	 jt.setOuterType(out);
+         jt.setOuterType(out);
        }
       outer_type = out;
-
+   
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-
+   
       if (t.getParent() instanceof ClassInstanceCreation) {
-	 ClassInstanceCreation cic = (ClassInstanceCreation) t.getParent();
-	 Type sty = cic.getType();
-	 JcompType xjt = JcompAst.getJavaType(sty);
-	 if (xjt != null) {
-	    if (xjt.isInterfaceType()) {
-	       jt.setSuperType(findType("java.lang.Object"));
-	       jt.addInterface(xjt);
-	     }
-	    else jt.setSuperType(xjt);
-	  }
+         ClassInstanceCreation cic = (ClassInstanceCreation) t.getParent();
+         Type sty = cic.getType();
+         JcompType xjt = JcompAst.getJavaType(sty);
+         if (xjt != null) {
+            if (xjt.isInterfaceType()) {
+               jt.setSuperType(findType("java.lang.Object"));
+               jt.addInterface(xjt);
+             }
+            else jt.setSuperType(xjt);
+          }
        }
       else if (t.getParent() instanceof EnumConstantDeclaration) {
-	 EnumConstantDeclaration ecd = (EnumConstantDeclaration) t.getParent();
-	 JcompType sty = JcompAst.getJavaType(ecd);
-	 if (sty == null) {
-	    EnumDeclaration ed = (EnumDeclaration) ecd.getParent();
-	    sty = JcompAst.getJavaType(ed);
-	  }
-	 jt.setSuperType(sty);
+         EnumConstantDeclaration ecd = (EnumConstantDeclaration) t.getParent();
+         JcompType sty = JcompAst.getJavaType(ecd);
+         if (sty == null) {
+            EnumDeclaration ed = (EnumDeclaration) ecd.getParent();
+            sty = JcompAst.getJavaType(ed);
+          }
+         jt.setSuperType(sty);
        }
-
+   
       return false;
     }
 
