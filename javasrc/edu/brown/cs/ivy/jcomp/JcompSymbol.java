@@ -1372,6 +1372,17 @@ private static class TypeSymbol extends JcompSymbol {
       return proj + "#" + jt.getJavaTypeName();
     }
 
+   @Override public boolean isStatic() {
+      return Modifier.isStatic(getModifiers());
+    }
+   
+   @Override public boolean isPrivate() {
+      return Modifier.isPrivate(getModifiers());
+    }
+   
+   @Override public int getModifiers() {
+      return ast_node.getModifiers();
+    }
 }	// end of subclass TypeSymbol
 
 

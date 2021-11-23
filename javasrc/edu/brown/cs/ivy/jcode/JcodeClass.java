@@ -89,6 +89,7 @@ JcodeClass(JcodeFactory bf,JcodeFileInfo fi,boolean proj)
 
 public String getName()
 {
+   if (base_type == null) return null;
    return base_type.getClassName();
 }
 
