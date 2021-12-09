@@ -82,6 +82,7 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 
 import edu.brown.cs.ivy.file.IvyLog;
+import edu.brown.cs.ivy.jcode.JcodeMethod;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -376,6 +377,15 @@ public static boolean isSystemType(String nm)
    return false;
 }
 
+
+public JcodeMethod getMethodCode(JcompSymbol js)
+{
+   if (js == null) return null;
+   JcodeMethod jm = type_context.getMethodCode(js);
+   if (jm == null) return null;
+   if (jm.getNumInstructions() <= 0) return null;   
+   return jm;
+}
 
 
 

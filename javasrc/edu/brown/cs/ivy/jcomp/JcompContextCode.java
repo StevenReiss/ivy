@@ -428,6 +428,14 @@ List<String> getClassPath()
    return rslt;
 }
 
+@Override JcodeMethod getMethodCode(JcompSymbol js)
+{
+   String cls = js.getClassType().getName();
+   String desc = js.getType().getJavaTypeName();
+   return jcode_control.findInheritedMethod(cls,js.getName(),desc);
+}
+
+
 
 }	// end of class JcompContextCode
 

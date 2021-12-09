@@ -138,7 +138,7 @@ InputStream getInputStream()
          ins.close();
        }
       catch (IOException e) {
-         System.err.println("FAIT: Problem reading jar file: " + e);
+         System.err.println("JCODE: Problem reading jar file: " + e);
          e.printStackTrace();
        }
     }

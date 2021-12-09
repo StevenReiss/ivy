@@ -12,6 +12,8 @@ package edu.brown.cs.ivy.jcomp;
 
 import org.objectweb.asm.Type;
 
+import edu.brown.cs.ivy.jcode.JcodeMethod;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -244,6 +246,11 @@ List<String> getClassPath()
 {
    if (parent_context == null) return new ArrayList<>();
    return parent_context.getClassPath();
+}
+
+JcodeMethod getMethodCode(JcompSymbol js)
+{
+   return null;
 }
 
 

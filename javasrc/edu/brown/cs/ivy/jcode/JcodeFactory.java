@@ -41,6 +41,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReader;
+import java.lang.module.ModuleReference;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -312,16 +316,25 @@ private void setupClassPath()
    File jf1 = new File(jf,"lib");
    File jf3 = new File(jf,"jre");
    File jf4 = new File(jf,"jmods");
-
+   File jf5 = new File(jf3,"lib");
+   File jf6 = new File(jf3,"jmods");
+   
    if (jf3.exists()) {
-      File jf5 = new File(jf,"lib");
       if (jf5.exists()) jf1 = jf5;
     }
+   if (!jf4.exists()) {
+      if (jf6.exists()) jf4 = jf6;
+    }
+   
+   File jf7 = new File(jf1,"rt.jar");
 
    addJavaJars(jf1);
 
    if (jf4.exists()) {
       addJavaJars(jf4);
+    }
+   else if (!jf7.exists()) {
+      addSystemModules();
     }
 }
 
@@ -424,6 +437,43 @@ private void addClassPathModule(String cpe)
       zf.close();
     }
    catch (IOException e) { }
+}
+
+
+private void addSystemModules()
+{
+   ModuleFinder mfndr = ModuleFinder.ofSystem();
+   for (ModuleReference mr : mfndr.findAll()) {
+      try {
+         ModuleReader mrdr = mr.open();
+         mrdr.list().forEach(s -> addSystemClass(mr,mrdr,s));
+       }
+      catch (IOException e) {
+         System.err.println("Can open " + mr);
+       }
+    }
+}
+
+
+private void addSystemClass(ModuleReference mr,ModuleReader mrdr,String id)
+{
+   try {
+      String en = id;
+      if (id.endsWith(".class")) en = id.substring(0,id.length()-6);
+      en = en.replace("/",".");
+      if (!class_map.containsKey(en)) {
+         ByteBuffer bb = mrdr.read(id).get();
+         int len = bb.limit() - bb.position();
+         byte [] buf = new byte[len];
+         bb.get(buf);
+         JcodeFileInfo fi = new JcodeFileInfo(null,id,buf);
+         class_map.put(en,fi);
+       }
+    }
+   catch (Exception e) { 
+      System.err.println("JCODE: problem processing system module " + mr + " " + id +
+            ": " + e);
+    }
 }
 
 
