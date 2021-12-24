@@ -67,6 +67,7 @@ MAKEDEP= makedepend -w 1
 MAKEDEPSEP= --
 J6FLAGS= -source 1.6 -target 1.6
 J8FLAGS= -source 1.8 -target 1.8
+J10FLAGS= -source 10 -target 10
 
 #
 #	Implicit rules that are needed

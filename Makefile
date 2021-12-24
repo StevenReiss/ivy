@@ -15,7 +15,7 @@ RCSVERSION = 0.0
 SVER= $(VERSION).$(SUBVER)
 
 INSTALL_TOP= $(BROWN_IVY_ROOT)
-
+CPRO= /research/people/spr
 
 
 #
@@ -269,8 +269,11 @@ bubbles:
 	-cp lib/cocker.jar /pro/bubbles/lib
 	-cp lib/asm.jar /pro/bubbles/lib
 	-cp ivybin.jar /pro/cocker/lib/ivy.jar
+	-cp ivybin.jar $(CPRO)/cocker/lib/ivy.jar
 	-cp lib/asm.jar /pro/cocker/lib/asm.jar
+	-cp lib/asm.jar $(CPRO)/cocker/lib/asm.jar
 	-cp lib/eclipsejar/*.jar /pro/cocker/lib/eclipsejar
+	-cp lib/eclipsejar/*.jar $(CPRO)/cocker/lib/eclipsejar
 	rm ivybin.jar
 	rm ivylib.jar
 
