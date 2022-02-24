@@ -16,5 +16,5 @@ SFILES= \
 	PebbleTransition.java \
 	PebbleXmlModel.java \
 
-LOCALJAVAFLAGS= $(J8FLAGS)
+LOCALJAVAFLAGS= $(J10FLAGS)
 

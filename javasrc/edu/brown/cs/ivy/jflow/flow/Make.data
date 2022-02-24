@@ -51,5 +51,5 @@ SFILES= \
 	ValueNumber.java \
 	ValueObject.java \
 
-LOCALJAVAFLAGS= $(J8FLAGS)
+LOCALJAVAFLAGS= $(J10FLAGS)
 

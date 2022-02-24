@@ -472,18 +472,18 @@ private static class UseItemEnum extends UseItem {
       enum_list = new Vector<String>();
       enum_items = new HashMap<String,String>();
       for (Iterator<Element> it = IvyXml.getElementsByTag(e,"VALUE"); it.hasNext(); ) {
-	 Element v = it.next();
-	 String nm = IvyXml.getAttrString(v,"NAME");
-	 if (nm == null) continue;
-	 enum_list.add(nm);
-	 enum_items.put(nm,nm);
-	 String op = IvyXml.getAttrString(v,"OPTION");
-	 if (op != null) {
-	    for (StringTokenizer tok = new StringTokenizer(op); tok.hasMoreTokens(); ) {
-	       String ov = tok.nextToken();
-	       enum_items.put(ov,nm);
-	     }
-	  }
+         Element v = it.next();
+         String nm = IvyXml.getAttrString(v,"NAME");
+         if (nm == null) continue;
+         enum_list.add(nm);
+         enum_items.put(nm,nm);
+         String op = IvyXml.getAttrString(v,"OPTION");
+         if (op != null) {
+            for (StringTokenizer tok = new StringTokenizer(op); tok.hasMoreTokens(); ) {
+               String ov = tok.nextToken();
+               enum_items.put(ov,nm);
+             }
+          }
        }
     }
 

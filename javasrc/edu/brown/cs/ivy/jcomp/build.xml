@@ -24,7 +24,7 @@
 
    <target name='compile' depends='init'>
       <javac srcdir='.' destdir='${IVY}/java' debug='on' deprecation='on'
-		target='1.8' source='1.8' bootclasspath='${j8}'
+		target='10' source='10'
 		includeantruntime='false'>
 	 <classpath refid='ivy.classpath' />
       </javac>

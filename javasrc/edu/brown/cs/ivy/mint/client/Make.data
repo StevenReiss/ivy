@@ -14,5 +14,5 @@ SFILES= MintClient.java \
 	MintClientMessage.java \
 	MintClientServer.java
 
-LOCALJAVAFLAGS= $(J8FLAGS)
+LOCALJAVAFLAGS= $(J10FLAGS)
 

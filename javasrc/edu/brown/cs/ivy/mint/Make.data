@@ -25,7 +25,7 @@ SFILES= \
 
 SUBDIRS= client server match web test
 
-LOCALJAVAFLAGS= $(J8FLAGS)
+LOCALJAVAFLAGS= $(J10FLAGS)
 
 testit:
 	ivyjava -Dedu.brown.cs.ivy.mint.debug=true edu.brown.cs.ivy.mint.test.MintTest

@@ -21,6 +21,7 @@ SFILES = JannotTree.java \
 	JannotTreeJCBlock.java \
 	JannotTreeJCBreak.java \
 	JannotTreeJCCase.java \
+	JannotTreeJCCaseLabel.java \
 	JannotTreeJCCatch.java \
 	JannotTreeJCClassDecl.java \
 	JannotTreeJCCompilationUnit.java \
@@ -72,5 +73,5 @@ SFILES = JannotTree.java \
 	JannotTreeVisitor.java \
 	JannotTrees.java \
 
-
+LOCALJAVAFLAGS= $(J10FLAGS)
 

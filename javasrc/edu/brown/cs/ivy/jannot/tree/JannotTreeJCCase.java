@@ -1,34 +1,34 @@
 /********************************************************************************/
-/*                                                                              */
-/*              JannotTreeJCCase.java                                           */
-/*                                                                              */
-/*      Compilation tree for switch cases                                       */
-/*                                                                              */
+/*										*/
+/*		JannotTreeJCCase.java						*/
+/*										*/
+/*	Compilation tree for switch cases					*/
+/*										*/
 /********************************************************************************/
-/*      Copyright 2013 Brown University -- Steven P. Reiss                    */
+/*	Copyright 2013 Brown University -- Steven P. Reiss		      */
 /*********************************************************************************
- *  Copyright 2013, Brown University, Providence, RI.                            *
- *                                                                               *
- *                        All Rights Reserved                                    *
- *                                                                               *
- *  Permission to use, copy, modify, and distribute this software and its        *
- *  documentation for any purpose other than its incorporation into a            *
- *  commercial product is hereby granted without fee, provided that the          *
- *  above copyright notice appear in all copies and that both that               *
- *  copyright notice and this permission notice appear in supporting             *
- *  documentation, and that the name of Brown University not be used in          *
- *  advertising or publicity pertaining to distribution of the software          *
- *  without specific, written prior permission.                                  *
- *                                                                               *
- *  BROWN UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS                *
- *  SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND            *
- *  FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL BROWN UNIVERSITY      *
- *  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY          *
- *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,              *
- *  WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS               *
- *  ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE          *
- *  OF THIS SOFTWARE.                                                            *
- *                                                                               *
+ *  Copyright 2013, Brown University, Providence, RI.				 *
+ *										 *
+ *			  All Rights Reserved					 *
+ *										 *
+ *  Permission to use, copy, modify, and distribute this software and its	 *
+ *  documentation for any purpose other than its incorporation into a		 *
+ *  commercial product is hereby granted without fee, provided that the 	 *
+ *  above copyright notice appear in all copies and that both that		 *
+ *  copyright notice and this permission notice appear in supporting		 *
+ *  documentation, and that the name of Brown University not be used in 	 *
+ *  advertising or publicity pertaining to distribution of the software 	 *
+ *  without specific, written prior permission. 				 *
+ *										 *
+ *  BROWN UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS		 *
+ *  SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND		 *
+ *  FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL BROWN UNIVERSITY	 *
+ *  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY 	 *
+ *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,		 *
+ *  WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS		 *
+ *  ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 	 *
+ *  OF THIS SOFTWARE.								 *
+ *										 *
  ********************************************************************************/
 
 
@@ -51,9 +51,9 @@ public class JannotTreeJCCase extends JannotTreeJCStatement implements CaseTree
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Constructors                                                            */
-/*                                                                              */
+/*										*/
+/*	Constructors								*/
+/*										*/
 /********************************************************************************/
 
 JannotTreeJCCase(SwitchCase n)
@@ -63,9 +63,9 @@ JannotTreeJCCase(SwitchCase n)
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Abstract Method Implementations                                         */
-/*                                                                              */
+/*										*/
+/*	Abstract Method Implementations 					*/
+/*										*/
 /********************************************************************************/
 
 @Override public void accept(JannotTreeVisitor v)
@@ -99,11 +99,12 @@ JannotTreeJCCase(SwitchCase n)
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Tree methods                                                            */
-/*                                                                              */
+/*										*/
+/*	Tree methods								*/
+/*										*/
 /********************************************************************************/
 
+// @SuppressWarnings("deprecation")
 @Override public JannotTreeJCExpression getExpression()
 {
    for (Object o : getCase().expressions()) {
@@ -125,27 +126,33 @@ public List<JannotTreeJCExpression> getExpressions()
 @Override public List<JannotTreeJCStatement> getStatements()
 {
    List<JannotTreeJCStatement> rslt = new ArrayList<>();
-   
+
    SwitchCase c = getCase();
    if (c.getParent() instanceof SwitchStatement) {
       SwitchStatement sw = (SwitchStatement) c.getParent();
       List<?> stmts = sw.statements();
       int idx = stmts.indexOf(c);
       for (int i = idx+1; i < stmts.size(); ++i) {
-         ASTNode n = (ASTNode) stmts.get(i);
-         if (n instanceof SwitchCase) break;
-         rslt.add((JannotTreeJCStatement) createTree(n));
+	 ASTNode n = (ASTNode) stmts.get(i);
+	 if (n instanceof SwitchCase) break;
+	 rslt.add((JannotTreeJCStatement) createTree(n));
        }
     }
-   
+
    return rslt;
 }
 
 
+public List<JannotTreeJCCaseLabel> getLabels()
+{
+   return null;
+}
+
+
 /********************************************************************************/
-/*                                                                              */
-/*      Helper methods                                                          */
-/*                                                                              */
+/*										*/
+/*	Helper methods								*/
+/*										*/
 /********************************************************************************/
 
 private SwitchCase getCase()
@@ -154,7 +161,7 @@ private SwitchCase getCase()
 }
 
 
-}       // end of class JannotTreeJCCase
+}	// end of class JannotTreeJCCase
 
 
 

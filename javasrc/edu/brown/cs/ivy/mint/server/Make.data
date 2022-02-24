@@ -25,5 +25,5 @@ SFILES= MintServer.java \
 	MintContextManager.java
 
 
-LOCALJAVAFLAGS= $(J8FLAGS)
+LOCALJAVAFLAGS= $(J10FLAGS)
 

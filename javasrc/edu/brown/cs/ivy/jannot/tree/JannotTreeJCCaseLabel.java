@@ -1,8 +1,8 @@
 /********************************************************************************/
 /*										*/
-/*		JannotTreeJCInstanceOf.java					*/
+/*		JannotTreeJCCaseLabel.java					*/
 /*										*/
-/*	description of class							*/
+/*	Compilation tree for switch case labels 				*/
 /*										*/
 /********************************************************************************/
 /*	Copyright 2013 Brown University -- Steven P. Reiss		      */
@@ -35,16 +35,14 @@
 
 package edu.brown.cs.ivy.jannot.tree;
 
-import org.eclipse.jdt.core.dom.InstanceofExpression;
+import org.eclipse.jdt.core.dom.ASTNode;
 
-import com.sun.source.tree.InstanceOfTree;
-import com.sun.source.tree.PatternTree;
-import com.sun.source.tree.Tree;
-import com.sun.source.tree.TreeVisitor;
-// import com.sun.source.tree.PatternTree;
+import com.sun.source.tree.CaseLabelTree;
+
+// import com.sun.source.tree.CaseLabelTree;
 
 
-public class JannotTreeJCInstanceOf extends JannotTreeJCExpression implements InstanceOfTree
+public abstract class JannotTreeJCCaseLabel extends JannotTree implements CaseLabelTree
 {
 
 
@@ -54,89 +52,18 @@ public class JannotTreeJCInstanceOf extends JannotTreeJCExpression implements In
 /*										*/
 /********************************************************************************/
 
-JannotTreeJCInstanceOf(InstanceofExpression n)
+JannotTreeJCCaseLabel(ASTNode n)
 {
    super(n);
 }
 
 
 
-/********************************************************************************/
-/*										*/
-/*	Abstract Method Implementations 					*/
-/*										*/
-/********************************************************************************/
 
-@Override public void accept(JannotTreeVisitor v)
-{
-   v.visitTypeTest(this);
-}
-
-
-@Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
-{
-   return visitor.visitInstanceOf(this,arg);
-}
-
-
-
-@Override public JannotTree translate(JannotTreeTranslator tt)
-{
-   tt.translate(getExpression());
-   tt.translate(getType());
-   return this;
-}
-
-
-
-@Override public Tree.Kind getKind()
-{
-   return Tree.Kind.INSTANCE_OF;
-}
-
-
-
-/********************************************************************************/
-/*										*/
-/*	Tree methods								*/
-/*										*/
-/********************************************************************************/
-
-@Override public JannotTreeJCExpression getExpression()
-{
-   return createTree(getNode().getLeftOperand());
-}
-
-
-public PatternTree getPattern() 		{ return null; }
-
-
-
-@Override public JannotTree getType()
-{
-   return createTree(getNode().getRightOperand());
-}
+}	// end of class JannotTreeJCCaseLabel
 
 
 
 
-
-
-/********************************************************************************/
-/*										*/
-/*	Helper methods								*/
-/*										*/
-/********************************************************************************/
-
-private InstanceofExpression getNode()
-{
-   return (InstanceofExpression) ast_node;
-}
-
-}	// end of class JannotTreeJCInstanceOf
-
-
-
-
-/* end of JannotTreeJCInstanceOf.java */
+/* end of JannotTreeJCCaseLabel.java */
 

@@ -18,6 +18,7 @@ SFILES= MintWebConstants.java \
 
 LOCALJAVAFLAGS= $(J6FLAGS)	# required for conifer
 LOCALJAVAFLAGS= $(J8FLAGS)
+LOCALJAVAFLAGS= $(J10FLAGS)
 
 WARFILE = $(PRO)/ivy/javasrc/edu/brown/cs/ivy/mint/web/mint.war
 

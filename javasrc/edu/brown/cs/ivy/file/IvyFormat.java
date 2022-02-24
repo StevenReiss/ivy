@@ -593,6 +593,14 @@ private static int internalFormatTypeName(String jty,int idx,StringBuffer buf,bo
 		  buf.append("<");
 		  ++i;
 		  while (i < jty.length()) {
+                     if (jty.charAt(i) == '+') {
+                        buf.append("? extends ");
+                        ++i;
+                      }
+                     else if (jty.charAt(i) == '-') {
+                        buf.append("? implements ");
+                        ++i;
+                      }
 		     i = internalFormatTypeName(jty,i,buf,internal);
 		     if (i >= jty.length() || jty.charAt(i) == '>') break;
 		     buf.append(",");

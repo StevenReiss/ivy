@@ -41,8 +41,7 @@ SFILES= \
 	JcompTest.java \
 
 
-LOCALJAVAFLAGS= -Xdiags:verbose $(J8FLAGS)
-LOCALJAVAFLAGS= -Xdiags:verbose
+LOCALJAVAFLAGS= -Xdiags:verbose $(J10FLAGS)
 
 
 

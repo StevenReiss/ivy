@@ -1,5 +1,5 @@
 #
-# LIMBO -- line number tracking 
+# LIMBO -- line number tracking
 #
 # Copyright 2007 <Steven P. Reiss>, Brown University - All rights reserved.
 #
@@ -15,5 +15,5 @@ SFILES= \
 
 
 
-LOCALJAVAFLAGS= $(J8FLAGS)
+LOCALJAVAFLAGS= $(J10FLAGS)
 

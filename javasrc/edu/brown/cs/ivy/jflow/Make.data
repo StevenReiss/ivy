@@ -29,7 +29,7 @@ SFILES= \
 
 SUBDIRS= flow model
 
-LOCALJAVAFLAGS= $(J8FLAGS)
+LOCALJAVAFLAGS= $(J10FLAGS)
 
 ALL= jflowdummy.jar
 

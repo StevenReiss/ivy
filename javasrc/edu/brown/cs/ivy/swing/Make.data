@@ -41,5 +41,5 @@ SFILES= \
 	SwingTreeTable.java \
 
 
-# LOCALJAVAFLAGS= $(J8FLAGS)
+LOCALJAVAFLAGS= $(J10FLAGS)
 
