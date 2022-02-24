@@ -43,7 +43,7 @@ import com.sun.source.tree.TreeVisitor;
 // import com.sun.source.tree.PatternTree;
 
 
-public class JannotTreeJCInstanceOf extends JannotTreeJCExpression implements InstanceOfTree
+public abstract class JannotTreeJCInstanceOf extends JannotTreeJCExpression implements InstanceOfTree
 {
 
 
@@ -106,9 +106,9 @@ JannotTreeJCInstanceOf(InstanceofExpression n)
    return createTree(getNode().getLeftOperand());
 }
 
-
-public Object	   getPattern() 		{ return null; }
-
+/*****
+public PatternTree getPattern() 		{ return null; }
+*****/
 
 
 @Override public JannotTree getType()

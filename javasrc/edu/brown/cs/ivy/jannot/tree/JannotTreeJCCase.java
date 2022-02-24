@@ -46,7 +46,7 @@ import com.sun.source.tree.CaseTree;
 import com.sun.source.tree.Tree;
 import com.sun.source.tree.TreeVisitor;
 
-public class JannotTreeJCCase extends JannotTreeJCStatement implements CaseTree
+public abstract class JannotTreeJCCase extends JannotTreeJCStatement implements CaseTree
 {
 
 
@@ -143,10 +143,13 @@ public List<JannotTreeJCExpression> getExpressions()
 }
 
 
-public List<? extends JannotTree> getLabels()
+/****
+public List<JannotTreeJCCaseLabel> getLabels()
 {
    return null;
 }
+*****/
+
 
 
 /********************************************************************************/
