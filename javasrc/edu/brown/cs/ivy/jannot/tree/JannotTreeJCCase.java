@@ -143,7 +143,7 @@ public List<JannotTreeJCExpression> getExpressions()
 }
 
 
-public List<JannotTreeJCCaseLabel> getLabels()
+public List<? extends JannotTree> getLabels()
 {
    return null;
 }

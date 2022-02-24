@@ -38,7 +38,6 @@ package edu.brown.cs.ivy.jannot.tree;
 import org.eclipse.jdt.core.dom.InstanceofExpression;
 
 import com.sun.source.tree.InstanceOfTree;
-import com.sun.source.tree.PatternTree;
 import com.sun.source.tree.Tree;
 import com.sun.source.tree.TreeVisitor;
 // import com.sun.source.tree.PatternTree;
@@ -108,7 +107,7 @@ JannotTreeJCInstanceOf(InstanceofExpression n)
 }
 
 
-public PatternTree getPattern() 		{ return null; }
+public Object	   getPattern() 		{ return null; }
 
 
 
