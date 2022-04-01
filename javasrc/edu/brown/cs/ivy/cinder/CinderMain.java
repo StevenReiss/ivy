@@ -106,7 +106,6 @@ public class CinderMain
 static public void main(String [] args)
 {
    CinderMain cm = new CinderMain(args);
-
    cm.process();
 
    System.exit(0);
@@ -207,7 +206,7 @@ private void scanArgs(String [] args)
 	    patch_type.setPatchExit(true,true);
 	  }
 	 else if (args[i].startsWith("-X")) {                   // -X (exit, no value)
-	    patch_type.setPatchExit(true,false);
+	    patch_type.setPatchExit(true, false);
 	  }
 	 else if (args[i].startsWith("-S")) {                   // -SYNC
 	    patch_type.setPatchSynchronization(true);

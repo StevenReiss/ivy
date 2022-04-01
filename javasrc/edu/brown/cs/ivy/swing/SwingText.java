@@ -424,26 +424,26 @@ private static class MacKeyTypedAction extends TextAction {
 
    @Override public void actionPerformed(ActionEvent e) {
       JTextComponent target = getTextComponent(e);
-
+   
       if (target != null && e != null) {
-	 if (!target.isEditable() || !target.isEnabled()) {
-	    target.getToolkit().beep();
-	    return;
-	  }
+         if (!target.isEditable() || !target.isEnabled()) {
+            target.getToolkit().beep();
+            return;
+          }
        }
-
+   
       String content = e.getActionCommand();
       int mod = e.getModifiers();
-
+   
       if ((content != null) && (content.length() > 0) &&
-	     (((mod & ActionEvent.META_MASK) == 0) &&
-		 ! (((mod & ActionEvent.CTRL_MASK) != 0) &&
-		       ((mod & ActionEvent.ALT_MASK) == 0) ))) {
-	 char c = content.charAt(0);
-	 if (c >= 0x20 && (c != 0x7F)) { // Filter out CTRL chars and delete
-	    if (target != null)
-	       target.replaceSelection(content);
-	  }
+             (((mod & ActionEvent.META_MASK) == 0) &&
+        	 ! (((mod & ActionEvent.CTRL_MASK) != 0) &&
+        	       ((mod & ActionEvent.ALT_MASK) == 0) ))) {
+         char c = content.charAt(0);
+         if (c >= 0x20 && (c != 0x7F)) { // Filter out CTRL chars and delete
+            if (target != null)
+               target.replaceSelection(content);
+          }
        }
     }
 

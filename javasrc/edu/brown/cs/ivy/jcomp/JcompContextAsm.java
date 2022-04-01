@@ -91,8 +91,6 @@ private Map<AsmClass,Set<JcompScope>> all_defined;
 JcompContextAsm(String javahome)
 {
    this((JcompContext) null);
-   known_types = new HashMap<String,AsmClass>();
-   class_path = new ArrayList<>();
 
    computeBasePath(javahome);
 }

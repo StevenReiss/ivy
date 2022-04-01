@@ -109,7 +109,7 @@ JannotTreeJCSwitch(SwitchStatement s)
    List<JannotTreeJCCase> rslt = new ArrayList<>();
    for (Object o : getStmt().statements()) {
       if (o instanceof SwitchCase) {
-	 rslt.add(new JannotTreeJCCase((SwitchCase) o));
+// 	 rslt.add(new JannotTreeJCCase((SwitchCase) o));
        }
     }
    return rslt;

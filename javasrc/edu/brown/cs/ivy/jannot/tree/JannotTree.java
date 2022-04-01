@@ -66,7 +66,7 @@ import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.Initializer;
-import org.eclipse.jdt.core.dom.InstanceofExpression;
+// import org.eclipse.jdt.core.dom.InstanceofExpression;
 import org.eclipse.jdt.core.dom.IntersectionType;
 import org.eclipse.jdt.core.dom.LabeledStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -80,7 +80,7 @@ import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.SwitchCase;
+// import org.eclipse.`jdt.core.dom.SwitchCase;
 import org.eclipse.jdt.core.dom.SwitchStatement;
 import org.eclipse.jdt.core.dom.SynchronizedStatement;
 import org.eclipse.jdt.core.dom.ThrowStatement;
@@ -270,7 +270,8 @@ static JannotTree createTree(ASTNode n)
       case ASTNode.SWITCH_STATEMENT :
 	 return new JannotTreeJCSwitch((SwitchStatement) n);
       case ASTNode.SWITCH_CASE :
-	 return new JannotTreeJCCase((SwitchCase) n);
+// 	 return new JannotTreeJCCase((SwitchCase) n);
+         return null;
       case ASTNode.SYNCHRONIZED_STATEMENT :
 	 return new JannotTreeJCSynchronized((SynchronizedStatement) n);
       case ASTNode.THROW_STATEMENT :
@@ -311,7 +312,8 @@ static JannotTree createTree(ASTNode n)
       case ASTNode.SIMPLE_NAME :
 	 return new JannotTreeJCIdent(n);
       case ASTNode.INSTANCEOF_EXPRESSION :
-	 return new JannotTreeJCInstanceOf((InstanceofExpression) n);
+// 	 return new JannotTreeJCInstanceOf((InstanceofExpression) n);
+         return null;
       case ASTNode.NUMBER_LITERAL :
       case ASTNode.NULL_LITERAL :
       case ASTNode.BOOLEAN_LITERAL :
