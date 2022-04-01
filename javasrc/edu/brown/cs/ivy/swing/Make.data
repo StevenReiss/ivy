@@ -20,6 +20,7 @@ SFILES= \
 	SwingGridPanel.java \
 	SwingFreezePane.java \
 	SwingHelpFrame.java \
+	SwingKey.java \
 	SwingListPanel.java \
 	SwingListSet.java \
 	SwingMenuBar.java \
