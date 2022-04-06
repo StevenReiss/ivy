@@ -288,7 +288,8 @@ private static void test4()
       File f1 = new File("/u/spr/sampler/spr/onsets/OnsetMain.class.save");
       File f2 = new File("/u/spr/sampler/spr/onsets/OnsetMain.class.new");
       File f3 = new File("/u/spr/sampler/spr/onsets/OnsetMain.class");
-      Process p = Runtime.getRuntime().exec("cp " + f1.getPath() + " " + f3.getPath());
+      String [] args = new String [] { "cp", f1.getPath(), f3.getPath() };
+      Process p = Runtime.getRuntime().exec(args);
       p.waitFor();
       System.err.println("NOTE CHANGE " + f3);
 
@@ -298,7 +299,8 @@ private static void test4()
       jm.updateChanged();
       System.err.println("RECHECK DONE");
 
-      p = Runtime.getRuntime().exec("cp " + f2.getPath() + " " + f3.getPath());
+      args = new String [] { "cp", f2.getPath(), f3.getPath() };
+      p = Runtime.getRuntime().exec(args);
       p.waitFor();
     }
    catch (JflowException e) {

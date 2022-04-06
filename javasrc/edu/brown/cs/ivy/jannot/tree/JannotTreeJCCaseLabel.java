@@ -37,12 +37,12 @@ package edu.brown.cs.ivy.jannot.tree;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 
-import com.sun.source.tree.CaseLabelTree;
+// import com.sun.source.tree.CaseLabelTree;
 
 // import com.sun.source.tree.CaseLabelTree;
 
 
-public abstract class JannotTreeJCCaseLabel extends JannotTree implements CaseLabelTree
+public abstract class JannotTreeJCCaseLabel extends JannotTree // implements CaseLabelTree
 {
 
 
