@@ -161,8 +161,8 @@ public class SwingComboBox<T extends Object> extends JComboBox<T>
 /********************************************************************************/
 
 private String btn_label;
-private UndoableEditSupport undo_support;
-private Object selected_item;
+private transient UndoableEditSupport undo_support;
+private transient Object selected_item;
 private boolean auto_complete;
 private boolean case_sensitive;
 
@@ -334,8 +334,8 @@ public void setContents(Collection<T> cnts)
 
 private class ComboBoxCommand extends AbstractUndoableEdit {
 
-   private Object old_item;
-   private Object new_item;
+   private transient Object old_item;
+   private transient Object new_item;
    private static final long serialVersionUID = 1;
 
    public ComboBoxCommand() {
@@ -374,7 +374,7 @@ private class ComboBoxCommand extends AbstractUndoableEdit {
 
 private class AutoCompleteDocument<S extends T> extends PlainDocument {
 
-    private ComboBoxModel<T> model;
+    private transient ComboBoxModel<T> completion_model;
     private JTextComponent text_comp;
     private boolean do_select = false;
     private boolean do_navigate = false;
@@ -383,7 +383,7 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
 
 
     public AutoCompleteDocument() {
-      model = getModel();
+      completion_model = getModel();
       text_comp = (JTextComponent)getEditor().getEditorComponent();
       text_comp.addKeyListener(new AutoKeyer(this));
       text_comp.addFocusListener(new AutoFocus(this));
@@ -465,14 +465,14 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
 
     private void setSelectedItem(Object item) {
        do_select = true;
-       model.setSelectedItem( item );
+       completion_model.setSelectedItem( item );
        do_select = false;
      }
 
     private Object lookupItem(String pattern) {
-       int n = model.getSize();
+       int n = completion_model.getSize();
        for ( int i = 0; i < n; ++i) {
-          String itm = model.getElementAt(i).toString();
+          String itm = completion_model.getElementAt(i).toString();
           if (itm.equals(pattern)) {
              cur_index = i;
              return itm;
@@ -480,7 +480,7 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
         }
         
        for ( int i = 0; i < n; i++ ){
-          String currentItem = model.getElementAt( i ).toString();
+          String currentItem = completion_model.getElementAt( i ).toString();
           if (case_sensitive) {
              if (currentItem.contains(pattern)) {
                 cur_index = i;

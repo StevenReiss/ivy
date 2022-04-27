@@ -113,11 +113,11 @@ public class MintWebServlet extends HttpServlet implements MintWebConstants
 /*										*/
 /********************************************************************************/
 
-private Map<String,Map<String,MintWebUser>>	known_connections;
+private transient Map<String,Map<String,MintWebUser>> known_connections;
 private int					reply_counter;
-private Timer					connect_timer;
+private transient Timer                         connect_timer;
 
-private Map<String,ReplyData>			reply_map;
+private transient Map<String,ReplyData>         reply_map;
 
 private static final long TIME_OUT_INTERVAL = 30*1000;
 

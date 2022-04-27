@@ -135,13 +135,13 @@ public class SwingFreezePane extends JPanel
 /********************************************************************************/
 
 private int		paint_count;
-private Image		draw_image;
+private transient Image draw_image;
 private boolean 	image_valid;
 private boolean 	is_forced_frozen;
 private boolean 	force_repaint;
 private int		count_threshold;
-private ChildManager	child_manager;
-private Map<Object,Object> render_hints;
+private transient ChildManager child_manager;
+private transient Map<Object,Object> render_hints;
 
 private static final int	REDRAW_THRESHOLD = 1;
 private static final int	MIN_AREA = 10000;

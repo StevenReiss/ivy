@@ -122,7 +122,7 @@ public static void main(String [] args)
 /********************************************************************************/
 
 public PetalEditor	 petal_editor;
-public PetalModelDefault petal_model;
+public transient PetalModelDefault petal_model;
 
 private static final long serialVersionUID = 1;
 

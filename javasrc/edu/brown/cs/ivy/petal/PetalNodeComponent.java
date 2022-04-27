@@ -38,7 +38,7 @@ public class PetalNodeComponent extends JPanel implements PetalConstants
 /********************************************************************************/
 
 private PetalNodeShape  use_shape;
-private Shape           draw_shape;
+private transient Shape draw_shape;
 private String          node_contents;
 
 private static final long serialVersionUID = 1;

@@ -105,9 +105,9 @@ public class SwingListSet<T extends Object> extends AbstractListModel<T>
 /*										*/
 /********************************************************************************/
 
-private Collection<T>	element_set;
-private T []		element_array;
-private T		selected_item;
+private transient Collection<T> element_set;
+private transient T []  element_array;
+private transient T     selected_item;
 
 
 private static final long serialVersionUID = 1;

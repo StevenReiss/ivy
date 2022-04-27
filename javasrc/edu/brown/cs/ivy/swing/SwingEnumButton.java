@@ -95,7 +95,7 @@ public class SwingEnumButton<E extends Enum<?>> extends JButton implements Actio
 
 private int	cur_index;
 private E []	value_set;
-private Icon [] icon_set;
+private transient Icon [] icon_set;
 private EventListenerList value_listeners;
 
 private static final long serialVersionUID = 1;

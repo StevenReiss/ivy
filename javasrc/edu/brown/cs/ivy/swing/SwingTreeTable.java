@@ -870,7 +870,7 @@ public static class AbstractCellEditor implements CellEditor {
 private static class TreeTableModelAdapter extends AbstractTableModel
 {
    private JTree for_tree;
-   private TreeTableModel tree_table_model;
+   private transient TreeTableModel tree_table_model;
 
    private static final long serialVersionUID = 1;
 

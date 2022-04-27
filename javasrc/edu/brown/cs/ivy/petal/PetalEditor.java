@@ -391,25 +391,25 @@ private static final long serialVersionUID = 1;
 /*										*/
 /********************************************************************************/
 
-private PetalModel	graph_model;
+private transient PetalModel graph_model;
 private TabFrame	tab_frame;
 private DragFrame	drag_frame;
 private ArcFrame	arc_frame;
 private JPanel		background_frame;
 private Dimension	editor_size;
-private PetalUndoSupport undo_support;
+private transient PetalUndoSupport undo_support;
 private PetalUndoManager command_manager;
 private Vector<PetalEditorCallback> editor_callbacks;
 private int		grid_size;
 private Point		next_position;
 private boolean 	position_center;
 
-private PetalNode	resize_component;
+private transient PetalNode resize_component;
 private int		resize_x;
 private int		resize_y;
 
 private int		pivot_index;
-private PetalArc	pivot_arc;
+private transient PetalArc pivot_arc;
 private boolean 	new_pivot;
 
 private boolean 	spline_arcs;
@@ -1775,7 +1775,7 @@ private Transferable getClipboardData(boolean cutfg)
 
 private class CutCopyCommand extends AbstractUndoableEdit {
 
-   private Transferable old_clipboard;
+   private transient Transferable old_clipboard;
    private boolean is_cut;
    private static final long serialVersionUID = 1;
 
@@ -1887,7 +1887,7 @@ private void pasteClipboardData(Transferable data,boolean dofg)
 
 private class PasteCommand extends AbstractUndoableEdit {
 
-   private Transferable old_clipboard;
+   private transient Transferable old_clipboard;
    private static final long	   serialVersionUID = 1;
 
    PasteCommand() {
@@ -2128,7 +2128,7 @@ private void handleResize(MouseEvent evt,Point dp,boolean release)
 
 private class CommandResize extends AbstractUndoableEdit {
 
-   private PetalNode for_node;
+   private transient PetalNode for_node;
    private Rectangle start_size;
    private Rectangle end_size;
    private static final long	   serialVersionUID = 1;
@@ -2321,7 +2321,7 @@ private void handleRemovePivots()
 
 private class CommandPivot extends AbstractUndoableEdit {
 
-   private PetalArc for_arc;
+   private transient PetalArc for_arc;
    private Point start_point;
    private Point end_point;
    private boolean created_pivot;
@@ -2361,7 +2361,7 @@ private class CommandPivot extends AbstractUndoableEdit {
 
 private class CommandReplacePivots extends AbstractUndoableEdit {
 
-   private PetalArc for_arc;
+   private transient PetalArc for_arc;
    private Point [] old_pivots;
    private Point [] new_pivots;
    private static final long serialVersionUID = 1;

@@ -107,8 +107,8 @@ public class PetalNodeDefault implements PetalNode, java.io.Serializable
 /********************************************************************************/
 
 private Component	node_component;
-private PetalLink	node_link;
-private PetalArc	link_arc;
+private transient PetalLink node_link;
+private transient PetalArc link_arc;
 
 private static final long serialVersionUID = 1;
 

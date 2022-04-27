@@ -388,7 +388,7 @@ private void fixLayout()
 
 private static class MenuBar extends SwingMenuBar implements ActionListener {
 
-   private PebbleEditor for_editor;
+   private transient PebbleEditor for_editor;
    private Window for_window;
    private static final long serialVersionUID = 1;
 

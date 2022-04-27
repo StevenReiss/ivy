@@ -162,7 +162,7 @@ class PebbleEventEditor extends SwingGridPanel implements PebbleConstants,
 /*										*/
 /********************************************************************************/
 
-private PebbleEditor for_editor;
+private transient PebbleEditor for_editor;
 private Window for_window;
 private JList<PebbleEvent> list_area;
 private JButton edit_button;
@@ -491,10 +491,11 @@ private int showResizableOptionDialog(Component parent, Object message, String t
 
 private class EditEventDialog extends SwingGridPanel implements ActionListener {
 
-   PebbleEvent for_event;
-   JComboBox<String> default_box;
-   JTextField label_field;
-   Map<String,Component> prop_fields;
+   private PebbleEvent for_event;
+   private JComboBox<String> default_box;
+   private JTextField label_field;
+   private transient Map<String,Component> prop_fields;
+   
    private static final long serialVersionUID = 1;
 
    EditEventDialog(PebbleEvent evt) {
@@ -728,9 +729,8 @@ private class EditEventDialog extends SwingGridPanel implements ActionListener {
 
 }	// end of subclass EditEventDialog
 
-private Set<Reference<MatchComboModel> > models = new HashSet<
-    Reference<MatchComboModel> >();
-private java.util.List<String> matchClasses;
+private transient Set<Reference<MatchComboModel>> models = new HashSet<>();
+private transient java.util.List<String> matchClasses;
 
 private String newEventMatch(MatchComboModel model) {
     String value = for_editor.getEditModel().getNextMatch();
@@ -765,10 +765,10 @@ private MatchComboModel getMatchModel(String selected) {
     return model;
 }
 
-private Object MATCH_NONE = new Object() {
+private transient Object MATCH_NONE = new Object() {
     @Override public String toString() { return "NONE"; }
 };
-private Object MATCH_NEW = new Object() {
+private transient Object MATCH_NEW = new Object() {
     @Override public String toString() { return "NEW"; }
 };
 
@@ -956,16 +956,11 @@ private class MatchEditor extends ClassEditor {
 
 private class MultiMatchEditor extends JPanel implements ActionListener {
 
-    private java.util.List<MatchEditor> matches = new ArrayList<MatchEditor>();
-
+    private transient java.util.List<MatchEditor> matches = new ArrayList<MatchEditor>();
     private JLabel nameLabel;
-
     private JPanel top;
-
     private String name;
-
     protected PebbleEvent for_event;
-
     private JButton addButton;
     private JButton removeButton;
     private static final long serialVersionUID = 1;

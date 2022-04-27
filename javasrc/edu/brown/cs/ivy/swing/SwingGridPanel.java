@@ -263,10 +263,10 @@ protected HashMap<Object,JLabel> label_map;
 protected Insets  inset_values;
 
 private Box			bottom_box;
-private UndoableEditSupport	undo_support;
-private ActionListener		action_listener;
+private transient UndoableEditSupport undo_support;
+private transient ActionListener action_listener;
 private String			action_command;
-private Map<Object,JFileChooser> chooser_map;
+private transient Map<Object,JFileChooser> chooser_map;
 
 protected JLabel		banner_prototype;
 protected JLabel		section_prototype;
@@ -400,8 +400,8 @@ public final void restoreValues()
 private class ValueSetCommand extends AbstractUndoableEdit {
 
    private String value_label;
-   private Object value_object;
-   private Object old_object;
+   private transient Object value_object;
+   private transient Object old_object;
    private static final long serialVersionUID = 1;
 
    ValueSetCommand(String lbl,Object nval) {

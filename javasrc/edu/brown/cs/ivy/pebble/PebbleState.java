@@ -119,17 +119,17 @@ class PebbleState extends PetalNodeDefault implements PebbleConstants.State, Peb
 /*										*/
 /********************************************************************************/
 
-private PebbleEditor	base_editor;
+private transient PebbleEditor base_editor;
 private String		state_name;
 private String		state_label;
 private boolean 	is_start;
 private boolean 	is_accept;
 private boolean 	is_error;
 private boolean 	is_ignore;
-private Collection<Action> state_actions;
+private transient Collection<Action> state_actions;
 private PebbleState	default_next;
 
-private StateIcon	state_icon;
+private transient StateIcon state_icon;
 
 private static final long serialVersionUID = 1;
 

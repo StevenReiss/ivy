@@ -141,9 +141,9 @@ public class SwingSourceViewer extends SwingTextPane implements SwingColors
 /********************************************************************************/
 
 private String		source_file;
-private StyledDocument	source_doc;
-private List<Integer>	line_map;
-private Style		our_style;
+private transient StyledDocument source_doc;
+private transient List<Integer> line_map;
+private transient Style our_style;
 
 private static final long serialVersionUID = 1;
 

@@ -104,8 +104,8 @@ public interface CommandHandler {
 /*										*/
 /********************************************************************************/
 
-private PetalUndoSupport	undo_support;
-private CommandHandler		command_handler;
+private transient PetalUndoSupport undo_support;
+private transient CommandHandler   command_handler;
 
 private static final long serialVersionUID = 1;
 

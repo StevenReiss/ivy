@@ -143,7 +143,7 @@ private final static int BASIC_THUMB_WIDTH = 5;
 /*										*/
 /********************************************************************************/
 
-private AdjustmentListener adj_listener;
+private transient AdjustmentListener adj_listener;
 
 private boolean right_moved;
 private boolean left_moved;
@@ -181,8 +181,8 @@ private Color	thumb_highlight_color;
 private Color	track_color;
 private Color	track_highlight_color;
 
-private RangeSliderMotionAdapter motion_listener;
-private RangeSliderMouseAdapter mouse_listener;
+private transient RangeSliderMotionAdapter motion_listener;
+private transient RangeSliderMouseAdapter mouse_listener;
 
 
 private static final long serialVersionUID = 1;

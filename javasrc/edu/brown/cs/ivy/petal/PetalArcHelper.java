@@ -153,12 +153,12 @@ private static final long	serialVersionUID = 1;
 /*										*/
 /********************************************************************************/
 
-private PetalNode	source_node;
+private transient PetalNode source_node;
 private PetalPort	source_port;
-private PetalNode	target_node;
+private transient PetalNode target_node;
 private PetalPort	target_port;
-private PetalArcEnd	source_end;
-private PetalArcEnd	target_end;
+private transient PetalArcEnd source_end;
+private transient PetalArcEnd target_end;
 
 private Vector<Point>	arc_pivots;
 private Point []	arc_points;

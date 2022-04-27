@@ -280,7 +280,7 @@ public boolean checkActions(String v)
 private static class Event implements EventType, Serializable {
 
    private String event_name;
-   private List<EventProperty> event_props;
+   private transient List<EventProperty> event_props;
    private static final long serialVersionUID = 1;
 
    Event(Node xml) {

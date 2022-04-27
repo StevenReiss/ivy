@@ -128,10 +128,10 @@ class PebbleTransition extends PetalArcDefault implements PebbleConstants.Transi
 /********************************************************************************/
 
 private ArcLabel arc_label;
-private List<PebbleEvent> arc_events;
-private PebbleEditor base_editor;
+private transient  List<PebbleEvent> arc_events;
+private transient PebbleEditor base_editor;
 private String	arc_condition;
-private Collection<Action> arc_actions;
+private transient Collection<Action> arc_actions;
 
 private static final long serialVersionUID = 1;
 

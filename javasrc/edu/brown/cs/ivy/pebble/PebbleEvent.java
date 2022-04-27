@@ -88,8 +88,8 @@ class PebbleEvent implements PebbleConstants.Event, Transferable, Serializable, 
 
 private String		event_name;
 private String		event_label;
-private EventType	event_type;
-private Map<String,Object> event_params;
+private transient EventType event_type;
+private transient Map<String,Object> event_params;
 private String		next_state;
 private static final long serialVersionUID = 1;
 

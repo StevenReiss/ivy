@@ -111,7 +111,7 @@ public class SwingRangeSlider extends JSlider implements ChangeListener
 
 private String	action_command;
 private int	num_decimals;
-private ActionListener action_listener;
+private transient ActionListener action_listener;
 
 
 private static final long serialVersionUID = 1;
