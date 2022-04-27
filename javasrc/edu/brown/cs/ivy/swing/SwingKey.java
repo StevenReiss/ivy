@@ -242,6 +242,12 @@ public static void saveKeyDefinitions()
 
 
 
+public static Map<String,Map<String,Set<String>>> getKeyMappings()
+{
+   return command_keys;
+}
+
+
 /********************************************************************************/
 /*                                                                              */
 /*      Keep Track of when-key-action mappings                                  */
@@ -379,6 +385,12 @@ public static void registerKeyAction(String when,JComponent jc,String nm,
 }
 
 
+public static void registerKeyAction(String when,String nm,String ... key) 
+{
+    new SwingKey(when,nm,null,key);
+} 
+
+
 
 /********************************************************************************/
 /*                                                                              */
@@ -393,11 +405,15 @@ public SwingKey(Action a,String... key)
 
 
 
-
-
 public SwingKey(String when,Action a,String... dfltkey)
 {
    this(when,null,a,dfltkey);
+}
+
+
+public SwingKey(String when,String name,String... dfltkey)
+{
+   this(when,name,null,dfltkey);
 }
 
 
@@ -430,11 +446,6 @@ public SwingKey(String when,String name,Action a,String... dfltkey)
 
 
 
-
-
-
-
-
 /********************************************************************************/
 /*                                                                              */
 /*      Access methods                                                          */
@@ -452,7 +463,7 @@ public void addToKeyMap(Keymap kmp)
 
 public void registerKeyAction(JComponent jc)
 {
-   if (key_action == null) return;
+   if (key_action == null || jc == null) return;
    
    String cmd = getCommandName(key_action);
    // this needs to use the actual action name, not the user name

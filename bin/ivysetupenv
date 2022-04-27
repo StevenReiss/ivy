@@ -73,7 +73,7 @@ else
 endif
 
 
-if ($?BROWN_JAVA_HOME) then
+if ($?BROWN_JAVA_OS) then
 else
    set tx = /usr/bin/test
    if (-e /bin/test) set tx = /bin/test

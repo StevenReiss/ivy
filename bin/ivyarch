@@ -19,7 +19,7 @@ if (-e /bin/uname || -e /usr/bin/uname) then
 	 set a = `uname -m`
       endif
    else if (`uname` == Darwin) then
-      if (`uname -r` =~ 1* ) then
+      if (`uname -r` =~ [12]* ) then
 	 set a = mac64
       else
 	 set a = `uname -m`
