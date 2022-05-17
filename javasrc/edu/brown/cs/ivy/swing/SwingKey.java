@@ -56,6 +56,7 @@ import java.util.TreeSet;
 import javax.swing.Action;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.text.Keymap;
 
@@ -473,6 +474,16 @@ public void registerKeyAction(JComponent jc)
       im.put(ks,cmd);
       jc.getActionMap().put(cmd,key_action);
     }
+   if (jc instanceof JTextField) {
+      JTextField tf = (JTextField) jc;
+      Keymap kmp = tf.getKeymap();
+      if (kmp.getName().contains("*")) {
+         for (KeyStroke ks : key_strokes) {
+            kmp.addActionForKeyStroke(ks,key_action);
+          }
+       }
+    }
+  
 }
 
 

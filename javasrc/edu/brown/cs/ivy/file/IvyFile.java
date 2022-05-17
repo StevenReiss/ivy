@@ -138,9 +138,6 @@
 
 package edu.brown.cs.ivy.file;
 
-import edu.brown.cs.ivy.exec.IvyExecQuery;
-import edu.brown.cs.ivy.exec.IvySetup;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -154,6 +151,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.lang.reflect.Method;
+import java.net.InetAddress;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -179,7 +178,15 @@ public class IvyFile {
 /********************************************************************************/
 
 static {
-   IvySetup.setup();
+   try {
+      Class<?> setup = Class.forName("edu.brown.cs.ivy.exec.IvySetup");
+      Method m = setup.getMethod("setup");
+      m.invoke(null);
+    }
+   catch (Throwable e) {
+      IvyLog.logE("Problem invoking setup",e);
+    }
+// IvySetup.setup();
 }
  
 
@@ -255,7 +262,7 @@ public static String expandName(String name,Map<String,String> vals)
 	    if (erslt == null) erslt = System.getenv("BROWN_DYVISE_" + what);
 	    if (erslt == null) erslt = System.getenv("BROWN_S6_" + what);
 	    if (erslt == null) erslt = System.getenv("BROWN_" + what);
-	    if (erslt == null && what.equals("HOST")) erslt = IvyExecQuery.computeHostName();
+	    if (erslt == null && what.equals("HOST")) erslt = computeHostName();
 	  }
 	 if (erslt != null) buf.append(erslt);
        }
@@ -298,7 +305,7 @@ public static String expandText(String name,Map<String,String> vals)
 	 else if (what.equals("CWD")) what = "user.dir";
 	 if (erslt == null) erslt = System.getProperty(what);
 	 if (erslt == null) erslt = System.getenv(what);
-	 if (erslt == null && what.equals("HOST")) erslt = IvyExecQuery.computeHostName();
+	 if (erslt == null && what.equals("HOST")) erslt = computeHostName();
 	 if (erslt == null) erslt = dflt;
 	 if (erslt != null) buf.append(erslt);
        }
@@ -715,5 +722,29 @@ public static File getJarFile(Class<?> c)
    File f = new File(file);
    return f;
 }
+
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Host name utilities                                                     */
+/*                                                                              */
+/********************************************************************************/
+
+public static String computeHostName()
+{
+   try {
+      InetAddress lh = InetAddress.getLocalHost();
+      String h = lh.getCanonicalHostName();
+      if (h != null) return h;
+    }
+   catch (IOException e ) {
+      System.err.println("IVY: Problem getting host name: " + e);
+    }
+   
+   return "localhost";
+}
+
 
 }	// end of class IvyFile

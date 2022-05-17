@@ -54,6 +54,7 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Name;
@@ -107,7 +108,7 @@ public static CompilationUnit parseSourceFile(String text)
 
 public static CompilationUnit parseSourceFile(char [] buf)
 {
-   ASTParser parser = ASTParser.newParser(AST.JLS12);
+   ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
    parser.setKind(ASTParser.K_COMPILATION_UNIT);
    parser.setSource(buf);
 
@@ -128,18 +129,18 @@ public static CompilationUnit parseSourceFile(char [] buf)
 
 public static ASTNode parseStatement(String text)
 {
-   ASTParser parser = ASTParser.newParser(AST.JLS12);
+   ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
    parser.setKind(ASTParser.K_STATEMENTS);
    Map<String,String> options = JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
    options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
    options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
-   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");  
+   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");
    parser.setCompilerOptions(options);
    parser.setResolveBindings(false);
    parser.setStatementsRecovery(true);
    parser.setSource(text.toCharArray());
-   
+
    Block blk = (Block) parser.createAST(null);
    if (blk.statements().size() == 1) {
       return (ASTNode) blk.statements().get(0);
@@ -153,42 +154,42 @@ public static ASTNode parseStatement(String text)
 
 public static Expression parseExpression(String text)
 {
-   ASTParser parser = ASTParser.newParser(AST.JLS12);
+   ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
    Map<String,String> options = JavaCore.getOptions();
    options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
    options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
-   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");  
+   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");
    parser.setCompilerOptions(options);
    parser.setResolveBindings(false);
    parser.setStatementsRecovery(true);
    parser.setSource(text.toCharArray());
    parser.setKind(ASTParser.K_EXPRESSION);
-   
+
    Expression exp = (Expression) parser.createAST(null);
-   
+
    return exp;
 }
 
 
 public static ASTNode parseDeclarations(String text)
 {
-   ASTParser parser = ASTParser.newParser(AST.JLS12);
+   ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
    parser.setKind(ASTParser.K_CLASS_BODY_DECLARATIONS);
    Map<String,String> options = JavaCore.getOptions();
    options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
    options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
-   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");   
+   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");
    parser.setCompilerOptions(options);
    parser.setResolveBindings(false);
    parser.setStatementsRecovery(true);
    parser.setSource(text.toCharArray());
-   
+
    TypeDeclaration typ = (TypeDeclaration) parser.createAST(null);
    if (typ.bodyDeclarations().size() == 1) {
       return (ASTNode) typ.bodyDeclarations().get(0);
     }
    else if (typ.bodyDeclarations().size() == 0) return null;
-   
+
    return typ;
 }
 
@@ -196,7 +197,7 @@ public static ASTNode parseDeclarations(String text)
 
 public static AST createNewAst()
 {
-   AST ast = AST.newAST(AST.JLS12,true);
+   AST ast = AST.newAST(AST.getJLSLatest(),true);
 
    return ast;
 }
@@ -340,9 +341,9 @@ public static String getJavaTypeName(ASTNode n)
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Constant management methods                                             */
-/*                                                                              */
+/*										*/
+/*	Constant management methods						*/
+/*										*/
 /********************************************************************************/
 
 public static Object getNumberValue(NumberLiteral v)
@@ -354,18 +355,18 @@ public static Object getNumberValue(NumberLiteral v)
    boolean ishex = false;
    boolean islong = false;
    for (int i = 0; i < ds.length(); ++i) {
-      switch (ds.charAt(i)) { 
-         case 'E' :
+      switch (ds.charAt(i)) {
+	 case 'E' :
 	 case 'e' :
-         case 'f' :
+	 case 'f' :
 	 case 'F' :
-            if (!ishex) isreal = true;
+	    if (!ishex) isreal = true;
 	    break;
-     	 case '.' :
-         case 'P' :
-         case 'p' :
-            isreal = true;
-            break;
+	 case '.' :
+	 case 'P' :
+	 case 'p' :
+	    isreal = true;
+	    break;
 	 case 'l' :
 	 case 'L' :
 	    islong = true;
@@ -382,27 +383,27 @@ public static Object getNumberValue(NumberLiteral v)
     }
    if (isreal) {
       if (ds.endsWith("f") || ds.endsWith("F")) {
-         ds = ds.substring(0,ds.length()-1);
+	 ds = ds.substring(0,ds.length()-1);
        }
       if (isflt) {
-         rslt = Float.valueOf(ds);
+	 rslt = Float.valueOf(ds);
        }
       else {
-         rslt = Double.valueOf(ds);
+	 rslt = Double.valueOf(ds);
        }
     }
    else {
       if (islong) {
-         if (ds.endsWith("l") || ds.endsWith("L")) {
-            ds = ds.substring(0,ds.length()-1);
-            rslt = Long.decode(ds);
-          }
+	 if (ds.endsWith("l") || ds.endsWith("L")) {
+	    ds = ds.substring(0,ds.length()-1);
+	    rslt = Long.decode(ds);
+	  }
        }
       else {
-         rslt = Integer.decode(ds);
+	 rslt = Integer.decode(ds);
        }
     }
-   
+
    return rslt;
 }
 
@@ -1135,15 +1136,15 @@ private static class FindLocationVisitor extends ASTVisitor {
       if (soff > start_offset) return false;
       if (best_match == null) best_match = n;
       else {
-         switch (n.getNodeType()) {
-            case ASTNode.JAVADOC :
-            case ASTNode.BLOCK_COMMENT :
-            case ASTNode.LINE_COMMENT :
-               break;
-            default :
-               best_match = n;
-               break;
-          }
+	 switch (n.getNodeType()) {
+	    case ASTNode.JAVADOC :
+	    case ASTNode.BLOCK_COMMENT :
+	    case ASTNode.LINE_COMMENT :
+	       break;
+	    default :
+	       best_match = n;
+	       break;
+	  }
        }
       return true;
     }
@@ -1158,13 +1159,40 @@ public static ASTNode findNodeAtLine(ASTNode n,int line)
    CompilationUnit cu = (CompilationUnit) n.getRoot();
    int soff = cu.getPosition(line,1);
    int eoff = cu.getPosition(line+1,1)-1;
-   
+
    FindLineVisitor vis = new FindLineVisitor(soff,eoff);
    n.accept(vis);
-   
+
    ASTNode rslt = vis.getMatch();
    if (rslt == null) rslt = findNodeAtOffset(n,soff);
    return rslt;
+}
+
+
+
+public static Expression findTypeReferenceNode(ASTNode n)
+{
+   ASTNode next = null;
+   for (ASTNode use = n; use != null; use = next) {
+      next = null;
+      switch (use.getNodeType()) {
+         case ASTNode.EXPRESSION_STATEMENT :
+            ExpressionStatement es1 = (ExpressionStatement) use;
+            next = es1.getExpression();
+            break;
+         case ASTNode.ASSIGNMENT :
+            Assignment as1 = (Assignment) use;
+            return as1.getRightHandSide();
+         case ASTNode.FOR_STATEMENT :
+            ForStatement fs = (ForStatement) use;
+            if (fs.initializers().size() != 1) return null;
+            next = (ASTNode) fs.initializers().get(0);
+            break;
+         default :
+            break;
+       }
+    }
+   return null;
 }
 
 
@@ -1175,17 +1203,17 @@ private static class FindLineVisitor extends ASTVisitor {
    private int start_offset;
    private int end_offset;
    private ASTNode best_match;
-   
+
    FindLineVisitor(int soff,int eoff) {
       start_offset = soff;
       end_offset = eoff;
       best_match = null;
     }
-   
+
    ASTNode getMatch() {
       return best_match;
     }
-   
+
    @Override public boolean preVisit2(ASTNode n) {
       int soff = n.getStartPosition();
       int eoff = soff + n.getLength();
@@ -1193,15 +1221,15 @@ private static class FindLineVisitor extends ASTVisitor {
       if (soff > end_offset) return false;
       if (eoff > end_offset || soff < start_offset) return true;
       if (best_match == null) {
-         switch (n.getNodeType()) {
-            case ASTNode.JAVADOC :
-            case ASTNode.BLOCK_COMMENT :
-            case ASTNode.LINE_COMMENT :
-               break;
-            default :
-               best_match = n;
-               break;
-          }
+	 switch (n.getNodeType()) {
+	    case ASTNode.JAVADOC :
+	    case ASTNode.BLOCK_COMMENT :
+	    case ASTNode.LINE_COMMENT :
+	       break;
+	    default :
+	       best_match = n;
+	       break;
+	  }
        }
       return true;
     }

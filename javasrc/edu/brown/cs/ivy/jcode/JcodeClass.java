@@ -121,6 +121,7 @@ public String getFilePath()
 {
    if (from_file == null) return null;
    File f = from_file.getPath();
+   if (f == null) return null;
    return f.getPath();
 }
 

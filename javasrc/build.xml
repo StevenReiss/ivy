@@ -5,8 +5,8 @@
    <property name='IVY' value='/pro/ivy' />
 
    <target name='all'>
-      <ant antfile="build.xml" dir="edu/brown/cs/ivy/exec" />
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/file" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/exec" />
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/swing" />
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/xml" />
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/petal" />
@@ -28,8 +28,8 @@
 
    <target name='doc'>
       <javadoc sourcepathref='jdocsrc' classpathref='ivy.classpath' destdir='${PRO}/bubbles/doc'>
-	 <package name='edu.brown.cs.ivy.exec' />
 	 <package name='edu.brown.cs.ivy.file' />
+	 <package name='edu.brown.cs.ivy.exec' />
 	 <package name='edu.brown.cs.ivy.swing' />
 	 <package name='edu.brown.cs.ivy.xml' />
 	 <package name='edu.brown.cs.ivy.petal' />

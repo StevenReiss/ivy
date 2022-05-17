@@ -43,7 +43,7 @@ SETUPCOMPS= lib bin data
 OTHERCOMPS= include
 
 C++_COMPONENTS= stdlib mince native
-JCOMPONENTS= exec file swing xml petal pebble mint jcode jcomp jannot limbo leash project
+JCOMPONENTS= file exec swing xml petal pebble mint jcode jcomp jannot limbo leash project
 
 COMPONENTS= $(JCOMPONENTS) $(C++_COMPONENTS)
 
