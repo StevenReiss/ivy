@@ -908,13 +908,13 @@ private class ProcessThread extends Thread {
 
    @Override public void run() {
       for ( ; ; ) {
-	 Object o = getNextMessage(true);
-	 if (o == null && interrupted()) break;
-	 if (o == null) continue;
-	 if (synch_mode == MintSyncMode.MULTIPLE || synch_mode == MintSyncMode.ONLY_REPLIES) {
-	    asynchProcessMessage(o);
-	  }
-	 else processMessage(o);
+         Object o = getNextMessage(true);
+         if (o == null && interrupted()) break;
+         if (o == null) continue;
+         if (synch_mode == MintSyncMode.MULTIPLE || synch_mode == MintSyncMode.ONLY_REPLIES) {
+            asynchProcessMessage(o);
+          }
+         else processMessage(o);
        }
     }
 
