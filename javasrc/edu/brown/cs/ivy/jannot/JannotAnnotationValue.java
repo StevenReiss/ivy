@@ -50,6 +50,7 @@ import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.TextBlock;
 
 import edu.brown.cs.ivy.file.IvyFormat;
 import edu.brown.cs.ivy.jcomp.JcompAst;
@@ -148,6 +149,10 @@ JannotAnnotationValue(ASTNode n)
          break;
       case ASTNode.STRING_LITERAL :
          String strv = ((StringLiteral) ast_node).getEscapedValue();
+         strv = IvyFormat.getLiteralValue(strv);
+         return v.visitString(strv,p);
+      case ASTNode.TEXT_BLOCK :
+         strv = ((TextBlock) ast_node).getEscapedValue();
          strv = IvyFormat.getLiteralValue(strv);
          return v.visitString(strv,p);
     }

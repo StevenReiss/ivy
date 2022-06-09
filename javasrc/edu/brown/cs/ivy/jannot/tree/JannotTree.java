@@ -319,6 +319,7 @@ static JannotTree createTree(ASTNode n)
       case ASTNode.BOOLEAN_LITERAL :
       case ASTNode.STRING_LITERAL :
       case ASTNode.CHARACTER_LITERAL :
+      case ASTNode.TEXT_BLOCK :
 	 return new JannotTreeJCLiteral((Expression) n);
       case ASTNode.ARRAY_CREATION :
 	 return new JannotTreeJCNewArray((ArrayCreation) n);

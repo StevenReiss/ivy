@@ -96,6 +96,7 @@ import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.eclipse.jdt.core.dom.SuperMethodReference;
 import org.eclipse.jdt.core.dom.SwitchCase;
 import org.eclipse.jdt.core.dom.SwitchStatement;
+import org.eclipse.jdt.core.dom.TextBlock;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
@@ -679,6 +680,10 @@ private class RefPass extends ASTVisitor {
    public @Override void endVisit(StringLiteral n) {
       JcompAst.setExprType(n,findType("java.lang.String"));
     }
+   
+   public @Override void endVisit(TextBlock n) {
+      JcompAst.setExprType(n,findType("java.lang.String"));
+   }
 
    public @Override void endVisit(TypeLiteral n) {
       JcompType t0 = findType("java.lang.Class");

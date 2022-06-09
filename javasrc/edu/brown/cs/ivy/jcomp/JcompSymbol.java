@@ -54,6 +54,7 @@ import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.TextBlock;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclaration;
@@ -744,6 +745,10 @@ static Object getValue(Expression e)
 	 StringLiteral slit = (StringLiteral) e;
 	 String s0 = slit.getEscapedValue();
 	 return IvyFormat.getLiteralValue(s0);
+      case ASTNode.TEXT_BLOCK :
+         TextBlock tblk = (TextBlock) e;
+         String s1 = tblk.getEscapedValue();
+         return IvyFormat.getLiteralValue(s1);
       case ASTNode.QUALIFIED_NAME :
       case ASTNode.SIMPLE_NAME :
 	 Name snam = (Name) e;

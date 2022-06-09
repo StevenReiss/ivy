@@ -69,6 +69,7 @@ import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.TextBlock;
 import org.eclipse.jdt.core.dom.TypeParameter;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
@@ -499,6 +500,10 @@ static Object getConstantValue(ASTNode an)
          break;
       case ASTNode.STRING_LITERAL :
          String strv = ((StringLiteral) an).getEscapedValue();
+         strv = IvyFormat.getLiteralValue(strv);
+         return strv;
+      case ASTNode.TEXT_BLOCK :
+         strv = ((TextBlock) an).getEscapedValue();
          strv = IvyFormat.getLiteralValue(strv);
          return strv;
     }

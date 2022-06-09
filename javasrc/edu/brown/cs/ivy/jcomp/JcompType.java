@@ -2010,38 +2010,38 @@ private static abstract class ClassInterfaceType extends JcompType {
    @SuppressWarnings("unchecked")
    private Expression buildNonNullValue(AST ast,int lvl) {
       if (getName().equals("java.util.ResourceBundle")) {
-	 return handleResourceBundle(ast);
+         return handleResourceBundle(ast);
        }
       else if (getName().equals("java.lang.String")) {
-	 StringLiteral sl = ast.newStringLiteral();
-	 sl.setLiteralValue(JcompAst.getUniqueString("JCOMP_String_"));
-	 return sl;
+         StringLiteral sl = ast.newStringLiteral();
+         sl.setLiteralValue(JcompAst.getUniqueString("JCOMP_String_"));
+         return sl;
        }
       JcompSymbol js = findBestConstructor();
       if (js == null) return createDefaultValue(ast);
-
+   
       ClassInstanceCreation cic = ast.newClassInstanceCreation();
       Name nm = JcompAst.getQualifiedName(ast,getName());
       Type nty = ast.newSimpleType(nm);
       cic.setType(nty);
       for (JcompType aty : js.getType().getComponents()) {
-	 Expression aex = null;
-	 if (lvl == 0) aex = aty.createDefaultValue(ast);
-	 else if (aty.isInterfaceType()) aex = aty.createDefaultValue(ast);
-	 // TODO: handle case where aty is abstract
-	 else if (aty.getName().equals("java.lang.String")) {
-	    StringLiteral sl = ast.newStringLiteral();
-	    sl.setLiteralValue(JcompAst.getUniqueString("JCOMP_String_"));
-	    aex = sl;
-	  }
-	 else if (aty instanceof ClassInterfaceType) {
-	    ClassInterfaceType cit = (ClassInterfaceType) aty;
-	    aex = cit.buildNonNullValue(ast,lvl-1);
-	  }
-	 else aex = aty.createNonNullValue(ast);
-	 cic.arguments().add(aex);
+         Expression aex = null;
+         if (lvl == 0) aex = aty.createDefaultValue(ast);
+         else if (aty.isInterfaceType()) aex = aty.createDefaultValue(ast);
+         // TODO: handle case where aty is abstract
+         else if (aty.getName().equals("java.lang.String")) {
+            StringLiteral sl = ast.newStringLiteral();
+            sl.setLiteralValue(JcompAst.getUniqueString("JCOMP_String_"));
+            aex = sl;
+          }
+         else if (aty instanceof ClassInterfaceType) {
+            ClassInterfaceType cit = (ClassInterfaceType) aty;
+            aex = cit.buildNonNullValue(ast,lvl-1);
+          }
+         else aex = aty.createNonNullValue(ast);
+         cic.arguments().add(aex);
        }
-
+   
       return cic;
     }
 

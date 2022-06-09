@@ -41,6 +41,7 @@ import org.eclipse.jdt.core.dom.CharacterLiteral;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.NumberLiteral;
 import org.eclipse.jdt.core.dom.StringLiteral;
+import org.eclipse.jdt.core.dom.TextBlock;
 
 import com.sun.source.tree.LiteralTree;
 import com.sun.source.tree.Tree;
@@ -101,6 +102,7 @@ JannotTreeJCLiteral(Expression n)
       case ASTNode.BOOLEAN_LITERAL :
          return Tree.Kind.BOOLEAN_LITERAL;
       case ASTNode.STRING_LITERAL :
+      case ASTNode.TEXT_BLOCK :
          return Tree.Kind.STRING_LITERAL;
       case ASTNode.CHARACTER_LITERAL :
          return Tree.Kind.CHAR_LITERAL;
@@ -134,6 +136,9 @@ JannotTreeJCLiteral(Expression n)
       case ASTNode.STRING_LITERAL :
          String strv = ((StringLiteral) ast_node).getEscapedValue();
          return IvyFormat.getLiteralValue(strv);
+      case ASTNode.TEXT_BLOCK :
+         String tstrv = ((TextBlock) ast_node).getEscapedValue();
+         return IvyFormat.getLiteralValue(tstrv);
       case ASTNode.CHARACTER_LITERAL :
          String chrv = ((CharacterLiteral) ast_node).getEscapedValue();
          String chv = IvyFormat.getLiteralValue(chrv);
