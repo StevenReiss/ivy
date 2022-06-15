@@ -82,6 +82,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JToolBar;
 import javax.swing.ToolTipManager;
 
+import edu.brown.cs.ivy.file.IvyI18N;
+
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
@@ -98,6 +100,7 @@ public abstract class SwingToolBar extends JToolBar implements ActionListener, S
 /********************************************************************************/
 
 private HashMap<String,AbstractButton> tool_items;
+private transient IvyI18N i18n_map;
 
 private static final long serialVersionUID = 1L;
 
@@ -111,7 +114,14 @@ private static final long serialVersionUID = 1L;
 
 public SwingToolBar()
 {
+   this(null);
+}
+
+
+public SwingToolBar(IvyI18N intl)
+{
    tool_items = new HashMap<String,AbstractButton>();
+   i18n_map = intl;
 }
 
 
@@ -132,7 +142,7 @@ protected JButton addButton(String id,String iconf,String tt)
 {
    Icon icon = (iconf == null ? null : new ImageIcon(iconf));
    String xid = (icon == null ? id : null);
-   JButton btn = new JButton(xid,icon);
+   JButton btn = new SwingButton(xid,icon,i18n_map);
    addSomeButton(btn,id,tt);
 
    return btn;
@@ -149,7 +159,7 @@ protected JCheckBox addCheckButton(String id,boolean fg,String tt)
 protected JCheckBox addCheckButton(String id,String iconf,boolean fg,String tt)
 {
    Icon icon = (iconf == null ? null : new ImageIcon(iconf));
-   JCheckBox btn = new JCheckBox(id,icon,fg);
+   JCheckBox btn = new SwingCheckBox(id,icon,fg,i18n_map);
    addSomeButton(btn,id,tt);
 
    return btn;
@@ -168,7 +178,7 @@ protected JRadioButton addRadioButton(ButtonGroup grp,String id,String iconf,
 					 boolean fg,String tt)
 {
    Icon icon = (iconf == null ? null : new ImageIcon(iconf));
-   JRadioButton btn = new JRadioButton(id,icon,fg);
+   JRadioButton btn = new SwingRadioButton(id,icon,fg,i18n_map);
    addSomeButton(btn,id,tt);
    grp.add(btn);
 

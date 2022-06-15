@@ -6,6 +6,9 @@ PACKAGE= swing
 
 SFILES= \
 	SwingBorderPanel.java \
+	SwingButton.java \
+	SwingCheckBox.java \
+	SwingCheckBoxMenuItem.java \
 	SwingColorButton.java \
 	SwingColorRangeChooser.java \
 	SwingColors.java \
@@ -21,12 +24,16 @@ SFILES= \
 	SwingFreezePane.java \
 	SwingHelpFrame.java \
 	SwingKey.java \
+	SwingLabel.java \
 	SwingListPanel.java \
 	SwingListSet.java \
+	SwingMenu.java \
 	SwingMenuBar.java \
 	SwingMonitoredWindow.java \
 	SwingNumericField.java \
 	SwingPasswordField.java \
+	SwingRadioButton.java \
+	SwingRadioButtonMenuItem.java \
 	SwingRangeScrollBar.java \
 	SwingRangeSlider.java \
 	SwingRootMonitor.java \
@@ -37,6 +44,7 @@ SFILES= \
 	SwingTextArea.java \
 	SwingTextField.java \
 	SwingTextPane.java \
+	SwingToggleButton.java \
 	SwingToolBar.java \
 	SwingTree.java \
 	SwingTreeTable.java \

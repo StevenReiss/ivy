@@ -1324,7 +1324,8 @@ abstract public String getJavaTypeName();
 /*										*/
 /********************************************************************************/
 
-String getPackageName()  {
+public String getPackageName()  
+{
    String nm = getName();
    int idx = nm.lastIndexOf(".");
    if (idx < 0) return "<DEFAULT>";

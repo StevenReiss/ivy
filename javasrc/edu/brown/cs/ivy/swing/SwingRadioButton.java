@@ -1,0 +1,178 @@
+/********************************************************************************/
+/*                                                                              */
+/*              SwingRadioButton.java                                           */
+/*                                                                              */
+/*      Internationalized JRadioButton                                          */
+/*                                                                              */
+/********************************************************************************/
+/*      Copyright 2013 Brown University -- Steven P. Reiss                    */
+/*********************************************************************************
+ *  Copyright 2013, Brown University, Providence, RI.                            *
+ *                                                                               *
+ *                        All Rights Reserved                                    *
+ *                                                                               *
+ *  Permission to use, copy, modify, and distribute this software and its        *
+ *  documentation for any purpose other than its incorporation into a            *
+ *  commercial product is hereby granted without fee, provided that the          *
+ *  above copyright notice appear in all copies and that both that               *
+ *  copyright notice and this permission notice appear in supporting             *
+ *  documentation, and that the name of Brown University not be used in          *
+ *  advertising or publicity pertaining to distribution of the software          *
+ *  without specific, written prior permission.                                  *
+ *                                                                               *
+ *  BROWN UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS                *
+ *  SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND            *
+ *  FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL BROWN UNIVERSITY      *
+ *  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY          *
+ *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,              *
+ *  WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS               *
+ *  ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE          *
+ *  OF THIS SOFTWARE.                                                            *
+ *                                                                               *
+ ********************************************************************************/
+
+
+
+package edu.brown.cs.ivy.swing;
+
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JRadioButton;
+
+import edu.brown.cs.ivy.file.IvyI18N;
+
+public class SwingRadioButton extends JRadioButton
+{
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Private Storage                                                         */
+/*                                                                              */
+/********************************************************************************/
+
+private transient IvyI18N i18n_map;
+
+private static final long serialVersionUID = 1;
+
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Constructors                                                            */
+/*                                                                              */
+/********************************************************************************/
+
+public SwingRadioButton()
+{
+   this(null,null,false,null);
+}
+
+public SwingRadioButton(IvyI18N intl)
+{
+   this(null,null,false,intl);
+}
+
+public SwingRadioButton(String text)
+{
+   this(text,null,false,null);
+}
+
+public SwingRadioButton(String text,IvyI18N intl)
+{
+   this(text,null,false,intl);
+}
+
+public SwingRadioButton(String text,boolean b)
+{
+   this(text,null,b,null);
+}
+
+public SwingRadioButton(String text,boolean b,IvyI18N intl)
+{
+   this(text,null,b,intl);
+}
+
+
+public SwingRadioButton(String text,Icon icon)
+{
+   this(text,icon,false,null);
+}
+
+public SwingRadioButton(String text,Icon icon,IvyI18N intl)
+{
+   this(text,icon,false,intl);
+}
+
+
+public SwingRadioButton(String text,Icon icon,boolean b)
+{
+   this(text,icon,b,null);
+}
+
+
+public SwingRadioButton(String text,Icon icon,boolean b,IvyI18N intl)
+{
+   super((intl == null ? text : intl.getString(text)),icon,b);
+   
+   i18n_map = intl;
+}
+
+public SwingRadioButton(Action a)
+{
+   super(a);
+   i18n_map = null;
+}
+
+
+public SwingRadioButton(Action a,IvyI18N intl)
+{
+   super(a);
+   i18n_map = intl;
+   if (intl != null) {
+      String text = a.getValue(Action.NAME).toString();
+      setText(text);
+    }
+}
+
+
+public SwingRadioButton(Icon icn)
+{
+   super(icn);
+   i18n_map = null;
+}
+
+public SwingRadioButton(Icon icn,IvyI18N intl)
+{
+   super(icn);
+   i18n_map = intl;
+}
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Internationalized routines                                              */
+/*                                                                              */
+/********************************************************************************/
+
+@Override public void setText(String text)
+{
+   String text1 = text;
+   if (i18n_map != null) text1 = i18n_map.getString(text);
+   super.setText(text1);
+}
+
+
+
+
+
+
+}       // end of class SwingRadioButton
+
+
+
+
+/* end of SwingRadioButton.java */
+

@@ -272,6 +272,14 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
    JcompType jt = type_map.get(jc);
    if (jt == null) {
       String jnm = jc.getName();
+      if (jnm == null) {
+         try {
+            Thread.sleep(5000);
+          }
+         catch (InterruptedException e) { }
+          jnm = jc.getName(); 
+          if (jnm == null) return null;
+       }
       jnm = jnm.replace("/",".");
       jnm = jnm.replace("$",".");
       if (jc.isInterface()) {

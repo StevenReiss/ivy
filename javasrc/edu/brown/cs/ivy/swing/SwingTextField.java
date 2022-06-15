@@ -46,6 +46,8 @@ package edu.brown.cs.ivy.swing;
 import javax.swing.JTextField;
 import javax.swing.text.Document;
 
+import edu.brown.cs.ivy.file.IvyI18N;
+
 public class SwingTextField extends JTextField
 {
 
@@ -55,6 +57,8 @@ public class SwingTextField extends JTextField
 /*      Private Storage                                                         */
 /*                                                                              */
 /********************************************************************************/
+
+private transient IvyI18N i18n_map;
 
 private static final long serialVersionUID = 1;
 
@@ -67,12 +71,14 @@ private static final long serialVersionUID = 1;
 
 public SwingTextField()
 {
+   i18n_map = null;
    SwingText.fixKeyBindings(this);
 }
 
 public SwingTextField(int col)
 {
    super(col);
+   i18n_map = null;
    SwingText.fixKeyBindings(this);
 }
 
@@ -80,6 +86,7 @@ public SwingTextField(int col)
 public SwingTextField(String text)
 {
    super(text);
+   i18n_map = null;
    SwingText.fixKeyBindings(this);
 }
 
@@ -87,6 +94,7 @@ public SwingTextField(String text)
 public SwingTextField(String text,int cols)
 {
    super(text,cols);
+   i18n_map = null;
    SwingText.fixKeyBindings(this);
 }
 
@@ -94,9 +102,64 @@ public SwingTextField(String text,int cols)
 public SwingTextField(Document doc,String text,int cols)
 {
    super(doc,text,cols);
+   i18n_map = null;
    SwingText.fixKeyBindings(this);
 }
 
+
+
+public SwingTextField(IvyI18N intl)
+{
+   i18n_map = intl;
+   SwingText.fixKeyBindings(this);
+}
+
+public SwingTextField(int col,IvyI18N intl)
+{
+   super(col);
+   i18n_map = intl;
+   SwingText.fixKeyBindings(this);
+}
+
+
+public SwingTextField(String text,IvyI18N intl)
+{
+   super((intl == null ? text : intl.getString(text)));
+   i18n_map = intl;
+   SwingText.fixKeyBindings(this);
+}
+
+
+public SwingTextField(String text,int cols,IvyI18N intl)
+{
+   super((intl == null ? text : intl.getString(text)),cols);
+   i18n_map = intl;
+   SwingText.fixKeyBindings(this);
+}
+
+
+public SwingTextField(Document doc,String text,int cols,IvyI18N intl)
+{
+   super(doc,(intl == null ? text: intl.getString(text)),cols);
+   i18n_map = null;
+   SwingText.fixKeyBindings(this);
+}
+
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Internationalization methods                                            */
+/*                                                                              */
+/********************************************************************************/
+
+@Override public void setText(String text)
+{
+   String text1 = text;
+   if (i18n_map != null) text1 = i18n_map.getString(text);
+   super.setText(text1);
+}
 
 
 }       // end of class SwingTextField

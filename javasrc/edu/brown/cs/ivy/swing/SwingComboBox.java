@@ -140,6 +140,8 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEditSupport;
 
+import edu.brown.cs.ivy.file.IvyI18N;
+
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
@@ -161,6 +163,9 @@ public class SwingComboBox<T extends Object> extends JComboBox<T>
 /********************************************************************************/
 
 private String btn_label;
+
+@SuppressWarnings("unused") private transient IvyI18N i18n_map;
+
 private transient UndoableEditSupport undo_support;
 private transient Object selected_item;
 private boolean auto_complete;
@@ -183,51 +188,97 @@ public SwingComboBox(String lbl,Vector<T> data) 	{ this(lbl,data,null); }
 
 public SwingComboBox(String lbl,T [] data,UndoableEditSupport es)
 {
-   this(lbl,data,false,es);
+   this(lbl,data,false,es,null);
 }
 
 public SwingComboBox(String lbl,Vector<T> data,UndoableEditSupport es)
 {
-   this(lbl,data,false,es);
+   this(lbl,data,false,es,null);
 }
 
 
 public SwingComboBox(String lbl,Collection<T> data,UndoableEditSupport es)
 {
-   this(lbl,data,false,es);
+   this(lbl,data,false,es,null);
+}
+
+public SwingComboBox(String lbl,T [] data,UndoableEditSupport es,IvyI18N intl)
+{
+   this(lbl,data,false,es,intl);
+}
+
+public SwingComboBox(String lbl,Vector<T> data,UndoableEditSupport es,IvyI18N intl)
+{
+   this(lbl,data,false,es,intl);
+}
+
+
+public SwingComboBox(String lbl,Collection<T> data,UndoableEditSupport es,IvyI18N intl)
+{
+   this(lbl,data,false,es,intl);
 }
 
 
 public SwingComboBox(String lbl,Collection<T> data,boolean autocomplete,UndoableEditSupport es)
 {
-   this(lbl,new Vector<T>(),autocomplete,es);
+   this(lbl,new Vector<T>(),autocomplete,es,null);
+}
+
+
+public SwingComboBox(String lbl,Collection<T> data,boolean autocomplete,UndoableEditSupport es,IvyI18N intl)
+{
+   this(lbl,new Vector<T>(),autocomplete,es,intl);
    if (data != null) {
       for (T t : data) addItem(t);
-   }
+    }
 }
 
 
 public SwingComboBox(T [] data,boolean autocomplete)
 {
-   this(null,data,autocomplete,null);
+   this(null,data,autocomplete,null,null);
 }
 
 
 public SwingComboBox(Vector<T> data,boolean autocomplete)
 {
-   this(null,data,autocomplete,null);
+   this(null,data,autocomplete,null,null);
 }
 
 
 public SwingComboBox(Collection<T> data,boolean autocomplete)
 {
-   this(null,new Vector<T>(data),autocomplete,null);
+   this(null,new Vector<T>(data),autocomplete,null,null);
+}
+
+public SwingComboBox(T [] data,boolean autocomplete,IvyI18N intl)
+{
+   this(null,data,autocomplete,null,intl);
+}
+
+
+public SwingComboBox(Vector<T> data,boolean autocomplete,IvyI18N intl)
+{
+   this(null,data,autocomplete,null,intl);
+}
+
+
+public SwingComboBox(Collection<T> data,boolean autocomplete,IvyI18N intl)
+{
+   this(null,new Vector<T>(data),autocomplete,null,intl);
 }
 
 
 public SwingComboBox(String lbl,T [] data,boolean auto,UndoableEditSupport es)
 {
+   this(lbl,data,auto,es,null);
+}
+
+
+public SwingComboBox(String lbl,T [] data,boolean auto,UndoableEditSupport es,IvyI18N intl)
+{
    super(data);
+   i18n_map = intl;
    btn_label = lbl;
    undo_support = es;
    selected_item = null;
@@ -235,9 +286,17 @@ public SwingComboBox(String lbl,T [] data,boolean auto,UndoableEditSupport es)
    setAutoComplete(auto);
 }
 
+
 public SwingComboBox(String lbl,Vector<T> data,boolean auto,UndoableEditSupport es)
 {
+   this(lbl,data,auto,es,null);
+}
+
+
+public SwingComboBox(String lbl,Vector<T> data,boolean auto,UndoableEditSupport es,IvyI18N intl)
+{
    super(data);
+   i18n_map = intl;
    btn_label = lbl;
    undo_support = es;
    selected_item = null;
@@ -322,7 +381,6 @@ public void setContents(Collection<T> cnts)
 {
    super.paint(g);
 }
-
 
 
 

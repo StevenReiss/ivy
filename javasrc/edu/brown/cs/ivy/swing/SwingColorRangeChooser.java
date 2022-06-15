@@ -74,6 +74,8 @@ package edu.brown.cs.ivy.swing;
 
 import javax.swing.JComboBox;
 
+import edu.brown.cs.ivy.file.IvyI18N;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -111,6 +113,11 @@ private String []	gradient_options = {
 /********************************************************************************/
 
 public SwingColorRangeChooser(String nm,Color c1,Color c2)
+{
+   this(nm,c1,c2,null);
+}
+   
+public SwingColorRangeChooser(String nm,Color c1,Color c2,IvyI18N intl)
 {
    action_name = nm;
    action_listeners = new SwingEventListenerList<>(ActionListener.class);

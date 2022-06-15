@@ -224,6 +224,8 @@ import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEditSupport;
 
+import edu.brown.cs.ivy.file.IvyI18N;
+
 import java.awt.AWTEventMulticaster;
 import java.awt.Color;
 import java.awt.Component;
@@ -261,6 +263,7 @@ protected HashMap<String,Object> value_map;
 protected HashMap<Object,String> tag_map;
 protected HashMap<Object,JLabel> label_map;
 protected Insets  inset_values;
+protected transient IvyI18N i18n_map;
 
 private Box			bottom_box;
 private transient UndoableEditSupport undo_support;
@@ -285,17 +288,22 @@ private static final long serialVersionUID = 1;
 
 public SwingGridPanel()
 {
-   this(null);
+   this(null,null);
 }
 
 
-
 public SwingGridPanel(UndoableEditSupport ued)
+{
+   this(ued,null);
+}
+   
+public SwingGridPanel(UndoableEditSupport ued,IvyI18N i18n)
 {
    super(new GridBagLayout(),true);
 
    undo_support = ued;
    inset_values = null;
+   i18n_map = i18n;
    setInsets(2);
    action_listener = null;
    action_command = "PANEL";
@@ -449,6 +457,13 @@ public final void setInsets(int v)
 
 
 
+public final void setI18N(IvyI18N i18n) 
+{
+   i18n_map = i18n;
+}
+
+
+
 /********************************************************************************/
 /*										*/
 /*	Support methods for setting up a panel					*/
@@ -479,7 +494,7 @@ public final JLabel addBannerLabel(String txt)
 
 public final JLabel addSectionLabel(String txt)
 {
-   JLabel lbl = createLabel(txt,SwingConstants.LEFT,section_prototype);
+   JLabel lbl = createLabel(txt,SwingConstants.LEADING,section_prototype);
    addGBComponent(lbl,0,y_count++,0,1,1,0);
 
    return lbl;
@@ -506,7 +521,8 @@ public final JLabel addDescription(String lbl,String val)
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   JLabel desc = new JLabel(" " + val);
+   
+   JLabel desc = new JLabel(" " + mapText(val));
    Font fnt = desc.getFont();
    fnt = fnt.deriveFont(Font.PLAIN);
    desc.setFont(fnt);
@@ -579,7 +595,7 @@ public final <T> SwingComboBox<T> addChoice(String lbl,Collection<T> data,int id
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   SwingComboBox<T> cbx = new SwingComboBox<T>(lbl,data,compl,undo_support);
+   SwingComboBox<T> cbx = new SwingComboBox<T>(lbl,data,compl,undo_support,i18n_map);
 
    if (data != null && data.size() > 0 && idx >= 0) cbx.setSelectedIndex(idx);
    addGBComponent(cbx,1,y_count++,1,1,10,0);
@@ -608,7 +624,7 @@ public final <T> SwingComboBox<T> addChoice(String lbl,T [] data,int idx,boolean
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   SwingComboBox<T> cbx = new SwingComboBox<T>(lbl,data,compl,undo_support);
+   SwingComboBox<T> cbx = new SwingComboBox<T>(lbl,data,compl,undo_support,i18n_map);
    cbx.setActionCommand(lbl);
    if (cb != null) cbx.addActionListener(cb);
    if (data != null && data.length > 0 && idx > 0) cbx.setSelectedIndex(idx);
@@ -707,7 +723,7 @@ public final JCheckBox addBoolean(String lbl,boolean val,ActionListener cb)
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   JCheckBox cbx = new JCheckBox();
+   JCheckBox cbx = new SwingCheckBox(i18n_map);
    cbx.setSelected(val);
    cbx.setActionCommand(lbl);
    cbx.setOpaque(false);
@@ -756,9 +772,6 @@ public final JList<String> addButtonSet(String lbl,Map<String,Boolean> values,Li
    
    return lst;
 }
-
-
-
 
 
 
@@ -872,7 +885,8 @@ public final JTextField addTextField(String lbl,String val,int wid,ActionListene
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   JTextField tfld = new SwingTextField(val,wid);
+   String val1 = mapText(val);
+   JTextField tfld = new SwingTextField(val1,wid,i18n_map);
    Document doc = tfld.getDocument();
    tfld.setActionCommand(lbl);
 
@@ -1064,7 +1078,7 @@ private JTextField localAddFileField(String lbl,String val,int md,
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   JTextField tfld = new SwingTextField(val,24);
+   JTextField tfld = new SwingTextField(val,2,i18n_map);
    Document doc = tfld.getDocument();
    tfld.setActionCommand(lbl);
 
@@ -1079,7 +1093,7 @@ private JTextField localAddFileField(String lbl,String val,int md,
 
    addGBComponent(tfld,1,y_count,1,1,10,0);
 
-   JButton browser = new JButton("Browse");
+   JButton browser = new SwingButton("Browse",i18n_map);
    BrowseListener bl = new BrowseListener(tfld,md,filters,fsv);
    browser.addActionListener(bl);
    addGBComponent(browser,2,y_count++,1,1,0,0);
@@ -1119,7 +1133,7 @@ public final SwingColorButton addColorField(String lbl,Color val,boolean alpha,A
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   SwingColorButton btn = new SwingColorButton(lbl,alpha,val);
+   SwingColorButton btn = new SwingColorButton(lbl,alpha,val,i18n_map);
    if (cb1 != null) btn.addActionListener(cb1);
    addGBComponent(btn,1,y_count++,0,1,10,0);
 
@@ -1136,7 +1150,7 @@ public final SwingColorRangeChooser addColorRangeField(String lbl,Color c1,Color
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   SwingColorRangeChooser btn = new SwingColorRangeChooser(lbl,c1,c2);
+   SwingColorRangeChooser btn = new SwingColorRangeChooser(lbl,c1,c2,i18n_map);
    if (cb1 != null) btn.addActionListener(cb1);
    addGBComponent(btn,1,y_count++,0,1,10,0);
 
@@ -1209,7 +1223,7 @@ public final JButton addBottomButton(String nm,String tag,boolean enabled,Action
       bottom_box.add(Box.createHorizontalGlue());
     }
 
-   JButton btn = new JButton(nm);
+   JButton btn = new SwingButton(nm,i18n_map);
    if (cb != null) btn.addActionListener(cb);
    btn.setActionCommand(tag);
    btn.setEnabled(enabled);
@@ -1229,7 +1243,7 @@ public final JToggleButton addBottomToggle(String nm,String tag,boolean st,Chang
       bottom_box.add(Box.createHorizontalGlue());
     }
 
-   JToggleButton btn = new JToggleButton(nm);
+   JToggleButton btn = new SwingToggleButton(nm,i18n_map);
    if (cb != null) btn.addChangeListener(cb);
    btn.setActionCommand(tag);
    btn.setSelected(st);
@@ -1348,7 +1362,7 @@ public void setLabelPrototype(JLabel lbl)		{ label_prototype = lbl; }
 
 protected JLabel createLabel(String txt,int halign,JLabel proto)
 {
-   JLabel lbl = new JLabel(txt,halign);
+   JLabel lbl = new SwingLabel(txt,halign,i18n_map);
 
    if (proto != null) {
       lbl.setVerticalAlignment(proto.getVerticalAlignment());
@@ -1366,9 +1380,18 @@ protected JLabel createLabel(String txt,int halign,JLabel proto)
 
 private JLabel createLabel(String txt)
 {
-   return createLabel(" " + txt + " : ",SwingConstants.RIGHT,label_prototype);
+   String txt1 = mapText(txt);
+   
+   return createLabel(" " + txt1 + " : ",SwingConstants.RIGHT,label_prototype);
 }
 
+
+
+private String mapText(String txt)
+{
+   if (i18n_map == null) return txt;
+   return i18n_map.getString(txt);
+}
 
 
 

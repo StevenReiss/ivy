@@ -37,6 +37,8 @@ package edu.brown.cs.ivy.jcode;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -86,7 +88,7 @@ private Map<String,JcodeField>	known_fields;
 private Queue<String>		work_list;
 private LoadExecutor		work_holder;
 private Set<String>		path_set;
-private List<String>            user_paths;
+private List<String>		user_paths;
 private Map<Type,JcodeDataType> static_map;
 private Map<String,JcodeDataType> name_map;
 private Map<String,JcodeDataType> jname_map;
@@ -318,14 +320,14 @@ private void setupClassPath()
    File jf4 = new File(jf,"jmods");
    File jf5 = new File(jf3,"lib");
    File jf6 = new File(jf3,"jmods");
-   
+
    if (jf3.exists()) {
       if (jf5.exists()) jf1 = jf5;
     }
    if (!jf4.exists()) {
       if (jf6.exists()) jf4 = jf6;
     }
-   
+
    File jf7 = new File(jf1,"rt.jar");
 
    addJavaJars(jf1);
@@ -366,38 +368,38 @@ private boolean addClassPathEntry(String cpe)
       try {
 	 FileInputStream fis = new FileInputStream(f);
 	 JarInputStream jis = new JarInputStream(fis);
-         try {
-            for ( ; ; ) {
-               JarEntry je = jis.getNextJarEntry();
-               if (je == null) break;
-               String cn = je.getName();
-               String en = cn;
-               if (cn.endsWith(".class")) en = cn.substring(0,cn.length()-6);
-               else continue;
-               en = en.replace("/",".");
-               if (!class_map.containsKey(en)) {
-                  int sz = (int) je.getSize();
-                  byte [] buf = null;
-                  if (sz > 0) {
-                     buf = new byte[sz];
-                     int ln = 0;
-                     while (ln < sz) {
-                        int ct = jis.read(buf,ln,sz-ln);
-                        ln += ct;
-                      }
-                   }
-                  JcodeFileInfo fi = new JcodeFileInfo(f,cn,buf);
-                  class_map.put(en,fi);
-                }
-             }
-          }
-         finally {
-            jis.close();
-          }
+	 try {
+	    for ( ; ; ) {
+	       JarEntry je = jis.getNextJarEntry();
+	       if (je == null) break;
+	       String cn = je.getName();
+	       String en = cn;
+	       if (cn.endsWith(".class")) en = cn.substring(0,cn.length()-6);
+	       else continue;
+	       en = en.replace("/",".");
+	       if (!class_map.containsKey(en)) {
+		  int sz = (int) je.getSize();
+		  byte [] buf = null;
+		  if (sz > 0) {
+		     buf = new byte[sz];
+		     int ln = 0;
+		     while (ln < sz) {
+			int ct = jis.read(buf,ln,sz-ln);
+			ln += ct;
+		      }
+		   }
+		  JcodeFileInfo fi = new JcodeFileInfo(f,cn,buf);
+		  class_map.put(en,fi);
+		}
+	     }
+	  }
+	 finally {
+	    jis.close();
+	  }
        }
       catch (IOException e) { }
     }
-   
+
    return true;
 }
 
@@ -405,6 +407,8 @@ private boolean addClassPathEntry(String cpe)
 
 private void addClassPathModule(String cpe)
 {
+   IvyLog.logD("JCODE","Add class path entry " + cpe);
+
    try {
       File f = new File(cpe);
       ZipFile zf = new ZipFile(f);
@@ -445,11 +449,11 @@ private void addSystemModules()
    ModuleFinder mfndr = ModuleFinder.ofSystem();
    for (ModuleReference mr : mfndr.findAll()) {
       try {
-         ModuleReader mrdr = mr.open();
-         mrdr.list().forEach(s -> addSystemClass(mr,mrdr,s));
+	 ModuleReader mrdr = mr.open();
+	 mrdr.list().forEach(s -> addSystemClass(mr,mrdr,s));
        }
       catch (IOException e) {
-         System.err.println("Can open " + mr);
+	 System.err.println("Can open " + mr);
        }
     }
 }
@@ -462,17 +466,17 @@ private void addSystemClass(ModuleReference mr,ModuleReader mrdr,String id)
       if (id.endsWith(".class")) en = id.substring(0,id.length()-6);
       en = en.replace("/",".");
       if (!class_map.containsKey(en)) {
-         ByteBuffer bb = mrdr.read(id).get();
-         int len = bb.limit() - bb.position();
-         byte [] buf = new byte[len];
-         bb.get(buf);
-         JcodeFileInfo fi = new JcodeFileInfo(null,id,buf);
-         class_map.put(en,fi);
+	 ByteBuffer bb = mrdr.read(id).get();
+	 int len = bb.limit() - bb.position();
+	 byte [] buf = new byte[len];
+	 bb.get(buf);
+	 JcodeFileInfo fi = new JcodeFileInfo(null,id,buf);
+	 class_map.put(en,fi);
        }
     }
-   catch (Exception e) { 
+   catch (Exception e) {
       System.err.println("JCODE: problem processing system module " + mr + " " + id +
-            ": " + e);
+	    ": " + e);
     }
 }
 
@@ -557,6 +561,8 @@ JcodeDataType findClassType(String s)
 JcodeDataType findDataType(Type t)
 {
    JcodeDataType bdt = null;
+
+   if (t == null) return null;
 
    bdt = static_map.get(t);
    if (bdt == null) {
@@ -767,7 +773,7 @@ private class LoadExecutor extends ThreadPoolExecutor implements ThreadFactory {
 
    void workOnClass(String c) {
       if (work_items.putIfAbsent(c,Boolean.TRUE) != null) return;
-   
+
       LoadTask task = new LoadTask(c);
       execute(task);
     }
@@ -817,52 +823,52 @@ private class LoadTask implements Runnable {
       JcodeFileInfo fi = class_map.get(load_class);
       String altname = load_class;
       if (fi == null) {
-         while (altname.contains(".")) {
-            int idx = altname.lastIndexOf(".");
-            altname = altname.substring(0,idx) + "$" + altname.substring(idx+1);
-            fi = class_map.get(altname);
-            if (fi != null) break;
-          }
+	 while (altname.contains(".")) {
+	    int idx = altname.lastIndexOf(".");
+	    altname = altname.substring(0,idx) + "$" + altname.substring(idx+1);
+	    fi = class_map.get(altname);
+	    if (fi != null) break;
+	  }
        }
-   
+
       if (fi == null) {
-         // System.err.println("JCODE: Can't find class " + load_class);
-         return;
+	 // System.err.println("JCODE: Can't find class " + load_class);
+	 return;
        }
       try {
-         JcodeClass bc = null;
-         synchronized (known_classes) {
-            if (known_classes.get(load_class) == null) {
-               bc = new JcodeClass(JcodeFactory.this,fi,true);
-               known_classes.put(load_class,bc);
-               String c1 = load_class.replace('.','/');
-               known_classes.put(c1,bc);
-               String c2 = "L" + c1 + ";";
-               known_classes.put(c2,bc);
-               if (c1.contains("$")) {
-        	  String c3 = c1.replace('$','.');
-        	  known_classes.put(c3,bc);
-        	  String c4 = load_class.replace('$','.');
-        	  known_classes.put(c4,bc);
-        	}
-             }
-          }
-   
-         if (bc != null) {
-            // System.err.println("JCODE: Load class " + load_class);
-            InputStream ins = fi.getInputStream();
-            if (ins == null) {
-               System.err.println("JCODE: Can't open file for class " + load_class);
-             }
-            else {
-               ClassReader cr = new ClassReader(ins)	  ;
-               cr.accept(bc,0);
-               ins.close();
-             }
-          }
+	 JcodeClass bc = null;
+	 synchronized (known_classes) {
+	    if (known_classes.get(load_class) == null) {
+	       bc = new JcodeClass(JcodeFactory.this,fi,true);
+	       known_classes.put(load_class,bc);
+	       String c1 = load_class.replace('.','/');
+	       known_classes.put(c1,bc);
+	       String c2 = "L" + c1 + ";";
+	       known_classes.put(c2,bc);
+	       if (c1.contains("$")) {
+		  String c3 = c1.replace('$','.');
+		  known_classes.put(c3,bc);
+		  String c4 = load_class.replace('$','.');
+		  known_classes.put(c4,bc);
+		}
+	     }
+	  }
+
+	 if (bc != null) {
+	    // System.err.println("JCODE: Load class " + load_class);
+	    InputStream ins = fi.getInputStream();
+	    if (ins == null) {
+	       System.err.println("JCODE: Can't open file for class " + load_class);
+	     }
+	    else {
+	       ClassReader cr = new ClassReader(ins)	  ;
+	       cr.accept(bc,0);
+	       ins.close();
+	     }
+	  }
        }
       catch (IOException e) {
-         System.err.println("JCODE: Problem reading class " + load_class);
+	 System.err.println("JCODE: Problem reading class " + load_class);
        }
    }
 

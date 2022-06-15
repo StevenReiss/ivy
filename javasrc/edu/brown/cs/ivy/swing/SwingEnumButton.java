@@ -76,6 +76,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
+import edu.brown.cs.ivy.file.IvyI18N;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -97,6 +99,7 @@ private int	cur_index;
 private E []	value_set;
 private transient Icon [] icon_set;
 private EventListenerList value_listeners;
+private transient IvyI18N i18n_map;
 
 private static final long serialVersionUID = 1;
 
@@ -112,22 +115,40 @@ private static final long serialVersionUID = 1;
 @SuppressWarnings("unchecked")
 public SwingEnumButton(E dflt)
 {
-   this(dflt,(Class<E>) dflt.getClass(),null);
+   this(dflt,(Class<E>) dflt.getClass(),null,null);
 }
 
+@SuppressWarnings("unchecked")
+public SwingEnumButton(E dflt,IvyI18N intl)
+{
+   this(dflt,(Class<E>) dflt.getClass(),null,intl);
+}
 
 
 @SuppressWarnings("unchecked")
 public SwingEnumButton(E dflt,Icon [] icons)
 {
-   this(dflt,(Class<E>) dflt.getClass(),icons);
+   this(dflt,(Class<E>) dflt.getClass(),icons,null);
 }
 
+
+@SuppressWarnings("unchecked")
+public SwingEnumButton(E dflt,Icon [] icons,IvyI18N intl)
+{
+   this(dflt,(Class<E>) dflt.getClass(),icons,intl);
+}
 
 
 public SwingEnumButton(E dflt,Class<E> cls,Icon [] icons)
 {
+  this(dflt,cls,icons,null);
+}
+
+
+public SwingEnumButton(E dflt,Class<E> cls,Icon [] icons,IvyI18N intl)
+{
    value_set = cls.getEnumConstants();
+   i18n_map = intl;
 
    icon_set = new Icon[value_set.length];
    if (icons != null) {
@@ -190,7 +211,9 @@ private void setDisplay()
 {
    if (icon_set[cur_index] == null) {
       setIcon(null);
-      setText(value_set[cur_index].toString());
+      String text = value_set[cur_index].toString();
+      if (i18n_map != null) text = i18n_map.getString(text);
+      setText(text);
     }
    else {
       setIcon(icon_set[cur_index]);

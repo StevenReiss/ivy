@@ -86,6 +86,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ToolTipManager;
 
+import edu.brown.cs.ivy.file.IvyI18N;
+
 import java.awt.event.ActionListener;
 
 
@@ -102,6 +104,9 @@ public abstract class SwingMenuBar extends JMenuBar implements ActionListener, S
 /*										*/
 /********************************************************************************/
 
+private transient IvyI18N i18n_map;
+
+
 private static final long serialVersionUID = 1L;
 
 
@@ -112,8 +117,15 @@ private static final long serialVersionUID = 1L;
 /*											*/
 /****************************************************************************************/
 
-public SwingMenuBar()				 { }
+public SwingMenuBar()		
+{
+   i18n_map = null;
+}
 
+public SwingMenuBar(IvyI18N intl)		
+{
+   i18n_map = intl;
+}
 
 
 
@@ -125,7 +137,7 @@ public SwingMenuBar()				 { }
 
 protected final JMenuItem addButton(JMenu m,String id,String tt)
 {
-   JMenuItem itm = new JMenuItem(id);
+   JMenuItem itm = new SwingMenuItem(id,i18n_map);
    itm.addActionListener(this);
    itm.setToolTipText(tt);
    if (tt != null) ToolTipManager.sharedInstance().registerComponent(itm);
@@ -137,7 +149,7 @@ protected final JMenuItem addButton(JMenu m,String id,String tt)
 
 protected final JCheckBoxMenuItem addCheckButton(JMenu m,String id,boolean fg,String tt)
 {
-   JCheckBoxMenuItem itm = new JCheckBoxMenuItem(id,fg);
+   JCheckBoxMenuItem itm = new SwingCheckBoxMenuItem(id,fg,i18n_map);
    itm.addActionListener(this);
    itm.setToolTipText(tt);
    if (tt != null) ToolTipManager.sharedInstance().registerComponent(itm);
@@ -150,7 +162,7 @@ protected final JCheckBoxMenuItem addCheckButton(JMenu m,String id,boolean fg,St
 
 protected final JRadioButtonMenuItem addRadioButton(JMenu m,ButtonGroup grp,String id,boolean fg,String tt)
 {
-   JRadioButtonMenuItem itm = new JRadioButtonMenuItem(id,fg);
+   JRadioButtonMenuItem itm = new SwingRadioButtonMenuItem(id,fg,i18n_map);
    itm.addActionListener(this);
    itm.setToolTipText(tt);
    if (tt != null) ToolTipManager.sharedInstance().registerComponent(itm);

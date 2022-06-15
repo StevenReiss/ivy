@@ -95,6 +95,7 @@ public String getName()
 
 public JcodeDataType getDataType()
 {
+   if (base_type == null) return null;
    return bcode_factory.findDataType(base_type);
 }
 

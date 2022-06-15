@@ -79,6 +79,8 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.border.LineBorder;
 
+import edu.brown.cs.ivy.file.IvyI18N;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -123,17 +125,27 @@ private static final long serialVersionUID = 1;
 
 public SwingColorButton(String nm,Color c)
 {
-   this(nm,false,c);
+   this(nm,false,c,null);
 }
 
+public SwingColorButton(String nm,Color c,IvyI18N intl)
+{
+   this(nm,false,c,intl);
+}
 
 
 public SwingColorButton(String nm,boolean alpha,Color c)
 {
+   this(nm,alpha,c,null);
+}
+
+
+public SwingColorButton(String nm,boolean alpha,Color c,IvyI18N intl)
+{
    action_listeners = new SwingEventListenerList<>(ActionListener.class);
 
    if (c == null) c = Color.BLACK;
-   button_name = nm;
+   button_name = (intl == null ? nm : intl.getString(nm));
    current_color = c;
    use_alpha = alpha;
 
