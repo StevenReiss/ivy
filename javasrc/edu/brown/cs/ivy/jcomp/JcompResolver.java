@@ -1359,8 +1359,8 @@ private class RefPass extends ASTVisitor {
       boolean oref = false;
       JcompType qt = JcompAst.getJavaType(r.getExpression());
       if (qt == null) {
-	 oref = true;
-	 qt = JcompAst.getExprType(r.getExpression());
+         oref = true;
+         qt = JcompAst.getExprType(r.getExpression());
        }
       handleReference(r,qt,oref,r.getName().getIdentifier());
       return false;
