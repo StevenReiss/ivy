@@ -176,6 +176,15 @@ boolean startServer()
 		}
 	     }
 	  }
+         else if (fnm.equals("eclipsejar")) {
+            for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator);
+               tok2.hasMoreTokens(); ) {
+	       String p2 = tok2.nextToken();
+	       if (p2.contains("org.eclipse") || p2.contains("com.google") || p2.endsWith("org.python")) {
+		  cpbuf.append(p2);
+		}
+	     }
+          }
 	 else {
 	    int ct = 0;
             boolean fnd = false;
