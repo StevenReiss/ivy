@@ -166,6 +166,7 @@ boolean startServer()
 	    File f2 = IvyFile.expandFile("$(IVY)/lib/cocker.jar");
 	    if (f1.exists()) cpbuf.append(f1.getPath());
 	    else cpbuf.append(f2.getPath());
+            cpbuf.append(File.pathSeparator);
 	  }
 	 else if (fnm.equals("ivy")) {
 	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator);
@@ -173,6 +174,7 @@ boolean startServer()
 	       String p2 = tok2.nextToken();
 	       if (p2.endsWith("ivy.jar") || p2.endsWith("ivy/java") || p2.endsWith("ivy/bin")) {
 		  cpbuf.append(p2);
+                  cpbuf.append(File.pathSeparator);
 		}
 	     }
 	  }
@@ -182,28 +184,30 @@ boolean startServer()
 	       String p2 = tok2.nextToken();
 	       if (p2.contains("org.eclipse") || p2.contains("com.google") || p2.endsWith("org.python")) {
 		  cpbuf.append(p2);
+                  cpbuf.append(File.pathSeparator);
 		}
 	     }
           }
 	 else {
-	    int ct = 0;
             boolean fnd = false;
 	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator);
                tok2.hasMoreTokens(); ) {
 	       String p2 = tok2.nextToken();
 	       if (p2.contains(fnm)) {
-		  if (ct++ > 0) cpbuf.append(File.pathSeparator);
 		  cpbuf.append(p2);
+                  cpbuf.append(File.pathSeparator);
                   fnd = true;
 		}
 	     }
             if (!fnd) {
                IvyLog.logE("LEASH","Path element " + fnm + " not found in " + cp);
                File f1 = IvyFile.expandFile("$(IVY)/lib/" + fnm);
-               if (f1.exists()) cpbuf.append(f1.getPath());
+               if (f1.exists()) {
+                  cpbuf.append(f1.getPath());
+                  cpbuf.append(File.pathSeparator);
+                }         
              }
 	  }
-	 cpbuf.append(File.pathSeparator);
        }
 
       StringBuffer cmd = new StringBuffer();

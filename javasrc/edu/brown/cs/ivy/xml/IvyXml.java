@@ -1653,8 +1653,8 @@ private static class XmlParser {
 
    void reset() {
       try {
-	 parser_object.reset();
-	 parse("<END/>");
+         parser_object.reset();
+         parse("<END/>");
        }
       catch (Throwable e) { }
     }
