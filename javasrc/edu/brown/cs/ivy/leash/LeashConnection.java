@@ -155,6 +155,7 @@ boolean startServer()
 
    try {
       String cp = System.getProperty("java.class.path");
+      IvyLog.logI("LEASH","Starting class path:" + cp);
 
       StringBuffer cpbuf = new StringBuffer();
 
@@ -167,7 +168,8 @@ boolean startServer()
 	    else cpbuf.append(f2.getPath());
 	  }
 	 else if (fnm.equals("ivy")) {
-	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator); tok2.hasMoreTokens(); ) {
+	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator);
+               tok2.hasMoreTokens(); ) {
 	       String p2 = tok2.nextToken();
 	       if (p2.endsWith("ivy.jar") || p2.endsWith("ivy/java") || p2.endsWith("ivy/bin")) {
 		  cpbuf.append(p2);
@@ -177,7 +179,8 @@ boolean startServer()
 	 else {
 	    int ct = 0;
             boolean fnd = false;
-	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator); tok2.hasMoreTokens(); ) {
+	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator);
+               tok2.hasMoreTokens(); ) {
 	       String p2 = tok2.nextToken();
 	       if (p2.contains(fnm)) {
 		  if (ct++ > 0) cpbuf.append(File.pathSeparator);
@@ -186,7 +189,7 @@ boolean startServer()
 		}
 	     }
             if (!fnd) {
-               IvyLog.logD("LEASH","Path element " + fnm + " not found in " + cp);
+               IvyLog.logE("LEASH","Path element " + fnm + " not found in " + cp);
                File f1 = IvyFile.expandFile("$(IVY)/lib/" + fnm);
                if (f1.exists()) cpbuf.append(f1.getPath());
              }
