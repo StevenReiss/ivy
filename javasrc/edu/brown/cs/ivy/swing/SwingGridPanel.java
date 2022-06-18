@@ -521,7 +521,6 @@ public final JLabel addDescription(String lbl,String val)
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   
    JLabel desc = new JLabel(" " + mapText(val));
    Font fnt = desc.getFont();
    fnt = fnt.deriveFont(Font.PLAIN);
