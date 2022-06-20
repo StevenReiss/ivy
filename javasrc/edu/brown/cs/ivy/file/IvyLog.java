@@ -324,12 +324,15 @@ private static void log(LogLevel lvl,String pkg,int indent,String msg,Throwable 
    
    for (int i = 0; i < indent; ++i) pfx += "   ";
    String tail = "";
-   if (t != null) {
+   String tpfx = "";
+   while (t != null) {
       StringWriter sw = new StringWriter();
       PrintWriter pw = new PrintWriter(sw);
       pw.println();
       t.printStackTrace(pw);
-      tail = sw.toString();
+      tail += tpfx + sw.toString();
+      t = t.getCause();
+      tpfx = "\nCaused By: ";
     }
    
    if (log_writer != null) {
