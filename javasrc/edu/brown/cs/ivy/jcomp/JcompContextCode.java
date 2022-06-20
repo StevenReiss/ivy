@@ -8,6 +8,7 @@
 
 package edu.brown.cs.ivy.jcomp;
 
+import edu.brown.cs.ivy.file.IvyLog;
 import edu.brown.cs.ivy.jcode.JcodeClass;
 import edu.brown.cs.ivy.jcode.JcodeDataType;
 import edu.brown.cs.ivy.jcode.JcodeFactory;
@@ -70,8 +71,8 @@ JcompContextCode(JcodeFactory jf)
       if (parent_context != null) return parent_context.defineKnownType(typer,name);
       return null;
     }
-
-   JcompType jt = getJcompType(typer,jc);
+   
+   JcompType jt = getJcompType(typer,jc,name);
 
    return jt;
 }
@@ -266,20 +267,27 @@ private int compatiblityScore(JcompTyper typer,JcompType argtyp,JcodeMethod jm)
 /*										*/
 /********************************************************************************/
 
-private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc)
+private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc,String name)
 {
    if (jc == null) return null;
    JcompType jt = type_map.get(jc);
    if (jt == null) {
       String jnm = jc.getName();
-      if (jnm == null) {
-         try {
-            Thread.sleep(5000);
+      for (int i = 0; i < 100; ++i) {
+         if (jnm == null) {
+            try {
+               Thread.sleep(50);
+             }
+            catch (InterruptedException e) { }
+            jnm = jc.getName(); 
+            if (jnm != null) break;
           }
-         catch (InterruptedException e) { }
-          jnm = jc.getName(); 
-          if (jnm == null) return null;
        }
+      if (jnm == null) {
+         IvyLog.logX("JCOMP","Can't find class for " + name);
+         return null;
+       }
+      
       jnm = jnm.replace("/",".");
       jnm = jnm.replace("$",".");
       if (jc.isInterface()) {

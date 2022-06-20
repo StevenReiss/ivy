@@ -104,7 +104,7 @@ JannotTreeJCCase(SwitchCase n)
 /*										*/
 /********************************************************************************/
 
-@SuppressWarnings({"All","deprecation"})
+@SuppressWarnings({"all","deprecation"})
 @Override public JannotTreeJCExpression getExpression()
 {
    for (Object o : getCase().expressions()) {

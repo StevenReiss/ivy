@@ -124,6 +124,7 @@ Collection<JcompSemantics> getSources();
 List<String> getClassPath();
 
 void addSourceFile(JcompSource src);
+void removeSourceFile(JcompSource src);
 
 /**
  *      Find the containing symbol (i.e. method) for a given source offset.

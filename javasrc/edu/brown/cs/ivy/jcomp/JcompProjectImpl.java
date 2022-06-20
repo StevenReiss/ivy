@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -110,7 +111,8 @@ void clear()
 void addFile(JcompFile jf)
 {
    if (file_nodes.contains(jf)) return;
-   IvyLog.logD("JCOMP","ADD SOURCE FILE " + jf.getFile());
+   IvyLog.logD("JCOMP","ADD SOURCE FILE " + jf.getFile() + " " + 
+         jf.getFile().hashCode() + " " + hashCode());
    
    file_nodes.add(jf);
    jf.setRoot(this);
@@ -118,11 +120,22 @@ void addFile(JcompFile jf)
 }
 
 
+
+
 @Override public void addSourceFile(JcompSource src)
 {
    JcompFile jf = new JcompFile(src);
    addFile(jf);
    jf.reparse();
+}
+
+
+@Override public void removeSourceFile(JcompSource src)
+{
+   for (Iterator<JcompFile> it = file_nodes.iterator(); it.hasNext(); ) {
+      JcompFile jf = it.next();
+      if (jf.getFile() == src) it.remove();
+    }
 }
 
 

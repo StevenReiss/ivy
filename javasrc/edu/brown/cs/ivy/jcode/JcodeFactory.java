@@ -37,8 +37,6 @@ package edu.brown.cs.ivy.jcode;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Type;
 
-import edu.brown.cs.ivy.file.IvyLog;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -407,7 +405,7 @@ private boolean addClassPathEntry(String cpe)
 
 private void addClassPathModule(String cpe)
 {
-   IvyLog.logD("JCODE","Add class path entry " + cpe);
+// IvyLog.logD("JCODE","Add class path entry " + cpe);
 
    try {
       File f = new File(cpe);
