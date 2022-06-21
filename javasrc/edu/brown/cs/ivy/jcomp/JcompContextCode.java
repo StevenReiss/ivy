@@ -8,7 +8,6 @@
 
 package edu.brown.cs.ivy.jcomp;
 
-import edu.brown.cs.ivy.file.IvyLog;
 import edu.brown.cs.ivy.jcode.JcodeClass;
 import edu.brown.cs.ivy.jcode.JcodeDataType;
 import edu.brown.cs.ivy.jcode.JcodeFactory;
@@ -273,21 +272,6 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc,Strin
    JcompType jt = type_map.get(jc);
    if (jt == null) {
       String jnm = jc.getName();
-      for (int i = 0; i < 100; ++i) {
-         if (jnm == null) {
-            try {
-               wait(50);
-             }
-            catch (InterruptedException e) { }
-            jnm = jc.getName(); 
-            if (jnm != null) break;
-          }
-       }
-      if (jnm == null) {
-         IvyLog.logX("JCOMP","Can't find class for " + name);
-         return null;
-       }
-      
       jnm = jnm.replace("/",".");
       jnm = jnm.replace("$",".");
       if (jc.isInterface()) {
