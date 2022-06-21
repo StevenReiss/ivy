@@ -247,12 +247,18 @@ public JcodeClass findKnownClass(String name)
    jdt = known_classes.get(name);
    if (jdt != null && jdt.getName() == null) {
       synchronized (this) {
+         int ct = 0;
          while (jdt.getName() == null) {
             IvyLog.logD("JCODE","Waiting for class " + name);
             try {
                wait(50);
              }    
             catch (InterruptedException e) { }
+            if (++ct > 100) {
+               // waited too long == must be some other problem
+               IvyLog.logX("JCODE","Waiting too long for class");
+               return jdt;
+             }
           }
        }
     }
