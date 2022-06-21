@@ -276,7 +276,7 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc,Strin
       for (int i = 0; i < 100; ++i) {
          if (jnm == null) {
             try {
-               Thread.sleep(50);
+               wait(50);
              }
             catch (InterruptedException e) { }
             jnm = jc.getName(); 
