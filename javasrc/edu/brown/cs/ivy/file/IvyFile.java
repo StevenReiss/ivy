@@ -669,6 +669,37 @@ public static File getCommonParent(File f1,File f2)
 }
 
 
+public static File getCanonical(File f1)
+{
+   if (f1 == null) return null;
+   
+   try {
+      f1 = f1.getCanonicalFile();
+    }
+   catch (IOException e) {
+      f1 = f1.getAbsoluteFile();
+    }
+   
+   return f1;
+}
+
+public static String getCanonicalPath(File f1)
+{
+   if (f1 == null) return null;
+   
+   try {
+      return f1.getCanonicalPath();
+    }
+   catch (IOException e) {
+      return f1.getAbsolutePath();
+    }
+}
+
+
+
+
+
+
 /********************************************************************************/
 /*                                                                              */
 /*      Encoding methods                                                        */

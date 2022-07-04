@@ -73,13 +73,13 @@
 package edu.brown.cs.ivy.limbo;
 
 
+import edu.brown.cs.ivy.file.IvyFile;
 import edu.brown.cs.ivy.xml.IvyXml;
 import edu.brown.cs.ivy.xml.IvyXmlWriter;
 
 import org.w3c.dom.Element;
 
 import java.io.File;
-import java.io.IOException;
 
 
 
@@ -123,10 +123,7 @@ protected LimboLine(String file,int line)
 
 protected LimboLine(File file,int line)
 {
-   try {
-      file = file.getCanonicalFile();
-    }
-   catch (IOException e) { }
+   file = IvyFile.getCanonical(file);
 
    file_name = file;
    line_number = line;

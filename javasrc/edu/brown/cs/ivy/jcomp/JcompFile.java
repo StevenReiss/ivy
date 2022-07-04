@@ -41,10 +41,16 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.LambdaExpression;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
+
+import edu.brown.cs.ivy.file.IvyLog;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -209,17 +215,57 @@ private class ErrorVisitor extends ASTVisitor {
        }
       return true;
     }
+   
+   @Override public void endVisit(ReturnStatement n) {
+      if (have_error) return;
+      ASTNode mthd = null;
+      for (ASTNode n1 = n; n1 != null; n1 = n1.getParent()) {
+         if (n1 instanceof MethodDeclaration) {
+            mthd = (MethodDeclaration) n1;
+            break;
+          }
+         else if (n1 instanceof LambdaExpression) {
+            break;
+          }
+       }
+      if (mthd == null) return;
+      JcompSymbol msym = JcompAst.getDefinition(mthd);
+      if (msym == null) return;
+      JcompType mtyp = msym.getType();
+      if (mtyp == null) return;
+      JcompType rtyp = mtyp.getBaseType();
+      
+      Expression ex = n.getExpression();
+      if (ex == null) {
+         if (rtyp != null && !rtyp.isVoidType()) {
+            IvyLog.logD("JCOMP","NOTE RETURN ERROR");
+            addError("Must return value for method",IProblem.ReturnTypeMismatch,n);
+          }
+         return;
+       }
+      
+      JcompType rt = JcompAst.getExprType(ex);
+      if (rt.isErrorType()) return;
+      if (rtyp == null || rtyp.isVoidType()) {
+         IvyLog.logD("JCOMP","NOTE RETURN ERROR");   addError("Can't return value for void method/constructor",
+               IProblem.ReturnTypeMismatch,n);
+       }
+      else if (!rtyp.isCompatibleWith(rt) && !rt.isCompatibleWith(rtyp)) {
+         IvyLog.logD("JCOMP","NOTE RETURN ERROR");   
+         addError("Return type mismatch",IProblem.ReturnTypeMismatch,n);
+       }
+    }
 
    private void addError(String msg,int id,ASTNode n) {
       int start = n.getStartPosition();
       int end = start + n.getLength();
       int line = 0;
       if (ast_root instanceof CompilationUnit) {
-	 CompilationUnit cu = (CompilationUnit) ast_root;
-	 line = cu.getLineNumber(start);
+         CompilationUnit cu = (CompilationUnit) ast_root;
+         line = cu.getLineNumber(start);
        }
       JcompMessage rm = new JcompMessage(getFile(),JcompMessageSeverity.ERROR,
-	    id,msg,line,start,end);
+            id,msg,line,start,end);
       message_list.add(rm);
     }
 

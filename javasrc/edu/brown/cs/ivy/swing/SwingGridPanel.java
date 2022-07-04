@@ -235,6 +235,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
@@ -245,6 +247,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.WeakHashMap;
 
 
 public class SwingGridPanel extends JPanel
@@ -264,6 +267,9 @@ protected HashMap<Object,String> tag_map;
 protected HashMap<Object,JLabel> label_map;
 protected Insets  inset_values;
 protected transient IvyI18N i18n_map;
+
+private Map<Component,List<Component>> dependent_items;
+private DepListener dep_listener;
 
 private Box			bottom_box;
 private transient UndoableEditSupport undo_support;
@@ -313,6 +319,8 @@ public SwingGridPanel(UndoableEditSupport ued,IvyI18N i18n)
    chooser_map = new HashMap<>();
    label_map = new HashMap<>();
    tag_map = new HashMap<>();
+   dependent_items = new WeakHashMap<>();
+   dep_listener = new DepListener();
 
    beginLayout();
 }
@@ -527,6 +535,8 @@ public final JLabel addDescription(String lbl,String val)
    desc.setFont(fnt);
 
    addGBComponent(desc,1,y_count++,0,1,10,0);
+   
+   addDependency(desc,tag);
 
    return desc;
 }
@@ -541,14 +551,18 @@ public final JLabel addDescription(String lbl,String val)
 
 public final Component addRawComponent(String lbl, Component c)
 {
+   JLabel tag = null;
    if (lbl != null) {
-      JLabel tag = createLabel(lbl);
+      tag = createLabel(lbl);
       addGBComponent(tag,0,y_count,1,1,0,0);
       tag_map.put(c,lbl);
       label_map.put(c,tag);
+      addDependency(c,tag);
     }
 
    addGBComponent(c,1,y_count++,0,1,10,0);
+   
+   addDependency(c,tag);
 
    return c;
 }
@@ -600,7 +614,7 @@ public final <T> SwingComboBox<T> addChoice(String lbl,Collection<T> data,int id
    addGBComponent(cbx,1,y_count++,1,1,10,0);
 
    tag_map.put(cbx,lbl);
-   label_map.put(cbx,tag);
+   addDependency(cbx,tag);
    
    cbx.setActionCommand(lbl);
    if (cb != null) cbx.addActionListener(cb);
@@ -630,7 +644,7 @@ public final <T> SwingComboBox<T> addChoice(String lbl,T [] data,int idx,boolean
    addGBComponent(cbx,1,y_count++,1,1,10,0);
 
    tag_map.put(cbx,lbl);
-   label_map.put(cbx,tag);
+   addDependency(cbx,tag);
 
    return cbx;
 }
@@ -731,7 +745,7 @@ public final JCheckBox addBoolean(String lbl,boolean val,ActionListener cb)
    addGBComponent(cbx,1,y_count++,1,1,0,0);
 
    tag_map.put(cbx,lbl);
-   label_map.put(cbx,tag);
+   addDependency(cbx,tag);
    
    return cbx;
 }
@@ -767,7 +781,7 @@ public final JList<String> addButtonSet(String lbl,Map<String,Boolean> values,Li
    addGBComponent(lst,1,y_count++,1,1,0,0);
    
    tag_map.put(lst,lbl);
-   label_map.put(lst,tag);
+   addDependency(lst,tag);
    
    return lst;
 }
@@ -795,7 +809,7 @@ public final SwingNumericField addNumericField(String lbl,double min,double max,
    addGBComponent(tfld,1,y_count++,0,1,10,0);
 
    tag_map.put(tfld,lbl);
-   label_map.put(tfld,tag);
+   addDependency(tfld,tag);
    
    return tfld;
 }
@@ -817,7 +831,7 @@ public final SwingNumericField addNumericField(String lbl,int min,int max,int va
    addGBComponent(tfld,1,y_count++,0,1,10,0);
 
    tag_map.put(tfld,lbl);
-   label_map.put(tfld,tag);
+   addDependency(tfld,tag);
    
    return tfld;
 }
@@ -837,7 +851,7 @@ public final SwingRangeSlider addRange(String lbl,int min,int max,int dec,int va
    addGBComponent(sldr,1,y_count++,0,1,10,0);
 
    tag_map.put(sldr,lbl);
-   label_map.put(sldr,tag);
+   addDependency(sldr,tag);
    
    return sldr;
 }
@@ -856,7 +870,7 @@ public final SwingDimensionChooser addDimensionField(String lbl,int w,int h,Acti
    addGBComponent(tfld,1,y_count++,0,1,10,0);
 
    tag_map.put(tfld,lbl);
-   label_map.put(tfld,tag);
+   addDependency(tfld,tag);
    
    return tfld;
 }
@@ -899,7 +913,7 @@ public final JTextField addTextField(String lbl,String val,int wid,ActionListene
 
    tag_map.put(tfld,lbl);
    tag_map.put(doc,lbl);
-   label_map.put(tfld,tag);
+   addDependency(tfld,tag);
    label_map.put(doc,tag);
    
    return tfld;
@@ -930,7 +944,7 @@ public final JTextArea addTextArea(String lbl,String val,int row,int col,Undoabl
 
    tag_map.put(tarea,lbl);
    tag_map.put(doc,lbl);
-   label_map.put(tarea,tag);
+   addDependency(tarea,tag);
    label_map.put(doc,tag);
    
    return tarea;
@@ -1102,8 +1116,9 @@ private JTextField localAddFileField(String lbl,String val,int md,
 
    tag_map.put(tfld,lbl);
    tag_map.put(doc,lbl);
-   label_map.put(tfld,tag);
    label_map.put(doc,tag);
+   addDependency(tfld,tag);
+   addDependency(tfld,browser);
 
    return tfld;
 }
@@ -1137,7 +1152,7 @@ public final SwingColorButton addColorField(String lbl,Color val,boolean alpha,A
    addGBComponent(btn,1,y_count++,0,1,10,0);
 
    tag_map.put(btn,lbl);
-   label_map.put(btn,tag);
+   addDependency(btn,tag);
    
    return btn;
 }
@@ -1154,7 +1169,7 @@ public final SwingColorRangeChooser addColorRangeField(String lbl,Color c1,Color
    addGBComponent(btn,1,y_count++,0,1,10,0);
 
    tag_map.put(btn,lbl);
-   label_map.put(btn,tag);
+   addDependency(btn,tag);
 
    return btn;
 }
@@ -1178,7 +1193,7 @@ public final SwingFontChooser addFontField(String lbl,Font font,Color c,int opts
    addGBComponent(fc,1,y_count++,0,1,10,0);
 
    tag_map.put(fc,lbl);
-   label_map.put(fc,tag);
+   addDependency(fc,tag);
    
    return fc;
 }
@@ -1431,6 +1446,51 @@ public void fireActionPerformed()
 
    al.actionPerformed(evt);
 }
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Handle dependencies to allow easy show/hide                             */
+/*                                                                              */
+/********************************************************************************/
+
+private void addDependency(Component from,Component to)
+{
+   if (from == null || to == null) return;
+   
+   List<Component> deps = dependent_items.get(from);
+   if (deps == null) {
+      deps = new ArrayList<>();
+      dependent_items.put(from,deps);
+      from.addComponentListener(dep_listener);
+    }
+   deps.add(to);
+   if (to instanceof JLabel) {
+      if (label_map.get(from) == null) label_map.put(from,(JLabel) to);
+    }
+}
+
+
+
+private class DepListener extends ComponentAdapter {
+
+   @Override public void componentShown(ComponentEvent e) {
+      update(e,true);
+    }
+   
+   @Override public void componentHidden(ComponentEvent e) {
+      update(e,false);
+    }
+   
+   private void update(ComponentEvent e,boolean vis) {
+      Component jc = (Component) e.getSource();
+      List<Component> deps = dependent_items.get(jc);
+      if (deps == null) return;
+      for (Component dc : deps) dc.setVisible(vis);
+    }
+   
+}       // end of inner class DepListener
 
 
 

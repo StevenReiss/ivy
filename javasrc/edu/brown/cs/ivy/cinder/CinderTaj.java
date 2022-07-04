@@ -173,10 +173,7 @@ CinderTaj()
 @Override public boolean localSetupFiles(BT_Class cls,String infn,String outfn)
 {
    File otf = new File(outfn);
-   try {
-      otf = otf.getCanonicalFile();
-    }
-   catch (IOException e) { }
+   otf = IvyFile.getCanonical(otf);
    File dir = otf.getParentFile();
 
    if (dir == null) return false;

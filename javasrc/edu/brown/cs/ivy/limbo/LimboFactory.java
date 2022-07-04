@@ -74,12 +74,12 @@ package edu.brown.cs.ivy.limbo;
 
 
 
+import edu.brown.cs.ivy.file.IvyFile;
 import edu.brown.cs.ivy.xml.IvyXml;
 
 import org.w3c.dom.Element;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -142,10 +142,7 @@ public void setFile(String file)
 
 public void setFile(File file)
 {
-   try {
-      file = file.getCanonicalFile();
-    }
-   catch (IOException e) { }
+   file = IvyFile.getCanonical(file);
    cur_file = file;
 }
 
@@ -178,10 +175,7 @@ public static LimboLine createFromXml(Element e)
 
 public static void removeFile(File f)
 {
-   try {
-      f = f.getCanonicalFile();
-    }
-   catch (IOException e) { }
+   f = IvyFile.getCanonical(f);
 
    file_map.remove(f);
 }
@@ -196,10 +190,7 @@ public static void removeFile(File f)
 
 static LimboFile findFile(File f)
 {
-   try {
-      f = f.getCanonicalFile();
-    }
-   catch (IOException e) { }
+   f = IvyFile.getCanonical(f);
 
    LimboFile lf = file_map.get(f);
    if (lf == null || f.lastModified() > lf.getLastModified()) {
