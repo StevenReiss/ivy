@@ -40,15 +40,19 @@ import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.LabeledStatement;
 import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.Statement;
+import org.eclipse.jdt.core.dom.SwitchCase;
 
 import edu.brown.cs.ivy.file.IvyLog;
 
@@ -217,6 +221,7 @@ private class ErrorVisitor extends ASTVisitor {
     }
    
    @Override public void endVisit(ReturnStatement n) {
+      checkNextReachable(n);
       if (have_error) return;
       ASTNode mthd = null;
       for (ASTNode n1 = n; n1 != null; n1 = n1.getParent()) {
@@ -247,14 +252,36 @@ private class ErrorVisitor extends ASTVisitor {
       JcompType rt = JcompAst.getExprType(ex);
       if (rt.isErrorType()) return;
       if (rtyp == null || rtyp.isVoidType()) {
-         IvyLog.logD("JCOMP","NOTE RETURN ERROR");   addError("Can't return value for void method/constructor",
+         IvyLog.logD("JCOMP","NOTE RETURN ERROR");  
+         addError("Can't return value for void method/constructor",
                IProblem.ReturnTypeMismatch,n);
        }
-      else if (!rtyp.isCompatibleWith(rt) && !rt.isCompatibleWith(rtyp)) {
-         IvyLog.logD("JCOMP","NOTE RETURN ERROR");   
+      // second clause is probably all that is needed
+      else if (!rtyp.isAssignCompatibleWith(rt) && !rt.isAssignCompatibleWith(rtyp)) {
+         IvyLog.logD("JCOMP","NOTE RETURN ERROR");    
          addError("Return type mismatch",IProblem.ReturnTypeMismatch,n);
        }
     }
+   
+   
+   private void checkNextReachable(ASTNode n)
+   {
+      ASTNode par = n.getParent();
+      if (par instanceof Block) {
+         Block blk = (Block) par;
+         int idx = blk.statements().indexOf(n);
+         if (idx >= 0 && idx+1 < blk.statements().size()) {
+            ASTNode next = (ASTNode) blk.statements().get(idx+1);
+            if (next instanceof SwitchCase) return;
+            else if (next instanceof LabeledStatement) return;
+            else if (next instanceof Statement) {
+               IvyLog.logD("JCOMP","NOTE REACHABLE ERROR");   
+               addError("Unreachable statement",IProblem.UnreachableCatch,next);
+             }
+          }
+       }
+      return;
+   }
 
    private void addError(String msg,int id,ASTNode n) {
       int start = n.getStartPosition();

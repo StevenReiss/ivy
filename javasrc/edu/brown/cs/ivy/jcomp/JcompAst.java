@@ -74,6 +74,8 @@ import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -120,9 +122,16 @@ public static CompilationUnit parseSourceFile(char [] buf)
    parser.setCompilerOptions(options);
    parser.setResolveBindings(false);
    parser.setStatementsRecovery(true);
-   CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-
-   return cu;
+   
+   try {
+      CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+      return cu;
+    }
+   catch (Throwable t) {
+      IvyLog.logE("JCOMP","Problem parsing ast " + new String(buf),t);
+    }
+   
+   return null;
 }
 
 
