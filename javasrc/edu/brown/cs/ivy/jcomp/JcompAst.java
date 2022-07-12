@@ -110,25 +110,27 @@ public static CompilationUnit parseSourceFile(String text)
 
 public static CompilationUnit parseSourceFile(char [] buf)
 {
-   ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
-   parser.setKind(ASTParser.K_COMPILATION_UNIT);
-   parser.setSource(buf);
-
-   Map<String,String> options = JavaCore.getOptions();
-   JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
-   options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
-   options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
-   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");
-   parser.setCompilerOptions(options);
-   parser.setResolveBindings(false);
-   parser.setStatementsRecovery(true);
-   
-   try {
-      CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-      return cu;
-    }
-   catch (Throwable t) {
-      IvyLog.logE("JCOMP","Problem parsing ast " + new String(buf),t);
+   for (int i = 0; i < 3; ++i) {
+      ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
+      parser.setKind(ASTParser.K_COMPILATION_UNIT);
+      parser.setSource(buf);
+      
+      Map<String,String> options = JavaCore.getOptions();
+      JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
+      options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
+      options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
+      options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");
+      parser.setCompilerOptions(options);
+      parser.setResolveBindings(false);
+      parser.setStatementsRecovery(true);
+      
+      try {
+         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+         return cu;
+       }
+      catch (Throwable t) {
+         IvyLog.logE("JCOMP","Problem parsing ast " + new String(buf),t);
+       }
     }
    
    return null;
@@ -559,7 +561,9 @@ public static JcompSource getSource(ASTNode n)
 static public void setSource(ASTNode n,JcompSource s)
 {
    n = n.getRoot();
-   n.setProperty(PROP_JAVA_SOURCE,s);
+   if (n != null) {
+      n.setProperty(PROP_JAVA_SOURCE,s);
+    }
 }
 
 
