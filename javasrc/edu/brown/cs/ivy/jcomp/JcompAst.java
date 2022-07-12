@@ -110,7 +110,8 @@ public static CompilationUnit parseSourceFile(String text)
 
 public static CompilationUnit parseSourceFile(char [] buf)
 {
-   for (int i = 0; i < 3; ++i) {
+   IvyLog.logD("JCOMP","Start parsing source file " + buf.length);
+   for (int i = 0; i < 2; ++i) {
       ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
       parser.setKind(ASTParser.K_COMPILATION_UNIT);
       parser.setSource(buf);
@@ -126,6 +127,7 @@ public static CompilationUnit parseSourceFile(char [] buf)
       
       try {
          CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+         IvyLog.logD("JCOMP","Finish parsing source file " + buf.length);
          return cu;
        }
       catch (Throwable t) {
