@@ -562,8 +562,8 @@ public static JcompSource getSource(ASTNode n)
 
 static public void setSource(ASTNode n,JcompSource s)
 {
-   n = n.getRoot();
    if (n != null) {
+      n = n.getRoot();
       n.setProperty(PROP_JAVA_SOURCE,s);
     }
 }

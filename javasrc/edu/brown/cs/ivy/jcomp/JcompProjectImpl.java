@@ -111,7 +111,7 @@ void clear()
 void addFile(JcompFile jf)
 {
    if (file_nodes.contains(jf)) return;
-   IvyLog.logD("JCOMP","ADD SOURCE FILE " + jf.getFile() + " " + 
+   IvyLog.logD("JCOMP","ADD SOURCE FILE " + jf.getFile().getFileName() + " " + 
          jf.getFile().hashCode() + " " + hashCode());
    
    file_nodes.add(jf);
