@@ -111,28 +111,27 @@ public static CompilationUnit parseSourceFile(String text)
 public static CompilationUnit parseSourceFile(char [] buf)
 {
    IvyLog.logD("JCOMP","Start parsing source file " + buf.length);
-   for (int i = 0; i < 2; ++i) {
-      ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
-      parser.setKind(ASTParser.K_COMPILATION_UNIT);
-      parser.setSource(buf);
-      
-      Map<String,String> options = JavaCore.getOptions();
-      JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
-      options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
-      options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
-      options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");
-      parser.setCompilerOptions(options);
-      parser.setResolveBindings(false);
-      parser.setStatementsRecovery(true);
-      
-      try {
-         CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-         IvyLog.logD("JCOMP","Finish parsing source file " + buf.length);
-         return cu;
-       }
-      catch (Throwable t) {
-         IvyLog.logE("JCOMP","Problem parsing ast " + new String(buf),t);
-       }
+
+   ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
+   parser.setKind(ASTParser.K_COMPILATION_UNIT);
+   parser.setSource(buf);
+   
+   Map<String,String> options = JavaCore.getOptions();
+   JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
+   options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
+   options.put("org.eclipse.jdt.core.compiler.problem.assertIdentifier","ignore");
+   options.put("org.eclipse.jdt.core.compiler.problem.enumIdentifier","ignore");
+   parser.setCompilerOptions(options);
+   parser.setResolveBindings(false);
+   parser.setStatementsRecovery(true);
+   
+   try {
+      CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+      IvyLog.logD("JCOMP","Finish parsing source file " + buf.length);
+      return cu;
+    }
+   catch (Throwable t) {
+      IvyLog.logE("JCOMP","Problem parsing ast " + new String(buf),t);
     }
    
    return null;
@@ -588,6 +587,8 @@ static void setResolved(ASTNode n,JcompTyper jt)
 
 static public boolean isResolved(ASTNode n)
 {
+   if (n == null) return true;
+   
    n = n.getRoot();
    return n.getProperty(PROP_JAVA_RESOLVED) == Boolean.TRUE;
 }
