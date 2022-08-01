@@ -108,6 +108,13 @@ private static Map<String,Color> color_map;
 
 public static Color getColorByName(String v)
 {
+   return getColorByName(v,true);
+}
+
+
+
+public static Color getColorByName(String v,boolean force)
+{
    if (v == null || v.length() == 0) return null;
 
    Color c = color_map.get(v.toLowerCase());
@@ -156,7 +163,8 @@ public static Color getColorByName(String v)
 	    return c;
 	  }
 	 catch (Exception e) {
-	    System.err.println("SWING: Bad color: " + v + ": " + e);
+	    if (force) System.err.println("SWING: Bad color: " + v + ": " + e);
+	    return null;
 	  }
        }
     }
@@ -164,16 +172,23 @@ public static Color getColorByName(String v)
    if (nv.startsWith("#")) nv = nv.substring(1);
    if (nv.startsWith("0x")) nv = nv.substring(2);
 
-   try {
-      long lv = Long.parseLong(nv,16);
-      int cv = (int)(lv & 0xffffffff);
-      if ((cv & 0xff000000) == 0 && nv.length() <= 6) c = new Color(cv);
-      else c = new Color(cv,true);
-      color_map.put(v.toLowerCase(),c);
-      return c;
+   if (nv.length() == 3 || nv.length() >= 6) {
+      try {
+	 long lv = Long.parseLong(nv,16);
+	 int cv = (int)(lv & 0xffffffff);
+	 if ((cv & 0xff000000) == 0 && nv.length() <= 6) c = new Color(cv);
+	 else c = new Color(cv,true);
+	 color_map.put(v.toLowerCase(),c);
+	 return c;
+       }
+      catch (NumberFormatException e) {
+	 if (force) System.err.println("IVY: Bad color value: '" + v + "'");
+	 return null;
+       }
     }
-   catch (NumberFormatException e) {
-      System.err.println("IVY: Bad color value: '" + v + "'");
+
+   if (force) {
+      System.err.println("IVY: Unknown color specification: " + v);
     }
 
    return null;

@@ -25,6 +25,7 @@ SFILES= \
 	SwingHelpFrame.java \
 	SwingKey.java \
 	SwingLabel.java \
+	SwingLineScrollPane.java \
 	SwingListPanel.java \
 	SwingListSet.java \
 	SwingMenu.java \

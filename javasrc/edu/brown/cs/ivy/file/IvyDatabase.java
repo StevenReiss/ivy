@@ -198,22 +198,22 @@ public static Connection openDatabase(String name) throws SQLException
    nm += name;
 
    IvyLog.logD("Connect to database " + nm);
-   
+
    Connection conn = DriverManager.getConnection(nm,dbms_user,dbms_password);
 
    Runtime.getRuntime().addShutdownHook(new DatabaseCloser(conn));
-   
+
    switch (dbms_type) {
       case DERBY :
       case DERBY_EMBED :
-         File f3 = new File(System.getProperty("user.dir"));
-         File f4 = new File(f3,"derby.log");
-         f4.deleteOnExit();
-         break;
+	 File f3 = new File(System.getProperty("user.dir"));
+	 File f4 = new File(f3,"derby.log");
+	 f4.deleteOnExit();
+	 break;
       default :
-         break;
+	 break;
     }
-   
+
    return conn;
 }
 
@@ -227,6 +227,13 @@ public static Connection openDefaultDatabase() throws SQLException
 
 
 public static void setProperties(String dflt) throws SQLException
+{
+   if (dflt == null) setup(null);
+   else setup(new File(dflt));
+}
+
+
+public static void setProperties(File dflt) throws SQLException
 {
    setup(dflt);
 }
@@ -251,12 +258,12 @@ public static void setProperties(InputStream ins) throws SQLException
 /*										*/
 /********************************************************************************/
 
-private static void setup(String user) throws SQLException
+private static void setup(File propfile) throws SQLException
 {
    Properties p0 = null;
-   
-   if (user != null) p0 = getProperties(new File(user));
-   
+
+   if (propfile != null) p0 = getProperties(propfile);
+
    setupProperties(p0);
 }
 
@@ -334,22 +341,22 @@ private static void setupProperties(Properties p0) throws SQLException
 	 dbms_files = true;		// MYSQL supports external files
 	 break;
       case DERBY :
-         File f1 = new File(System.getProperty("user.home"));
-         File f2 = new File(f1,"derby.log");
-         System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
-         System.setProperty("derby.stream.error.file",f2.getPath());
-         System.setProperty("derby.system.home",f1.getPath());
-         dbms_prefix = DERBY_PREFIX;
+	 File f1 = new File(System.getProperty("user.home"));
+	 File f2 = new File(f1,"derby.log");
+	 System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
+	 System.setProperty("derby.stream.error.file",f2.getPath());
+	 System.setProperty("derby.system.home",f1.getPath());
+	 dbms_prefix = DERBY_PREFIX;
 	 dbms_default = null;
 	 dbms_files = false;
 	 if (dbms_host == null) dbms_host = "localhost:1527";
 	 break;
       case DERBY_EMBED :
-         File f3 = new File(System.getProperty("user.home"));
-         File f4 = new File(f3,"derby.log");
-         System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
-         System.setProperty("derby.stream.error.file",f4.getPath());
-         System.setProperty("derby.system.home",f4.getPath());
+	 File f3 = new File(System.getProperty("user.home"));
+	 File f4 = new File(f3,"derby.log");
+	 System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
+	 System.setProperty("derby.stream.error.file",f4.getPath());
+	 System.setProperty("derby.system.home",f4.getPath());
 	 dbms_prefix = DERBY_PREFIX;
 	 dbms_default = null;
 	 dbms_files = false;
@@ -535,53 +542,53 @@ public static String getIdDefType()
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Dummy log file for DERBY                                                */
-/*                                                                              */
+/*										*/
+/*	Dummy log file for DERBY						*/
+/*										*/
 /********************************************************************************/
 
 
 public static final class NullOutputStream extends OutputStream {
-   
+
    public void write(int b) { }
    public void write(byte[] b) { }
    public void write(byte[] b,int off,int len) { }
-   
-}       // end of inner class NullOutputStream
+
+}	// end of inner class NullOutputStream
 
 
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Database closer                                                         */
-/*                                                                              */
+/*										*/
+/*	Database closer 							*/
+/*										*/
 /********************************************************************************/
 
 private static class DatabaseCloser extends Thread {
-   
+
    private Connection for_database;
-   
+
    DatabaseCloser(Connection c) {
       for_database = c;
     }
-   
+
    @Override public void run() {
       try {
-         if (for_database.isClosed()) return;
-         if (!for_database.getAutoCommit()) {
-            for_database.commit();
-          }
+	 if (for_database.isClosed()) return;
+	 if (!for_database.getAutoCommit()) {
+	    for_database.commit();
+	  }
        }
       catch (SQLException e) { }
       try {
-         if (for_database.isClosed()) return;
-         for_database.close();
+	 if (for_database.isClosed()) return;
+	 for_database.close();
        }
       catch (SQLException e) { }
     }
-   
-}       // end of inner class DataabseCloser
+
+}	// end of inner class DataabseCloser
 
 
 }	// end of class IvyDatabase

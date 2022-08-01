@@ -132,6 +132,13 @@ public static CompilationUnit parseSourceFile(char [] buf)
     }
    catch (Throwable t) {
       IvyLog.logE("JCOMP","Problem parsing ast " + new String(buf),t);
+      for (Throwable t0 = t; t0 != null; t0 = t0.getCause()) {
+         if (t0 instanceof ClassNotFoundException) {
+            System.err.println("JCOMP: Problem loading AST classes: " + t);
+            t.printStackTrace();
+            System.exit(17);
+          }
+       }
     }
    
    return null;

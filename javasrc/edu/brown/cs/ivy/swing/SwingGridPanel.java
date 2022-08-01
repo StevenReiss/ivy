@@ -268,8 +268,8 @@ protected HashMap<Object,JLabel> label_map;
 protected Insets  inset_values;
 protected transient IvyI18N i18n_map;
 
-private Map<Component,List<Component>> dependent_items;
-private DepListener dep_listener;
+private transient Map<Component,List<Component>> dependent_items;
+private transient DepListener dep_listener;
 
 private Box			bottom_box;
 private transient UndoableEditSupport undo_support;
