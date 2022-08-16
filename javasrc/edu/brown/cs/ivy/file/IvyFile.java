@@ -277,6 +277,12 @@ public static String expandName(String name,Map<String,String> vals)
 
 public static String expandText(String name,Map<String,String> vals)
 {
+   return expandText(name,vals,true);
+}
+   
+   
+public static String expandText(String name,Map<String,String> vals,boolean sys)
+{
    StringBuffer buf = new StringBuffer();
 
    if (name == null) return null;
@@ -300,12 +306,14 @@ public static String expandText(String name,Map<String,String> vals)
 	 if (vals != null && vals.containsKey(what)) {
 	    erslt = vals.get(what);
 	  }
-	 else if (what.equals("USER")) what = "user.name";
-	 else if (what.equals("HOME")) what = "user.home";
-	 else if (what.equals("CWD")) what = "user.dir";
-	 if (erslt == null) erslt = System.getProperty(what);
-	 if (erslt == null) erslt = System.getenv(what);
-	 if (erslt == null && what.equals("HOST")) erslt = computeHostName();
+         else if (sys) {
+            if (what.equals("USER")) what = "user.name";
+            else if (what.equals("HOME")) what = "user.home";
+            else if (what.equals("CWD")) what = "user.dir";
+            if (erslt == null) erslt = System.getProperty(what);
+            if (erslt == null) erslt = System.getenv(what);
+            if (erslt == null && what.equals("HOST")) erslt = computeHostName();
+          }
 	 if (erslt == null) erslt = dflt;
 	 if (erslt != null) buf.append(erslt);
        }

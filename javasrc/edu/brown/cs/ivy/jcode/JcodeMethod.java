@@ -80,7 +80,10 @@ private String			match_name;
 private Collection<JcodeMethod>  parent_methods;
 private Collection<JcodeMethod>  child_methods;
 private Collection<JcodeTryCatchBlock> try_blocks;
+private Map<String,JcodeMethod>  derived_methods;
+private JcodeMethod             base_method;
 
+private static String [] string_array = new String [] {};
 
 
 
@@ -101,6 +104,23 @@ JcodeMethod(JcodeFactory bf,JcodeClass cls,int a,String n,String d,String s,Stri
    parent_methods = null;
    child_methods = null;
    try_blocks = new ArrayList<JcodeTryCatchBlock>();
+   derived_methods = null;
+}
+
+
+private JcodeMethod(JcodeMethod base,String description)
+{
+   super(base.api,base.access,base.name,description,base.signature,base.exceptions.toArray(string_array));
+   bcode_factory = base.bcode_factory;
+   in_class = base.in_class;
+   match_name = base.match_name;
+   goto_map = base.goto_map;
+   ins_list = base.ins_list;
+   base_method = base;
+   parent_methods = null;
+   child_methods = null;
+   try_blocks = null;
+   derived_methods = null;
 }
 
 
@@ -387,6 +407,30 @@ public String getClassSignature()               { return in_class.signature; }
 
 
 /********************************************************************************/
+/*                                                                              */
+/*      Handle polymorphic methods                                              */
+/*                                                                              */
+/********************************************************************************/
+
+public JcodeMethod deriveMethod(String newdesc)
+{
+   if (newdesc.equals(desc)) return this;
+   
+   if (derived_methods == null) derived_methods = new HashMap<>();
+   
+   synchronized (derived_methods) {
+      JcodeMethod dm = derived_methods.get(newdesc);
+      if (dm == null) {
+         dm = new JcodeMethod(this,newdesc);
+         derived_methods.put(newdesc,dm);
+       }
+      return dm;
+    }
+}
+
+
+
+/********************************************************************************/
 /*										*/
 /*	Visitation methods							*/
 /*										*/
@@ -553,6 +597,8 @@ private void computeDigest()
 public synchronized Collection<JcodeMethod> getParentMethods()
 {
    if (parent_methods != null) return parent_methods;
+   
+   if (base_method != null) return Collections.emptyList();
 
    parent_methods = in_class.findParentMethods(name,desc,false,false,null);
 
@@ -565,7 +611,7 @@ public synchronized Collection<JcodeMethod> getChildMethods()
 {
    if (child_methods != null) return child_methods;
 
-   if (isPrivate()) {
+   if (isPrivate() || base_method != null) {
       child_methods = Collections.emptyList();
     }
    else {
@@ -586,6 +632,8 @@ public synchronized Collection<JcodeMethod> getChildMethods()
 
 public Collection<JcodeTryCatchBlock> getTryCatchBlocks()
 {
+   if (base_method != null) return base_method.getTryCatchBlocks();
+   
    return try_blocks;
 }
 

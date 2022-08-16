@@ -15,7 +15,11 @@ RCSVERSION = 0.0
 SVER= $(VERSION).$(SUBVER)
 
 INSTALL_TOP= $(BROWN_IVY_ROOT)
-CPRO= /research/people/spr
+ifneq ("$(wildcard /research/people/spr)","")
+   CPRO=/research/people/spr
+else
+   CPRO= $(PRO)
+endif
 
 
 #
@@ -248,32 +252,29 @@ javadoc:
 		edu.brown.cs.ivy.project
 
 
-
-
 bubbles:
 	make jar
 	rm -rf src.files ivysrc.jar
 	(cd javasrc; find . -follow -name '*.java' -print | fgrep -v 'jflow'| fgrep -v 'cinder' | fgrep -v 'project' | fgrep -v 'pebble' > ../src.files )
 	(cd javasrc; jar cf ../ivysrc.jar `cat ../src.files` )
 	rm -rf src.files
-	mv ivysrc.jar /pro/bubbles/
+	mv ivysrc.jar $(PRO)/bubbles/
 	(cd java; find . -follow -name '*.class' -print | fgrep -v 'jflow'| fgrep -v 'cinder' | fgrep -v 'project' | fgrep -v 'pebble'  > ../bin.files )
 	(cd java; jar cf ../ivybin.jar `cat ../bin.files` )
 	rm -rf bin.files
-	cp ivybin.jar /pro/bubbles/suds/lib/ivy.jar
-	cp ivybin.jar /pro/bubbles/lib/ivy.jar
+	cp ivybin.jar $(PRO)/bubbles/suds/lib/ivy.jar
+	cp ivybin.jar $(PRO)/bubbles/lib/ivy.jar
 	jar cf ivylib.jar lib/*.props lib/*.jar lib/androidjar lib/eclipsejar lib/*.xml
-	-cp ivylib.jar /pro/bubbles/
+	-cp ivylib.jar $(PRO)/bubbles/
 	-mkdir eclipsejar
-	-cp lib/eclipsejar/*.jar /pro/bubbles/eclipsejar
-	-cp lib/cocker.jar /pro/bubbles/lib
-	-cp lib/asm.jar /pro/bubbles/lib
-	-cp ivybin.jar /pro/cocker/lib/ivy.jar
+	-cp lib/eclipsejar/*.jar $(PRO)/bubbles/eclipsejar
+	-cp lib/cocker.jar $(PRO)/bubbles/lib
+	-cp lib/asm.jar $(PRO)/bubbles/lib
 	-cp ivybin.jar $(CPRO)/cocker/lib/ivy.jar
-	-cp lib/asm.jar /pro/cocker/lib/asm.jar
 	-cp lib/asm.jar $(CPRO)/cocker/lib/asm.jar
-	-cp lib/eclipsejar/*.jar /pro/cocker/lib/eclipsejar
 	-cp lib/eclipsejar/*.jar $(CPRO)/cocker/lib/eclipsejar
+	-cp ivybin.jar $(CPRO)/iot/signmaker/lib/ivy.jar
+	-cp lib/json.jar lib/mysql.jar lib/postgresql.jar $(CPRO)/iot/signmaker/lib
 	rm ivybin.jar
 	rm ivylib.jar
 

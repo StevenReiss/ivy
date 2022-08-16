@@ -581,6 +581,9 @@ public JcodeMethod getMethodReference()
        }
       if (fm == null && mn.owner.equals("java/lang/invoke/VarHandle")) {
          fm = in_method.getFactory().findMethod(null,mn.owner,mn.name,null);
+         if (fm != null) {
+            fm = fm.deriveMethod(mn.desc);
+          }
          // could be varargs
        }
       return fm;

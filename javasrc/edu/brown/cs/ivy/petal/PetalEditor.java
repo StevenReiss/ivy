@@ -1428,43 +1428,43 @@ private class Keyer extends KeyAdapter {
 
    @Override public void keyPressed(KeyEvent e) {
       switch (e.getKeyCode()) {
-	 case KeyEvent.VK_CUT :
-	 case KeyEvent.VK_DELETE :
-	 case KeyEvent.VK_BACK_SPACE :
-	    commandCut();
-	    break;
-	 case KeyEvent.VK_UNDO :
-	    commandUndo();
-	    break;
-	 case KeyEvent.VK_AGAIN :
-	    commandRedo();
-	    break;
-	 case KeyEvent.VK_COPY :
-	    commandCopy();
-	    break;
-	 case KeyEvent.VK_PASTE :
-	    commandPaste();
-	    break;
-	 default :
-	    switch (e.getKeyChar()) {
-	       case 21 :				// ^U :: undo
-	       case 26 :				// ^Z :: undo
-		  commandUndo();
-		  break;
-	       case 18 :				// ^R :: redo
-		  commandRedo();
-		  break;
-	       case 24 :				// ^X :: cut
-		  commandCut();
-		  break;
-	       case 3 : 				// ^C :: copy
-		  commandCopy();
-		  break;
-	       case 22 :				// ^V :: paste
-		  commandPaste();
-		  break;
-	     }
-	    break;
+         case KeyEvent.VK_CUT :
+         case KeyEvent.VK_DELETE :
+         case KeyEvent.VK_BACK_SPACE :
+            commandCut();
+            break;
+         case KeyEvent.VK_UNDO :
+            commandUndo();
+            break;
+         case KeyEvent.VK_AGAIN :
+            commandRedo();
+            break;
+         case KeyEvent.VK_COPY :
+            commandCopy();
+            break;
+         case KeyEvent.VK_PASTE :
+            commandPaste();
+            break;
+         default :
+            switch (e.getKeyChar()) {
+               case 21 :				// ^U :: undo
+               case 26 :				// ^Z :: undo
+        	  commandUndo();
+        	  break;
+               case 18 :				// ^R :: redo
+        	  commandRedo();
+        	  break;
+               case 24 :				// ^X :: cut
+        	  commandCut();
+        	  break;
+               case 3 : 				// ^C :: copy
+        	  commandCopy();
+        	  break;
+               case 22 :				// ^V :: paste
+        	  commandPaste();
+        	  break;
+             }
+            break;
        }
     }
 
