@@ -160,7 +160,10 @@ import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
@@ -176,6 +179,10 @@ public class IvyFile {
 /*	Ensure the environment is set up correctly				*/
 /*										*/
 /********************************************************************************/
+
+private static final int     APPROX_TIME = 15*60*1000;
+private static final DateFormat TIME_FORMAT = new SimpleDateFormat("h:mm");
+
 
 static {
    try {
@@ -302,6 +309,7 @@ public static String expandText(String name,Map<String,String> vals,boolean sys)
 	 if (idx > 0) {
 	    dflt = what.substring(idx+1).trim();
 	    what = what.substring(0,idx).trim();
+            dflt = fixTimeValue(dflt);
 	  }
 	 if (vals != null && vals.containsKey(what)) {
 	    erslt = vals.get(what);
@@ -321,6 +329,30 @@ public static String expandText(String name,Map<String,String> vals,boolean sys)
     }
 
    return buf.toString();
+}
+
+
+
+private static String fixTimeValue(String val)
+{
+   if (val.startsWith("@")) {
+      val = val.substring(1);
+    }
+   else return val;
+   
+   int delta = 60*60*1000;
+   if (val.startsWith("+")) {
+      val = val.substring(1);
+      delta = Integer.parseInt(val);
+    }
+   long t0 = System.currentTimeMillis() + delta; 
+   t0 = (t0 + APPROX_TIME-1) / APPROX_TIME;
+   t0 = t0 * APPROX_TIME;
+   
+   Date d = new Date(t0);
+   String rslt = TIME_FORMAT.format(d);
+   
+   return rslt; 
 }
 
 

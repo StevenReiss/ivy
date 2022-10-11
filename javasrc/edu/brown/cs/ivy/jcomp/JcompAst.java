@@ -112,7 +112,7 @@ public static CompilationUnit parseSourceFile(char [] buf)
 {
    IvyLog.logD("JCOMP","Start parsing source file " + buf.length);
 
-   ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
+   ASTParser parser = getAstParser();
    parser.setKind(ASTParser.K_COMPILATION_UNIT);
    parser.setSource(buf);
    
@@ -142,6 +142,21 @@ public static CompilationUnit parseSourceFile(char [] buf)
     }
    
    return null;
+}
+
+
+@SuppressWarnings("deprecation")
+private static ASTParser getAstParser()
+{
+   ASTParser parser = null;
+   try {
+      parser = ASTParser.newParser(AST.getJLSLatest());
+    }
+   catch (Throwable t) {
+      parser = ASTParser.newParser(AST.JLS12);
+    }
+   
+   return parser;
 }
 
 
@@ -184,7 +199,7 @@ public static Expression parseExpression(String text)
 {
    IvyLog.logD("JCOMP","Start parsing expression " + text);
    
-   ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
+   ASTParser parser = getAstParser();
    Map<String,String> options = JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
    options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
@@ -213,7 +228,7 @@ public static ASTNode parseDeclarations(String text)
 {
    IvyLog.logD("JCOMP","Start parsing declarations " + text);
    
-   ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
+   ASTParser parser = getAstParser();
    parser.setKind(ASTParser.K_CLASS_BODY_DECLARATIONS);
    Map<String,String> options = JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);

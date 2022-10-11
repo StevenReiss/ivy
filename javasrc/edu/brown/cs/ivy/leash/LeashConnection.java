@@ -189,11 +189,13 @@ boolean startServer()
 	     }
           }
 	 else {
+            String fnm1 = fnm;
+            if (fnm.equals("asm.jar")) fnm1 = "asm9.jar";
             boolean fnd = false;
 	    for (StringTokenizer tok2 = new StringTokenizer(cp,File.pathSeparator);
                tok2.hasMoreTokens(); ) {
 	       String p2 = tok2.nextToken();
-	       if (p2.contains(fnm)) {
+	       if (p2.contains(fnm) || p2.contains(fnm1)) {
 		  cpbuf.append(p2);
                   cpbuf.append(File.pathSeparator);
                   fnd = true;
