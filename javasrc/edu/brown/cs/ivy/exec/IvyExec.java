@@ -199,7 +199,7 @@ private ReaderThread error_thread;
 
 private static IvyExecFiles exec_poller = new IvyExecFiles();
 private static boolean	use_polling = false;
-private static AtomicInteger thread_counter =  new AtomicInteger(0); 
+private static AtomicInteger thread_counter =  new AtomicInteger(0);
 
 
 
@@ -317,6 +317,9 @@ private void doExec(String [] args,String [] env,File cwd,int flags) throws IOEx
       cnm = args[0];
       int idx = cnm.lastIndexOf(File.separator);
       if (idx > 0) cnm = cnm.substring(idx+1);
+    }
+   else {
+      throw new IOException("Nothing to execute");
     }
 
    String osnm = System.getProperty("os.name");
@@ -744,17 +747,17 @@ public static List<String> tokenize(String cmd)
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Replace common terms in a string                                        */
-/*                                                                              */
+/*										*/
+/*	Replace common terms in a string					*/
+/*										*/
 /********************************************************************************/
 
 private static String expandString(String name)
 {
    StringBuffer buf = new StringBuffer();
-   
+
    if (name == null) return null;
-   
+
    for (int i = 0; i < name.length(); ++i) {
       char c = name.charAt(i);
       if (c == '$' && i+1 < name.length() && name.charAt(i+1) == '(') {
@@ -765,23 +768,23 @@ private static String expandString(String name)
 	 if (i >= name.length()) break;
 	 String erslt = null;
 	 String what = tok.toString();
-	 
-         if (what.equals("PRO")) what = "ROOT";
-         else if (what.equals("USER")) what = "user.name";
-         else if (what.equals("HOME")) what = "user.home";
-         else if (what.equals("CWD")) what = "user.dir";
-         erslt = System.getProperty(what);
-         if (erslt == null) erslt = System.getProperty("edu.brown.cs.ivy." + what);
-         if (erslt == null) erslt = System.getenv(what);
-         if (erslt == null) erslt = System.getenv("BROWN_IVY_" + what);
-         if (erslt == null) erslt = System.getenv("BROWN_" + what);
-         if (erslt == null && what.equals("HOST")) erslt = IvyExecQuery.computeHostName();
+	
+	 if (what.equals("PRO")) what = "ROOT";
+	 else if (what.equals("USER")) what = "user.name";
+	 else if (what.equals("HOME")) what = "user.home";
+	 else if (what.equals("CWD")) what = "user.dir";
+	 erslt = System.getProperty(what);
+	 if (erslt == null) erslt = System.getProperty("edu.brown.cs.ivy." + what);
+	 if (erslt == null) erslt = System.getenv(what);
+	 if (erslt == null) erslt = System.getenv("BROWN_IVY_" + what);
+	 if (erslt == null) erslt = System.getenv("BROWN_" + what);
+	 if (erslt == null && what.equals("HOST")) erslt = IvyExecQuery.computeHostName();
 	 if (erslt != null) buf.append(erslt);
        }
       else if (c == '/') buf.append(File.separatorChar);
       else buf.append(c);
     }
-   
+
    return buf.toString();
 }
 

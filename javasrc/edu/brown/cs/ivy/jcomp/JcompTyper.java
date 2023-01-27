@@ -306,6 +306,12 @@ public JcompType findSystemType(String nm)
       String t1 = nm.substring(idx+1,idx1);
       return findParameterizedSystemType(t0,t1);
     }
+   
+   if (nm.startsWith("REF$")) {
+      
+    }
+
+
 
    jt = type_context.defineKnownType(this,nm);
    if (jt == null) return null;

@@ -195,7 +195,7 @@ static {
     }
 // IvySetup.setup();
 }
- 
+
 
 
 /********************************************************************************/
@@ -286,8 +286,8 @@ public static String expandText(String name,Map<String,String> vals)
 {
    return expandText(name,vals,true);
 }
-   
-   
+
+
 public static String expandText(String name,Map<String,String> vals,boolean sys)
 {
    StringBuffer buf = new StringBuffer();
@@ -309,19 +309,19 @@ public static String expandText(String name,Map<String,String> vals,boolean sys)
 	 if (idx > 0) {
 	    dflt = what.substring(idx+1).trim();
 	    what = what.substring(0,idx).trim();
-            dflt = fixTimeValue(dflt);
+	    dflt = fixTimeValue(dflt);
 	  }
 	 if (vals != null && vals.containsKey(what)) {
 	    erslt = vals.get(what);
 	  }
-         else if (sys) {
-            if (what.equals("USER")) what = "user.name";
-            else if (what.equals("HOME")) what = "user.home";
-            else if (what.equals("CWD")) what = "user.dir";
-            if (erslt == null) erslt = System.getProperty(what);
-            if (erslt == null) erslt = System.getenv(what);
-            if (erslt == null && what.equals("HOST")) erslt = computeHostName();
-          }
+	 else if (sys) {
+	    if (what.equals("USER")) what = "user.name";
+	    else if (what.equals("HOME")) what = "user.home";
+	    else if (what.equals("CWD")) what = "user.dir";
+	    if (erslt == null) erslt = System.getProperty(what);
+	    if (erslt == null) erslt = System.getenv(what);
+	    if (erslt == null && what.equals("HOST")) erslt = computeHostName();
+	  }
 	 if (erslt == null) erslt = dflt;
 	 if (erslt != null) buf.append(erslt);
        }
@@ -339,20 +339,20 @@ private static String fixTimeValue(String val)
       val = val.substring(1);
     }
    else return val;
-   
+
    int delta = 60*60*1000;
    if (val.startsWith("+")) {
       val = val.substring(1);
       delta = Integer.parseInt(val);
     }
-   long t0 = System.currentTimeMillis() + delta; 
+   long t0 = System.currentTimeMillis() + delta;
    t0 = (t0 + APPROX_TIME-1) / APPROX_TIME;
    t0 = t0 * APPROX_TIME;
-   
+
    Date d = new Date(t0);
    String rslt = TIME_FORMAT.format(d);
-   
-   return rslt; 
+
+   return rslt;
 }
 
 
@@ -483,7 +483,7 @@ public static String loadFile(Reader fr) throws IOException
 }
 
 
-public static String loadFile(InputStream ins) throws IOException 
+public static String loadFile(InputStream ins) throws IOException
 {
    InputStreamReader isr = new InputStreamReader(ins);
    return loadFile(isr);
@@ -515,9 +515,9 @@ public static void copyFile(File sf,File df) throws IOException
    try {
       byte [] buf = new byte[8192];
       for ( ; ; ) {
-         int ln = r.read(buf);
-         if (ln <= 0) break;
-         w.write(buf,0,ln);
+	 int ln = r.read(buf);
+	 if (ln <= 0) break;
+	 w.write(buf,0,ln);
        }
     }
    finally {
@@ -534,9 +534,9 @@ public static void copyFile(InputStream r,File df) throws IOException
    try {
       byte [] buf = new byte[8192];
       for ( ; ; ) {
-         int ln = r.read(buf);
-         if (ln <= 0) break;
-         w.write(buf,0,ln);
+	 int ln = r.read(buf);
+	 if (ln <= 0) break;
+	 w.write(buf,0,ln);
        }
     }
    finally {
@@ -553,9 +553,9 @@ public static void copyFileNoClose(InputStream r,File df) throws IOException
    try {
       byte [] buf = new byte[8192];
       for ( ; ; ) {
-         int ln = r.read(buf);
-         if (ln <= 0) break;
-         w.write(buf,0,ln);
+	 int ln = r.read(buf);
+	 if (ln <= 0) break;
+	 w.write(buf,0,ln);
        }
     }
    finally {
@@ -570,8 +570,8 @@ public static void copyHierarchy(File sd,File dd) throws IOException
    if (sd.isDirectory()) {
       if (!dd.exists()) dd.mkdirs();
       for (File f : sd.listFiles()) {
-         File df = new File(dd,f.getName());
-         copyHierarchy(f,df);
+	 File df = new File(dd,f.getName());
+	 copyHierarchy(f,df);
        }
     }
    else {
@@ -588,9 +588,9 @@ public static void copyFile(File sf,OutputStream w) throws IOException
    try {
       byte [] buf = new byte[8192];
       for ( ; ; ) {
-         int ln = r.read(buf);
-         if (ln <= 0) break;
-         w.write(buf,0,ln);
+	 int ln = r.read(buf);
+	 if (ln <= 0) break;
+	 w.write(buf,0,ln);
        }
     }
    finally {
@@ -620,9 +620,9 @@ public static void copyFile(File sf,Writer w) throws IOException
    try {
       char [] buf = new char[8192];
       for ( ; ; ) {
-         int ln = r.read(buf);
-         if (ln <= 0) break;
-         w.write(buf,0,ln);
+	 int ln = r.read(buf);
+	 if (ln <= 0) break;
+	 w.write(buf,0,ln);
        }
     }
    finally {
@@ -636,16 +636,16 @@ public static void copyFile(File sf,Writer w) throws IOException
 public static void copyFile(File sf,File df,Map<String,String> vals) throws IOException
 {
    try (
-         BufferedReader r = new BufferedReader(new FileReader(sf));
-         FileWriter w = new FileWriter(df)) {
+	 BufferedReader r = new BufferedReader(new FileReader(sf));
+	 FileWriter w = new FileWriter(df)) {
       String eol = System.getProperty("line.separator");
       if (eol == null) eol = "\n";
       for ( ; ; ) {
-         String ln = r.readLine();
-         if (ln == null) break;
-         ln = expandText(ln,vals);
-         w.write(ln);
-         w.write(eol);
+	 String ln = r.readLine();
+	 if (ln == null) break;
+	 ln = expandText(ln,vals);
+	 w.write(ln);
+	 w.write(eol);
        }
     }
 }
@@ -653,9 +653,9 @@ public static void copyFile(File sf,File df,Map<String,String> vals) throws IOEx
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Path management methods                                                 */
-/*                                                                              */
+/*										*/
+/*	Path management methods 						*/
+/*										*/
 /********************************************************************************/
 
 public static String getRelativePath(File f,File dir)
@@ -663,18 +663,18 @@ public static String getRelativePath(File f,File dir)
    String p1 = f.getAbsolutePath();
    String p2 = dir.getAbsolutePath();
    if (p1.equals(p2)) return "";
-   
+
    if (p2.length() > p1.length()) {
       String p3 = p1;
       p1 = p2;
       p2 = p3;
     }
    else if (p1.length() == p2.length()) return null;
-   
+
    if (!p1.startsWith(p2)) return null;
    char ch = p1.charAt(p2.length());
    if (ch != File.separatorChar) return null;
-   
+
    return p1.substring(p2.length()+1);
 }
 
@@ -684,19 +684,19 @@ public static File getCommonParent(File f1,File f2)
 {
    List<File> path1 = new ArrayList<File>();
    List<File> path2 = new ArrayList<File>();
-   
+
    path1.add(f1);
    while (f1.getParentFile() != null) {
       f1 = f1.getParentFile();
       path1.add(f1);
     }
-   
+
    path2.add(f2);
    while (f2.getParentFile() != null) {
       f2 = f2.getParentFile();
       path2.add(f2);
     }
-   
+
    File par = null;
    for (int i = 0; ; ++i) {
       if (i >= path1.size() || i >= path2.size()) break;
@@ -712,21 +712,21 @@ public static File getCommonParent(File f1,File f2)
 public static File getCanonical(File f1)
 {
    if (f1 == null) return null;
-   
+
    try {
       f1 = f1.getCanonicalFile();
     }
    catch (IOException e) {
       f1 = f1.getAbsoluteFile();
     }
-   
+
    return f1;
 }
 
 public static String getCanonicalPath(File f1)
 {
    if (f1 == null) return null;
-   
+
    try {
       return f1.getCanonicalPath();
     }
@@ -741,9 +741,9 @@ public static String getCanonicalPath(File f1)
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Encoding methods                                                        */
-/*                                                                              */
+/*										*/
+/*	Encoding methods							*/
+/*										*/
 /********************************************************************************/
 
 public static String digestString(String text)
@@ -762,15 +762,15 @@ public static String digestString(String text)
       rslt = buf.toString();
     }
    catch (NoSuchAlgorithmException e) { }
-   
+
    return rslt;
 }
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      JAR utilities                                                           */
-/*                                                                              */
+/*										*/
+/*	JAR utilities								*/
+/*										*/
 /********************************************************************************/
 
 public static File getJarFile(Class<?> c)
@@ -782,9 +782,9 @@ public static File getJarFile(Class<?> c)
    if (url == null) return null;
    String file = url.toString();
    if (file.startsWith("jar:file:/")) file = file.substring(9);
-   if (file.length() >= 3 && file.charAt(0) == '/' && 
-         Character.isLetter(file.charAt(1)) && file.charAt(2) == ':' &&
-         File.separatorChar == '\\') file = file.substring(1);
+   if (file.length() >= 3 && file.charAt(0) == '/' &&
+	 Character.isLetter(file.charAt(1)) && file.charAt(2) == ':' &&
+	 File.separatorChar == '\\') file = file.substring(1);
    int idx = file.lastIndexOf("!");
    if (idx > 0) file = file.substring(0,idx);
    if (File.separatorChar != '/') file = file.replace('/',File.separatorChar);
@@ -798,9 +798,9 @@ public static File getJarFile(Class<?> c)
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Host name utilities                                                     */
-/*                                                                              */
+/*										*/
+/*	Host name utilities							*/
+/*										*/
 /********************************************************************************/
 
 public static String computeHostName()
@@ -813,9 +813,23 @@ public static String computeHostName()
    catch (IOException e ) {
       System.err.println("IVY: Problem getting host name: " + e);
     }
-   
+
    return "localhost";
 }
 
 
 }	// end of class IvyFile
+
+
+
+
+
+
+
+
+
+
+
+
+
+				

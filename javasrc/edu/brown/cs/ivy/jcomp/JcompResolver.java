@@ -828,6 +828,9 @@ private class RefPass extends ASTVisitor {
    }
 
    public @Override boolean visit(MethodInvocation n) {
+      if (n.toString().startsWith("c.find("))
+         System.err.println("CHECK HERE");
+      
       JcompType bt = cur_type;
       Expression e = n.getExpression();
       boolean isstatic = false;
@@ -1340,6 +1343,7 @@ private class RefPass extends ASTVisitor {
       JcompType rettype = JcompAst.getExprType(e.getBody());
       JcompType methodtype = type_data.createMethodType(rettype,argtypes,false,null);
       JcompType reftype = JcompType.createFunctionRefType(methodtype,null,fsym);
+      reftype = type_data.fixJavaType(reftype);
       JcompAst.setExprType(e,reftype);
       JcompAst.setJavaType(e,reftype);
     }
@@ -1435,6 +1439,9 @@ private class RefPass extends ASTVisitor {
             mtyp = type_data.createMethodType(rtyp.getBaseType(),comps,
                   rtyp.isVarArgs(),null);
           }
+         else {
+            mtyp = type_data.createMethodType(rtyp.getBaseType(),comps,false,null);
+          }
        }
       // should handle type arguments
       boolean thisarg = false;
@@ -1448,19 +1455,16 @@ private class RefPass extends ASTVisitor {
                js = ms;
                break;
              }
-            else if (!ms.isStatic() && mtyp != null &&
-        	  ms.getType().isCompatibleWith(mtyp)) {
+            else if (!ms.isStatic() && mtyp != null && ms.getType().isCompatibleWith(mtyp)) {
                thisarg = true;
                js = ms;
                break;
              }
-            else if (!ms.isStatic() && ctyp != null &&
-        	  ms.getType().isCompatibleWith(ctyp)) {
+            else if (!ms.isStatic() && ctyp != null && ms.getType().isCompatibleWith(ctyp)) {
                js = ms;
                break;
              }
-            else if (!ms.isStatic() && ref &&
-        	  ms.getType().isCompatibleWith(rtyp)) {
+            else if (!ms.isStatic() && ref && ms.getType().isCompatibleWith(rtyp)) {
                thisarg = true;
                js = ms;
                break;
@@ -1481,6 +1485,7 @@ private class RefPass extends ASTVisitor {
           }
          JcompSymbol rsym = JcompAst.getDefinition(r);
          JcompType reftype = JcompType.createFunctionRefType(styp,nstype,rsym,js);
+         reftype = type_data.fixJavaType(reftype);
          JcompAst.setExprType(r,reftype);
          JcompAst.setJavaType(r,reftype);
        }

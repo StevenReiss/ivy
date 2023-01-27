@@ -3266,7 +3266,9 @@ private static class FunctionRefType extends JcompType {
 
    @Override public boolean isCompatibleWith(JcompType jt) {
       JcompType mt = jt.getFunctionalType();
-      if (mt == null) return false;
+      if (mt == null) {
+         return false;
+       }
      // if (mt.isCompatibleWith(method_type)) return true;
       if (method_type.isCompatibleWith(mt)) return true;
       if (nonstatic_type != null && mt.isCompatibleWith(nonstatic_type)) return true;
