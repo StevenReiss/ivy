@@ -11,6 +11,7 @@ PACKAGE= exec
 
 
 SFILES= \
+	IvyCopyright.java \
 	IvyExec.java \
 	IvyExecFiles.java \
 	IvyExecQuery.java \

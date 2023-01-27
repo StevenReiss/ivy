@@ -43,6 +43,8 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodReference;
 import org.objectweb.asm.Opcodes;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -205,15 +207,19 @@ static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
    if (mth2.isAbstract() && !mth1.isAbstract()) return true;
 
    int ctx = getTypeDepth(mth1.getClassType(),mth2.getClassType());
+   int ctx1 = getTypeDepth(mth2.getClassType(),mth1.getClassType());
+   IvyLog.logD("BETTER TYPE " + mth1.getFullName() + " " + mth2.getFullName() + " " +
+         ctx + " " + ctx1);
+   
+   
    if (ctx == 0) {
       if ((mth1.getModifiers() & Opcodes.ACC_BRIDGE) != 0) return false;
       else if ((mth2.getModifiers() & Opcodes.ACC_BRIDGE) != 0) return true;
       if ((mth1.getModifiers() & Opcodes.ACC_SYNTHETIC) != 0) return false;
       else if ((mth2.getModifiers() & Opcodes.ACC_SYNTHETIC) != 0) return true;
     }
-   if (ctx >= 0) return true;
-   ctx = getTypeDepth(mth2.getClassType(),mth1.getClassType());
    if (ctx >= 0) return false;
+   if (ctx1 >= 0) return true;
 
    return false;
 }
