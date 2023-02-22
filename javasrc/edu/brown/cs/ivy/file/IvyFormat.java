@@ -367,15 +367,17 @@ public static String getLiteralValue(String s)
 	 c = s.charAt(i);
 	 if (Character.toUpperCase(c) == 'U') {
 	    i++;
-	    String unicodeChars = s.substring(i, i + 4);
+            int eidx = Math.min(s.length()-1,i+4);
+	    String unicodeChars = s.substring(i, eidx);
 	    int val = Integer.parseInt(unicodeChars, 16);
-	    i += 4 - 1;
+	    i = eidx;
 	    buf.append((char) val);
           }
 	 else if (Character.isDigit(c)) {
-            String octchars = s.substring(i,i+3);
+            int eidx = Math.min(s.length()-1,i+3);
+            String octchars = s.substring(i,eidx);
             int val = Integer.parseInt(octchars,8);
-	    i += 3;
+	    i = eidx;
             buf.append((char) val);
           }
 	 else {

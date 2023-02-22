@@ -1448,30 +1448,32 @@ private class TypePreSetter extends AbstractTypeSetter {
       canbe_type = false;
       set_types = false;
    
-      if ((t.getModifiers() & Modifier.ABSTRACT) != 0) {
-         jt.setAbstract(true);
-       }
-      if (out != null && (t.getModifiers() & Modifier.STATIC) == 0 && !out.isInterfaceType()) {
-         jt.setInnerNonStatic(true);
-       }
-   
-      if (type_prefix != null) nm = type_prefix + "." + nm;
-      Type sty = t.getSuperclassType();
-      if (sty != null) {
-          JcompType suptyp = JcompAst.getJavaType(sty);
-         jt.setSuperType(suptyp);
-       }
-      for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-         Type ity = (Type) it.next();
-         if (ity != null) {
-            JcompType inttyp = JcompAst.getJavaType(ity);
-            if (!inttyp.isUndefined()) jt.addInterface(inttyp);
-            // else System.err.println("Undefined pretype " + ity);
+      if (jt != null) {
+         if ((t.getModifiers() & Modifier.ABSTRACT) != 0) {
+            jt.setAbstract(true);
           }
+         if (out != null && (t.getModifiers() & Modifier.STATIC) == 0 && !out.isInterfaceType()) {
+            jt.setInnerNonStatic(true);
+          }
+         
+         if (type_prefix != null) nm = type_prefix + "." + nm;
+         Type sty = t.getSuperclassType();
+         if (sty != null) {
+            JcompType suptyp = JcompAst.getJavaType(sty);
+            jt.setSuperType(suptyp);
+          }
+         for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
+            Type ity = (Type) it.next();
+            if (ity != null) {
+               JcompType inttyp = JcompAst.getJavaType(ity);
+               if (!inttyp.isUndefined()) jt.addInterface(inttyp);
+               // else System.err.println("Undefined pretype " + ity);
+             }
+          }
+         
+         String sgn = getClassSignature(t,jt);
+         jt.setSignature(sgn);
        }
-   
-      String sgn = getClassSignature(t,jt);
-      jt.setSignature(sgn);
    
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
@@ -1614,35 +1616,38 @@ private class TypeSetter extends AbstractTypeSetter {
       visitList(t.superInterfaceTypes());
       visitItem(t.getName());
       canbe_type = false;
-      if ((t.getModifiers() & Modifier.ABSTRACT) != 0) {
-         jt.setAbstract(true);
-       }
-      if (out != null && (t.getModifiers() & Modifier.STATIC) == 0 && !out.isInterfaceType()) {
-         jt.setInnerNonStatic(true);
-       }
-   
-      if (type_prefix != null) nm = type_prefix + "." + nm;
-      Type sty = t.getSuperclassType();
-      if (sty != null) {
-         JcompType suptyp = JcompAst.getJavaType(sty);
-         if (suptyp.isUndefined()) {
-            // System.err.println("Super type is undefined");
+      
+      if (jt != null) {
+         if ((t.getModifiers() & Modifier.ABSTRACT) != 0) {
+            jt.setAbstract(true);
           }
-         jt.setSuperType(suptyp);
-       }
-      for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-         Type ity = (Type) it.next();
-         if (ity != null) {
-            JcompType inttyp = JcompAst.getJavaType(ity);
-            if (inttyp.isUndefined()) {
-               // System.err.println("Interface type is undefined");
+         if (out != null && (t.getModifiers() & Modifier.STATIC) == 0 && !out.isInterfaceType()) {
+            jt.setInnerNonStatic(true);
+          }
+         
+         if (type_prefix != null) nm = type_prefix + "." + nm;
+         Type sty = t.getSuperclassType();
+         if (sty != null) {
+            JcompType suptyp = JcompAst.getJavaType(sty);
+            if (suptyp.isUndefined()) {
+               // System.err.println("Super type is undefined");
              }
-            jt.addInterface(inttyp);
+            jt.setSuperType(suptyp);
           }
+         for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
+            Type ity = (Type) it.next();
+            if (ity != null) {
+               JcompType inttyp = JcompAst.getJavaType(ity);
+               if (inttyp.isUndefined()) {
+                  // System.err.println("Interface type is undefined");
+                }
+               jt.addInterface(inttyp);
+             }
+          }
+         
+         String sgn = getClassSignature(t,jt);
+         jt.setSignature(sgn);
        }
-   
-      String sgn = getClassSignature(t,jt);
-      jt.setSignature(sgn);
    
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
