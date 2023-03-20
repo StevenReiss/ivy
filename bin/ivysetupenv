@@ -59,6 +59,10 @@ else
    setenv BROWN_IVY_IVY $y2
    setenv BROWN_IVY_ARCH `$BROWN_IVY_IVY/bin/ivyarch`
 
+   if ($?PRO == 0) then
+      setenv PRO $BROWN_IVY_ROOT
+   endif
+
    if ($?LD_LIBRARY_PATH == 0) then
       setenv LD_LIBRARY_PATH "$BROWN_IVY_IVY/lib/${BROWN_IVY_ARCH}"
    else
@@ -148,7 +152,7 @@ endif
 
 
 if ($?CLASSPATH) then
-   set xxx = `echo $CLASSPATH | fgrep ivy/java`
+   set xxx = `echo $CLASSPATH | grep -F ivy/java`
    if ( "X$xxx" == X ) then
       setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/java:$BROWN_IVY_IVY/javasrc"
    endif
@@ -156,8 +160,8 @@ else
    setenv CLASSPATH "$BROWN_IVY_IVY/java:$BROWN_IVY_IVY/javasrc"
 endif
 
-set xxx = `echo $CLASSPATH | fgrep postgresql`
-set yyy = `echo $CLASSPATH | fgrep mysql`
+set xxx = `echo $CLASSPATH | grep -F postgresql`
+set yyy = `echo $CLASSPATH | grep -F mysql`
 if ($?BROWN_IVY_DBMS == 0) then
    if (-e $BROWN_IVY_IVY/lib/postgresqlcopy.jar) then
       setenv BROWN_IVY_DBMS "$BROWN_IVY_IVY/lib/postgresqlcopy.jar"
@@ -179,28 +183,28 @@ if ($?BROWN_IVY_DBMS == 0) then
    endif
 endif
 
-set xxx = `echo $CLASSPATH | fgrep asm.jar`
+set xxx = `echo $CLASSPATH | grep -F asm.jar`
 if ( "X$xxx" == X ) then
    setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/asm.jar"
 endif
 
-set xxx = `echo $CLASSPATH | fgrep javax.servlet.jar`
+set xxx = `echo $CLASSPATH | grep -F javax.servlet.jar`
 if ( "X$xxx" == X ) then
    setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/javax.servlet.jar"
 endif
 
-set xxx = `echo $CLASSPATH | fgrep jce.jar`
+set xxx = `echo $CLASSPATH | grep -F jce.jar`
 if ( "X$xxx" == X  && -e $BROWN_IVY_IVY/lib/jce.jar) then
    setenv CLASSPATH "${CLASSPATH}:$BROWN_IVY_IVY/lib/jce.jar"
 endif
 
-set xxx = `echo $CLASSPATH | fgrep junit`
+set xxx = `echo $CLASSPATH | grep -F junit`
 if ( "X$xxx" == X ) then
    set junit = $BROWN_IVY_IVY/lib/junit.jar
    setenv CLASSPATH "${CLASSPATH}:$junit"
 endif
 
-set xxx = `echo $CLASSPATH | fgrep org.eclipse.jdt.debug`
+set xxx = `echo $CLASSPATH | grep -F org.eclipse.jdt.debug`
 # if ( "X$xxx" == X && $?ECLIPSEROOT == 0 ) then
 if ( "X$xxx" == X ) then
    set eclipsejar =
@@ -211,7 +215,7 @@ if ( "X$xxx" == X ) then
    setenv CLASSPATH "${CLASSPATH}$ECLIPSEPATH"
 endif
 
-set xxx = `echo $CLASSPATH | fgrep org.eclipse.jdt.debug`
+set xxx = `echo $CLASSPATH | grep -F org.eclipse.jdt.debug`
 if ( "X$xxx" == X  && 0 == 1 ) then
    if ( $?ECLIPSEROOT == 1) then
       set eclipse = $ECLIPSEROOT
@@ -259,7 +263,7 @@ endif
 
 if ($BROWN_IVY_ARCH == ppc) then
    if ($?LD_LIBRARY_PATH) then
-      set xxx = `echo $LD_LIBRARY_PATH | fgrep /usr/local/lib`
+      set xxx = `echo $LD_LIBRARY_PATH | grep -F /usr/local/lib`
       if ( "X$xxx" == X) then
 	 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/local/lib"
       endif
@@ -290,7 +294,7 @@ endif
 if ($?LD_LIBRARY_PATH == 0) then
    set xxx =
 else
-   set xxx = `echo $LD_LIBRARY_PATH | fgrep ivy/lib`
+   set xxx = `echo $LD_LIBRARY_PATH | grep -F ivy/lib`
 endif
 if ( "X$xxx" == X && $?BROWN_VELD_ARCH != 0 ) then
    if ($BROWN_VELD_ARCH == i686 || $BROWN_VELD_ARCH == x86_64) then

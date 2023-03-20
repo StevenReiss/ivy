@@ -14,6 +14,9 @@ SUBVER = 0
 RCSVERSION = 0.0
 SVER= $(VERSION).$(SUBVER)
 
+
+
+
 INSTALL_TOP= $(BROWN_IVY_ROOT)
 ifneq ("$(wildcard /research/people/spr)","")
    CPRO=/research/people/spr
@@ -206,8 +209,8 @@ realinstall:
 jar:
 	rm -rf jar.files ivy.jar
 	(cd java; find . -follow -name '*.class' -print | \
-		fgrep -v .AppleDouble | \
-		fgrep -v tea/iced > ../jar.files )
+		grep -F -v .AppleDouble | \
+		grep -F -v tea/iced > ../jar.files )
 	cp javasrc/fait.xml java
 	cp lib/words java
 	(cd java; jar cf ../lib/ivy.jar `cat ../jar.files` fait.xml words )
@@ -255,11 +258,11 @@ javadoc:
 bubbles:
 	make jar
 	rm -rf src.files ivysrc.jar
-	(cd javasrc; find . -follow -name '*.java' -print | fgrep -v 'jflow'| fgrep -v 'cinder' | fgrep -v 'project' | fgrep -v 'pebble' > ../src.files )
+	(cd javasrc; find . -follow -name '*.java' -print | grep -F -v 'jflow'| grep -F -v 'cinder' | grep -F -v 'project' | grep -F -v 'pebble' > ../src.files )
 	(cd javasrc; jar cf ../ivysrc.jar `cat ../src.files` )
 	rm -rf src.files
 	mv ivysrc.jar $(PRO)/bubbles/
-	(cd java; find . -follow -name '*.class' -print | fgrep -v 'jflow'| fgrep -v 'cinder' | fgrep -v 'project' | fgrep -v 'pebble'  > ../bin.files )
+	(cd java; find . -follow -name '*.class' -print | grep -F -v 'jflow'| grep -F -v 'cinder' | grep -F -v 'project' | grep -F -v 'pebble'  > ../bin.files )
 	(cd java; jar cf ../ivybin.jar `cat ../bin.files` )
 	rm -rf bin.files
 	cp ivybin.jar $(PRO)/bubbles/suds/lib/ivy.jar
