@@ -208,9 +208,8 @@ static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
 
    int ctx = getTypeDepth(mth1.getClassType(),mth2.getClassType());
    int ctx1 = getTypeDepth(mth2.getClassType(),mth1.getClassType());
-   IvyLog.logD("BETTER TYPE " + mth1.getFullName() + " " + mth2.getFullName() + " " +
-         ctx + " " + ctx1);
-   
+// IvyLog.logD("BETTER TYPE " + mth1.getFullName() + " " + mth2.getFullName() + " " +
+//       ctx + " " + ctx1);
    
    if (ctx == 0) {
       if ((mth1.getModifiers() & Opcodes.ACC_BRIDGE) != 0) return false;

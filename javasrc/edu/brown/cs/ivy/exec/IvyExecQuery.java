@@ -240,6 +240,14 @@ public static String getProcessId()
    return null;
 }
 
+public static Integer getProcessNumber()
+{
+   String s = getProcessId();
+   if (s == null) return null;
+   int i = Integer.parseInt(s);
+   return i;
+}
+   
 
 
 public static String getHostName()

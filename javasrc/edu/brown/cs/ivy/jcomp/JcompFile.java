@@ -103,6 +103,7 @@ JcompFile(JcompSource rf)
 @Override public ASTNode getAstNode()
 {
    if (ast_root == null) {
+      IvyLog.logD("JCOMP","Start AST for " + getFile().getFileName());
       if (for_file instanceof JcompExtendedSource1 && for_project != null) {
 	 JcompExtendedSource1 efile = (JcompExtendedSource1) for_file;
 	 ast_root = efile.getAstRootNode(for_project.getProjectKey());
@@ -313,6 +314,7 @@ void setRoot(JcompProjectImpl root)
 
 @Override public void reparse()
 {
+   IvyLog.logD("JCOMP","Reparse " + getFile().getFileName());
    ast_root = null;
    for_project.setResolved(false,null);
 }

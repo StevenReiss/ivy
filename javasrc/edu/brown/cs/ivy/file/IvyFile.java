@@ -712,6 +712,7 @@ public static File getCommonParent(File f1,File f2)
 public static File getCanonical(File f1)
 {
    if (f1 == null) return null;
+   if (!f1.isAbsolute()) f1 = f1.getAbsoluteFile();
 
    try {
       f1 = f1.getCanonicalFile();
