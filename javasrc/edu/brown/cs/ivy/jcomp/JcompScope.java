@@ -43,8 +43,6 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodReference;
 import org.objectweb.asm.Opcodes;
 
-import edu.brown.cs.ivy.file.IvyLog;
-
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
