@@ -370,8 +370,9 @@ public static String getLiteralValue(String s)
             int eidx = Math.min(s.length()-1,i+4);
 	    String unicodeChars = s.substring(i, eidx);
 	    int val = Integer.parseInt(unicodeChars, 16);
-	    i = eidx;
-	    buf.append((char) val);
+            char cval = (char) val;
+	    i = eidx-1;
+	    buf.append(cval);
           }
 	 else if (Character.isDigit(c)) {
             int eidx = Math.min(s.length()-1,i+3);

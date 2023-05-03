@@ -247,7 +247,7 @@ private class ErrorVisitor extends ASTVisitor {
             IvyLog.logD("JCOMP","NOTE RETURN ERROR");
             addError("Must return value for method",IProblem.ReturnTypeMismatch,n);
           }
-         return;
+         return; 
        }
       
       JcompType rt = JcompAst.getExprType(ex);
