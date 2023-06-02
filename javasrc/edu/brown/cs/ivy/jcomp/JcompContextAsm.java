@@ -644,9 +644,11 @@ private class AsmClass {
       return rslt;
     }
 
-   synchronized void defineAll(JcompTyper typer,JcompScope scp) {
-      if (local_defined == null) local_defined = new HashSet<>();
-      else if (!local_defined.add(scp)) return;
+   void defineAll(JcompTyper typer,JcompScope scp) {
+      synchronized (this) {
+	 if (local_defined == null) local_defined = new HashSet<>();
+	 else if (!local_defined.add(scp)) return;
+       }
 
       for (AsmField af : field_data) {
 	 if (scp.lookupVariable(af.getName()) == null) {

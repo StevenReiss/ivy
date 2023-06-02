@@ -82,4 +82,4 @@ lib/eclipsejar.older
 lib/junit.jar.2
 lib/useneweclipse.csh
 pom.xml
-
+.nfs*
