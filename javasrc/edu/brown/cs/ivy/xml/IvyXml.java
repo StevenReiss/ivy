@@ -588,8 +588,8 @@ public static String decodeXmlString(String pcdata)
 	 c3 = lookAhead(3,i,pcdata);
 	 c4 = lookAhead(4,i,pcdata);
 	 c5 = lookAhead(5,i,pcdata);
-         c6 = lookAhead(6,i,pcdata);
-         c7 = lookAhead(7,i,pcdata);
+	 c6 = lookAhead(6,i,pcdata);
+	 c7 = lookAhead(7,i,pcdata);
 	 if (c1 == 'a' && c2 == 'm' && c3 == 'p' && c4 == ';') {
 	    n.append("&");
 	    i += 4;
@@ -624,20 +624,20 @@ public static String decodeXmlString(String pcdata)
 	    n.append(c0);
 	    i += 4;
 	  }
-         else if (c1 == '#' && c2 == 'x' && c6 == ';') {
-            char [] chrs = new char[] { c3,c4,c5 };
+	 else if (c1 == '#' && c2 == 'x' && c6 == ';') {
+	    char [] chrs = new char[] { c3,c4,c5 };
 	    String sc = new String(chrs);
 	    char c0 = (char) Integer.parseInt(sc,16);
 	    n.append(c0);
 	    i += 6;
-          }
-         else if (c1 == '#' && c2 == 'x' && c7 == ';') {
-            char [] chrs = new char[] { c3,c4,c5,c6 };
+	  }
+	 else if (c1 == '#' && c2 == 'x' && c7 == ';') {
+	    char [] chrs = new char[] { c3,c4,c5,c6 };
 	    String sc = new String(chrs);
 	    char c0 = (char) Integer.parseInt(sc,16);
 	    n.append(c0);
 	    i += 7;
-          }
+	  }
 	 else n.append("&");
        }
       else n.append(c);
@@ -696,6 +696,40 @@ public static String cdataSanitize(String s)
 public static String cdataExpand(String s)
 {
    s = s.replace("@@@]@@@]@@@>","]]>");
+   if (s.contains("&#x")) {
+      StringBuffer buf = new StringBuffer();
+      int idx = -1;
+      for (int i = s.indexOf("&#x",idx+1); i > 0; ++i) {
+	 buf.append(s.substring(idx+1,i));
+	 int val = 0;
+	 int k = -1;
+	 for (int j = i+3; j < s.length(); ++j) {
+	    char c = s.charAt(j);
+	    if (c == ';' && j > i+3) {
+	       buf.append((char) val);
+	       k = j;
+	       break;
+	    }
+	    else {
+	       int v = Character.digit(c,16);
+	       if (v < 0) {
+		  break;
+		}
+	       else {
+		  val = val*16 + v;
+		}
+	     }
+	  }
+	 if (k < 0) {
+	    buf.append("&#x");
+	    idx = i+2;
+	  }
+	 else {
+	    idx = k;
+	  }
+       }
+      s = buf.toString();
+    }
 
    return s;
 }
@@ -1265,9 +1299,9 @@ private static class NodeIterator implements Iterable<Element>, Iterator<Element
       if (isElement(xml)) cur_child = xml.getFirstChild();
       else cur_child = null;
       element_type = et;
-   
+
       while (cur_child != null && !isElement(cur_child,element_type)) {
-         cur_child = cur_child.getNextSibling();
+	 cur_child = cur_child.getNextSibling();
        }
     }
 
@@ -1430,15 +1464,15 @@ static public String getText(Node xml,boolean trim)
       StringBuffer buf = new StringBuffer();
 
       for (int i = 0; ; ++i) {
-         try {
-            Node nc = nl.item(i);
-            if (nc == null) break;
-            String s = getText(nc);
-            if (s != null) buf.append(s);
-          }
-         catch (Throwable t) {
-            System.err.println("Some problem");
-          }
+	 try {
+	    Node nc = nl.item(i);
+	    if (nc == null) break;
+	    String s = getText(nc);
+	    if (s != null) buf.append(s);
+	  }
+	 catch (Throwable t) {
+	    System.err.println("Some problem");
+	  }
        }
 
       if (buf.length() == 0) return null;
@@ -1611,31 +1645,31 @@ private static class XmlParser {
    XmlParser(boolean ns) throws Exception {
       DocumentBuilderFactory dbf = null;
       try {
-         dbf = DocumentBuilderFactory.newInstance();
+	 dbf = DocumentBuilderFactory.newInstance();
        }
       catch (Exception e) {
-         System.err.println("IVY XML: Problem creating document builder factory: " + e);
-         throw e;
+	 System.err.println("IVY XML: Problem creating document builder factory: " + e);
+	 throw e;
        }
       dbf.setValidating(false);
       // dbf.setXIncludeAware(false);
       dbf.setNamespaceAware(ns);
       dbf.setIgnoringElementContentWhitespace(true);
-   
+
       try {
-         System.setProperty("entityExpansionLimit","100000000");
+	 System.setProperty("entityExpansionLimit","100000000");
        }
       catch (Throwable e) { }
       try {
-         dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd",false);
+	 dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd",false);
        }
       catch (Throwable e) { }
       try {
-         parser_object = dbf.newDocumentBuilder();
+	 parser_object = dbf.newDocumentBuilder();
        }
       catch (ParserConfigurationException e) {
-         System.err.println("IvyXml: Problem creating java xml parser: " + e.getMessage());
-         System.exit(1);
+	 System.err.println("IvyXml: Problem creating java xml parser: " + e.getMessage());
+	 System.exit(1);
        }
     }
 
@@ -1653,8 +1687,8 @@ private static class XmlParser {
 
    void reset() {
       try {
-         parser_object.reset();
-         parse("<END/>");
+	 parser_object.reset();
+	 parse("<END/>");
        }
       catch (Throwable e) { }
     }

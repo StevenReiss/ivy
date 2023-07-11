@@ -163,6 +163,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -499,6 +500,34 @@ public String getCommand()			{ return exec_command; }
 public static void usePolling(boolean fg)	{ use_polling = fg; }
 
 
+public long getPid()
+{
+   if (exec_process == null) return 0;
+
+   try {
+      ProcessHandle ph = exec_process.toHandle();
+      return ph.pid();
+    }
+   catch (Throwable t) { }
+
+   return 0;
+}
+
+public long getParentPid()
+{
+   if (exec_process == null) return 0;
+   try {
+      ProcessHandle ph = exec_process.toHandle();
+      Optional<ProcessHandle> oph = ph.parent();
+      ProcessHandle par = oph.get();
+      return par.pid();
+    }
+   catch (Throwable t) { }
+
+   return 0;
+}
+
+
 
 /********************************************************************************/
 /*										*/
@@ -695,13 +724,15 @@ private static class ReaderThread extends Thread {
 
    @Override public void run() {
       try {
-         for ( ; ; ) {
-            String l = input_reader.readLine();
-            if (l == null) break;
-            if (output_writer != null) output_writer.println(l);
-          }
+	 for ( ; ; ) {
+	    String l = input_reader.readLine();
+	    if (l == null) break;
+	    if (output_writer != null) output_writer.println(l);
+	  }
        }
-      catch       (IOException e) { return; }
+      catch (IOException e) {
+	 return;
+       }
     }
 
 }	// end of subclass ReaderThread
@@ -717,6 +748,8 @@ private static class ReaderThread extends Thread {
 public static List<String> tokenize(String cmd)
 {
    List<String> argv = new ArrayList<String>();
+
+   if (cmd == null) return argv;
 
    char quote = 0;
    StringBuffer buf = new StringBuffer();
@@ -768,7 +801,7 @@ private static String expandString(String name)
 	 if (i >= name.length()) break;
 	 String erslt = null;
 	 String what = tok.toString();
-	
+
 	 if (what.equals("PRO")) what = "ROOT";
 	 else if (what.equals("USER")) what = "user.name";
 	 else if (what.equals("HOME")) what = "user.home";
