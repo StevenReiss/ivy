@@ -227,7 +227,7 @@ private boolean addChar(StringBuffer buf,int ch)
 
    switch (cur_state) {
       case 0 :							// start state
-	 if (ch == '{') {
+	 if (ch == '{' || ch == '[') {
 	    cur_state = 1;
 	    element_depth = 1;
 	  }
@@ -236,7 +236,7 @@ private boolean addChar(StringBuffer buf,int ch)
 	 if (ch == '"' || ch == '\'') {
 	    cur_state = 2;
 	    string_char = ch;
-	  }	
+	  }
 	 else if (ch == '}' || ch == ']') {
 	    if (--element_depth == 0) rslt = true;
 	  }

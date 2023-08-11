@@ -69,6 +69,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Vector;
 
@@ -153,9 +154,9 @@ public SwingHelpFrame(String title, String dir, String ext, String defau)
 
    help_prefix = "file:" + help_dir + File.separator;
    try {
-      default_page = new URL(help_prefix + defau);
+      default_page = new URI(help_prefix + defau).toURL();
     }
-   catch (java.net.MalformedURLException exc) {
+   catch (java.net.MalformedURLException | java.net.URISyntaxException exc) {
       System.err.println("Attempted to create a "
 			    + "bad URL: " + help_prefix + defau);
     }
@@ -291,7 +292,7 @@ protected void initHelp(String name)
       if (help_files[i].endsWith(name)) {
 	 String s = help_files[i];
 	 try {
-	    URL help_url = new URL(s);
+	    URL help_url = new URI(s).toURL();
 	    displayFile(help_url);
 	  }
 	 catch (Exception e) {
@@ -383,12 +384,12 @@ protected class HelpInfo {
    public HelpInfo(String help, String file) {
       helpName = help;
       try {
-	 fileName = new URL(help_prefix + file);
+         fileName = new URI(help_prefix + file).toURL();
        }
-      catch (java.net.MalformedURLException exc) {
-	 System.err.println("Attempted to create a HelpInfo "
-			       + "with a bad URL: " + fileName);
-	 fileName = null;
+      catch (java.net.MalformedURLException | java.net.URISyntaxException exc) {
+         System.err.println("Attempted to create a HelpInfo "
+        		       + "with a bad URL: " + fileName);
+         fileName = null;
        }
     }
 

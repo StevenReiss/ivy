@@ -119,6 +119,19 @@ JannotTreeJCEnhancedForLoop(EnhancedForStatement n)
 }
 
 
+public JannotTree getVariableOrRecordPattern()
+{
+   return null;
+}
+
+public EnhancedForLoopTree.DeclarationKind getDeclarationKind()
+{
+   return null;
+}
+
+
+
+
 
 /********************************************************************************/
 /*										*/

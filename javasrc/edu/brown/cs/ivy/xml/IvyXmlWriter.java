@@ -484,6 +484,12 @@ synchronized public void field(String elt,Date d)
 }
 
 
+synchronized public void field(String elt,File f)
+{
+   if (f != null) field(elt,f.getPath());
+}
+
+
 
 synchronized public void field(String elt,Object o)
 {

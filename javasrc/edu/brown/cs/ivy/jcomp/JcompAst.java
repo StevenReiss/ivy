@@ -115,7 +115,7 @@ public static CompilationUnit parseSourceFile(char [] buf)
    ASTParser parser = getAstParser();
    parser.setKind(ASTParser.K_COMPILATION_UNIT);
    parser.setSource(buf);
-   
+
    Map<String,String> options = JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
    options.put("org.eclipse.jdt.core.compiler.problem.enablePreviewFeatures","enabled");
@@ -124,7 +124,7 @@ public static CompilationUnit parseSourceFile(char [] buf)
    parser.setCompilerOptions(options);
    parser.setResolveBindings(false);
    parser.setStatementsRecovery(true);
-   
+
    try {
       CompilationUnit cu = (CompilationUnit) parser.createAST(null);
       IvyLog.logD("JCOMP","Finish parsing source file " + buf.length);
@@ -133,14 +133,14 @@ public static CompilationUnit parseSourceFile(char [] buf)
    catch (Throwable t) {
       IvyLog.logE("JCOMP","Problem parsing ast " + new String(buf),t);
       for (Throwable t0 = t; t0 != null; t0 = t0.getCause()) {
-         if (t0 instanceof ClassNotFoundException) {
-            System.err.println("JCOMP: Problem loading AST classes: " + t);
-            t.printStackTrace();
-            System.exit(17);
-          }
+	 if (t0 instanceof ClassNotFoundException) {
+	    System.err.println("JCOMP: Problem loading AST classes: " + t);
+	    t.printStackTrace();
+	    System.exit(17);
+	  }
        }
     }
-   
+
    return null;
 }
 
@@ -155,7 +155,7 @@ private static ASTParser getAstParser()
    catch (Throwable t) {
       parser = ASTParser.newParser(AST.JLS12);
     }
-   
+
    return parser;
 }
 
@@ -164,7 +164,7 @@ private static ASTParser getAstParser()
 public static ASTNode parseStatement(String text)
 {
    IvyLog.logD("JCOMP","Start parsing statement " + text);
-   
+
    ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
    parser.setKind(ASTParser.K_STATEMENTS);
    Map<String,String> options = JavaCore.getOptions();
@@ -181,7 +181,7 @@ public static ASTNode parseStatement(String text)
       Block blk = (Block) parser.createAST(null);
       IvyLog.logD("JCOMP","End parsing statement");
       if (blk.statements().size() == 1) {
-         return (ASTNode) blk.statements().get(0);
+	 return (ASTNode) blk.statements().get(0);
        }
       else if (blk.statements().size() == 0) return null;
       return blk;
@@ -198,7 +198,7 @@ public static ASTNode parseStatement(String text)
 public static Expression parseExpression(String text)
 {
    IvyLog.logD("JCOMP","Start parsing expression " + text);
-   
+
    ASTParser parser = getAstParser();
    Map<String,String> options = JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
@@ -227,7 +227,7 @@ public static Expression parseExpression(String text)
 public static ASTNode parseDeclarations(String text)
 {
    IvyLog.logD("JCOMP","Start parsing declarations " + text);
-   
+
    ASTParser parser = getAstParser();
    parser.setKind(ASTParser.K_CLASS_BODY_DECLARATIONS);
    Map<String,String> options = JavaCore.getOptions();
@@ -244,7 +244,7 @@ public static ASTNode parseDeclarations(String text)
       TypeDeclaration typ = (TypeDeclaration) parser.createAST(null);
       IvyLog.logD("JCOMP","End parsing declarations");
       if (typ.bodyDeclarations().size() == 1) {
-         return (ASTNode) typ.bodyDeclarations().get(0);
+	 return (ASTNode) typ.bodyDeclarations().get(0);
        }
       else if (typ.bodyDeclarations().size() == 0) return null;
       return typ;
@@ -252,7 +252,7 @@ public static ASTNode parseDeclarations(String text)
    catch (Throwable t) {
       IvyLog.logE("JCOMP","Problem parsing declarations " + text,t);
     }
-   
+
    return null;
 }
 
@@ -576,6 +576,8 @@ public static void setDefinition(ASTNode n,JcompSymbol t)
 
 public static JcompType getExprType(ASTNode n)
 {
+   if (n == null) return null;
+
    return (JcompType) n.getProperty(PROP_JAVA_ETYPE);
 }
 
@@ -639,7 +641,7 @@ static void setResolved(ASTNode n,JcompTyper jt)
 static public boolean isResolved(ASTNode n)
 {
    if (n == null) return true;
-   
+
    n = n.getRoot();
    return n.getProperty(PROP_JAVA_RESOLVED) == Boolean.TRUE;
 }
@@ -1243,20 +1245,20 @@ public static Expression findTypeReferenceNode(ASTNode n)
    for (ASTNode use = n; use != null; use = next) {
       next = null;
       switch (use.getNodeType()) {
-         case ASTNode.EXPRESSION_STATEMENT :
-            ExpressionStatement es1 = (ExpressionStatement) use;
-            next = es1.getExpression();
-            break;
-         case ASTNode.ASSIGNMENT :
-            Assignment as1 = (Assignment) use;
-            return as1.getRightHandSide();
-         case ASTNode.FOR_STATEMENT :
-            ForStatement fs = (ForStatement) use;
-            if (fs.initializers().size() != 1) return null;
-            next = (ASTNode) fs.initializers().get(0);
-            break;
-         default :
-            break;
+	 case ASTNode.EXPRESSION_STATEMENT :
+	    ExpressionStatement es1 = (ExpressionStatement) use;
+	    next = es1.getExpression();
+	    break;
+	 case ASTNode.ASSIGNMENT :
+	    Assignment as1 = (Assignment) use;
+	    return as1.getRightHandSide();
+	 case ASTNode.FOR_STATEMENT :
+	    ForStatement fs = (ForStatement) use;
+	    if (fs.initializers().size() != 1) return null;
+	    next = (ASTNode) fs.initializers().get(0);
+	    break;
+	 default :
+	    break;
        }
     }
    return null;

@@ -96,6 +96,7 @@ import javax.crypto.spec.PBEParameterSpec;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.rmi.server.UID;
@@ -254,7 +255,7 @@ private void sendMessage(String url,String hdr,byte [] code)
 {
    try {
       byte [] hb = hdr.getBytes("UTF-8");
-      URL u = new URL(url);
+      URL u = new URI(url).toURL();
       URLConnection uc = u.openConnection();
       uc.setUseCaches(false);
       uc.setDoOutput(true);
@@ -396,21 +397,21 @@ private class WebReaderThread extends Thread {
    @Override public void run() {
       System.err.println("STARTING READER");
       while (!isInterrupted()) {
-	 String url = web_url + "&T=RECV";
-	 try {
-	    URL u = new URL(url);
-	    System.err.println("MINT: WEB RECV " + u);
-	    URLConnection uc = u.openConnection();
-	    InputStream ins = uc.getInputStream();
-	    for ( ; ; ) {
-	       if (!readMessage(ins)) break;
-	     }
-	    ins.close();
-	  }
-	 catch (Exception e) {
-	    System.err.println("MINT: problem reading web message: " + e);
-	    e.printStackTrace();
-	  }
+         String url = web_url + "&T=RECV";
+         try {
+            URL u = new URI(url).toURL();
+            System.err.println("MINT: WEB RECV " + u);
+            URLConnection uc = u.openConnection();
+            InputStream ins = uc.getInputStream();
+            for ( ; ; ) {
+               if (!readMessage(ins)) break;
+             }
+            ins.close();
+          }
+         catch (Exception e) {
+            System.err.println("MINT: problem reading web message: " + e);
+            e.printStackTrace();
+          }
        }
     }
 

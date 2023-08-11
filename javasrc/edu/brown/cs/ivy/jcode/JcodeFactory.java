@@ -872,11 +872,11 @@ private class LoadTask implements Runnable {
                String c2 = "L" + c1 + ";";
                known_classes.put(c2,bc);
                if (c1.contains("$")) {
-        	  String c3 = c1.replace('$','.');
-        	  known_classes.put(c3,bc);
-        	  String c4 = load_class.replace('$','.');
-        	  known_classes.put(c4,bc);
-        	}
+                  String c3 = c1.replace('$','.');
+                  known_classes.put(c3,bc);
+                  String c4 = load_class.replace('$','.');
+                  known_classes.put(c4,bc);
+                }
              }
           }
         

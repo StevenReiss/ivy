@@ -39,6 +39,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -112,10 +114,10 @@ JannotProjectImpl(JcompProject jp)
 	    nm = "file:" + fent.getAbsolutePath();
 	    if (fent.isDirectory() && !nm.endsWith("/")) nm += "/";
 	  }
-	 URL u = new URL(nm);
+	 URL u = new URI(nm).toURL();
 	 urls[i] = u;
        }
-      catch (MalformedURLException e) {
+      catch (MalformedURLException | URISyntaxException e) {
 	 System.err.println("JANNOT: bad class path entry: " + nm + " : " + ent);
        }
     }

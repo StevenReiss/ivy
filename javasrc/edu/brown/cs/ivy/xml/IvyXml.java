@@ -437,6 +437,16 @@ public static String convertXmlToString(Node xml)
    return sw.toString();
 }
 
+public static String debugConvertXmlToString(Object v)
+{
+   if (v instanceof Node) {
+      return convertXmlToString(((Node) v));
+   }
+   if (v instanceof Element) {
+      return convertXmlToString(((Element) v));
+   }
+   return v.toString();
+}
 
 
 public static void addXml(Node n,Writer w) throws IOException
