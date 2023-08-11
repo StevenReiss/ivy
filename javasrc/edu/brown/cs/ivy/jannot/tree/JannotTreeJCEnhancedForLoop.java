@@ -42,7 +42,7 @@ import com.sun.source.tree.Tree;
 import com.sun.source.tree.TreeVisitor;
 
 public class JannotTreeJCEnhancedForLoop extends JannotTreeJCStatement
-	implements EnhancedForLoopTree
+//	implements EnhancedForLoopTree
 {
 
 
@@ -72,7 +72,8 @@ JannotTreeJCEnhancedForLoop(EnhancedForStatement n)
 
 @Override public <R,D> R accept(TreeVisitor<R,D> visitor,D arg)
 {
-   return visitor.visitEnhancedForLoop(this,arg);
+   return null;
+// return visitor.visitEnhancedForLoop(this,arg);
 }
 
 
@@ -100,34 +101,40 @@ JannotTreeJCEnhancedForLoop(EnhancedForStatement n)
 /*										*/
 /********************************************************************************/
 
-@Override public JannotTreeJCExpression getExpression()
+// @Override
+public JannotTreeJCExpression getExpression()
 {
    return createTree(getFor().getExpression());
 }
 
 
 
-@Override public JannotTreeJCStatement getStatement()
+// @Override
+public JannotTreeJCStatement getStatement()
 {
    return createTree(getFor().getBody());
 }
 
 
-@Override public JannotTreeJCVariableDecl getVariable()
+// @Override
+public JannotTreeJCVariableDecl getVariable()
 {
    return createTree(getFor().getParameter());
 }
 
 
+// @Override
 public JannotTree getVariableOrRecordPattern()
 {
    return null;
 }
 
-public EnhancedForLoopTree.DeclarationKind getDeclarationKind()
-{
-   return null;
-}
+
+// @Override
+// public EnhancedForLoopTree.DeclarationKind getDeclarationKind()
+// {
+//    return null;
+// }
 
 
 
