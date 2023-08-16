@@ -37,7 +37,6 @@ package edu.brown.cs.ivy.jannot.tree;
 
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 
-import com.sun.source.tree.EnhancedForLoopTree;
 import com.sun.source.tree.Tree;
 import com.sun.source.tree.TreeVisitor;
 

@@ -1369,12 +1369,13 @@ public final GridBagConstraints addGBComponent(Component c,int x,int y,int wd,in
 /********************************************************************************/
 
 public void setBannerPrototype(JLabel lbl)		{ banner_prototype = lbl; }
+public JLabel getBannerPrototype()                      { return banner_prototype; }
 public void setSectionPrototype(JLabel lbl)		{ section_prototype = lbl; }
 public void setLabelPrototype(JLabel lbl)		{ label_prototype = lbl; }
 
 
 
-protected JLabel createLabel(String txt,int halign,JLabel proto)
+public JLabel createLabel(String txt,int halign,JLabel proto)
 {
    JLabel lbl = new SwingLabel(txt,halign,i18n_map);
 
