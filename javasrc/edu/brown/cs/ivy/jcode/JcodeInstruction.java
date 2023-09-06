@@ -579,9 +579,11 @@ public JcodeMethod getMethodReference()
 	 // arrays might have methods from Object
 	 fm = in_method.getFactory().findMethod(null,"Ljava/lang/Object;",mn.name,mn.desc);
        }
-      if (fm == null && mn.owner.equals("java/lang/invoke/VarHandle")) {
-         fm = in_method.getFactory().findMethod(null,mn.owner,mn.name,null);
-         if (fm != null) {
+      if (mn.owner.equals("java/lang/invoke/VarHandle")) {
+         if (fm == null) {
+            fm = in_method.getFactory().findMethod(null,mn.owner,mn.name,null);
+          }
+         if (fm != null && !fm.isVarArgs()) {
             fm = fm.deriveMethod(mn.desc);
           }
          // could be varargs

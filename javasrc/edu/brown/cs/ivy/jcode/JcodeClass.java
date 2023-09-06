@@ -236,7 +236,7 @@ public JcodeMethod findMethod(String nm,String desc)
             sgn = sgn.substring(idx1,idx2+1);
             if (sgn.equals(argdesc)) return bm;
           }
-         
+         if (bm.isPolymorphic()) return bm;
          // if (desc.endsWith(")") && bmd.startsWith(desc)) return bm;
        }
     }

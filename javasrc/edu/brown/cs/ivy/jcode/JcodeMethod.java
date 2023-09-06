@@ -189,6 +189,14 @@ public boolean isAbstract()
    return Modifier.isAbstract(access);
 }
 
+public boolean isPolymorphic()
+{
+   if (visibleAnnotations == null) return false;
+   for (AnnotationNode an : visibleAnnotations) {
+      if (an.desc.contains("PolymorphicSignature")) return true;
+    }
+   return false;
+}
 
 public boolean isNative()
 {
