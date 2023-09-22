@@ -356,11 +356,26 @@ public static String formatTypeName(String javatype)
 /*                                                                              */
 /********************************************************************************/
 
-public static String getLiteralValue(String s)
+public static String getLiteralValue(String s) {
+   return getLiteralValue(s,true);
+}
+
+public static String getRawLiteralValue(String s) {
+   return getLiteralValue(s,false);
+}
+
+
+private static String getLiteralValue(String s,boolean quoted)
 {
    StringBuffer buf = new StringBuffer();
-   int last = s.length() - 1;
-   for (int i = 1; i < last; i++) {
+   int start = 0;
+   int last = s.length();
+   if (quoted) {
+      ++start;
+      --last;
+    }
+  
+   for (int i = start; i < last; i++) {
       char c = s.charAt(i);
       if (c == '\\') {
 	 i++;
