@@ -1408,29 +1408,29 @@ private static class NodeSpecIterator implements Iterable<Element>, Iterator<Ele
 
    private void findNext() {
       while (cur_child != null) {
-	 Node n = cur_child.getFirstChild();
-	 if (n != null) cur_child = n;
-	 else {
-	    if (cur_child == root_node) {
-	       cur_child = null;
-	       return;
-	     }
-	    n = cur_child.getNextSibling();
-	    if (n != null) cur_child = n;
-	    else {
-	       while (n == null) {
-		  n = cur_child.getParentNode();
-		  if (n == null || n == root_node) {
-		     n = null;
-		     break;
-		   }
-	     cur_child = n;
-	     n = cur_child.getNextSibling();
-		}
-	       cur_child = n;
-	     }
-	  }
-	 if (cur_child != null && isElement(cur_child,element_type)) return;
+         Node n = cur_child.getFirstChild();
+         if (n != null) cur_child = n;
+         else {
+            if (cur_child == root_node) {
+               cur_child = null;
+               return;
+             }
+            n = cur_child.getNextSibling();
+            if (n != null) cur_child = n;
+            else {
+               while (n == null) {
+        	  n = cur_child.getParentNode();
+        	  if (n == null || n == root_node) {
+        	     n = null;
+        	     break;
+        	   }
+             cur_child = n;
+             n = cur_child.getNextSibling();
+        	}
+               cur_child = n;
+             }
+          }
+         if (cur_child != null && isElement(cur_child,element_type)) return;
        }
     }
 
