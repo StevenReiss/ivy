@@ -169,6 +169,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.html.HtmlRenderer;
+
 
 public class IvyFile {
 
@@ -819,7 +823,23 @@ public static String computeHostName()
 }
 
 
+/********************************************************************************/
+/*                                                                              */
+/*      Markdown methods                                                        */
+/*                                                                              */
+/********************************************************************************/
 
+public static String parseMarkdown(String md)
+{
+   Parser p = Parser.builder().build();
+   Node document = p.parse(md);
+   HtmlRenderer renderer = HtmlRenderer.builder().build();
+   String text = renderer.render(document);
+   
+   if (text != null && text.startsWith("<p>")) text = text.substring(3);
+   
+   return text;
+}
 
 }	// end of class IvyFile
 

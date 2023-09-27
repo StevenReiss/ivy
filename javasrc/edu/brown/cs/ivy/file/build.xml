@@ -6,9 +6,11 @@
    <target name='init' >
       <path id='ivy.classpath'>
 	 <pathelement location='${IVY}/java' />
+	 <pathelement location='${IVY}/lib/commonmark.jar' />
       </path>
       <path id='test.classpath'>
 	 <pathelement location='${IVY}/java' />
+	 <pathelement location='${IVY}/lib/commonmark.jar' />
       </path>
    </target>
 
