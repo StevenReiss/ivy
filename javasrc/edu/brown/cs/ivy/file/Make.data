@@ -16,6 +16,7 @@ SFILES= \
 	IvyElapsedTime.java \
 	IvyFile.java \
 	IvyFormat.java \
+	IvyI18N.java \
 	IvyLog.java \
 	IdentityHashSet.java \
 	IvyFileLocker.java \
