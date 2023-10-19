@@ -630,6 +630,10 @@ public JcodeMethod findMethod(String nm,String cls,String mnm,String desc)
 
    JcodeMethod bm = known_methods.get(nm);
    if (bm != null) return bm;
+   
+   if (cls != null && cls.startsWith("REF$")) {
+      
+    }
 
    synchronized (known_methods) {
       bm = known_methods.get(nm);
@@ -651,6 +655,9 @@ public JcodeMethod findMethod(String nm,String cls,String mnm,String desc)
 	  }
 //	 JcodeClass bc = known_classes.get(cls);
 	 JcodeClass bc = findClass(cls);
+         if (bc == null && cls.startsWith("[")) {
+            bc = findClass("java/lang/Object");
+          }
 	 if (bc == null) {
 	    IvyLog.logD("JCODE","Class " + cls + " not found");
 	    return null;

@@ -593,7 +593,7 @@ public String getHandle(String proj)
 }
 
 
-String getSignature()			{ return null; }
+public String getSignature()			{ return null; }
 
 private boolean isNonLocalDef(ASTNode n)
 {
@@ -806,7 +806,7 @@ private static class BinaryField extends JcompSymbol {
    @Override public JcompType getClassType()	{ return class_type; }
    @Override public boolean isEnumSymbol()	{ return (access_info & Opcodes.ACC_ENUM) != 0; }
    @Override public int getModifiers()		{ return access_info; }
-   @Override String getSignature()		{ return field_signature; }
+   @Override public String getSignature()		{ return field_signature; }
 
    @Override protected String getFullName(boolean nogen) {
       String tnm = (nogen ? class_type.getNongenericName() : class_type.getName());

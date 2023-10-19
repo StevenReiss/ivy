@@ -38,103 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFile.java,v 1.29 2020/05/03 01:18:51 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyFile.java,v $
- * Revision 1.29  2020/05/03 01:18:51  spr
- * Minor extensions.  Add stemming facilities.id circular dependencies.
- *
- * Revision 1.28  2020/01/28 21:13:55  spr
- * Add logging as ivy primitive.  Add new functions to ivyfile.
- *
- * Revision 1.27  2019/11/22 13:13:43  spr
- * Add byte load routine.
- *
- * Revision 1.26  2018/09/20 23:56:58  spr
- * Add copy without close
- *
- * Revision 1.25  2018/08/02 15:09:49  spr
- * Fix imports.  Add copy from input stream.
- *
- * Revision 1.24  2017/06/20 00:51:52  spr
- * Add copy directory method.
- *
- * Revision 1.23  2016/09/30 20:45:22  spr
- * Add new utility methods.
- *
- * Revision 1.22  2016/07/13 13:03:28  spr
- * Add other file read/write routines
- *
- * Revision 1.21  2015/07/02 19:01:27  spr
- * Minor bug fixes
- *
- * Revision 1.20  2014/06/12 01:06:25  spr
- * Minor updates
- *
- * Revision 1.19  2014/02/26 14:07:51  spr
- * Add new file copy method.
- *
- * Revision 1.18  2014/01/22 00:31:13  spr
- * Minor fixup.
- *
- * Revision 1.17  2013/09/24 01:06:53  spr
- * Minor fix
- *
- * Revision 1.16  2013-05-09 12:16:03  spr
- * Last checkin at for Java 1.6
- *
- * Revision 1.15  2011-05-27 19:32:38  spr
- * Change copyrights.
- *
- * Revision 1.14  2009-10-02 00:18:22  spr
- * Import clean up.
- *
- * Revision 1.13  2009-09-17 01:55:38  spr
- * Add database and setup support.
- *
- * Revision 1.12  2009-06-04 18:49:46  spr
- * Additional expansion options.
- *
- * Revision 1.11  2009-03-20 01:57:00  spr
- * Add remove call for directories; handle windows file names.
- *
- * Revision 1.10  2008-11-12 13:45:19  spr
- * Add DYVISE.
- *
- * Revision 1.9  2008-03-14 12:25:42  spr
- * Add s6 support.
- *
- * Revision 1.8  2006/07/03 18:14:54  spr
- * Add WADI support.
- *
- * Revision 1.7  2006/05/10 13:42:07  spr
- * Check for null parameters.
- *
- * Revision 1.6  2006/03/09 23:32:18  spr
- * Use System.getenv as well as properties.
- *
- * Revision 1.5  2005/10/31 19:20:18  spr
- * Provide an expand call with user-defined additional definitions.
- *
- * Revision 1.4  2005/06/28 17:20:14  spr
- * Fix up known paths for $(xxx) lookup.
- *
- * Revision 1.3  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.2  2003/08/04 13:06:41  spr
- * Add TAIGA to possible expansions.
- *
- * Revision 1.1  2003/03/18 20:19:25  spr
- * Initial conversion of BloomFile to IvyFile -- provide file name lookup.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.file;
 
@@ -824,9 +727,9 @@ public static String computeHostName()
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Markdown methods                                                        */
-/*                                                                              */
+/*										*/
+/*	Markdown methods							*/
+/*										*/
 /********************************************************************************/
 
 public static String parseMarkdown(String md)
@@ -835,9 +738,9 @@ public static String parseMarkdown(String md)
    Node document = p.parse(md);
    HtmlRenderer renderer = HtmlRenderer.builder().build();
    String text = renderer.render(document);
-   
+
    if (text != null && text.startsWith("<p>")) text = text.substring(3);
-   
+
    return text;
 }
 
@@ -855,4 +758,4 @@ public static String parseMarkdown(String md)
 
 
 
-				
+			

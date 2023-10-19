@@ -110,8 +110,6 @@ public static CompilationUnit parseSourceFile(String text)
 
 public static CompilationUnit parseSourceFile(char [] buf)
 {
-   IvyLog.logD("JCOMP","Start parsing source file " + buf.length);
-
    ASTParser parser = getAstParser();
    parser.setKind(ASTParser.K_COMPILATION_UNIT);
    parser.setSource(buf);
@@ -127,7 +125,6 @@ public static CompilationUnit parseSourceFile(char [] buf)
 
    try {
       CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-      IvyLog.logD("JCOMP","Finish parsing source file " + buf.length);
       return cu;
     }
    catch (Throwable t) {
@@ -163,8 +160,6 @@ private static ASTParser getAstParser()
 
 public static ASTNode parseStatement(String text)
 {
-   IvyLog.logD("JCOMP","Start parsing statement " + text);
-
    ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
    parser.setKind(ASTParser.K_STATEMENTS);
    Map<String,String> options = JavaCore.getOptions();
@@ -179,7 +174,6 @@ public static ASTNode parseStatement(String text)
 
    try {
       Block blk = (Block) parser.createAST(null);
-      IvyLog.logD("JCOMP","End parsing statement");
       if (blk.statements().size() == 1) {
 	 return (ASTNode) blk.statements().get(0);
        }
@@ -197,8 +191,6 @@ public static ASTNode parseStatement(String text)
 
 public static Expression parseExpression(String text)
 {
-   IvyLog.logD("JCOMP","Start parsing expression " + text);
-
    ASTParser parser = getAstParser();
    Map<String,String> options = JavaCore.getOptions();
    JavaCore.setComplianceOptions(JavaCore.VERSION_12,options);
@@ -213,7 +205,6 @@ public static Expression parseExpression(String text)
 
    try {
       Expression exp = (Expression) parser.createAST(null);
-      IvyLog.logD("JCOMP","End parsing expression");
       return exp;
     }
    catch (Throwable t) {
@@ -226,8 +217,6 @@ public static Expression parseExpression(String text)
 
 public static ASTNode parseDeclarations(String text)
 {
-   IvyLog.logD("JCOMP","Start parsing declarations " + text);
-
    ASTParser parser = getAstParser();
    parser.setKind(ASTParser.K_CLASS_BODY_DECLARATIONS);
    Map<String,String> options = JavaCore.getOptions();
@@ -631,6 +620,7 @@ static public void setSource(ASTNode n,JcompSource s)
 
 static void setResolved(ASTNode n,JcompTyper jt)
 {
+   if (n == null) return;
    n = n.getRoot();
    n.setProperty(PROP_JAVA_TYPER,jt);
    n.setProperty(PROP_JAVA_RESOLVED,Boolean.TRUE);

@@ -303,6 +303,10 @@ public JcompType findSystemType(String nm)
    if (idx > 0) {
       String t0 = nm.substring(0,idx);
       int idx1 = nm.lastIndexOf(">");
+      if (idx1 < idx+1) {
+         IvyLog.logE("Problem finding system tyhpe "+ nm);
+         return null;
+       }
       String t1 = nm.substring(idx+1,idx1);
       return findParameterizedSystemType(t0,t1);
     }
@@ -1203,9 +1207,9 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
 
    protected void visitItem(ASTNode n) {
       if (n != null) {
-	 boolean cbt = canbe_type;
-	 n.accept(this);
-	 canbe_type = cbt;
+         boolean cbt = canbe_type;
+         n.accept(this);
+         canbe_type = cbt;
        }
     }
 

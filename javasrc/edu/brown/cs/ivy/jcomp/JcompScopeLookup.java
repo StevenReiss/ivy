@@ -195,9 +195,9 @@ void defineMethod(JcompSymbol js,JcompScope scp)
 
 
 
-JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompScope js,JcompType basetype,ASTNode n)
+JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompScope scope,JcompType basetype,ASTNode n)
 {
-   List<MethodElement> lme = method_names.get(id);
+   List<MethodElement> lme = null;
    synchronized(method_names) {
       lme = method_names.get(id);
       if (lme == null) {
@@ -206,15 +206,16 @@ JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompScope js,
       else lme = new ArrayList<>(lme);
     }
 
-   while (js != null) {
+   while (scope != null) {
       for (MethodElement me : lme) {
-	 if (me.getScope() == js) {
+	 if (me.getScope() == scope) {
 	    JcompSymbol bestms = null;
 	    for (JcompSymbol ms : me.getMethods()) {
 	       if (basetype != null && n != null) {
 		  if (!JcompType.checkProtections(ms,basetype,n)) continue;
 		}
-	       if (aty == null) bestms = ms;
+               ms.getType().defineAll(typer); 
+               if (aty == null) bestms = ms;
 	       else if (aty.isCompatibleWith(ms.getType())) {
 		  if (bestms == null) bestms = ms;
 		  else if (JcompScope.isBetterMethod(aty,ms,bestms))
@@ -224,7 +225,7 @@ JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompScope js,
 	    if (bestms != null) return bestms;
 	  }
        }
-      js = js.getParent();
+      scope = scope.getParent();
     }
 
    return null;
@@ -362,6 +363,10 @@ Collection<JcompSymbol> getDefinedMethods(JcompScope js)
 
    return rslt;
 }
+
+
+
+
 
 
 

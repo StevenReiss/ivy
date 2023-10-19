@@ -164,11 +164,17 @@ JcompScopeFixed()
 	 if (typer != null) js.getType().defineAll(typer);
 	 if (aty == null || aty.isCompatibleWith(js.getType())) {
 	    if (bestms == null) bestms = js;
-	    else if (isBetterMethod(aty,js,bestms))
-	       bestms = js;
+	    else if (aty != null && isBetterMethod(aty,js,bestms)) {
+               bestms = js;
+             }
+            else if (aty == null) {
+               int ct0 = js.getType().getComponents().size();
+               int ct1 = bestms.getType().getComponents().size();
+               if (ct1 < ct0) bestms = js;
+             }
 	  }
 	 else if (bestms == null) {
-
+            bestms = js;
 	  }
        }
       if (bestms != null) return bestms;
@@ -272,13 +278,15 @@ JcompScopeFixed()
 
 @Override public synchronized Collection<JcompSymbol> getDefinedMethods()
 {
-   Collection<JcompSymbol> rslt = new ArrayList<JcompSymbol>();
+   Collection<JcompSymbol> rslt = new ArrayList<>();
    for (Collection<JcompSymbol> csm : method_names.values()) {
       rslt.addAll(csm);
     }
 
    return rslt;
 }
+
+
 
 
 

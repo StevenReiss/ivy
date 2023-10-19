@@ -126,6 +126,9 @@ private JcompScopeLookup getLookupScope()		{ return lookup_scope; }
    return lookup_scope.getDefinedMethods(this);
 }
 
+
+
+
 @Override List<JcompSymbol> lookupStatics(String id)
 {
    return lookup_scope.lookupStatics(id,this);
