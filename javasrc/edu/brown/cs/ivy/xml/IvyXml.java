@@ -1640,6 +1640,40 @@ static public byte [] stringToByteArray(String s)
 }
 
 
+static public String decodeCharacters(String val)
+{
+   StringTokenizer tok = new StringTokenizer(val," ,;");
+   return decodeCharacters(val,tok.countTokens());
+}
+   
+
+
+
+static public String decodeCharacters(String val,int len)
+{
+   char[] buf = new char[len];
+   StringTokenizer tok = new StringTokenizer(val," ,;");
+   int i = 0;
+   while (tok.hasMoreTokens()) {
+      String v = tok.nextToken();
+      buf[i++] = (char) Integer.parseInt(v);
+    }
+   val = new String(buf);
+   return val;
+}
+
+
+static public String encodeCharacters(String txt) 
+{
+   StringBuffer buf = new StringBuffer();
+   for (int i = 0; i < txt.length(); ++i) {
+      int ch = txt.charAt(i);
+      if (i > 0) buf.append(",");
+      buf.append(ch);
+    }
+   
+   return buf.toString();
+}
 
 
 /********************************************************************************/

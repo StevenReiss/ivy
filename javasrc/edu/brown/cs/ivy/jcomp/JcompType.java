@@ -2125,22 +2125,22 @@ private static abstract class ClassInterfaceType extends JcompType {
       int score = 0;
       JcompType mty = js.getType();
       for (JcompType aty : mty.getComponents()) {
-	 if (aty.isPrimitiveType()) score += 10;
-	 else if (aty.getName().equals("java.lang.String")) score += 8;
-	 else {
-	    if (aty.isBinaryType() && !js.getClassType().isBinaryType()) score += 3;
-	    if (aty.getScope() != null) {
-	       for (JcompSymbol xjs : getScope().getDefinedMethods()) {
-		  if (xjs.isConstructorSymbol() && isUsableConstructor(xjs)) {
-		     score += 1;
-		   }
-		}
-	     }
-	  }
-
+         if (aty.isPrimitiveType()) score += 10;
+         else if (aty.getName().equals("java.lang.String")) score += 8;
+         else {
+            if (aty.isBinaryType() && !js.getClassType().isBinaryType()) score += 3;
+            if (aty.getScope() != null) {
+               for (JcompSymbol xjs : getScope().getDefinedMethods()) {
+                  if (xjs.isConstructorSymbol() && isUsableConstructor(xjs)) {
+                     score += 1;
+                   }
+                }
+             }
+          }
+         
        }
       return score;
-    }
+   }
 
    @Override public boolean isThrowable() {
       for (JcompType jt = this; jt != null; jt = jt.getSuperType()) {
