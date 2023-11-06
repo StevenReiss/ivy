@@ -154,18 +154,22 @@ JcompScopeFixed()
 
    ljs = method_names.get(id);
    if (ljs != null) ljs = new ArrayList<>(ljs);
+   
+   JcompType match = base;
+   if (base.isParameterizedType()) match = base.getBaseType();
 
    if (ljs != null) {
+      boolean repl = false;
       JcompSymbol bestms = null;
       for (JcompSymbol js : ljs) {
 	 if (base != null && n != null) {
 	    if (!JcompType.checkProtections(js,base,n)) continue;
 	  }
-         if (id.equals("<init>") && js.getClassType() != base) 
+         if (id.equals("<init>") && js.getClassType() != base && js.getClassType() != match) 
             continue;
 	 if (typer != null) js.getType().defineAll(typer);
 	 if (aty == null || aty.isCompatibleWith(js.getType())) {
-	    if (bestms == null) bestms = js;
+	    if (bestms == null || repl) bestms = js;
 	    else if (aty != null && isBetterMethod(aty,js,bestms)) {
                bestms = js;
              }
@@ -177,6 +181,7 @@ JcompScopeFixed()
 	  }
 	 else if (bestms == null) {
             bestms = js;
+            repl = true;
 	  }
        }
       if (bestms != null) return bestms;
