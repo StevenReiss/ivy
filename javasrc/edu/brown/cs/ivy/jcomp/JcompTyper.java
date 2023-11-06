@@ -304,7 +304,7 @@ public JcompType findSystemType(String nm)
       String t0 = nm.substring(0,idx);
       int idx1 = nm.lastIndexOf(">");
       if (idx1 < idx+1) {
-         IvyLog.logE("Problem finding system tyhpe "+ nm);
+         IvyLog.logE("Problem finding system type "+ nm);
          return null;
        }
       String t1 = nm.substring(idx+1,idx1);
@@ -1199,9 +1199,9 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
 
    @Override public void endVisit(SimpleName t) {
       if (set_types) {
-	 String s = t.getFullyQualifiedName();
-	 JcompType jt = lookupPossibleType(s);
-	 if (jt != null) setJavaType(t,jt);
+         String s = t.getFullyQualifiedName();
+         JcompType jt = lookupPossibleType(s);
+         if (jt != null) setJavaType(t,jt);
        }
     }
 
@@ -1247,14 +1247,14 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       if (s == null) return null;
       JcompType jt = type_map.get(s);
       if (jt != null) return jt;
-
+   
       JcompType vjt = findTypeVariable(nm);
       if (vjt != null) return vjt;
-
+   
       if (jt == null && canbe_type) {
-	 jt = findSystemType(s);
+         jt = findSystemType(s);
        }
-
+   
       return jt;
     }
 
@@ -1614,7 +1614,7 @@ private class TypeSetter extends AbstractTypeSetter {
       JcompType out = outer_type;
       JcompType jt = JcompAst.getJavaType(t);
       outer_type = jt;
-
+   
       canbe_type = true;
       visitList(t.modifiers());
       visitItem(t.getSuperclassType());
@@ -1622,48 +1622,48 @@ private class TypeSetter extends AbstractTypeSetter {
       visitList(t.superInterfaceTypes());
       visitItem(t.getName());
       canbe_type = false;
-
+   
       if (jt != null) {
-	 if ((t.getModifiers() & Modifier.ABSTRACT) != 0) {
-	    jt.setAbstract(true);
-	  }
-	 if (out != null && (t.getModifiers() & Modifier.STATIC) == 0 && !out.isInterfaceType()) {
-	    jt.setInnerNonStatic(true);
-	  }
-	
-	 if (type_prefix != null) nm = type_prefix + "." + nm;
-	 Type sty = t.getSuperclassType();
-	 if (sty != null) {
-	    JcompType suptyp = JcompAst.getJavaType(sty);
-	    if (suptyp.isUndefined()) {
-	       // System.err.println("Super type is undefined");
-	     }
-	    jt.setSuperType(suptyp);
-	  }
-	 for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
-	    Type ity = (Type) it.next();
-	    if (ity != null) {
-	       JcompType inttyp = JcompAst.getJavaType(ity);
-	       if (inttyp.isUndefined()) {
-		  // System.err.println("Interface type is undefined");
-		}
-	       jt.addInterface(inttyp);
-	     }
-	  }
-	
-	 String sgn = getClassSignature(t,jt);
-	 jt.setSignature(sgn);
+         if ((t.getModifiers() & Modifier.ABSTRACT) != 0) {
+            jt.setAbstract(true);
+          }
+         if (out != null && (t.getModifiers() & Modifier.STATIC) == 0 && !out.isInterfaceType()) {
+            jt.setInnerNonStatic(true);
+          }
+        
+         if (type_prefix != null) nm = type_prefix + "." + nm;
+         Type sty = t.getSuperclassType();
+         if (sty != null) {
+            JcompType suptyp = JcompAst.getJavaType(sty);
+            if (suptyp.isUndefined()) {
+               // System.err.println("Super type is undefined");
+             }
+            jt.setSuperType(suptyp);
+          }
+         for (Iterator<?> it = t.superInterfaceTypes().iterator(); it.hasNext(); ) {
+            Type ity = (Type) it.next();
+            if (ity != null) {
+               JcompType inttyp = JcompAst.getJavaType(ity);
+               if (inttyp.isUndefined()) {
+        	  // System.err.println("Interface type is undefined");
+        	}
+               jt.addInterface(inttyp);
+             }
+          }
+        
+         String sgn = getClassSignature(t,jt);
+         jt.setSignature(sgn);
        }
-
+   
       visitList(t.bodyDeclarations());
       // visitList(t.modifiers());
-
+   
       outer_type = out;
-
+   
       int idx = type_prefix.lastIndexOf('.');
       if (idx < 0) type_prefix = null;
       else type_prefix = type_prefix.substring(0,idx);
-
+   
       return false;
    }
 

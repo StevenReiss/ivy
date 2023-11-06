@@ -1408,29 +1408,29 @@ private static class NodeSpecIterator implements Iterable<Element>, Iterator<Ele
 
    private void findNext() {
       while (cur_child != null) {
-         Node n = cur_child.getFirstChild();
-         if (n != null) cur_child = n;
-         else {
-            if (cur_child == root_node) {
-               cur_child = null;
-               return;
-             }
-            n = cur_child.getNextSibling();
-            if (n != null) cur_child = n;
-            else {
-               while (n == null) {
-        	  n = cur_child.getParentNode();
-        	  if (n == null || n == root_node) {
-        	     n = null;
-        	     break;
-        	   }
-             cur_child = n;
-             n = cur_child.getNextSibling();
-        	}
-               cur_child = n;
-             }
-          }
-         if (cur_child != null && isElement(cur_child,element_type)) return;
+	 Node n = cur_child.getFirstChild();
+	 if (n != null) cur_child = n;
+	 else {
+	    if (cur_child == root_node) {
+	       cur_child = null;
+	       return;
+	     }
+	    n = cur_child.getNextSibling();
+	    if (n != null) cur_child = n;
+	    else {
+	       while (n == null) {
+		  n = cur_child.getParentNode();
+		  if (n == null || n == root_node) {
+		     n = null;
+		     break;
+		   }
+	     cur_child = n;
+	     n = cur_child.getNextSibling();
+		}
+	       cur_child = n;
+	     }
+	  }
+	 if (cur_child != null && isElement(cur_child,element_type)) return;
        }
     }
 
@@ -1645,25 +1645,31 @@ static public String decodeCharacters(String val)
    StringTokenizer tok = new StringTokenizer(val," ,;");
    return decodeCharacters(val,tok.countTokens());
 }
-   
+
 
 
 
 static public String decodeCharacters(String val,int len)
 {
-   char[] buf = new char[len];
-   StringTokenizer tok = new StringTokenizer(val," ,;");
-   int i = 0;
-   while (tok.hasMoreTokens()) {
-      String v = tok.nextToken();
-      buf[i++] = (char) Integer.parseInt(v);
+   try {
+      char[] buf = new char[len];
+      StringTokenizer tok = new StringTokenizer(val," ,;");
+      int i = 0;
+      while (tok.hasMoreTokens()) {
+	 String v = tok.nextToken();
+	 buf[i++] = (char) Integer.parseInt(v);
+       }
+      val = new String(buf);
     }
-   val = new String(buf);
+   catch (NumberFormatException e) {
+      IvyLog.logE("XML","Problem decoding characters: " + val,e);
+    }
+
    return val;
 }
 
 
-static public String encodeCharacters(String txt) 
+static public String encodeCharacters(String txt)
 {
    StringBuffer buf = new StringBuffer();
    for (int i = 0; i < txt.length(); ++i) {
@@ -1671,7 +1677,7 @@ static public String encodeCharacters(String txt)
       if (i > 0) buf.append(",");
       buf.append(ch);
     }
-   
+
    return buf.toString();
 }
 

@@ -160,6 +160,12 @@ private static ASTParser getAstParser()
 
 public static ASTNode parseStatement(String text)
 {
+   return parseStatement(text,false);
+}
+
+
+public static ASTNode parseStatement(String text,boolean canfail)
+{
    ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
    parser.setKind(ASTParser.K_STATEMENTS);
    Map<String,String> options = JavaCore.getOptions();
@@ -181,6 +187,7 @@ public static ASTNode parseStatement(String text)
       return blk;
     }
    catch (Throwable t) {
+      if (canfail) return null;
       IvyLog.logE("JCOMP","Problem parsing statement " + text,t);
     }
 

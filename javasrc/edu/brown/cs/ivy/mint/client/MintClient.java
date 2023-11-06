@@ -348,7 +348,20 @@ public MintClient(String id,MintSyncMode mode)
        }
 
       server_writer.println(MINT_HEADER_SEND + " " + rid + " " + fgs);
-      server_writer.println(msg);
+      int msglen = msg.length();
+      if (msglen > 1000000) {
+         int delta = 1000000;
+         for (int base = 0; base < msg.length(); base += delta) {
+            int end = base + delta;
+            if (end > msglen) end = msglen;
+            String txt = msg.substring(base,end);
+            server_writer.print(txt);
+          }
+         server_writer.println();
+       }
+      else {
+         server_writer.println(msg);
+       }
       server_writer.println(MINT_TRAILER);
     }
 }

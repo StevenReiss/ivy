@@ -62,11 +62,11 @@ class JcompProjectImpl implements JcompProject, JcompConstants
 private List<JcompFile>   file_nodes;
 private JcompContext	  base_context;
 private boolean 	  is_resolved;
+private boolean           doing_resolve;
 private Set<JcompType>	  all_types;
 private JcompTyper        resolve_typer;
 private boolean           is_sorted;
 private Object            project_key;
-
 
 
 
@@ -81,6 +81,7 @@ JcompProjectImpl(JcompContext ctx)
    file_nodes = new ArrayList<JcompFile>();
    base_context = ctx;
    is_resolved = false;
+   doing_resolve = false;
    resolve_typer = null;
    all_types = null;
    is_sorted = false;
@@ -93,6 +94,7 @@ void clear()
 {
    file_nodes = null;
    is_resolved = false;
+   doing_resolve = false;
    all_types = null;
    resolve_typer = null;
    is_sorted = false;
@@ -170,6 +172,7 @@ Set<JcompType> getAllTypes()
 synchronized void setResolved(boolean fg,JcompTyper typer)
 {
    is_resolved = fg;
+   doing_resolve = false;
 
    if (!fg) all_types = null;
    else {
@@ -178,6 +181,8 @@ synchronized void setResolved(boolean fg,JcompTyper typer)
 	 JcompAst.setResolved(cu,typer);
        }
     }
+   
+   notifyAll();
 }
 
 
@@ -226,13 +231,24 @@ Object getProjectKey()
 
 @Override synchronized public void resolve()
 {
-   sortFiles();
+   IvyLog.logD("RESOLVE PROJECT " + this + " " + doing_resolve + " " + is_resolved);
+   
+   while (doing_resolve) {
+      try {
+         wait(5000);
+       }
+      catch (InterruptedException e) { }
+    }
    
    if (isResolved()) {
       if (resolve_typer == null) resolve_typer = new JcompTyper(base_context);
       return;
     }
+   
+   doing_resolve = true;
 
+   sortFiles();
+   
    clearResolve();
 
    resolve_typer = new JcompTyper(base_context);
@@ -241,6 +257,8 @@ Object getProjectKey()
    jr.resolveNames(this);
 
    all_types = new HashSet<JcompType>(resolve_typer.getAllTypes());
+   
+   IvyLog.logD("FINISH RESOLVE " + this);
 
    setResolved(true,resolve_typer);
 }

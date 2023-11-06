@@ -124,6 +124,8 @@ private void addCompatibleMethods(JcodeDataType jdt,String id,String desc,
       List<JcodeMethod> rslt)
 {
    rslt.addAll(jcode_control.findAllMethods(jdt,id,desc));
+   if (id.equals("<init>")) return;
+   
    if (jdt.getSuperType() != null) {
       addCompatibleMethods(jdt.getSuperType(),id,desc,rslt);
     }

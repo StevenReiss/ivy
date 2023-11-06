@@ -2560,6 +2560,9 @@ private static class ParamType extends ClassInterfaceType {
     }
 
    @Override public boolean isParameterizedType()	{ return true; }
+   @Override public boolean isBinaryType() {
+      return base_type.isBinaryType();
+   }
    @Override public JcompType getBaseType()		{ return base_type; }
    @Override boolean isBaseKnown()			{ return base_type.isBaseKnown(); }
    @Override public boolean isAbstract()		{ return base_type.isAbstract(); }

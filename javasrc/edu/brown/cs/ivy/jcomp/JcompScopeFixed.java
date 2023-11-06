@@ -153,7 +153,7 @@ JcompScopeFixed()
    Collection<JcompSymbol> ljs;
 
    ljs = method_names.get(id);
-   if (ljs != null) ljs = new ArrayList<JcompSymbol>(ljs);
+   if (ljs != null) ljs = new ArrayList<>(ljs);
 
    if (ljs != null) {
       JcompSymbol bestms = null;
@@ -161,6 +161,8 @@ JcompScopeFixed()
 	 if (base != null && n != null) {
 	    if (!JcompType.checkProtections(js,base,n)) continue;
 	  }
+         if (id.equals("<init>") && js.getClassType() != base) 
+            continue;
 	 if (typer != null) js.getType().defineAll(typer);
 	 if (aty == null || aty.isCompatibleWith(js.getType())) {
 	    if (bestms == null) bestms = js;
