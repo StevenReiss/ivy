@@ -259,6 +259,7 @@ private JcompScope assoc_scope;
 private JcompType assoc_type;
 private JcompSymbol assoc_symbol;
 private boolean is_abstract;
+private boolean is_final;
 private boolean inner_nonstatic;
 private String type_signature;
 private Map<JcompType,JcompType> parent_map;
@@ -280,6 +281,7 @@ protected JcompType(String s)
    assoc_type = null;
    assoc_symbol = null;
    is_abstract = false;
+   is_final = false;
    inner_nonstatic = false;
    type_signature = null;
    parent_map = null;
@@ -342,6 +344,7 @@ public boolean isByteType()		{ return false; }
 public boolean isLongType()		{ return false; }
 public boolean isBroaderType(JcompType t) { return false; }
 public boolean isComplete()		{ return true; }
+public boolean isRecord()               { return false; }
 
 
 /**
@@ -476,8 +479,10 @@ public boolean isThrowable()			{ return false; }
  **/
 
 public boolean isAbstract()			{ return is_abstract; }
+public boolean isFinal()                        { return is_final; }
 
 void setAbstract(boolean fg)			{ is_abstract = fg; }
+void setFinal(boolean fg)                       { is_final = fg; }
 
 
 
@@ -1792,7 +1797,7 @@ private static abstract class ClassInterfaceType extends JcompType {
    @Override public boolean isStringType() {
       return getName().equals("java.lang.String");
    }
-
+   
    @Override public boolean isCompatibleWith(JcompType jt) {
       if (jt == null) return false;
       if (jt == this) return true;
@@ -2566,6 +2571,8 @@ private static class ParamType extends ClassInterfaceType {
    @Override public JcompType getBaseType()		{ return base_type; }
    @Override boolean isBaseKnown()			{ return base_type.isBaseKnown(); }
    @Override public boolean isAbstract()		{ return base_type.isAbstract(); }
+   @Override public boolean isFinal()                   { return base_type.isFinal(); }
+   @Override public boolean isRecord()                  { return base_type.isRecord(); }
    @Override public boolean isUndefined() {
       if (base_type.isUndefined()) return true;
       for (JcompType jt : param_values.values()) {

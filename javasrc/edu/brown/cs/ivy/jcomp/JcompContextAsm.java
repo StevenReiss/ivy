@@ -476,61 +476,63 @@ private class AsmClass {
    synchronized JcompType getJcompType(JcompTyper typer) {
       JcompType btyp = base_types.get(typer);
       if (btyp == null) {
-	 String jnm = class_name.replace('/','.');
-	 jnm = jnm.replace('$','.');
-	 if ((access_info & Opcodes.ACC_INTERFACE) != 0) {
-	    btyp = JcompType.createBinaryInterfaceType(jnm,generic_signature);
-	  }
-	 else if ((access_info & Opcodes.ACC_ANNOTATION) != 0) {
-	    btyp = JcompType.createBinaryAnnotationType(jnm,generic_signature);
-	    if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
-	       btyp.setAbstract(true);
-	     }
-	  }
-	 else if ((access_info & Opcodes.ACC_ENUM) != 0) {
-	    btyp = JcompType.createBinaryEnumType(jnm,generic_signature);
-	    if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
-	       btyp.setAbstract(true);
-	     }
-	  }
-	 else {
-	    btyp = JcompType.createBinaryClassType(jnm,generic_signature);
-	    if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
-	       btyp.setAbstract(true);
-	     }
-	  }
-	 int idx = class_name.lastIndexOf("/");
-	 if (idx < 0) idx = 0;
-	 int idx1 = class_name.indexOf("$",idx);
-	 if (idx1 > 0) {
-	    String ojtnm = class_name.substring(0,idx1);
-	    JcompType oty = getAsmTypeName(typer,ojtnm);
-	    if (oty != null) btyp.setOuterType(oty);
-	    if (idx1 > 0 && nested_this &&
-		  oty != null && !oty.isInterfaceType()) {
-	       btyp.setInnerNonStatic(true);
-	     }
-	  }
-
-	 btyp.setContextType(false);
-	 if (super_name != null) {
-	    JcompType sjt = getAsmTypeName(typer,super_name);
-	    if (sjt == null) {
-	       System.err.println("SUPER TYPE IS UNKNOWN: " + super_name);
-	     }
-	    if (sjt != null) btyp.setSuperType(sjt);
-	  }
-	 if (iface_names != null) {
-	    for (String inm : iface_names) {
-	       JcompType ijt = getAsmTypeName(typer,inm);
-	       if (ijt != null) btyp.addInterface(ijt);
-	     }
-	  }
-	 btyp.setDefinition(JcompSymbol.createSymbol(btyp,access_info));
+         String jnm = class_name.replace('/','.');
+         jnm = jnm.replace('$','.');
+         if ((access_info & Opcodes.ACC_INTERFACE) != 0) {
+            btyp = JcompType.createBinaryInterfaceType(jnm,generic_signature);
+          }
+         else if ((access_info & Opcodes.ACC_ANNOTATION) != 0) {
+            btyp = JcompType.createBinaryAnnotationType(jnm,generic_signature);
+            if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
+               btyp.setAbstract(true);
+             }
+          }
+         else if ((access_info & Opcodes.ACC_ENUM) != 0) {
+            btyp = JcompType.createBinaryEnumType(jnm,generic_signature);
+            if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
+               btyp.setAbstract(true);
+             }
+          }
+         else {
+            btyp = JcompType.createBinaryClassType(jnm,generic_signature);
+            if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
+               btyp.setAbstract(true);
+             }
+          }
+         if ((access_info & Opcodes.ACC_FINAL) != 0) btyp.setFinal(true);
+         
+         int idx = class_name.lastIndexOf("/");
+         if (idx < 0) idx = 0;
+         int idx1 = class_name.indexOf("$",idx);
+         if (idx1 > 0) {
+            String ojtnm = class_name.substring(0,idx1);
+            JcompType oty = getAsmTypeName(typer,ojtnm);
+            if (oty != null) btyp.setOuterType(oty);
+            if (idx1 > 0 && nested_this &&
+        	  oty != null && !oty.isInterfaceType()) {
+               btyp.setInnerNonStatic(true);
+             }
+          }
+   
+         btyp.setContextType(false);
+         if (super_name != null) {
+            JcompType sjt = getAsmTypeName(typer,super_name);
+            if (sjt == null) {
+               System.err.println("SUPER TYPE IS UNKNOWN: " + super_name);
+             }
+            if (sjt != null) btyp.setSuperType(sjt);
+          }
+         if (iface_names != null) {
+            for (String inm : iface_names) {
+               JcompType ijt = getAsmTypeName(typer,inm);
+               if (ijt != null) btyp.addInterface(ijt);
+             }
+          }
+         btyp.setDefinition(JcompSymbol.createSymbol(btyp,access_info));
        }
       btyp = typer.fixJavaType(btyp);
       base_types.put(typer,btyp);
-
+   
       return btyp;
     }
 
