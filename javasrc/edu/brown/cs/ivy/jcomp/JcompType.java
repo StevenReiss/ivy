@@ -2988,7 +2988,7 @@ private static class MethodType extends JcompType {
       if (atyps != null) {
          for (JcompType jt : atyps) {
             if (jt == null) {
-               System.err.println("Attempt to create null parameter type");
+               IvyLog.logE("JCOMP","Attempt to create null parameter type");
                jt = JcompType.createAnyClassType();
              }
             param_types.add(jt);

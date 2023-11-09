@@ -12,6 +12,7 @@ package edu.brown.cs.ivy.jcomp;
 
 import org.objectweb.asm.Type;
 
+import edu.brown.cs.ivy.file.IvyLog;
 import edu.brown.cs.ivy.jcode.JcodeMethod;
 
 import java.util.ArrayList;
@@ -157,7 +158,7 @@ protected JcompType getAsmType(JcompTyper typer,Type t)
    JcompType njt = typer.findSystemType(tnm);
 
    if (njt == null) {
-      System.err.println("JCOMP: Problem finding system type: " + tnm);
+      IvyLog.logE("JCOMP","Problem finding system type: " + tnm);
       njt = typer.findSystemType("java.lang.Object");
     }
 

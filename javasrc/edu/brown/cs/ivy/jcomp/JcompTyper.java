@@ -290,6 +290,8 @@ public JcompType findSystemType(String nm)
 
    JcompType jt = type_map.get(nm);
    if (jt != null) return jt;
+   
+   nm = nm.replace("><",",");
 
    if (nm.endsWith("[]")) {
       int idx = nm.lastIndexOf("[]");
@@ -304,7 +306,7 @@ public JcompType findSystemType(String nm)
       String t0 = nm.substring(0,idx);
       int idx1 = nm.lastIndexOf(">");
       if (idx1 < idx+1) {
-         IvyLog.logE("Problem finding system type "+ nm);
+         IvyLog.logE("JCOMP","Problem finding system type "+ nm);
          return null;
        }
       String t1 = nm.substring(idx+1,idx1);

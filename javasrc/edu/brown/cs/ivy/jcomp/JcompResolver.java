@@ -530,9 +530,9 @@ private class DefPass extends ASTVisitor {
       JcompAst.setDefinition(n,js);
       JcompAst.setDefinition(n.getName(),js);
       if (jt.needsOuterClass()) {
-	 // define field symbol for this$0
-	 JcompSymbol thisjs = JcompSymbol.createNestedThis(jt,jt.getOuterType());
-	 jt.getScope().defineVar(thisjs);
+         // define field symbol for this$0
+         JcompSymbol thisjs = JcompSymbol.createNestedThis(jt,jt.getOuterType());
+         jt.getScope().defineVar(thisjs);
        }
     }
 
