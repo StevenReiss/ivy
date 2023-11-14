@@ -158,7 +158,7 @@ protected JcompType getAsmType(JcompTyper typer,Type t)
    JcompType njt = typer.findSystemType(tnm);
 
    if (njt == null) {
-      IvyLog.logE("JCOMP","Problem finding system type: " + tnm);
+      IvyLog.logE("JCOMP","Problem finding context system type: " + tnm);
       njt = typer.findSystemType("java.lang.Object");
     }
 

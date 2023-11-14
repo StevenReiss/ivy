@@ -2626,47 +2626,52 @@ private static class ParamType extends ClassInterfaceType {
       return true;
     }
 
-   private static String buildParamName(JcompType b,List<JcompType> pl,Map<String,JcompType> outers) {
+   private static String buildParamName(JcompType b1,List<JcompType> pl,Map<String,JcompType> outers) {
       List<String> names = null;
+      JcompType b = b1;
+      while (b.isParameterizedType()) b = b.getBaseType();
       if (b.getSignature() != null) names = JcompGenerics.getTypeVariableNames(b.getSignature(),false);
-
+   
       StringBuffer buf = new StringBuffer();
       buf.append(b.getName());
       int ct = 0;
       if (names != null && names.size() > 0) {
-	 for (int i = 0; i < names.size(); ++i) {
-	    String nm = names.get(i);
-	    JcompType pt = null;
-	     if (pl != null && pl.size() > i) {
-		pt = pl.get(i);
-	      }
-	     else if (outers != null) {
-		pt = outers.get(nm);
-	      }
-	     if (pt == null)
-		pt = createVariableType(nm);
-	     if (ct++ > 0) buf.append(",");
-	     else buf.append("<");
-	     buf.append(pt.getName());
-	  }
+         for (int i = 0; i < names.size(); ++i) {
+            String nm = names.get(i);
+            JcompType pt = null;
+            if (pl != null && pl.size() > i) {
+               pt = pl.get(i);
+             }
+            else if (outers != null) {
+               pt = outers.get(nm);
+             }
+            if (pt == null)
+               pt = createVariableType(nm);
+            if (ct++ > 0) buf.append(",");
+            else buf.append("<");
+            buf.append(pt.getName());
+          }
        }
       if (outers != null) {
-	 for (Map.Entry<String,JcompType> ent : outers.entrySet()) {
-	    String nm = ent.getKey();
-	    if (names != null && names.contains(nm)) continue;
-	    if (ct++ > 0) buf.append(",");
-	    else buf.append("<");
-	    buf.append(ent.getKey());
-	    buf.append("=");
-	    buf.append(ent.getValue().getName());
-	  }
+         for (Map.Entry<String,JcompType> ent : outers.entrySet()) {
+            String nm = ent.getKey();
+            if (names != null && names.contains(nm)) continue;
+            if (ct++ > 0) buf.append(",");
+            else buf.append("<");
+            buf.append(ent.getKey());
+            buf.append("=");
+            buf.append(ent.getValue().getName());
+          }
        }
       if (ct > 0) buf.append(">");
-
+      
       String rslt = buf.toString();
-
+      
+      if (rslt.contains("><"))
+         System.err.println("CHECK HERE");
+      
       return rslt;
-    }
+   }
 
    @Override public boolean isCompatibleWith(JcompType jt) {
       if (jt == this) return true;
@@ -3015,16 +3020,16 @@ private static class MethodType extends JcompType {
       buf.append("(");
       int ct = 0;
       if (pl != null) {
-	 for (JcompType p : pl) {
-	    if (ct++ > 0) buf.append(",");
-	    if (p == null) buf.append("*ANY*");
-	    else buf.append(p.getName());
-	  }
+         for (JcompType p : pl) {
+            if (ct++ > 0) buf.append(",");
+            if (p == null) buf.append("*ANY*");
+            else buf.append(p.getName());
+          }
        }
       // if (varargs) buf.append("...");
       buf.append(")");
       if (r != null) buf.append(r.getName());
-
+   
       return buf.toString();
     }
 

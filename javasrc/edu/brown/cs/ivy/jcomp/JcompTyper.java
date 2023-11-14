@@ -306,7 +306,7 @@ public JcompType findSystemType(String nm)
       String t0 = nm.substring(0,idx);
       int idx1 = nm.lastIndexOf(">");
       if (idx1 < idx+1) {
-         IvyLog.logE("JCOMP","Problem finding system type "+ nm);
+         IvyLog.logE("JCOMP","Problem finding jcomp system type "+ nm);
          return null;
        }
       String t1 = nm.substring(idx+1,idx1);
@@ -316,8 +316,6 @@ public JcompType findSystemType(String nm)
    if (nm.startsWith("REF$")) {
 
     }
-
-
 
    jt = type_context.defineKnownType(this,nm);
    if (jt == null) return null;
