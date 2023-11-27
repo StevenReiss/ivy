@@ -327,7 +327,7 @@ private static void setupProperties(Properties p0) throws SQLException
    switch (dbms_type) {
       case POSTGRESQL :
 	 dbms_prefix = POSTGRES_PREFIX;
-	 dbms_default = "template1";
+	 dbms_default = "postgres";
 	 dbms_files = false;
 	 try {
 	    Class.forName("org.postgresql.copy.CopyManager");
