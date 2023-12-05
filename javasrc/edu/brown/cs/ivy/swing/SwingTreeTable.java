@@ -172,6 +172,7 @@ import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+// import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -185,8 +186,11 @@ import javax.swing.tree.TreeSelectionModel;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
+import java.util.HashMap;
+import java.util.Map;
 
 
 
@@ -200,7 +204,7 @@ public class SwingTreeTable extends JTable {
 /*										*/
 /********************************************************************************/
 
-protected TreeTableCellRenderer tree;			// a subclass of JTree as well
+private TreeTableCellRenderer tree_renderer;			// a subclass of JTree as well
 
 private static final long serialVersionUID = 1;
 
@@ -212,24 +216,25 @@ private static final long serialVersionUID = 1;
 /*										*/
 /********************************************************************************/
 
-public SwingTreeTable(TreeTableModel treeTableModel) {
+public SwingTreeTable(TreeTableModel treeTableModel) 
+{
    super();
 
    // Create the tree. It will be used as a renderer and editor.
-   tree = new TreeTableCellRenderer(treeTableModel);
-   tree.setOpaque(isOpaque());
+   tree_renderer = new TreeTableCellRenderer(treeTableModel);
+   tree_renderer.setOpaque(isOpaque());
 
    // Install a tableModel representing the visible rows in the tree.
-   super.setModel(new TreeTableModelAdapter(treeTableModel, tree));
+   super.setModel(new TreeTableModelAdapter(treeTableModel, tree_renderer));
 
    // Force the JTable and JTree to share their row selection models.
    ListToTreeSelectionModelWrapper selectionWrapper = new
       ListToTreeSelectionModelWrapper();
-   tree.setSelectionModel(selectionWrapper);
+   tree_renderer.setSelectionModel(selectionWrapper);
    setSelectionModel(selectionWrapper.getListSelectionModel());
 
    // Install the tree editor renderer and editor.
-   setDefaultRenderer(TreeTableModel.class, tree);
+   setDefaultRenderer(TreeTableModel.class, tree_renderer);
    setDefaultEditor(TreeTableModel.class, new TreeTableCellEditor());
 
    // No grid.
@@ -240,7 +245,7 @@ public SwingTreeTable(TreeTableModel treeTableModel) {
 
    // And update the height of the trees row to match that of
    // the table.
-   if (tree.getRowHeight() < 1) {
+   if (tree_renderer.getRowHeight() < 1) {
       // Metal looks better like this.
       setRowHeight(18);
     }
@@ -263,8 +268,8 @@ public SwingTreeTable(TreeTableModel treeTableModel) {
 @Override public void updateUI()
 {
    super.updateUI();
-   if(tree != null) {
-      tree.updateUI();
+   if (tree_renderer != null) {
+      tree_renderer.updateUI();
     }
    // Use the tree's default foreground and background colors in the table
    LookAndFeel.installColorsAndFont(this, "Tree.background",
@@ -294,8 +299,8 @@ public SwingTreeTable(TreeTableModel treeTableModel) {
 @Override public void setRowHeight(int rowheight)
 {
    super.setRowHeight(rowheight);
-   if (tree != null && tree.getRowHeight() != rowheight) {
-      tree.setRowHeight(getRowHeight());
+   if (tree_renderer != null && tree_renderer.getRowHeight() != rowheight) {
+      tree_renderer.setRowHeight(getRowHeight());
     }
 }
 
@@ -313,7 +318,7 @@ public SwingTreeTable(TreeTableModel treeTableModel) {
 
 public JTree getTree()
 {
-   return tree;
+   return tree_renderer;
 }
 
 
@@ -321,7 +326,7 @@ public JTree getTree()
 @Override public void setOpaque(boolean fg)
 {
    super.setOpaque(fg);
-   if (tree != null) tree.setOpaque(fg);
+   if (tree_renderer != null) tree_renderer.setOpaque(fg);
 }
 
 
@@ -352,7 +357,7 @@ public void removeTreeExpansionListener(TreeExpansionListener tel)
 	 tmode = TreeSelectionModel.SINGLE_TREE_SELECTION;
 	 break;
     }
-   tree.getSelectionModel().setSelectionMode(tmode);
+   tree_renderer.getSelectionModel().setSelectionMode(tmode);
 }
 
 
@@ -418,22 +423,26 @@ private class TreeTableCellRenderer extends JTree implements TableCellRenderer {
     * row will be drawn at 0,0.
     */
    @Override public void paint(Graphics g) {
-      g.translate(0, -visibleRow * getRowHeight());
-      super.paint(g);
+      Graphics2D g2 = (Graphics2D) g.create();
+      double ht = -visibleRow * getRowHeight();
+      g2.translate(0,ht);
+//    System.err.println("PAINT TREE " + visibleRow + " " + g2.getTransform());
+//    System.err.println("   " +  g2.getClip() + " " + ((Graphics2D) g).getTransform());
+      super.paint(g2);
     }
 
    /**
     * TreeCellRenderer method. Overridden to update the visible row.
     */
    @Override public Component getTableCellRendererComponent(JTable table,
-						     Object value,
-						     boolean isSelected,
-						     boolean hasFocus,
-						     int row, int column) {
-      if(isSelected) setBackground(table.getSelectionBackground());
+        					     Object value,
+        					     boolean isSelected,
+        					     boolean hasFocus,
+        					     int row, int column) {
+      if (isSelected) setBackground(table.getSelectionBackground());
       else setBackground(table.getBackground());
-
       visibleRow = row;
+//    System.err.println("PERF TABLE CELL " + row + " " + value);
       return this;
     }
 
@@ -455,13 +464,11 @@ private class TreeTableCellRenderer extends JTree implements TableCellRenderer {
 
 private class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
 
-
-
    @Override public Component getTableCellEditorComponent(JTable table,
 						   Object value,
 						   boolean isSelected,
 						   int r, int c) {
-      return tree;
+      return tree_renderer;
     }
 
    /**
@@ -487,12 +494,12 @@ private class TreeTableCellEditor extends AbstractCellEditor implements TableCel
          for (int counter = getColumnCount() - 1; counter >= 0; counter--) {
             if (getColumnClass(counter) == TreeTableModel.class) {
                MouseEvent me = (MouseEvent)e;
-               MouseEvent newME = new MouseEvent(tree, me.getID(),
+               MouseEvent newME = new MouseEvent(tree_renderer, me.getID(),
         					    me.getWhen(), me.getModifiersEx(),
         					    me.getX() - getCellRect(0, counter, true).x,
         					    me.getY(), me.getClickCount(),
         					    me.isPopupTrigger(),me.getButton());
-               tree.dispatchEvent(newME);
+               tree_renderer.dispatchEvent(newME);
                break;
              }
           }
@@ -589,7 +596,7 @@ private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel 
 	    if(min != -1 && max != -1) {
 	       for(int counter = min; counter <= max; counter++) {
 		  if(listSelectionModel.isSelectedIndex(counter)) {
-		     TreePath	  selPath = tree.getPathForRow(counter);
+		     TreePath	  selPath = tree_renderer.getPathForRow(counter);
 
 		     if(selPath != null) {
 			addSelectionPath(selPath);
@@ -787,7 +794,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
    @Override public Class<?> getColumnClass(int column) {
       if (column == 0) return SwingTreeTable.TreeTableModel.class;
       return Object.class;
-      }
+    }
 
    @Override public boolean isCellEditable(Object node, int column) {
       return getColumnClass(column) == TreeTableModel.class;
@@ -871,47 +878,22 @@ private static class TreeTableModelAdapter extends AbstractTableModel
 {
    private JTree for_tree;
    private transient TreeTableModel tree_table_model;
+   private Map<Integer,Object> row_map;
+   private int row_count;
 
    private static final long serialVersionUID = 1;
 
    public TreeTableModelAdapter(TreeTableModel treetablemodel, JTree tree) {
       for_tree = tree;
       tree_table_model = treetablemodel;
-
-      tree.addTreeExpansionListener(
-	 new TreeExpansionListener() {
-	    // Don't use fireTableRowsInserted() here; the selection model
-	    // would get updated twice.
-	    @Override public void treeExpanded(TreeExpansionEvent event) {
-	       fireTableDataChanged();
-	     }
-	    @Override public void treeCollapsed(TreeExpansionEvent event) {
-	       fireTableDataChanged();
-	     }
-	  });
-
-      // Install a TreeModelListener that can update the table when
+      TreeTableModelListener listener = new TreeTableModelListener(this);
+   
+      // Install a tree and tree model listeners that can update the table when
       // tree changes. We use delayedFireTableDataChanged as we can
       // not be guaranteed the tree will have finished processing
       // the event before us.
-      treetablemodel.addTreeModelListener(
-	 new TreeModelListener() {
-	    @Override public void treeNodesChanged(TreeModelEvent e) {
-	       delayedFireTableDataChanged();
-	     }
-
-	    @Override public void treeNodesInserted(TreeModelEvent e) {
-	       delayedFireTableDataChanged();
-	     }
-
-	    @Override public void treeNodesRemoved(TreeModelEvent e) {
-	       delayedFireTableDataChanged();
-	     }
-
-	    @Override public void treeStructureChanged(TreeModelEvent e) {
-	       delayedFireTableDataChanged();
-	     }
-	  });
+      tree.addTreeExpansionListener(listener);
+      treetablemodel.addTreeModelListener(listener);
     }
 
    // Wrappers, implementing TableModel interface.
@@ -929,17 +911,70 @@ private static class TreeTableModelAdapter extends AbstractTableModel
     }
 
    @Override public int getRowCount() {
-      return for_tree.getRowCount();
+      if (row_map == null) nodeForRow(0);
+      if (for_tree.getRowCount() != row_count) {
+         boolean fg = for_tree.isLargeModel();
+         for_tree.setLargeModel(!fg);
+         for_tree.setLargeModel(fg);
+//       BasicTreeUI tui = (BasicTreeUI) for_tree.getUI();
+//       System.err.println("DIRVERGENT ROW COUNT " + for_tree.getRowCount() + " " + row_count);
+         return Math.min(for_tree.getRowCount(),row_count);
+       }
+      return row_count;
+//    return for_tree.getRowCount();
     }
 
    protected Object nodeForRow(int row) {
+      Object root = tree_table_model.getRoot();
+      int start = for_tree.isRootVisible() ? 0 : -1;
+      Map<Integer,Object> usemap = row_map;
+      if (usemap == null) {
+         usemap = new HashMap<>();
+         row_count = exploreTree(root,start,usemap);
+         row_map = usemap;
+       }
+      Object rslt = usemap.get(row);
+      
       TreePath treePath = for_tree.getPathForRow(row);
       if (treePath == null) return null;
-      return treePath.getLastPathComponent();
+      Object val = treePath.getLastPathComponent();
+      if (!val.equals(rslt)) {
+//       System.err.println("DIVERGENT NODE FOR ROW " + row + " " + val + " " + rslt);
+       }
+//    return val;
+      
+      return rslt;
+      
+    }
+   
+   private int exploreTree(Object node,int row,Map<Integer,Object> rslt) {
+      boolean expand = for_tree.isExpanded(row);
+      if (row >= 0) rslt.put(row,node);
+      
+//    TreePath tp = for_tree.getPathForRow(row);
+//    System.err.println("NODE AT " + row + " = " + node + " " + expand + " " + for_tree.isCollapsed(0) + " " +
+//          for_tree.isVisible(tp));
+      ++row;
+      if (expand) {
+         for (int i = 0; i < tree_table_model.getChildCount(node); ++i) {
+            Object child = tree_table_model.getChild(node,i);
+            row = exploreTree(child,row,rslt);
+          }
+       }
+      
+      return row;
+    }
+   
+   void invalidateCache()                       { row_map = null; }
+   
+   @Override public void fireTableDataChanged() {
+      invalidateCache();
+      super.fireTableDataChanged();
     }
 
    @Override public Object getValueAt(int row, int column) {
-      return tree_table_model.getValueAt(nodeForRow(row), column);
+      Object rslt =  tree_table_model.getValueAt(nodeForRow(row), column);
+      return rslt;
     }
 
    @Override public boolean isCellEditable(int row, int column) {
@@ -950,20 +985,60 @@ private static class TreeTableModelAdapter extends AbstractTableModel
       tree_table_model.setValueAt(value, nodeForRow(row), column);
     }
 
-   /**
-    * Invokes fireTableDataChanged after all the pending events have been
-    * processed. SwingUtilities.invokeLater is used to handle this.
-    */
-   protected void delayedFireTableDataChanged() {
-      SwingUtilities.invokeLater(
-	 new Runnable() {
-	    @Override public void run() {
-	       fireTableDataChanged();
-	     }
-	  });
+}	// end of inner class TreeTableModelAdapter
+
+
+private static class TreeTableModelListener implements TreeExpansionListener, TreeModelListener {
+
+   private TreeTableModelAdapter for_adapter;
+   
+   TreeTableModelListener(TreeTableModelAdapter mdl) {
+      for_adapter = mdl;
+    }
+   
+   @Override public void treeExpanded(TreeExpansionEvent event) {
+//    System.err.println("TREE EXPANDED " + event.getPath());
+      fireTableDataChanged();
+    }
+   @Override public void treeCollapsed(TreeExpansionEvent event) {
+      fireTableDataChanged();
     }
 
-}	// end of inner class TreeTableModelAdapter
+   @Override public void treeNodesChanged(TreeModelEvent e) {
+      delayedFireTableDataChanged();
+    }
+   
+   @Override public void treeNodesInserted(TreeModelEvent e) {
+      delayedFireTableDataChanged();
+    }
+   
+   @Override public void treeNodesRemoved(TreeModelEvent e) {
+      delayedFireTableDataChanged();
+    }
+   
+   @Override public void treeStructureChanged(TreeModelEvent e) {
+      delayedFireTableDataChanged();
+    }  
+   
+   private void fireTableDataChanged() {
+      if (SwingUtilities.isEventDispatchThread()) {
+         for_adapter.fireTableDataChanged();
+       }
+      else {
+         delayedFireTableDataChanged();
+       }
+    }
+   
+   private void delayedFireTableDataChanged() {
+      for_adapter.invalidateCache();
+      SwingUtilities.invokeLater(
+            new Runnable() {
+               @Override public void run() {
+                  for_adapter.fireTableDataChanged();
+                }
+             });
+    }
+}
 
 
 

@@ -847,7 +847,7 @@ private class RefPass extends ASTVisitor {
             targs.add(JcompAst.getJavaType(tat));
           }
        }
-   
+      
       List<JcompType> atyp = buildArgumentList(n.arguments(),true);
       lookupMethod(bt,atyp,n,n.getName(),null,isstatic,false,n.arguments(),targs);
       // might want to use outer types if    this failed
@@ -1482,8 +1482,6 @@ private class RefPass extends ASTVisitor {
           }
         
          if (js != null && js.isBinarySymbol() && id.equals("<init>") && dfltcnst) {
-            if (bt.getName().contains("CharSequenceTranslator")) 
-               System.err.println("CHECK HERE");
             if (!bt.isBinaryType()) {
                js = null;
              }

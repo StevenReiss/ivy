@@ -2667,9 +2667,6 @@ private static class ParamType extends ClassInterfaceType {
       
       String rslt = buf.toString();
       
-      if (rslt.contains("><"))
-         System.err.println("CHECK HERE");
-      
       return rslt;
    }
 

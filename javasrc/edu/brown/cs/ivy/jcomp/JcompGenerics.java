@@ -813,6 +813,11 @@ private static class MethodVarFinder extends SignatureVisitor {
       ++cur_index;
       if (input_parms != null && cur_index < input_parms.size()) {
          JcompType bty = input_parms.get(cur_index);
+         if (bty.isFunctionRef()) {
+            JcompType mty = bty.getBaseType();
+            JcompType rty = mty.getBaseType();
+            bty = rty;
+          }
          return new MethodVarTypeFinder(type_data,bty,type_map);
        }
       return new SkipVisitor();

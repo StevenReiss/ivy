@@ -90,8 +90,11 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import java.awt.AWTEventMulticaster;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 
@@ -198,6 +201,23 @@ public void setScaledValue(double v)
    double scl = Math.pow(10,num_decimals);
    int iv = (int) (v * scl);
    setValue(iv);
+}
+
+
+
+public void setFont(Font ft)
+{
+   super.setFont(ft);
+   
+   Dictionary<?,?> lbls = getLabelTable();
+   if (lbls == null) return;
+   for (Enumeration<?> en = lbls.elements(); en.hasMoreElements(); ) {
+      Object o = en.nextElement();
+      if (o instanceof JLabel) {
+         JLabel lbl = (JLabel) o;
+         lbl.setFont(ft);
+       }
+    }
 }
 
 

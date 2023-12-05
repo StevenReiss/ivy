@@ -62,11 +62,11 @@ class JcompProjectImpl implements JcompProject, JcompConstants
 private List<JcompFile>   file_nodes;
 private JcompContext	  base_context;
 private boolean 	  is_resolved;
-private boolean           doing_resolve;
+private boolean 	  doing_resolve;
 private Set<JcompType>	  all_types;
-private JcompTyper        resolve_typer;
-private boolean           is_sorted;
-private Object            project_key;
+private JcompTyper	  resolve_typer;
+private boolean 	  is_sorted;
+private Object		  project_key;
 
 
 
@@ -113,9 +113,9 @@ void clear()
 void addFile(JcompFile jf)
 {
    if (file_nodes.contains(jf)) return;
-   IvyLog.logD("JCOMP","ADD SOURCE FILE " + jf.getFile().getFileName() + " " + 
-         jf.getFile().hashCode() + " " + hashCode());
-   
+   IvyLog.logD("JCOMP","ADD SOURCE FILE " + jf.getFile().getFileName() + " " +
+	 jf.getFile().hashCode() + " " + hashCode());
+
    file_nodes.add(jf);
    jf.setRoot(this);
    is_sorted = false;
@@ -181,7 +181,7 @@ synchronized void setResolved(boolean fg,JcompTyper typer)
 	 JcompAst.setResolved(cu,typer);
        }
     }
-   
+
    notifyAll();
 }
 
@@ -231,24 +231,24 @@ Object getProjectKey()
 
 @Override synchronized public void resolve()
 {
-   IvyLog.logD("RESOLVE PROJECT " + this + " " + doing_resolve + " " + is_resolved);
-   
    while (doing_resolve) {
       try {
-         wait(5000);
+	 wait(5000);
        }
       catch (InterruptedException e) { }
     }
-   
+
    if (isResolved()) {
       if (resolve_typer == null) resolve_typer = new JcompTyper(base_context);
       return;
     }
-   
+
+   IvyLog.logD("RESOLVE PROJECT " + this + " " + doing_resolve + " " + is_resolved);
+
    doing_resolve = true;
 
    sortFiles();
-   
+
    clearResolve();
 
    resolve_typer = new JcompTyper(base_context);
@@ -257,14 +257,14 @@ Object getProjectKey()
    jr.resolveNames(this);
 
    all_types = new HashSet<JcompType>(resolve_typer.getAllTypes());
-   
+
    IvyLog.logD("FINISH RESOLVE " + this);
 
    setResolved(true,resolve_typer);
 }
 
 
-public JcompTyper getResolveTyper()             { return resolve_typer; }
+public JcompTyper getResolveTyper()		{ return resolve_typer; }
 
 
 
@@ -461,15 +461,15 @@ private JcompSymbol getContainer(CompilationUnit cu,AbstractTypeDeclaration atd,
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Methods to sort files                                                   */
-/*                                                                              */
+/*										*/
+/*	Methods to sort files							*/
+/*										*/
 /********************************************************************************/
 
 private synchronized void sortFiles()
 {
    if (is_sorted) return;
-   
+
    FileSorter fs = new FileSorter(file_nodes);
    file_nodes = fs.sort();
    is_sorted = true;
@@ -479,222 +479,222 @@ private synchronized void sortFiles()
 
 
 private class FileSorter {
-   
+
    private List<JcompFile> base_list;
    private Map<JcompFile,List<JcompFile>> depend_names;
    private Map<String,JcompFile> class_names;
-   
+
    FileSorter(List<JcompFile> files) {
       base_list = files;
       depend_names = new HashMap<>();
       class_names = new HashMap<>();
     }
-   
+
    List<JcompFile> sort() {
       computeDepends();
       if (depend_names.isEmpty()) return base_list;
       List<JcompFile> rslt = new ArrayList<>();
       Set<JcompFile> done = new HashSet<>();
       while (rslt.size() < base_list.size()) {
-         boolean chng = false;
-         JcompFile fst = null;
-         for (JcompFile ff : base_list) {
-            if (done.contains(ff)) continue;
-            if (fst == null) fst = ff;
-            boolean allok = true;
-            List<JcompFile> rqs = depend_names.get(ff);
-            if (rqs != null) {
-               for (JcompFile xf : rqs) {
-                  if (!done.contains(xf)) allok = false;
-                }
-             }
-            if (allok) {
-               rslt.add(ff);
-               done.add(ff);
-               chng = true;
-             }
-          }
-         if (!chng) {
-            rslt.add(fst);
-            done.add(fst);
-          }
+	 boolean chng = false;
+	 JcompFile fst = null;
+	 for (JcompFile ff : base_list) {
+	    if (done.contains(ff)) continue;
+	    if (fst == null) fst = ff;
+	    boolean allok = true;
+	    List<JcompFile> rqs = depend_names.get(ff);
+	    if (rqs != null) {
+	       for (JcompFile xf : rqs) {
+		  if (!done.contains(xf)) allok = false;
+		}
+	     }
+	    if (allok) {
+	       rslt.add(ff);
+	       done.add(ff);
+	       chng = true;
+	     }
+	  }
+	 if (!chng) {
+	    rslt.add(fst);
+	    done.add(fst);
+	  }
        }
       return rslt;
     }
-   
+
    private void computeDepends() {
       setupNames();
       for (JcompFile ff : base_list) {
-         CompilationUnit cu = (CompilationUnit) ff.getAstNode();
-         addDepends(ff,cu);
+	 CompilationUnit cu = (CompilationUnit) ff.getAstNode();
+	 addDepends(ff,cu);
        }
     }
-   
+
    private void setupNames() {
       String pfx = null;
       for (JcompFile ff : base_list) {
-         CompilationUnit cu = (CompilationUnit) ff.getAstNode();
-         if (cu == null) {
-            continue;
-          }
-         if (cu.getPackage() != null) {
-            pfx = cu.getPackage().getName().getFullyQualifiedName();
-          }
-         for (Object o : cu.types()) {
-            setupNames(ff,pfx,(AbstractTypeDeclaration) o);
-          }
+	 CompilationUnit cu = (CompilationUnit) ff.getAstNode();
+	 if (cu == null) {
+	    continue;
+	  }
+	 if (cu.getPackage() != null) {
+	    pfx = cu.getPackage().getName().getFullyQualifiedName();
+	  }
+	 for (Object o : cu.types()) {
+	    setupNames(ff,pfx,(AbstractTypeDeclaration) o);
+	  }
        }
     }
-   
+
    private void setupNames(JcompFile ff,String pfx,AbstractTypeDeclaration atd) {
       String nm = atd.getName().getIdentifier();
       if (pfx != null) nm = pfx + "." + nm;
       class_names.put(nm,ff);
       for (Object o : atd.bodyDeclarations()) {
-         if (o instanceof AbstractTypeDeclaration) {
-            setupNames(ff,nm,(AbstractTypeDeclaration) o);
-          }
+	 if (o instanceof AbstractTypeDeclaration) {
+	    setupNames(ff,nm,(AbstractTypeDeclaration) o);
+	  }
        }
     }
-   
+
    private void addDepends(JcompFile ff,CompilationUnit cu) {
       List<String> pfxs = new ArrayList<String>();
       List<String> known = new ArrayList<String>();
       if (cu == null) return;
       if (cu.getPackage() != null) {
-         pfxs.add(cu.getPackage().getName().getFullyQualifiedName());
+	 pfxs.add(cu.getPackage().getName().getFullyQualifiedName());
        }
       for (Object o : cu.imports()) {
-         ImportDeclaration id = (ImportDeclaration) o;
-         if (id.isStatic()) {
-            String cnm = null;
-            if (id.isOnDemand()) {
-               cnm = id.getName().getFullyQualifiedName();
-             }
-            else if (id.getName() instanceof QualifiedName) {
-               QualifiedName qn = (QualifiedName) id.getName();
-               cnm = qn.getQualifier().getFullyQualifiedName();
-             }
-            else continue; 
-            addDepend(cnm,ff,pfxs,known);
-          }
-         if (id.isOnDemand()) {
-            pfxs.add(id.getName().getFullyQualifiedName());
-          }
-         else known.add(id.getName().getFullyQualifiedName());
+	 ImportDeclaration id = (ImportDeclaration) o;
+	 if (id.isStatic()) {
+	    String cnm = null;
+	    if (id.isOnDemand()) {
+	       cnm = id.getName().getFullyQualifiedName();
+	     }
+	    else if (id.getName() instanceof QualifiedName) {
+	       QualifiedName qn = (QualifiedName) id.getName();
+	       cnm = qn.getQualifier().getFullyQualifiedName();
+	     }
+	    else continue;
+	    addDepend(cnm,ff,pfxs,known);
+	  }
+	 if (id.isOnDemand()) {
+	    pfxs.add(id.getName().getFullyQualifiedName());
+	  }
+	 else known.add(id.getName().getFullyQualifiedName());
        }
-      
+
       for (Object o : cu.types()) {
-         AbstractTypeDeclaration atd = (AbstractTypeDeclaration) o;
-         addDepends(ff,atd,pfxs,known);
+	 AbstractTypeDeclaration atd = (AbstractTypeDeclaration) o;
+	 addDepends(ff,atd,pfxs,known);
        }
     }
-   
+
    private void addDepends(JcompFile ff,AbstractTypeDeclaration atd,
-         List<String> pfxs,List<String> known) {
+	 List<String> pfxs,List<String> known) {
       if (atd instanceof TypeDeclaration) {
-         TypeDeclaration td = (TypeDeclaration) atd;
-         addTypeDepends(ff,td,pfxs,known);
+	 TypeDeclaration td = (TypeDeclaration) atd;
+	 addTypeDepends(ff,td,pfxs,known);
        }
       else if (atd instanceof EnumDeclaration) {
-         EnumDeclaration ed = (EnumDeclaration) atd;
-         addEnumDepends(ff,ed,pfxs,known);
+	 EnumDeclaration ed = (EnumDeclaration) atd;
+	 addEnumDepends(ff,ed,pfxs,known);
        }
       for (Object o1 : atd.bodyDeclarations()) {
-         if (o1 instanceof AbstractTypeDeclaration) {
-            addDepends(ff,(AbstractTypeDeclaration) o1,pfxs,known);
-          }
+	 if (o1 instanceof AbstractTypeDeclaration) {
+	    addDepends(ff,(AbstractTypeDeclaration) o1,pfxs,known);
+	  }
        }
     }
-   
+
    private void addTypeDepends(JcompFile to,TypeDeclaration td,List<String> pfxs,List<String> known) {
       addDepend(td.getSuperclassType(),to,pfxs,known);
       for (Object o : td.superInterfaceTypes()) {
-         Type it = (Type) o;
-         addDepend(it,to,pfxs,known);
+	 Type it = (Type) o;
+	 addDepend(it,to,pfxs,known);
        }
     }
-   
+
    private void addEnumDepends(JcompFile to,EnumDeclaration td,List<String> pfxs,List<String> known) {
       for (Object o : td.superInterfaceTypes()) {
-         Type it = (Type) o;
-         addDepend(it,to,pfxs,known);
+	 Type it = (Type) o;
+	 addDepend(it,to,pfxs,known);
        }
     }
-   
+
    private void addDepend(Type t,JcompFile to,List<String> pfxs,List<String> known) {
       if (t == null) return;
       if (t.isSimpleType()) {
-         SimpleType st = (SimpleType) t;
-         String tnm = st.getName().getFullyQualifiedName();
-         JcompFile frm = class_names.get(tnm);
-         while (frm == null) {
-            String xnm = "." + tnm;
-            for (String s : known) {
-               if (s.endsWith(xnm)) {
-                  frm = class_names.get(s);
-                  if (frm != null) break;
-                }
-             }
-            if (frm == null) {
-               for (String s : pfxs) {
-                  frm = class_names.get(s + xnm);
-                  if (frm != null) break;
-                }
-             }
-            if (frm == null) {
-               int idx = tnm.lastIndexOf(".");
-               if (idx < 0) break;
-               tnm = tnm.substring(0,idx);
-             }
-          }
-         if (frm != null && frm != to) {
-            List<JcompFile> dps = depend_names.get(to);
-            if (dps == null) {
-               dps = new ArrayList<>();
-               depend_names.put(to,dps);
-             }
-            dps.add(frm);
-          }
+	 SimpleType st = (SimpleType) t;
+	 String tnm = st.getName().getFullyQualifiedName();
+	 JcompFile frm = class_names.get(tnm);
+	 while (frm == null) {
+	    String xnm = "." + tnm;
+	    for (String s : known) {
+	       if (s.endsWith(xnm)) {
+		  frm = class_names.get(s);
+		  if (frm != null) break;
+		}
+	     }
+	    if (frm == null) {
+	       for (String s : pfxs) {
+		  frm = class_names.get(s + xnm);
+		  if (frm != null) break;
+		}
+	     }
+	    if (frm == null) {
+	       int idx = tnm.lastIndexOf(".");
+	       if (idx < 0) break;
+	       tnm = tnm.substring(0,idx);
+	     }
+	  }
+	 if (frm != null && frm != to) {
+	    List<JcompFile> dps = depend_names.get(to);
+	    if (dps == null) {
+	       dps = new ArrayList<>();
+	       depend_names.put(to,dps);
+	     }
+	    dps.add(frm);
+	  }
        }
       else if (t.isParameterizedType()) {
-         ParameterizedType pt = (ParameterizedType) t;
-         addDepend(pt.getType(),to,pfxs,known);
+	 ParameterizedType pt = (ParameterizedType) t;
+	 addDepend(pt.getType(),to,pfxs,known);
        }
     }
-   
+
    private void addDepend(String tnm,JcompFile to,List<String> pfxs,List<String> known) {
       JcompFile frm = class_names.get(tnm);
       while (frm == null) {
-         String xnm = "." + tnm;
-         for (String s : known) {
-            if (s.endsWith(xnm)) {
-               frm = class_names.get(s);
-               if (frm != null) break;
-             }
-          }
-         if (frm == null) {
-            for (String s : pfxs) {
-               frm = class_names.get(s + xnm);
-               if (frm != null) break;
-             }
-          }
-         if (frm == null) {
-            int idx = tnm.lastIndexOf(".");
-            if (idx < 0) break;
-            tnm = tnm.substring(0,idx);
-          }
+	 String xnm = "." + tnm;
+	 for (String s : known) {
+	    if (s.endsWith(xnm)) {
+	       frm = class_names.get(s);
+	       if (frm != null) break;
+	     }
+	  }
+	 if (frm == null) {
+	    for (String s : pfxs) {
+	       frm = class_names.get(s + xnm);
+	       if (frm != null) break;
+	     }
+	  }
+	 if (frm == null) {
+	    int idx = tnm.lastIndexOf(".");
+	    if (idx < 0) break;
+	    tnm = tnm.substring(0,idx);
+	  }
        }
       if (frm != null && frm != to) {
-         List<JcompFile> dps = depend_names.get(to);
-         if (dps == null) {
-            dps = new ArrayList<>();
-            depend_names.put(to,dps);
-          }
-         dps.add(frm);
+	 List<JcompFile> dps = depend_names.get(to);
+	 if (dps == null) {
+	    dps = new ArrayList<>();
+	    depend_names.put(to,dps);
+	  }
+	 dps.add(frm);
        }
     }
-         
+	
 }	// end of inner class FileSorter
 
 

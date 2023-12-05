@@ -632,7 +632,6 @@ public JcodeMethod findMethod(String nm,String cls,String mnm,String desc)
    if (bm != null) return bm;
    
    if (cls != null && cls.startsWith("REF$")) {
-      
     }
 
    synchronized (known_methods) {
@@ -664,7 +663,7 @@ public JcodeMethod findMethod(String nm,String cls,String mnm,String desc)
 	  }
 	 bm = bc.findMethod(mnm,desc);
 	 if (bm == null) {
-	    IvyLog.logD("JCODE","Method " + cls + "." + mnm + " " + desc + " not found");
+// 	    IvyLog.logD("JCODE","Method " + cls + "." + mnm + " " + desc + " not found");
 	  }
 	 known_methods.put(nm,bm);
        }

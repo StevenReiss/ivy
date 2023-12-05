@@ -840,6 +840,7 @@ public final SwingNumericField addNumericField(String lbl,int min,int max,int va
 
 
 public final SwingRangeSlider addRange(String lbl,int min,int max,int dec,int val,ChangeListener cb)
+
 {
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
