@@ -281,6 +281,15 @@ public String closeResult()
    return rslt;
 }
 
+public void clear()
+{
+   if (base_writer instanceof StringWriter) {
+      StringWriter sw = (StringWriter) base_writer;
+      StringBuffer sbuf = sw.getBuffer();
+      sbuf.delete(0,sbuf.length());
+    }
+}
+
 
 public void setNameSpace(String ns,String ref)
 {

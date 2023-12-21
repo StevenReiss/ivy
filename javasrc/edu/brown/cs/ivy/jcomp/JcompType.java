@@ -2189,10 +2189,16 @@ private static abstract class ClassInterfaceType extends JcompType {
       Collection<JcompSymbol> syms = getAbstractMethods(this);
       if (syms.size() > 1) return null;
       if (interface_types != null) {
+         Set<String> names = new HashSet<>();
+         for (JcompSymbol sym : syms) names.add(sym.getName());
          for (JcompType jt : interface_types) {
             Collection<JcompSymbol> ssyms = getAbstractMethods(jt);
-            if (ssyms.size() > 0) {
-               if (syms.size() == 0 && ssyms.size() == 1) syms = ssyms;
+            List<JcompSymbol> others = new ArrayList<>();
+            for (JcompSymbol ns : ssyms) {
+               if (!names.contains(ns.getName())) others.add(ns); 
+             }
+            if (others.size() > 0) {
+               if (syms.size() == 0 && others.size() == 1) syms = ssyms;
                else return null;
              }
           }

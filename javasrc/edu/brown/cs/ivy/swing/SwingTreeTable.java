@@ -316,7 +316,7 @@ public SwingTreeTable(TreeTableModel treeTableModel)
  * Returns the tree that is being shared between the model.
  */
 
-public JTree getTree()
+public SwingTree getTree()
 {
    return tree_renderer;
 }
@@ -368,7 +368,7 @@ public void removeTreeExpansionListener(TreeExpansionListener tel)
 /*										*/
 /********************************************************************************/
 
-private class TreeTableCellRenderer extends JTree implements TableCellRenderer {
+private class TreeTableCellRenderer extends SwingTree implements TableCellRenderer {
 
    /** Last table/tree row asked to renderer. */
    protected int visibleRow;
@@ -635,7 +635,7 @@ private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel 
 public static interface TreeTableModel extends TreeModel
 {
     /**
-     * Returns the number ofs availible column.
+     * Returns the number of available columns.
      */
     public int getColumnCount();
 

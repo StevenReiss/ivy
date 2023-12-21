@@ -724,14 +724,14 @@ private static class ReaderThread extends Thread {
 
    @Override public void run() {
       try {
-	 for ( ; ; ) {
-	    String l = input_reader.readLine();
-	    if (l == null) break;
-	    if (output_writer != null) output_writer.println(l);
-	  }
+         for ( ; ; ) {
+            String l = input_reader.readLine();
+            if (l == null) break;
+            if (output_writer != null) output_writer.println(l);
+          }
        }
       catch (IOException e) {
-	 return;
+         return;
        }
     }
 

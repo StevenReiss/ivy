@@ -169,7 +169,10 @@ JcompScopeFixed()
             continue;
 	 if (typer != null) js.getType().defineAll(typer);
 	 if (aty == null || aty.isCompatibleWith(js.getType())) {
-	    if (bestms == null || repl) bestms = js;
+	    if (bestms == null || repl) {
+               bestms = js;
+               repl = false;
+             }
 	    else if (aty != null && isBetterMethod(aty,js,bestms)) {
                bestms = js;
              }

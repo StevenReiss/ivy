@@ -103,8 +103,10 @@ import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.EventListener;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 
@@ -235,32 +237,32 @@ private static class CellRenderer extends DefaultTreeCellRenderer {
 
 
    @Override public Component getTreeCellRendererComponent(JTree t,Object v,boolean sel,
-						    boolean exp,boolean leaf,
-						    int row,boolean foc) {
+        					    boolean exp,boolean leaf,
+        					    int row,boolean foc) {
       super.getTreeCellRendererComponent(t,v,sel,exp,leaf,row,foc);
-
+   
       if (v != null && v instanceof Node) {
-	 Node n = (Node) v;
-	 Color bkg = n.getBackgroundColor(sel);
-	 if (bkg == null) {
-	    if (sel) bkg = SWING_SELECT_COLOR;
-	    else bkg = MetalLookAndFeel.getMenuBackground();
-	  }
-	 setOpaque(true);
-	 super.setBackground(bkg);
-
-	 Color fg = n.getTextColor(sel);
-	 if (fg == null) {
-	    if (!n.isUsable()) fg = MetalLookAndFeel.getInactiveControlTextColor();
-	    else fg = Color.black;
-	  }
-	 super.setForeground(fg);
-	 setToolTipText(n.getToolTipText());
-
-	 Icon icn = n.getIcon();
-	 super.setIcon(icn);
+         Node n = (Node) v;
+         Color bkg = n.getBackgroundColor(sel);
+         if (bkg == null) {
+            if (sel) bkg = SWING_SELECT_COLOR;
+            else bkg = MetalLookAndFeel.getMenuBackground();
+          }
+         setOpaque(true);
+         super.setBackground(bkg);
+   
+         Color fg = n.getTextColor(sel);
+         if (fg == null) {
+            if (!n.isUsable()) fg = MetalLookAndFeel.getInactiveControlTextColor();
+            else fg = Color.black;
+          }
+         super.setForeground(fg);
+         setToolTipText(n.getToolTipText());
+   
+         Icon icn = n.getIcon();
+         super.setIcon(icn);
        }
-
+   
       return this;
     }
 
@@ -304,6 +306,96 @@ private class TreeMouser extends MouseAdapter {
 }	// end of subclass TreeMouser
 
 
+
+/********************************************************************************/
+/*                                                                              */
+/*     Save and restore expansion paths based on names                          */
+/*                                                                              */
+/********************************************************************************/
+
+public Object saveExpansions()
+{
+   TreeExpansion expansions = null;
+   Object root = getModel().getRoot();
+   TreePath rootpath = new TreePath(root);
+   expansions = findExpansions(rootpath,expansions);
+   
+   return expansions;
+}
+
+
+private TreeExpansion findExpansions(TreePath path,TreeExpansion parent)
+{
+   TreeModel mdl = getModel();
+   Object node = path.getLastPathComponent();
+   TreeExpansion expansion = parent;
+   if (isExpanded(path)) {
+      expansion = new TreeExpansion(node);
+      if (parent != null) parent.addChild(expansion); 
+      int ct = mdl.getChildCount(node);
+      for (int i = 0; i < ct; ++i) {
+         TreePath cpath = path.pathByAddingChild(mdl.getChild(node,i));
+         findExpansions(cpath,expansion);
+       }
+    }
+   
+   return expansion;
+}
+
+
+public void restoreExpansions(Object expandobj)
+{
+   if (expandobj == null || !(expandobj instanceof TreeExpansion)) return;
+   TreeExpansion expansion = (TreeExpansion) expandobj;
+   Object root = getModel().getRoot();
+   TreePath rootpath = new TreePath(root);
+   restoreExpansions(rootpath,expansion);
+}
+
+
+private void restoreExpansions(TreePath path,TreeExpansion expansion)
+{
+   if (expansion == null) return;
+   
+   if (!isExpanded(path)) {
+      expandPath(path);
+    }
+   
+   Object node = path.getLastPathComponent();
+   TreeModel mdl = getModel();
+   int ct = mdl.getChildCount(node);
+   for (int i = 0; i < ct; ++i) {
+      Object child = mdl.getChild(node,i);
+      TreeExpansion cexpt = expansion.getChild(child);
+      if (cexpt != null) {
+         TreePath cpath = path.pathByAddingChild(child);
+         restoreExpansions(cpath,cexpt);
+       }
+    }
+}
+
+
+private class TreeExpansion {
+   
+   private String tree_node;
+   private Map<String,TreeExpansion> child_nodes;
+   
+   TreeExpansion(Object node) {
+      tree_node = node.toString();
+      child_nodes = null;
+    }
+   
+   void addChild(TreeExpansion exp) {
+      if (child_nodes == null) child_nodes = new HashMap<>();
+      child_nodes.put(exp.tree_node,exp);
+    }
+   
+   TreeExpansion getChild(Object n) {
+       if (child_nodes == null) return null;
+       return child_nodes.get(n.toString());
+    }
+   
+}
 
 }	// end of class SwingTree
 

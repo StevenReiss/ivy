@@ -899,8 +899,8 @@ private class LoadTask implements Runnable {
              }
           }
        }
-      catch (IOException e) {
-         System.err.println("JCODE: Problem reading class " + load_class);
+      catch (IOException | IllegalArgumentException e) {
+         IvyLog.logE("JCODE","Problem reading class " + load_class,e);
        }
    }
 
