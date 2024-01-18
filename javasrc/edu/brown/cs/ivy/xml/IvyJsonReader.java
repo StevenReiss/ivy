@@ -218,7 +218,7 @@ private boolean addChar(StringBuffer buf,int ch)
 {
    boolean rslt = false;
 
-   if (cur_state == 0 && ch != '{') {
+   if (cur_state == 0 && (ch != '{' && ch != '[')) {
       System.err.println("JSON: Skip " + ch + " (" + ((char) ch) + ")");
       return false;
     }

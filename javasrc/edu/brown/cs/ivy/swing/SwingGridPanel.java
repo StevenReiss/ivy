@@ -906,7 +906,7 @@ public final JTextField addTextField(String lbl,String val,int wid,ActionListene
 
    if (cb1 != null) {
       tfld.addActionListener(cb1);
-      tfld.addFocusListener(new TextUnfocus(lbl,cb1));
+      tfld.addFocusListener(new TextUnfocus());
     }
    if (cb2 != null) doc.addUndoableEditListener(cb2);
 
@@ -1098,7 +1098,7 @@ private JTextField localAddFileField(String lbl,String val,int md,
 
    if (cb1 != null) {
       tfld.addActionListener(cb1);
-      tfld.addFocusListener(new TextUnfocus(lbl,cb1));
+      tfld.addFocusListener(new TextUnfocus());
     }
 
    if (cb2 != null) doc.addUndoableEditListener(cb2);
@@ -1504,16 +1504,12 @@ private class DepListener extends ComponentAdapter {
 
 private class TextUnfocus implements FocusListener {
 
-   private ActionListener action_handler;
-   private String local_command;
    private String last_text;
 
-   TextUnfocus(String cmd,ActionListener al) {
-      local_command = cmd;
-      action_handler = al;
+   TextUnfocus() {
       last_text = null;
     }
-
+   
    @Override public void focusGained(FocusEvent e) {
       JTextField tfld = (JTextField) e.getSource();
       last_text = tfld.getText();
@@ -1524,8 +1520,7 @@ private class TextUnfocus implements FocusListener {
       String t = tfld.getText();
       if (t == null && last_text == null) return;
       else if (t == null || !t.equals(last_text)) {
-	 ActionEvent evt = new ActionEvent(tfld,0,local_command);
-	 action_handler.actionPerformed(evt);
+         tfld.postActionEvent();
        }
       last_text = null;
     }

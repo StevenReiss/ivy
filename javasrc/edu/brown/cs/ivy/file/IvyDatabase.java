@@ -161,6 +161,7 @@ private static boolean postgres_usestdin = true;
 public static final OutputStream NULL_STREAM = new NullOutputStream();
 
 static {
+   System.setProperty("derby.stream.error.file","/dev/null");
    System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
 }
 
