@@ -554,13 +554,13 @@ public static String formatTypeName(String javatype,boolean internal)
 
 
 
-private static int internalFormatTypeName(String jty,int idx,StringBuffer buf,boolean internal)
+ private static int internalFormatTypeName(String jty,int idx,StringBuffer buf,boolean internal)
 {
    if (idx >= jty.length()) return idx;
    
    if (jty.charAt(idx) == '<') {
       int lvl = 0;
-      for ( ; ; ) {
+      while (idx < jty.length()) {
          ++idx;
          if (jty.charAt(idx) == '<') ++lvl;
          else if (jty.charAt(idx) == '>') {
@@ -572,6 +572,8 @@ private static int internalFormatTypeName(String jty,int idx,StringBuffer buf,bo
           }
        }
     }
+   
+   if (idx >= jty.length()) return idx;
 
    switch (jty.charAt(idx)) {
       case '?' :
