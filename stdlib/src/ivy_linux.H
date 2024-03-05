@@ -48,15 +48,25 @@
 
 #ifdef LINUX
 
+
+
+#include <features.h>
+
+#include <time.h>
+#include <sys/time.h>
+
 #include <fcntl.h>
 #include <dlfcn.h>
-#include <sys/time.h>
-#include <sys/wait.h>
+#include <wait.h>
 #include <unistd.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <signal.h>
 #include <sys/mman.h>
+
+#ifndef CLOCK_REALTIME
+#define CLOCK_REALTIME 0
+#endif
 
 
 
@@ -101,8 +111,8 @@ typedef unsigned long long	ULongLong;
 
 #define fork1	fork
 
-#define pthread_mutexattr_setpshared(x,y)
-#define pthread_condattr_setpshared(x,y)
+// #define pthread_mutexattr_setpshared(x,y)
+// #define pthread_condattr_setpshared(x,y)
 
 
 

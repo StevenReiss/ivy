@@ -40,7 +40,7 @@ mincetest.o: mincetest.C
 	$(CCPLUS) $(CPLUSFLAGS) $(THREADFLAGS) -c $<
 
 mincetest: mincetest.o $(BFILES)
-	$(CCPLUS) $(CPLUSFLAGS) -o mincetest mincetest.o $(BFILES) $(XERCESLIB) $(SOCKETLIB) $(THREADLIB)
+#	$(CCPLUS) $(CPLUSFLAGS) -o mincetest mincetest.o $(BFILES) $(XERCESLIB) $(SOCKETLIB) $(THREADLIB)
 
 
 

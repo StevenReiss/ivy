@@ -50,7 +50,6 @@
 #ifndef MINCE_INCLUDED_ALREADY
 #define MINCE_INCLUDED_ALREADY
 
-
 #include <ivy_datatypes.H>
 #include <ivy_xml.H>
 #include <ivy_socket.H>

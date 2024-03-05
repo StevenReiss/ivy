@@ -31,81 +31,10 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/stdlib/src/ivy_datatypes.H,v 1.15 2019/10/08 01:24:27 spr Exp $ */
-
-/************************************************************************
- *
- * $Log: ivy_datatypes.H,v $
- * Revision 1.15  2019/10/08 01:24:27  spr
- * Formatting.
- *
- * Revision 1.14  2013/09/24 01:07:55  spr
- * data format
- *
- * Revision 1.13  2011-03-10 02:59:17  spr
- * Updates to handle timers on the mac.
- *
- * Revision 1.12  2011-01-11 00:27:15  spr
- * Fixups for lock finding code.
- *
- * Revision 1.11  2007-12-21 02:22:58  spr
- * Updates to compile on the mac
- *
- * Revision 1.10  2007-12-13 20:23:04  spr
- * code clean up
- *
- * Revision 1.9  2007-08-10 02:12:03  spr
- * Cleanups for apple and x86_64./
- *
- * Revision 1.8  2007-05-12 00:44:51  spr
- * Fix up defs to get them to work on multiple machines.
- *
- * Revision 1.7  2007-05-12 00:35:44  spr
- * fix definitions for mac.
- *
- * Revision 1.6  2007-05-04 02:28:22  spr
- * Fix up import order and xerces version.
- *
- * Revision 1.5  2006-11-09 00:33:59  spr
- * Clean up types and operations.
- *
- * Revision 1.4  2006-08-30 20:19:16  spr
- * Clean up sets.
- *
- * Revision 1.3  2006/02/21 17:08:33  spr
- * Add default comparator for Sets.
- *
- * Revision 1.2  2006/01/30 19:07:25  spr
- * Add removeIf call.
- *
- * Revision 1.1  2005/06/28 17:22:11  spr
- * Move stdlib from bloom to ivy for use in veld, etc.
- *
- *
- ************************************************************************/
 
 
 #ifndef IVY_DATATYPES_ALREADY_INCLUDED
 #define IVY_DATATYPES_ALREADY_INCLUDED
-
-#undef _XOPEN_SOURCE
-#undef _POSIX_C_SOURCE
-
-#include <sys/types.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
-
-#include <new>
-#include <list>
-#include <vector>
-#include <set>
-#include <map>
-#include <algorithm>
-#include <functional>
-#include <string>
-#include <exception>
-
 
 #ifdef __sparc
 #include "ivy_solaris.H"
@@ -119,6 +48,20 @@
 #ifdef WIN32
 #include "ivy_win32.H"
 #endif
+
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+
+#include <new>
+#include <list>
+#include <vector>
+#include <set>
+#include <map>
+#include <algorithm>
+#include <functional>
+#include <string>
+#include <exception>
 
 
 namespace Ivy {
@@ -721,7 +664,7 @@ currentTimeNanos()
    ts.tv_sec = mts.tv_sec;
 #endif
 
-   LongLong rslt = ts.tv_nsec + ts.tv_sec * 1000000000; 
+   LongLong rslt = ts.tv_nsec + ts.tv_sec * 1000000000;
 
    return rslt;
 }
