@@ -94,7 +94,7 @@ public:
 /************************************************************************/
 
 template<class T>
-class Hash : unary_function<T,size_t>
+class Hash // : unary_function<T,size_t>		// unary_function no longer needed
 {
 public:
    unsigned long operator() (const T& key) const;

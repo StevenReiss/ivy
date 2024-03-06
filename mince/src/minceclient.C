@@ -49,7 +49,6 @@ static const char * const rcsid = "$Header: /pro/spr_cvs/pro/ivy/mince/src/mince
  *
  ********************************************************************************/
 
-
 #include "mince_local.H"
 
 
