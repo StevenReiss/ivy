@@ -807,56 +807,56 @@ public:
    void field(CStdString elt,int v) {
       if (open_state != OPEN) return;
       char buf[1024];
-      sprintf(buf," %s='%d'",elt.c_str(),v);
+      snprintf(buf,1024," %s='%d'",elt.c_str(),v);
       output(buf);
     }
 
    void field(CStdString elt,long v) {
       if (open_state != OPEN) return;
       char buf[1024];
-      sprintf(buf," %s='%ld'",elt.c_str(),v);
+      snprintf(buf,1024," %s='%ld'",elt.c_str(),v);
       output(buf);
     }
 
    void field(CStdString elt,unsigned int v) {
       if (open_state != OPEN) return;
       char buf[1024];
-      sprintf(buf," %s='%u'",elt.c_str(),v);
+      snprintf(buf,1024," %s='%u'",elt.c_str(),v);
       output(buf);
     }
 
    void field(CStdString elt,unsigned long v) {
       if (open_state != OPEN) return;
       char buf[1024];
-      sprintf(buf," %s='%lu'",elt.c_str(),v);
+      snprintf(buf,1024," %s='%lu'",elt.c_str(),v);
       output(buf);
     }
 
    void field(CStdString elt,double v) {
       if (open_state != OPEN) return;
       char buf[1024];
-      sprintf(buf," %s='%g'",elt.c_str(),v);
+      snprintf(buf,1024," %s='%g'",elt.c_str(),v);
       output(buf);
     }
 
    void field(CStdString elt,char key,long id) {
       if (open_state != OPEN) return;
       char buf[1024];
-      sprintf(buf," %s='%c%ld'",elt.c_str(),key,id);
+      snprintf(buf,1024," %s='%c%ld'",elt.c_str(),key,id);
       output(buf);
     }
 
    void field(CStdString elt,LongLong v) {
       if (open_state != OPEN) return;
       char buf[1024];
-      sprintf(buf," %s='%lld'",elt.c_str(),v);
+      snprintf(buf,1024," %s='%lld'",elt.c_str(),v);
       output(buf);
     }
 
    void field(CStdString elt,ULongLong v) {
       if (open_state != OPEN) return;
       char buf[1024];
-      sprintf(buf," %s='%llu'",elt.c_str(),v);
+      snprintf(buf,1024," %s='%llu'",elt.c_str(),v);
       output(buf);
     }
 

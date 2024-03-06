@@ -159,7 +159,6 @@ private void findPackageName()
 
    try {
       String cmd = "javap " + usecf.getPath();
-      System.err.println("RUN: " + cmd);
       IvyExec ex = new IvyExec(cmd,IvyExec.READ_OUTPUT);
       InputStream ins = ex.getInputStream();
       String rslt = IvyFile.loadFile(ins);
@@ -208,7 +207,6 @@ private void process()
 
    String rslt;
    try {
-      System.err.println("RUN: " + cmd);
       IvyExec ex = new IvyExec(cmd,IvyExec.READ_OUTPUT);
       InputStream ins = ex.getInputStream();
       rslt = IvyFile.loadFile(ins);

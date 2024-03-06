@@ -83,3 +83,4 @@ lib/junit.jar.2
 lib/useneweclipse.csh
 pom.xml
 .nfs*
+.DS_Store

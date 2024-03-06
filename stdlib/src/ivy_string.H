@@ -169,17 +169,17 @@ public:
    void append(const string& v) 	{ addString(v.c_str()); }
    void append(int v) {
       char buf[1024];
-      sprintf(buf,"%d",v);
+      snprintf(buf,1024,"%d",v);
       addString(buf);
     }
    void append(long v) {
       char buf[1024];
-      sprintf(buf,"%ld",v);
+      snprintf(buf,1024,"%ld",v);
       addString(buf);
     }
    void append(short v) {
       char buf[1024];
-      sprintf(buf,"%d",v);
+      snprintf(buf,1024,"%d",v);
       addString(buf);
     }
    void append(char v) {
@@ -190,22 +190,22 @@ public:
     }
    void append(double v) {
       char buf[1024];
-      sprintf(buf,"%g",v);
+      snprintf(buf,1024,"%g",v);
       addString(buf);
     }
    void append(float v) {
       char buf[1024];
-      sprintf(buf,"%g",v);
+      snprintf(buf,1024,"%g",v);
       addString(buf);
     }
    void append(unsigned int v) {
       char buf[1024];
-      sprintf(buf,"%u",v);
+      snprintf(buf,1024,"%u",v);
       addString(buf);
     }
    void append(unsigned long v) {
       char buf[1024];
-      sprintf(buf,"%lu",v);
+      snprintf(buf,1024,"%lu",v);
       addString(buf);
     }
 
@@ -254,7 +254,7 @@ public:
 
    void append(LongLong v) {
       char buf[1024];
-      sprintf(buf,"%lld",v);
+      snprintf(buf,1024,"%lld",v);
       addString(buf);
     }
    StringBuffer& operator << (LongLong v)		{ append(v); return *this; }

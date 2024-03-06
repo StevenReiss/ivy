@@ -20,6 +20,7 @@ SFILES= \
 	IvyLog.java \
 	IdentityHashSet.java \
 	IvyFileLocker.java \
+	IvyImplBuilder.java \
 	IvyMakeDeps.java \
 	IvyStringDiff.java \
 	IvyWordStemmer.java \
