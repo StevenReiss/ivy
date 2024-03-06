@@ -1,0 +1,5 @@
+#! /bin/csh -f
+
+set CP = $PRO/ivy/java
+
+java -cp $CP edu.brown.cs.ivy.file.IvyMakeDeps $*

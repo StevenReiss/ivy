@@ -878,7 +878,7 @@ private static class TreeTableModelAdapter extends AbstractTableModel
 {
    private JTree for_tree;
    private transient TreeTableModel tree_table_model;
-   private Map<Integer,Object> row_map;
+   private transient Map<Integer,Object> row_map;
    private int row_count;
 
    private static final long serialVersionUID = 1;

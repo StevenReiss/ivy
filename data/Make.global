@@ -186,7 +186,7 @@ endif
 #	Basic depenencies and make rules
 #
 
-all:	$(PREALL) javadep $(STAMP) $(REMOTEALL) $(ALL)
+all:	$(PREALL) javadep $(STAMP) $(REMOTEALL) $(ALL) makejavadep
 
 $(STAMP): $(BFILES) subdirs		  # javaall
 
@@ -574,6 +574,10 @@ ifdef SUBDIRS
 	   done
 endif
 
+makejavadep:
+	-makedep -cp $(JAVAPATH) -d $(JBINDIR)
+
+-include javadep
 
 
 #

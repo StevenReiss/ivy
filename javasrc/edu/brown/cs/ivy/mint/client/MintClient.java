@@ -1013,24 +1013,24 @@ private class ReaderThread extends Thread {
    void readPending(int min) throws IOException {
       if (line_reader == null) return;		// terminated
       if (isAlive()) return;			// thread is running, let it do the reads
-
+   
       for (int ctr = 0; ctr < min || line_reader.ready(); ++ctr) {
-	 String hdr = line_reader.readLine();
-	 if (hdr == null) {
-	    throw new IOException("End of file from server");
-	  }
-	 StringBuffer body = null;
-	 for ( ; ; ) {
-	    String s = line_reader.readLine();
-	    if (s == null || s.equals(MINT_TRAILER)) break;
-	    if (body == null) body = new StringBuffer(s);
-	    else {
-	       body.append('\n');
-	       body.append(s);
-	     }
-	  }
-	 String s = (body == null ? null : body.toString());
-	 processItem(hdr,s);
+         String hdr = line_reader.readLine();
+         if (hdr == null) {
+            throw new IOException("End of file from server");
+          }
+         StringBuffer body = null;
+         for ( ; ; ) {
+            String s = line_reader.readLine();
+            if (s == null || s.equals(MINT_TRAILER)) break;
+            if (body == null) body = new StringBuffer(s);
+            else {
+               body.append('\n');
+               body.append(s);
+             }
+          }
+         String s = (body == null ? null : body.toString());
+         processItem(hdr,s);
        }
     }
 
