@@ -575,8 +575,7 @@ ifdef SUBDIRS
 endif
 
 makejavadep:
-	-makedep -cp $(JAVAPATH) -d $(JBINDIR)
-
+	-$(PRO)/ivy/bin/makedep -cp $(JAVAPATH) -d $(JBINDIR)
 -include javadep
 
 
