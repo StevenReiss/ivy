@@ -265,7 +265,7 @@ bubbles:
 	(cd java; find . -follow -name '*.class' -print | grep -F -v 'jflow'| grep -F -v 'cinder' | grep -F -v 'project' | grep -F -v 'pebble'  > ../bin.files )
 	(cd java; jar cf ../ivybin.jar `cat ../bin.files` )
 	rm -rf bin.files
-	cp ivybin.jar $(PRO)/bubbles/suds/lib/ivy.jar
+	-cp ivybin.jar $(PRO)/bubbles/suds/lib/ivy.jar
 	cp ivybin.jar $(PRO)/bubbles/lib/ivy.jar
 	jar cf ivylib.jar lib/*.props lib/*.jar lib/androidjar lib/eclipsejar lib/*.xml
 	-cp ivylib.jar $(PRO)/bubbles/

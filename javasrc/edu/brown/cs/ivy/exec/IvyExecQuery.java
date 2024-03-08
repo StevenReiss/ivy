@@ -38,65 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExecQuery.java,v 1.16 2020/05/03 01:18:24 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyExecQuery.java,v $
- * Revision 1.16  2020/05/03 01:18:24  spr
- * GIve us a local copy of expandString to avoid circular dependencies.
- *
- * Revision 1.15  2018/08/08 18:47:24  spr
- * Handle java10 base path.
- *
- * Revision 1.14  2018/08/02 15:09:37  spr
- * Fix imports
- *
- * Revision 1.13  2017/05/17 14:13:36  spr
- * Add call to get java binary name.
- *
- * Revision 1.12  2015/03/31 02:19:04  spr
- * Formatting cleanup
- *
- * Revision 1.11  2015/02/14 18:44:50  spr
- * Handle long command lines correctly
- *
- * Revision 1.10  2011-05-27 19:32:35  spr
- * Change copyrights.
- *
- * Revision 1.9  2010-02-12 00:32:11  spr
- * Fix spacing and error messages.
- *
- * Revision 1.8  2009-10-02 00:18:16  spr
- * Import clean up.
- *
- * Revision 1.7  2009-09-17 01:55:24  spr
- * Use jps or equivalent to find processes; add setup code for windows, etc.
- *
- * Revision 1.6  2009-06-04 18:49:37  spr
- * Add ivyJava call and remove getenv.
- *
- * Revision 1.5  2008-06-11 01:46:14  spr
- * Try to close things better.
- *
- * Revision 1.4  2008-06-02 22:16:52  spr
- * Handle getargs using ps.
- *
- * Revision 1.3  2008-03-14 12:25:31  spr
- * Code cleanup.
- *
- * Revision 1.2  2007-08-10 02:10:20  spr
- * Use conventional methods to find process id, etc.
- *
- * Revision 1.1  2007-05-04 02:01:56  spr
- * Add native call to get command line arguments.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.exec;
 
 import edu.brown.cs.ivy.file.IvyFile;
