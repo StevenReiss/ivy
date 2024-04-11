@@ -35,6 +35,7 @@
 package edu.brown.cs.ivy.jcomp;
 
 import edu.brown.cs.ivy.exec.IvyExecQuery;
+import edu.brown.cs.ivy.file.IvyLog;
 import edu.brown.cs.ivy.jcode.JcodeConstants;
 
 import org.objectweb.asm.AnnotationVisitor;
@@ -104,8 +105,7 @@ JcompContextAsm(JcompContext par,String jarname)
      addUserClassPathEntry(jarname);
    }
   catch (IOException e) {
-     System.err.println("JCOMP: can't open file " + jarname + ": " + e);
-     e.printStackTrace();
+     IvyLog.logE("JCOMP","Can't open file " + jarname,e);
      return;
    }
 }
@@ -120,8 +120,7 @@ JcompContextAsm(JcompContext par,Iterable<String> jarnames)
 	 addUserClassPathEntry(jarname);
        }
       catch (IOException e) {
-	 System.err.println("JCOMP: can't open file " + jarname + ": " + e);
-	 e.printStackTrace();
+         IvyLog.logE("JCOMP","Can't open file " + jarname,e);
 	 return;
        }
     }
@@ -384,10 +383,10 @@ private AsmClass findKnownClassType(String name)
       cr.accept(kcv,ClassReader.SKIP_CODE);
     }
    catch (IOException e) {
-      System.err.println("JCOMP: CONTEXT: Problem reading class file: " + e);
+      IvyLog.logE("JCOMP","Context Problem reading class file " + name + ":" + e);
     }
    catch (IllegalArgumentException e) {
-      System.err.println("JCOMP: CONTEXT: Problem loading class file: " + e);
+      IvyLog.logE("JCOMP","Context Problem loading class file " + name + ":" + e);
     }
    finally {
       try {
@@ -476,63 +475,63 @@ private class AsmClass {
    synchronized JcompType getJcompType(JcompTyper typer) {
       JcompType btyp = base_types.get(typer);
       if (btyp == null) {
-         String jnm = class_name.replace('/','.');
-         jnm = jnm.replace('$','.');
-         if ((access_info & Opcodes.ACC_INTERFACE) != 0) {
-            btyp = JcompType.createBinaryInterfaceType(jnm,generic_signature);
-          }
-         else if ((access_info & Opcodes.ACC_ANNOTATION) != 0) {
-            btyp = JcompType.createBinaryAnnotationType(jnm,generic_signature);
-            if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
-               btyp.setAbstract(true);
-             }
-          }
-         else if ((access_info & Opcodes.ACC_ENUM) != 0) {
-            btyp = JcompType.createBinaryEnumType(jnm,generic_signature);
-            if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
-               btyp.setAbstract(true);
-             }
-          }
-         else {
-            btyp = JcompType.createBinaryClassType(jnm,generic_signature);
-            if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
-               btyp.setAbstract(true);
-             }
-          }
-         if ((access_info & Opcodes.ACC_FINAL) != 0) btyp.setFinal(true);
-         
-         int idx = class_name.lastIndexOf("/");
-         if (idx < 0) idx = 0;
-         int idx1 = class_name.indexOf("$",idx);
-         if (idx1 > 0) {
-            String ojtnm = class_name.substring(0,idx1);
-            JcompType oty = getAsmTypeName(typer,ojtnm);
-            if (oty != null) btyp.setOuterType(oty);
-            if (idx1 > 0 && nested_this &&
-        	  oty != null && !oty.isInterfaceType()) {
-               btyp.setInnerNonStatic(true);
-             }
-          }
-   
-         btyp.setContextType(false);
-         if (super_name != null) {
-            JcompType sjt = getAsmTypeName(typer,super_name);
-            if (sjt == null) {
-               System.err.println("SUPER TYPE IS UNKNOWN: " + super_name);
-             }
-            if (sjt != null) btyp.setSuperType(sjt);
-          }
-         if (iface_names != null) {
-            for (String inm : iface_names) {
-               JcompType ijt = getAsmTypeName(typer,inm);
-               if (ijt != null) btyp.addInterface(ijt);
-             }
-          }
-         btyp.setDefinition(JcompSymbol.createSymbol(btyp,access_info));
+	 String jnm = class_name.replace('/','.');
+	 jnm = jnm.replace('$','.');
+	 if ((access_info & Opcodes.ACC_INTERFACE) != 0) {
+	    btyp = JcompType.createBinaryInterfaceType(jnm,generic_signature);
+	  }
+	 else if ((access_info & Opcodes.ACC_ANNOTATION) != 0) {
+	    btyp = JcompType.createBinaryAnnotationType(jnm,generic_signature);
+	    if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
+	       btyp.setAbstract(true);
+	     }
+	  }
+	 else if ((access_info & Opcodes.ACC_ENUM) != 0) {
+	    btyp = JcompType.createBinaryEnumType(jnm,generic_signature);
+	    if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
+	       btyp.setAbstract(true);
+	     }
+	  }
+	 else {
+	    btyp = JcompType.createBinaryClassType(jnm,generic_signature);
+	    if ((access_info & Opcodes.ACC_ABSTRACT) != 0) {
+	       btyp.setAbstract(true);
+	     }
+	  }
+	 if ((access_info & Opcodes.ACC_FINAL) != 0) btyp.setFinal(true);
+	
+	 int idx = class_name.lastIndexOf("/");
+	 if (idx < 0) idx = 0;
+	 int idx1 = class_name.indexOf("$",idx);
+	 if (idx1 > 0) {
+	    String ojtnm = class_name.substring(0,idx1);
+	    JcompType oty = getAsmTypeName(typer,ojtnm);
+	    if (oty != null) btyp.setOuterType(oty);
+	    if (idx1 > 0 && nested_this &&
+		  oty != null && !oty.isInterfaceType()) {
+	       btyp.setInnerNonStatic(true);
+	     }
+	  }
+
+	 btyp.setContextType(false);
+	 if (super_name != null) {
+	    JcompType sjt = getAsmTypeName(typer,super_name);
+	    if (sjt == null) {
+               IvyLog.logD("JCOMP","Super type " + super_name + " is unknown for " + class_name);
+	     }
+	    if (sjt != null) btyp.setSuperType(sjt);
+	  }
+	 if (iface_names != null) {
+	    for (String inm : iface_names) {
+	       JcompType ijt = getAsmTypeName(typer,inm);
+	       if (ijt != null) btyp.addInterface(ijt);
+	     }
+	  }
+	 btyp.setDefinition(JcompSymbol.createSymbol(btyp,access_info));
        }
       btyp = typer.fixJavaType(btyp);
       base_types.put(typer,btyp);
-   
+
       return btyp;
     }
 
@@ -971,10 +970,10 @@ private static class JarClassPathEntry extends ClassPathEntry {
 	    return jar_file.getInputStream(ent);
 	  }
 	 catch (ZipException e) {
-	    System.err.println("JCOMP: Problem with system zip file: " + e);
+            IvyLog.logE("JCOMP","Problem with system zi file",e);
 	  }
 	 catch (IOException e) {
-	    System.err.println("JCOMP: Problem opening system jar entry: " + e);
+            IvyLog.logE("JCOMP","Problem opening system jar entry",e);
 	  }
        }
       return null;
@@ -1007,10 +1006,10 @@ private static class JmodClassPathEntry extends ClassPathEntry {
 	    return jmod_file.getInputStream(ent);
 	  }
 	 catch (ZipException e) {
-	    System.err.println("JCOMP: Problem with system zip file: " + e);
+            IvyLog.logE("JCOMP","Problem with system zip file",e);
 	  }
 	 catch (IOException e) {
-	    System.err.println("JCOMP: Problem opening system jmod entry: " + e);
+	    IvyLog.logE("JCOMP","Problem opening system jmod entry",e);
 	  }
        }
       return null;
@@ -1041,7 +1040,7 @@ private static class DirClassPathEntry extends ClassPathEntry {
 	 return new FileInputStream(fil);
        }
       catch (IOException e) {
-	 System.err.println("JCOMP: Probleam reading file " + fil);
+         IvyLog.logE("JCOMP","Problem reading file " + fil,e);
        }
       return null;
     }
