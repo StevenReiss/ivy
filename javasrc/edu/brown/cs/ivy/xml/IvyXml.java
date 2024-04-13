@@ -709,7 +709,12 @@ public static String cdataExpand(String s)
    if (s.contains("&#x")) {
       StringBuffer buf = new StringBuffer();
       int idx = -1;
-      for (int i = s.indexOf("&#x",idx+1); i > 0; ++i) {
+      while (idx+1 < s.length()) {
+         int i = s.indexOf("&#x",idx+1);
+         if (i < 0) {
+            buf.append(s.substring(idx+1));
+            break;
+          }
 	 buf.append(s.substring(idx+1,i));
 	 int val = 0;
 	 int k = -1;
@@ -738,6 +743,8 @@ public static String cdataExpand(String s)
 	    idx = k;
 	  }
        }
+      IvyLog.logD("CDATA EXPAND " + s + " " + buf);
+      
       s = buf.toString();
     }
 
