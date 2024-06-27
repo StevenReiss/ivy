@@ -116,7 +116,7 @@ public void add(T l)				{ super.add(listener_class,l); }
 
 public void remove(T l) 			{ super.remove(listener_class,l); }
 
-@Override public int getListenerCount()			{ return super.getListenerCount(listener_class); }
+@Override public int getListenerCount() 	{ return super.getListenerCount(listener_class); }
 
 public T [] getListeners()			{ return super.getListeners(listener_class); }
 

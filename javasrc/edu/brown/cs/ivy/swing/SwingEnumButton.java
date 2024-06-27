@@ -207,7 +207,7 @@ public void removeValueListener(ChangeListener cl)
 /*										*/
 /********************************************************************************/
 
-private void setDisplay()
+private final void setDisplay()
 {
    if (icon_set[cur_index] == null) {
       setIcon(null);
