@@ -273,8 +273,10 @@ bubbles:
 	-cp lib/eclipsejar/*.jar $(PRO)/bubbles/eclipsejar
 	-cp lib/cocker.jar $(PRO)/bubbles/lib
 	-cp lib/asm.jar $(PRO)/bubbles/lib
+	-cp lib/slf4j-api.jar $(PRO)/bubbles/lib
 	-cp ivybin.jar $(CPRO)/cocker/lib/ivy.jar
 	-cp lib/asm.jar $(CPRO)/cocker/lib/asm.jar
+	-cp lib/slf4j-api.jar $(CPRO)/cocker/lib/slf4j-api.jar
 	-cp lib/eclipsejar/*.jar $(CPRO)/cocker/lib/eclipsejar
 	-cp ivybin.jar $(CPRO)/iot/signmaker/lib/ivy.jar
 	-cp lib/json.jar lib/mysql.jar lib/postgresql.jar $(CPRO)/iot/signmaker/lib
@@ -286,4 +288,5 @@ bubbles:
 #	   rm -rf javasrc/edu/brown/cs/ivy/$$x/Makefile; \
 #	   ln -s ../../../../../data/Make.pass javasrc/edu/brown/cs/ivy/$$x/Makefile; \
 #	   done
+
 

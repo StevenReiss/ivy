@@ -8,11 +8,13 @@
 	 <pathelement location='${IVY}/java' />
 	 <pathelement location='${IVY}/lib/commonmark.jar' />
 	 <pathelement location='${IVY}/lib/asm.jar' />
+	 <pathelement location='${IVY}/lib/slf4j-api.jar' />
       </path>
       <path id='test.classpath'>
 	 <pathelement location='${IVY}/java' />
 	 <pathelement location='${IVY}/lib/commonmark.jar' />
 	 <pathelement location='${IVY}/lib/asm.jar' />
+	 <pathelement location='${IVY}/lib/slf4j-api.jar' />
       </path>
    </target>
 
