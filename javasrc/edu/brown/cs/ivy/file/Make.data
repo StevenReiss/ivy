@@ -18,6 +18,7 @@ SFILES= \
 	IvyFormat.java \
 	IvyI18N.java \
 	IvyLog.java \
+	IvySlf4jProvider.java \
 	IdentityHashSet.java \
 	IvyFileLocker.java \
 	IvyImplBuilder.java \

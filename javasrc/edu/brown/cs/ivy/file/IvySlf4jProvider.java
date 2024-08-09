@@ -1,39 +1,39 @@
 /********************************************************************************/
-/*                                                                              */
-/*              IvySlf4jProvider.java                                           */
-/*                                                                              */
-/*      Provider to direct SLF4J output through IvyLog                          */
-/*                                                                              */
+/*										*/
+/*		IvySlf4jProvider.java						*/
+/*										*/
+/*	Provider to direct SLF4J output through IvyLog				*/
+/*										*/
 /********************************************************************************/
-/*      Copyright 2013 Brown University -- Steven P. Reiss                    */
+/*	Copyright 2013 Brown University -- Steven P. Reiss		      */
 /*********************************************************************************
- *  Copyright 2013, Brown University, Providence, RI.                            *
- *                                                                               *
- *                        All Rights Reserved                                    *
- *                                                                               *
- *  Permission to use, copy, modify, and distribute this software and its        *
- *  documentation for any purpose other than its incorporation into a            *
- *  commercial product is hereby granted without fee, provided that the          *
- *  above copyright notice appear in all copies and that both that               *
- *  copyright notice and this permission notice appear in supporting             *
- *  documentation, and that the name of Brown University not be used in          *
- *  advertising or publicity pertaining to distribution of the software          *
- *  without specific, written prior permission.                                  *
- *                                                                               *
- *  BROWN UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS                *
- *  SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND            *
- *  FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL BROWN UNIVERSITY      *
- *  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY          *
- *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,              *
- *  WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS               *
- *  ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE          *
- *  OF THIS SOFTWARE.                                                            *
- *                                                                               *
+ *  Copyright 2013, Brown University, Providence, RI.				 *
+ *										 *
+ *			  All Rights Reserved					 *
+ *										 *
+ *  Permission to use, copy, modify, and distribute this software and its	 *
+ *  documentation for any purpose other than its incorporation into a		 *
+ *  commercial product is hereby granted without fee, provided that the 	 *
+ *  above copyright notice appear in all copies and that both that		 *
+ *  copyright notice and this permission notice appear in supporting		 *
+ *  documentation, and that the name of Brown University not be used in 	 *
+ *  advertising or publicity pertaining to distribution of the software 	 *
+ *  without specific, written prior permission. 				 *
+ *										 *
+ *  BROWN UNIVERSITY DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS		 *
+ *  SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND		 *
+ *  FITNESS FOR ANY PARTICULAR PURPOSE.  IN NO EVENT SHALL BROWN UNIVERSITY	 *
+ *  BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY 	 *
+ *  DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,		 *
+ *  WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS		 *
+ *  ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 	 *
+ *  OF THIS SOFTWARE.								 *
+ *										 *
  ********************************************************************************/
 
 
 
-package edu.brown.cs.ivy.exec;
+package edu.brown.cs.ivy.file;
 
 import org.slf4j.ILoggerFactory;
 import org.slf4j.IMarkerFactory;
@@ -52,9 +52,9 @@ public class IvySlf4jProvider implements SLF4JServiceProvider
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Private Storage                                                         */
-/*                                                                              */
+/*										*/
+/*	Private Storage 							*/
+/*										*/
 /********************************************************************************/
 
 private ILoggerFactory loggerFactory;
@@ -66,9 +66,9 @@ public static String REQUESTED_API_VERSION = "2.0.99"; // !final
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Constructors                                                            */
-/*                                                                              */
+/*										*/
+/*	Constructors								*/
+/*										*/
 /********************************************************************************/
 
 public IvySlf4jProvider()
@@ -78,7 +78,7 @@ public IvySlf4jProvider()
 
 
 @Override
-public void initialize() 
+public void initialize()
 {
    loggerFactory = new IvySlf4jLoggerFactory();
    markerFactory = new BasicMarkerFactory();
@@ -87,30 +87,30 @@ public void initialize()
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Access methods                                                          */
-/*                                                                              */
+/*										*/
+/*	Access methods								*/
+/*										*/
 /********************************************************************************/
 
-public ILoggerFactory getLoggerFactory() 
+public ILoggerFactory getLoggerFactory()
 {
    return loggerFactory;
 }
 
 @Override
-public IMarkerFactory getMarkerFactory() 
+public IMarkerFactory getMarkerFactory()
 {
    return markerFactory;
 }
 
 @Override
-public NOPMDCAdapter getMDCAdapter() 
+public NOPMDCAdapter getMDCAdapter()
 {
    return mdcAdapter;
 }
 
 @Override
-public String getRequestedApiVersion() 
+public String getRequestedApiVersion()
 {
    return REQUESTED_API_VERSION;
 }
@@ -118,22 +118,22 @@ public String getRequestedApiVersion()
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Logger factory for IvySlf4j                                             */
-/*                                                                              */
+/*										*/
+/*	Logger factory for IvySlf4j						*/
+/*										*/
 /********************************************************************************/
 
 private static class IvySlf4jLoggerFactory implements ILoggerFactory {
-   
+
    @Override public Logger getLogger(String name) {
       try {
-         return new IvySlf4jAdapter(name);
+	 return new IvySlf4jAdapter(name);
        }
       catch (Throwable t) {
-         return null;
+	 return null;
        }
-      
-}       // end of inner class IvySlf4jLoggerFactory
+
+}	// end of inner class IvySlf4jLoggerFactory
 
 
 /********************************************************************************/
@@ -145,33 +145,33 @@ private static class IvySlf4jLoggerFactory implements ILoggerFactory {
 private static class IvySlf4jAdapter implements Logger {
 
    private String logger_name;
-   
+
    private IvySlf4jAdapter(String name) {
       if (name == null) name = "IVYSLF4J";
       logger_name = name;
     }
-   
+
    @Override public String getName() {
       return logger_name;
     }
-   
+
    @Override public boolean isEnabledForLevel(Level level) {
       switch (level) {
-         case DEBUG :
-            return IvyLog.isDoLogging(LogLevel.DEBUG);
-         case ERROR :
-            return IvyLog.isDoLogging(LogLevel.ERROR);
-         case INFO :
-            return IvyLog.isDoLogging(LogLevel.INFO);
-         case TRACE :
-            return IvyLog.isTracing() && IvyLog.isDoLogging(LogLevel.DEBUG);
-         case WARN :
-            return IvyLog.isDoLogging(LogLevel.WARNING);
+	 case DEBUG :
+	    return IvyLog.isDoLogging(LogLevel.DEBUG);
+	 case ERROR :
+	    return IvyLog.isDoLogging(LogLevel.ERROR);
+	 case INFO :
+	    return IvyLog.isDoLogging(LogLevel.INFO);
+	 case TRACE :
+	    return IvyLog.isTracing() && IvyLog.isDoLogging(LogLevel.DEBUG);
+	 case WARN :
+	    return IvyLog.isDoLogging(LogLevel.WARNING);
        }
       return false;
     }
-   
-   
+
+
    @Override public void trace(String msg) {
       if (IvyLog.isTracing()) doLog(LogLevel.DEBUG,msg,null);
     }
@@ -208,9 +208,9 @@ private static class IvySlf4jAdapter implements Logger {
    @Override public boolean isTraceEnabled(Marker mkr) {
       return IvyLog.isTracing() && IvyLog.isDoLogging(LogLevel.DEBUG);
     }
-   
-   
-   
+
+
+
    @Override public void debug(String msg) {
       doLog(LogLevel.DEBUG,msg,null);
     }
@@ -247,8 +247,8 @@ private static class IvySlf4jAdapter implements Logger {
    @Override public boolean isDebugEnabled(Marker mkr) {
       return IvyLog.isDoLogging(LogLevel.DEBUG);
     }
-   
-   
+
+
    @Override public void info(String msg) {
       doLog(LogLevel.INFO,msg,null);
     }
@@ -285,8 +285,8 @@ private static class IvySlf4jAdapter implements Logger {
    @Override public boolean isInfoEnabled(Marker mkr) {
       return IvyLog.isDoLogging(LogLevel.INFO);
     }
-   
-   
+
+
    @Override public void warn(String msg) {
       doLog(LogLevel.WARNING,msg,null);
     }
@@ -323,8 +323,8 @@ private static class IvySlf4jAdapter implements Logger {
    @Override public boolean isWarnEnabled(Marker mkr) {
       return IvyLog.isDoLogging(LogLevel.WARNING);
     }
-   
-   
+
+
    @Override public void error(String msg) {
       doLog(LogLevel.ERROR,msg,null);
     }
@@ -361,10 +361,10 @@ private static class IvySlf4jAdapter implements Logger {
    @Override public boolean isErrorEnabled(Marker mkr) {
       return IvyLog.isDoLogging(LogLevel.ERROR);
     }
-   
+
    private void doLog(LogLevel lvl,String msg,Throwable t) {
       if (!IvyLog.isDoLogging(lvl)) return;
-      IvyLog.outsideLog(lvl,logger_name,0,msg,t); 
+      IvyLog.outsideLog(lvl,logger_name,0,msg,t);
     }
    private void doLog(LogLevel lvl,String ftm,Throwable t,Object ... args) {
       if (!IvyLog.isDoLogging(lvl)) return;
@@ -375,8 +375,8 @@ private static class IvySlf4jAdapter implements Logger {
       if (!IvyLog.isDoLogging(lvl)) return;
       if (mrk == null) doLog(lvl,msg,t);
       else {
-         if (msg == null) msg = mrk.toString();
-         else msg += mrk.toString();
+	 if (msg == null) msg = mrk.toString();
+	 else msg += mrk.toString();
        }
       IvyLog.outsideLog(lvl,logger_name,0,msg,t);
     }
@@ -386,12 +386,12 @@ private static class IvySlf4jAdapter implements Logger {
       msg = String.format(fmt,args);
       if (mrk == null) doLog(lvl,msg,t);
       else {
-         if (msg == null) msg = mrk.toString();
-         else msg += mrk.toString();
+	 if (msg == null) msg = mrk.toString();
+	 else msg += mrk.toString();
        }
       IvyLog.outsideLog(lvl,logger_name,0,msg,t);
     }
-   
+
 }	// end of inner class Slf4jAdapter
 
 
@@ -399,7 +399,7 @@ private static class IvySlf4jAdapter implements Logger {
 
 
 
-}       // end of class IvySlf4jProvider
+}	// end of class IvySlf4jProvider
 
 
 
