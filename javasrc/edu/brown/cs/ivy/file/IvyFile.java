@@ -392,6 +392,7 @@ public static String loadFile(Reader fr) throws IOException
 
 public static String loadFile(InputStream ins) throws IOException
 {
+   if (ins == null) return null;
    InputStreamReader isr = new InputStreamReader(ins);
    return loadFile(isr);
 }

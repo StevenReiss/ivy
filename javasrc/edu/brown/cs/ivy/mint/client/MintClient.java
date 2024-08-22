@@ -425,12 +425,18 @@ private synchronized void handleRegister(String pattern,Element xml,MintHandler 
       MintLogger.log("Bad pattern: " + xpat + " :: " + pattern);
     }
 
-   synchronized (write_lock) {
-      int pid = pat_counter++;
-      pattern_hash.put(Integer.valueOf(pid),new PatternInfo(xml,hdlr));
-      server_writer.println(MINT_HEADER_REGISTER + " " + pid);
-      server_writer.println(pattern);
-      server_writer.println(MINT_TRAILER);
+   try {
+      synchronized (write_lock) {
+         int pid = pat_counter++;
+         pattern_hash.put(Integer.valueOf(pid),new PatternInfo(xml,hdlr));
+         server_writer.println(MINT_HEADER_REGISTER + " " + pid);
+         server_writer.println(pattern);
+         server_writer.println(MINT_TRAILER);
+       }
+    }
+   catch (Throwable t) {
+      MintLogger.log("Problem connecting to server: " + t);
+      t.printStackTrace();
     }
 }
 
