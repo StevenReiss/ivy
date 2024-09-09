@@ -193,7 +193,7 @@ private static void test2()
       System.err.println("FLOW DONE");
       JflowModel.Main mm = mdl.createModel();
       if (mm != null) {
-	 FileWriter fw = new FileWriter("/ws/volfred/spr/model.out");
+	 FileWriter fw = new FileWriter("/data/fred4/spr/model.out");
 	 IvyXmlWriter xw = new IvyXmlWriter(fw);
 	 mm.outputProgram(xw);
 	 mm.outputGlobalProgram(xw,null,null);
@@ -241,7 +241,7 @@ private static void test3()
       System.err.println("FLOW DONE");
       JflowModel.Main mm = mdl.createModel();
       if (mm != null) {
-	 FileWriter fw = new FileWriter("/ws/volfred/spr/model.out");
+	 FileWriter fw = new FileWriter("/data/fred4/spr/model.out");
 	 IvyXmlWriter xw = new IvyXmlWriter(fw);
 	 mm.outputProgram(xw);
 	 xw.close();
@@ -349,7 +349,7 @@ private static void test5()
       System.err.println("FLOW DONE");
       JflowModel.Main mm = mdl.createModel();
       if (mm != null) {
-	 FileWriter fw = new FileWriter("/ws/volfred/spr/model.out");
+	 FileWriter fw = new FileWriter("/data/fred4/spr/model.out");
 	 IvyXmlWriter xw = new IvyXmlWriter(fw);
 	 mm.outputProgram(xw);
 	 mm.outputGlobalProgram(xw,null,null);
@@ -445,63 +445,63 @@ public static class TestIOControl extends TestControl {
     }
 
    @Override public JflowEvent findEvent(JflowModel jm,JflowMethod m,BT_Ins ins,boolean start,
-        			  List<Object> vals) {
+				  List<Object> vals) {
       if (!start) return null;
       BT_Method mthd = m.getMethod();
       if (!jm.getFlowMaster().isProjectClass(mthd.getDeclaringClass())) return null;
-   
+
       JflowValue jv = m.getAssociation(AssociationType.NEW,ins);
       if (jv == null) jv = m.getAssociation(AssociationType.THISARG,ins);
       if (jv == null) return null;
       String etyp = null;
       switch (ins.opcode) {
-         case BT_Opcodes.opc_new :
-            etyp = "NEW " + ins.getClassTarget().getName();
-            break;
-         case BT_Opcodes.opc_invokeinterface :
-         case BT_Opcodes.opc_invokestatic :
-         case BT_Opcodes.opc_invokespecial :
-         case BT_Opcodes.opc_invokevirtual :
-            BT_Method bm = ins.getMethodTarget();
-            String cnm = bm.getDeclaringClass().getName();
-            if (!cnm.startsWith("javax.swing") && !cnm.startsWith("java.awt")) return null;
-            etyp = "USE " + CinderManager.getMethodName(bm) + " (";
-            for (int i = 1; ; ++i) {
-               try {
-        	  AssociationType at = AssociationType.valueOf("ARG" + i);
-        	  JflowValue ajv = m.getAssociation(at,ins);
-        	  if (ajv == null) break;
-        	  if (i > 1) etyp += ",";
-        	  Object o = ajv.getProgramValue();
-        	  if (o == null) etyp += "?";
-        	  else etyp += o.toString();
-        	}
-               catch (IllegalArgumentException e) {
-        	  break;
-        	}
-             }
-            etyp += ")";
-            break;
-         default :
-            return null;
+	 case BT_Opcodes.opc_new :
+	    etyp = "NEW " + ins.getClassTarget().getName();
+	    break;
+	 case BT_Opcodes.opc_invokeinterface :
+	 case BT_Opcodes.opc_invokestatic :
+	 case BT_Opcodes.opc_invokespecial :
+	 case BT_Opcodes.opc_invokevirtual :
+	    BT_Method bm = ins.getMethodTarget();
+	    String cnm = bm.getDeclaringClass().getName();
+	    if (!cnm.startsWith("javax.swing") && !cnm.startsWith("java.awt")) return null;
+	    etyp = "USE " + CinderManager.getMethodName(bm) + " (";
+	    for (int i = 1; ; ++i) {
+	       try {
+		  AssociationType at = AssociationType.valueOf("ARG" + i);
+		  JflowValue ajv = m.getAssociation(at,ins);
+		  if (ajv == null) break;
+		  if (i > 1) etyp += ",";
+		  Object o = ajv.getProgramValue();
+		  if (o == null) etyp += "?";
+		  else etyp += o.toString();
+		}
+	       catch (IllegalArgumentException e) {
+		  break;
+		}
+	     }
+	    etyp += ")";
+	    break;
+	 default :
+	    return null;
        }
-   
+
       boolean use = false;
       for (JflowSource src : jv.getSourceCollection()) {
-         if (src.isModel()) {
-            TestSource ts = (TestSource) src.getModelSource();
-            etyp += " " + ts.getId();
-            use = true;
-          }
+	 if (src.isModel()) {
+	    TestSource ts = (TestSource) src.getModelSource();
+	    etyp += " " + ts.getId();
+	    use = true;
+	  }
        }
       if (!use) return null;
-   
+
       TestEvent te = event_map.get(etyp);
       if (te == null) {
-         te = new TestEvent(etyp);
-         event_map.put(etyp,te);
+	 te = new TestEvent(etyp);
+	 event_map.put(etyp,te);
        }
-   
+
       return te;
     }
 
