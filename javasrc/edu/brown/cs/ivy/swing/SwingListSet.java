@@ -88,6 +88,8 @@ import javax.swing.ComboBoxModel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 
@@ -162,10 +164,18 @@ public SwingListSet(boolean ordered)
 
 
 
-
 @Override public int getSize() {
    getArray();
    return element_array.length;
+}
+
+
+public boolean isOrderable() 
+{
+   if (element_set instanceof Set) return false;
+   if (element_set instanceof List) return true;
+   
+   return false;
 }
 
 
@@ -242,6 +252,20 @@ public synchronized void editElement(T elt)
    int idx = getIndexOf(elt);
    if (idx < 0) return;
    fireContentsChanged(this,idx,idx);
+}
+
+
+public void moveElement(int fromindex,int toindex)
+{
+   if (element_set instanceof List) {
+      List<T> eset = (List<T>) element_set;
+      T elt = eset.remove(fromindex);
+      eset.set(toindex,elt);
+      int min = Math.min(fromindex,toindex);
+      int max = Math.max(fromindex,toindex);
+      element_array = null;
+      fireContentsChanged(this,min,max);
+    }
 }
 
 

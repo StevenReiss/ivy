@@ -44,7 +44,6 @@ import org.slf4j.helpers.BasicMarkerFactory;
 import org.slf4j.helpers.NOPMDCAdapter;
 import org.slf4j.spi.SLF4JServiceProvider;
 
-import edu.brown.cs.ivy.file.IvyLog;
 import edu.brown.cs.ivy.file.IvyLog.LogLevel;
 
 public class IvySlf4jProvider implements SLF4JServiceProvider

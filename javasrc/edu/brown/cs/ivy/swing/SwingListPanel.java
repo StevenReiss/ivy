@@ -86,6 +86,8 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -109,6 +111,8 @@ private JList<T> item_list;
 private JButton new_button;
 private JButton edit_button;
 private JButton delete_button;
+private JButton up_button;
+private JButton down_button;
 private SwingListSet<T> item_set;
 private SwingEventListenerList<ActionListener>	action_listeners;
 
@@ -125,8 +129,17 @@ private static final long serialVersionUID = 1;
 
 protected SwingListPanel(SwingListSet<T> itemset)
 {
+   this(itemset,false);
+}
+
+
+
+protected SwingListPanel(SwingListSet<T> itemset,boolean orderable)
+{
    int y = 0;
    item_set = itemset;
+   
+   if (!itemset.isOrderable()) orderable = false; 
 
    action_listeners = new SwingEventListenerList<>(ActionListener.class);
 
@@ -142,6 +155,17 @@ protected SwingListPanel(SwingListSet<T> itemset)
 
    delete_button = new JButton("Delete");
    addGBComponent(delete_button,1,y++,1,1,0,0);
+   
+   if (orderable) {
+      up_button = new JButton("Move Up");
+      addGBComponent(up_button,1,y++,1,1,0,0);
+      down_button = new JButton("Move Down");
+      addGBComponent(down_button,1,y++,1,1,0,0);
+    }
+   else {
+      up_button = null;
+      down_button = null;
+    }
 
    JLabel dmy = new JLabel();
    addGBComponent(dmy,1,y++,1,1,0,0);
@@ -150,6 +174,8 @@ protected SwingListPanel(SwingListSet<T> itemset)
    new_button.addActionListener(this);
    edit_button.addActionListener(this);
    delete_button.addActionListener(this);
+   if (up_button != null) up_button.addActionListener(this);
+   if (down_button != null) down_button.addActionListener(this);
 
    fixButtons();
 }
@@ -199,7 +225,6 @@ public void setBackground(Color c)
 
 
 
-
 /********************************************************************************/
 /*										*/
 /*	Update methods								*/
@@ -212,11 +237,26 @@ private void fixButtons()
    if (sels == null || sels.size() == 0) {
       edit_button.setEnabled(false);
       delete_button.setEnabled(false);
+      if (up_button != null) up_button.setEnabled(false);
+      if (down_button != null) down_button.setEnabled(false);
     }
    else {
       delete_button.setEnabled(true);
-      if (sels.size() == 1) edit_button.setEnabled(true);
-      else edit_button.setEnabled(false);
+      if (sels.size() == 1) {
+         int idx = item_list.getSelectedIndex();
+         if (idx == 0 && up_button != null) up_button.setEnabled(false);
+         else if (up_button != null) up_button.setEnabled(true);
+         if (idx >= item_list.getModel().getSize() -1 && down_button != null) {
+            down_button.setEnabled(false);
+          }
+         else if (down_button != null) down_button.setEnabled(true);
+         edit_button.setEnabled(true);
+       }
+      else {
+         edit_button.setEnabled(false);
+         if (up_button != null) up_button.setEnabled(false);
+         if (down_button != null) down_button.setEnabled(false);
+       }
     }
 }
 
@@ -269,8 +309,22 @@ private void fixButtons()
        }
       if (sels.size() > 0) triggerActionEvent("ListUpdated");
     }
+   else if (cmd.equals("MOVE UP")) {
+      if (sels != null && sels.size() == 1) {
+	 int idx = item_list.getSelectedIndex();
+         if (idx > 0) item_set.moveElement(idx,idx-1); 
+       }
+    }
+   else if (cmd.equals("MOVE DOWN")) {
+      if (sels != null && sels.size() == 1) {
+	 int idx = item_list.getSelectedIndex();
+         if (idx+1 < item_set.getSize()) {
+            item_set.moveElement(idx,idx+1);
+          }
+       }
+    }
    else {
-      System.err.println("IVY: Unknown Data command: " + cmd);
+      IvyLog.logE("SWING","Unknown SwingList Data command: " + cmd);
     }
 }
 
