@@ -227,7 +227,7 @@ private class ErrorVisitor extends ASTVisitor {
       ASTNode mthd = null;
       for (ASTNode n1 = n; n1 != null; n1 = n1.getParent()) {
          if (n1 instanceof MethodDeclaration) {
-            mthd = (MethodDeclaration) n1;
+            mthd = n1;
             break;
           }
          else if (n1 instanceof LambdaExpression) {
