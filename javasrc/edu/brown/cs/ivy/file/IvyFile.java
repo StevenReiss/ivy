@@ -100,7 +100,6 @@ static {
    catch (Throwable e) {
       IvyLog.logE("Problem invoking setup",e);
     }
-// IvySetup.setup();
 }
 
 
@@ -759,4 +758,4 @@ public static String parseMarkdown(String md)
 
 
 
-			
+		
