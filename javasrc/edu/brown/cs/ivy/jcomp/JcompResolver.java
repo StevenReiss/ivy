@@ -850,7 +850,7 @@ private class RefPass extends ASTVisitor {
       
       List<JcompType> atyp = buildArgumentList(n.arguments(),true);
       lookupMethod(bt,atyp,n,n.getName(),null,isstatic,false,n.arguments(),targs);
-      // might want to use outer types if    this failed
+      // might want to use outer types if this failed
    
       return false;
     }
