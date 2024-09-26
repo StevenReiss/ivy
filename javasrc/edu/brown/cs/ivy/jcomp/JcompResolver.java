@@ -1449,6 +1449,12 @@ private class RefPass extends ASTVisitor {
          String id,boolean isstatic,boolean dfltcnst,List<?> args,List<JcompType> typargs) {
       JcompSymbol js = null;
    
+      if (id == null && nm != null) id = nm.getIdentifier();
+      
+      if (n.toString().equals("d.equals(sel)")) {
+         System.err.println("CHECK HERE");
+       }
+      
       if (bt != null && bt.getSignature() != null) {
          if (!bt.isParameterizedType() || !bt.isComplete()) {
             JcompType rty = getReferenceType(n);
@@ -1468,8 +1474,6 @@ private class RefPass extends ASTVisitor {
             IvyLog.logE("JCOMP","CASE: " + bt + " " + nm + " " + n,t);
             mtyp = findType(TYPE_ERROR);
           }
-   
-         if (id == null && nm != null) id = nm.getIdentifier();
    
          if (bt != null) bt.defineAll(type_data);
    
@@ -1513,6 +1517,10 @@ private class RefPass extends ASTVisitor {
        }
    
       if (js != null) {
+         JcompSymbol jsold = JcompAst.getReference(n);
+         if (jsold != null && jsold != js) {
+            js = getCommonParentMethod(js,jsold);
+          }
          if (nm != null) JcompAst.setReference(nm,js);
          JcompAst.setReference(n,js);
          fixStaticSignature(bt,n);
@@ -1532,7 +1540,8 @@ private class RefPass extends ASTVisitor {
           }
          if (rt.isParameterizedType()) {
             if (!rt.isComplete()) {
-               rt = JcompGenerics.deriveReturnType(type_data,js.getType(),bt,atyp,js.getClassType(),typargs);
+               rt = JcompGenerics.deriveReturnType(type_data,js.getType(),
+                     bt,atyp,js.getClassType(),typargs);
              }
           }
          else if (rt.isTypeVariable() || (jst != null && jst.getSignature() != null)) {
@@ -1542,11 +1551,13 @@ private class RefPass extends ASTVisitor {
              }
             else {
                // JcompType mty = JcompGenerics.deriveMethodType(type_data,js.getType(),bt,typargs);
-               rt = JcompGenerics.deriveReturnType(type_data,js.getType(),bt,atyp,js.getClassType(),typargs);
+               rt = JcompGenerics.deriveReturnType(type_data,js.getType(),
+                    bt,atyp,js.getClassType(),typargs);
              }
           }
          else if (rt.getSignature() != null && rt.getSignature().startsWith("<")) {
-            rt = JcompGenerics.deriveReturnType(type_data,js.getType(),bt,atyp,js.getClassType(),typargs);
+            rt = JcompGenerics.deriveReturnType(type_data,js.getType(),
+                  bt,atyp,js.getClassType(),typargs);
           }
          else if (id != null && id.equals("clone") && atyp.size() == 0 && bt != null) {
             rt = bt;
@@ -1564,6 +1575,21 @@ private class RefPass extends ASTVisitor {
          JcompAst.setExprType(n,findType(TYPE_ERROR));
        }
     }
+   
+   
+   private JcompSymbol getCommonParentMethod(JcompSymbol s1,JcompSymbol s2)
+   {
+      JcompType t1 = s1.getClassType();
+      JcompType t2 = s2.getClassType();
+      if (t1.getName().contains("Enum") || t2.getName().contains("java.lang.Enum"))
+         System.err.println("CHECK HERE");
+      if (t1.equals(t2)) return s1;
+      
+      JcompType ts = t1.getCommonParent(type_data,t2);
+      JcompSymbol sp = ts.lookupMethod(type_data,s1.getName(),s1.getType());
+      
+      return sp;
+   }
 
 
    private void rescanArgsForMethod(JcompSymbol js,List<?>  args)
@@ -1574,13 +1600,13 @@ private class RefPass extends ASTVisitor {
       if (js.getType().getSignature() == null && js.getSignature() == null) return;
       need_rescan = false;
       for (Object o : args) {
-	 JcompType jt = JcompAst.getExprType((ASTNode) o);
-	 if (jt != null && jt.isErrorType())
-	    return;
+         JcompType jt = JcompAst.getExprType((ASTNode) o);
+         if (jt != null && jt.isErrorType())
+            return;
        }
       for (Object o : args) {
-	 Expression arge = (Expression) o;
-	 arge.accept(this);
+         Expression arge = (Expression) o;
+         arge.accept(this);
        }
    }
 

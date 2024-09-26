@@ -8,6 +8,7 @@
 
 package edu.brown.cs.ivy.jcomp;
 
+import edu.brown.cs.ivy.file.IvyLog;
 import edu.brown.cs.ivy.jcode.JcodeClass;
 import edu.brown.cs.ivy.jcode.JcodeDataType;
 import edu.brown.cs.ivy.jcode.JcodeFactory;
@@ -311,7 +312,7 @@ private synchronized JcompType getJcompType(JcompTyper typer,JcodeClass jc,Strin
       if (jc.superName != null) {
 	 JcompType sty = getAsmTypeName(typer,jc.superName);
 	 if (sty == null) {
-	    System.err.println("SUPER TYPE IS UNKNOWN IN CODE: " + jc.superName);
+            IvyLog.logD("JCOMP","Super type is unknown in code: " + jc.superName);
 	  }
 	 if (sty != null) jt.setSuperType(sty);
        }

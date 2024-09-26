@@ -183,8 +183,10 @@ JcompScopeFixed()
              }
 	  }
 	 else if (bestms == null) {
-            bestms = js;
-            repl = true;
+            if (aty.getComponents().size() == js.getType().getComponents().size()) {
+               bestms = js;
+               repl = true;
+             }
 	  }
        }
       if (bestms != null) return bestms;

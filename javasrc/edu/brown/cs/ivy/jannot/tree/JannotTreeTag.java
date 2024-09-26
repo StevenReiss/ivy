@@ -361,4 +361,3 @@ public int operatorIndex() {
 
 
 /* end of JannotTreeTag.java */
-

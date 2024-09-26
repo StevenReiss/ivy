@@ -1113,7 +1113,6 @@ private JcompType findCommonMethod(JcompTyper typer,JcompType t2)
 {
    if (this == t2) return this;
    
-   
    List<JcompType> thcomp = getComponents();
    List<JcompType> t2comp = t2.getComponents();
    if (thcomp.size() != t2comp.size()) return null;
@@ -1747,8 +1746,8 @@ private static abstract class ClassInterfaceType extends JcompType {
 
    @Override void setSuperType(JcompType t) {
       if (t != this && t != null) {
-	 super_type = t;
-	 t.addChild(this);
+         super_type = t;
+         t.addChild(this);
        }
     }
 
@@ -2624,10 +2623,10 @@ private static class ParamType extends ClassInterfaceType {
    @Override public boolean isComplete() {
       if (!base_type.isComplete()) return false;
       for (JcompType jt : param_values.values()) {
-	 if (jt == this) {
-	    System.err.println("RECURSIVE PARAMETER TYPES");
-	  }
-	 if (!jt.isComplete()) return false;
+         if (jt == this) {
+            System.err.println("RECURSIVE PARAMETER TYPES");
+          }
+         if (!jt.isComplete()) return false;
        }
       return true;
     }
@@ -2900,6 +2899,9 @@ private static class VarType extends ClassInterfaceType {
    }
 
    @Override void setSuperType(JcompType jt) {
+      if (jt.getName().contains("Enum")) {
+         System.err.println("CHECK HERE");
+       }
       super.setSuperType(jt);
       // recompute type name
     }

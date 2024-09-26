@@ -302,7 +302,7 @@ public SwingGridPanel(UndoableEditSupport ued)
 {
    this(ued,null);
 }
-   
+
 public SwingGridPanel(UndoableEditSupport ued,IvyI18N i18n)
 {
    super(new GridBagLayout(),true);
@@ -351,8 +351,8 @@ public final Object getComponentForLabel(String c)
 
    for (Map.Entry<Object,String> ent : tag_map.entrySet()) {
       if (c.equals(ent.getValue())) {
-         Object rslt = ent.getKey();
-         if (rslt instanceof Component) return rslt;
+	 Object rslt = ent.getKey();
+	 if (rslt instanceof Component) return rslt;
       }
     }
 
@@ -461,11 +461,11 @@ public final void setInsets(int v)
 
 
 
-@Override public final Insets getInsets() 		{ return inset_values; }
+@Override public final Insets getInsets()		{ return inset_values; }
 
 
 
-public final void setI18N(IvyI18N i18n) 
+public final void setI18N(IvyI18N i18n)
 {
    i18n_map = i18n;
 }
@@ -535,7 +535,7 @@ public final JLabel addDescription(String lbl,String val)
    desc.setFont(fnt);
 
    addGBComponent(desc,1,y_count++,0,1,10,0);
-   
+
    addDependency(desc,tag);
 
    return desc;
@@ -561,7 +561,7 @@ public final Component addRawComponent(String lbl, Component c)
     }
 
    addGBComponent(c,1,y_count++,0,1,10,0);
-   
+
    addDependency(c,tag);
 
    return c;
@@ -615,7 +615,7 @@ public final <T> SwingComboBox<T> addChoice(String lbl,Collection<T> data,int id
 
    tag_map.put(cbx,lbl);
    addDependency(cbx,tag);
-   
+
    cbx.setActionCommand(lbl);
    if (cb != null) cbx.addActionListener(cb);
 
@@ -726,9 +726,9 @@ public final <T extends Enum<?>> SwingComboBox<T> addChoice(String lbl,T v,boole
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Boolean buttons                                                         */
-/*                                                                              */
+/*										*/
+/*	Boolean buttons 							*/
+/*										*/
 /********************************************************************************/
 
 public final JCheckBox addBoolean(String lbl,boolean val,ActionListener cb)
@@ -746,7 +746,7 @@ public final JCheckBox addBoolean(String lbl,boolean val,ActionListener cb)
 
    tag_map.put(cbx,lbl);
    addDependency(cbx,tag);
-   
+
    return cbx;
 }
 
@@ -754,22 +754,22 @@ public final JCheckBox addBoolean(String lbl,boolean val,ActionListener cb)
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Button set buttons                                                      */
-/*                                                                              */
+/*										*/
+/*	Button set buttons							*/
+/*										*/
 /********************************************************************************/
 
 public final JList<String> addButtonSet(String lbl,Map<String,Boolean> values,ListSelectionListener cb)
 {
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
-   
+
    String [] valarr = values.keySet().toArray(new String[values.size()]);
    JList<String> lst = new JList<>(valarr);
    lst.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
    for (int i = 0; i < valarr.length; ++i) {
       if (values.get(valarr[i]) == Boolean.TRUE) {
-         lst.addSelectionInterval(i,i);
+	 lst.addSelectionInterval(i,i);
        }
     }
    if (cb != null) lst.addListSelectionListener(cb);
@@ -777,12 +777,12 @@ public final JList<String> addButtonSet(String lbl,Map<String,Boolean> values,Li
    int rows = Math.min(valarr.length,3);
    lst.setVisibleRowCount(rows);
    lst.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-   
+
    addGBComponent(lst,1,y_count++,1,1,0,0);
-   
+
    tag_map.put(lst,lbl);
    addDependency(lst,tag);
-   
+
    return lst;
 }
 
@@ -797,7 +797,7 @@ public final JList<String> addButtonSet(String lbl,Map<String,Boolean> values,Li
 
 public final SwingNumericField addNumericField(String lbl,double min,double max,double val,
 						  ActionListener cb1)
-{
+{												
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
@@ -810,7 +810,7 @@ public final SwingNumericField addNumericField(String lbl,double min,double max,
 
    tag_map.put(tfld,lbl);
    addDependency(tfld,tag);
-   
+
    return tfld;
 }
 
@@ -832,7 +832,7 @@ public final SwingNumericField addNumericField(String lbl,int min,int max,int va
 
    tag_map.put(tfld,lbl);
    addDependency(tfld,tag);
-   
+
    return tfld;
 }
 
@@ -853,7 +853,7 @@ public final SwingRangeSlider addRange(String lbl,int min,int max,int dec,int va
 
    tag_map.put(sldr,lbl);
    addDependency(sldr,tag);
-   
+
    return sldr;
 }
 
@@ -872,7 +872,7 @@ public final SwingDimensionChooser addDimensionField(String lbl,int w,int h,Acti
 
    tag_map.put(tfld,lbl);
    addDependency(tfld,tag);
-   
+
    return tfld;
 }
 
@@ -916,7 +916,7 @@ public final JTextField addTextField(String lbl,String val,int wid,ActionListene
    tag_map.put(doc,lbl);
    addDependency(tfld,tag);
    label_map.put(doc,tag);
-   
+
    return tfld;
 }
 
@@ -947,7 +947,7 @@ public final JTextArea addTextArea(String lbl,String val,int row,int col,Undoabl
    tag_map.put(doc,lbl);
    addDependency(tarea,tag);
    label_map.put(doc,tag);
-   
+
    return tarea;
 }
 
@@ -1084,7 +1084,7 @@ public final JTextField addFileField(String lbl,String val,int md,
 
 private JTextField localAddFileField(String lbl,String val,int md,
 					Iterable<FileFilter> filters,
-                                        FileSystemView fsv,
+					FileSystemView fsv,
 					ActionListener cb1,
 					CaretListener cb3,
 					UndoableEditListener cb2)
@@ -1154,7 +1154,7 @@ public final SwingColorButton addColorField(String lbl,Color val,boolean alpha,A
 
    tag_map.put(btn,lbl);
    addDependency(btn,tag);
-   
+
    return btn;
 }
 
@@ -1195,7 +1195,7 @@ public final SwingFontChooser addFontField(String lbl,Font font,Color c,int opts
 
    tag_map.put(fc,lbl);
    addDependency(fc,tag);
-   
+
    return fc;
 }
 
@@ -1370,7 +1370,7 @@ public final GridBagConstraints addGBComponent(Component c,int x,int y,int wd,in
 /********************************************************************************/
 
 public void setBannerPrototype(JLabel lbl)		{ banner_prototype = lbl; }
-public JLabel getBannerPrototype()                      { return banner_prototype; }
+public JLabel getBannerPrototype()			{ return banner_prototype; }
 public void setSectionPrototype(JLabel lbl)		{ section_prototype = lbl; }
 public void setLabelPrototype(JLabel lbl)		{ label_prototype = lbl; }
 
@@ -1397,7 +1397,7 @@ public JLabel createLabel(String txt,int halign,JLabel proto)
 private JLabel createLabel(String txt)
 {
    String txt1 = mapText(txt);
-   
+
    return createLabel(" " + txt1 + " : ",SwingConstants.RIGHT,label_prototype);
 }
 
@@ -1452,15 +1452,15 @@ public void fireActionPerformed()
 
 
 /********************************************************************************/
-/*                                                                              */
-/*      Handle dependencies to allow easy show/hide                             */
-/*                                                                              */
+/*										*/
+/*	Handle dependencies to allow easy show/hide				*/
+/*										*/
 /********************************************************************************/
 
 private void addDependency(Component from,Component to)
 {
    if (from == null || to == null) return;
-   
+
    List<Component> deps = dependent_items.get(from);
    if (deps == null) {
       deps = new ArrayList<>();
@@ -1480,19 +1480,19 @@ private class DepListener extends ComponentAdapter {
    @Override public void componentShown(ComponentEvent e) {
       update(e,true);
     }
-   
+
    @Override public void componentHidden(ComponentEvent e) {
       update(e,false);
     }
-   
+
    private void update(ComponentEvent e,boolean vis) {
       Component jc = (Component) e.getSource();
       List<Component> deps = dependent_items.get(jc);
       if (deps == null) return;
       for (Component dc : deps) dc.setVisible(vis);
     }
-   
-}       // end of inner class DepListener
+
+}	// end of inner class DepListener
 
 
 
@@ -1509,7 +1509,7 @@ private class TextUnfocus implements FocusListener {
    TextUnfocus() {
       last_text = null;
     }
-   
+
    @Override public void focusGained(FocusEvent e) {
       JTextField tfld = (JTextField) e.getSource();
       last_text = tfld.getText();
@@ -1520,7 +1520,7 @@ private class TextUnfocus implements FocusListener {
       String t = tfld.getText();
       if (t == null && last_text == null) return;
       else if (t == null || !t.equals(last_text)) {
-         tfld.postActionEvent();
+	 tfld.postActionEvent();
        }
       last_text = null;
     }
@@ -1550,8 +1550,8 @@ private class BrowseListener implements ActionListener {
       file_mode = md;
       if (filters == null) user_filters = null;
       else {
-         user_filters = new ArrayList<FileFilter>();
-         for (FileFilter ff : filters) user_filters.add(ff);
+	 user_filters = new ArrayList<FileFilter>();
+	 for (FileFilter ff : filters) user_filters.add(ff);
        }
     }
 
@@ -1560,26 +1560,26 @@ private class BrowseListener implements ActionListener {
    @Override public void actionPerformed(ActionEvent e) {
       String cur = text_field.getText();
       if (cur != null) {
-         File curf = null;
-         FileSystemView fsv = file_chooser.getFileSystemView();
-         if (fsv == null) curf = new File(cur);
-         else curf = fsv.createFileObject(cur);
-         file_chooser.setSelectedFile(curf);
+	 File curf = null;
+	 FileSystemView fsv = file_chooser.getFileSystemView();
+	 if (fsv == null) curf = new File(cur);
+	 else curf = fsv.createFileObject(cur);
+	 file_chooser.setSelectedFile(curf);
        }
       file_chooser.setFileSelectionMode(file_mode);
       if (user_filters != null) {
-         file_chooser.setAcceptAllFileFilterUsed(false);
-         int ct = 0;
-         for (FileFilter ff : user_filters) {
-            if (ct++ == 0) file_chooser.setFileFilter(ff);
-            file_chooser.addChoosableFileFilter(ff);
-          }
+	 file_chooser.setAcceptAllFileFilterUsed(false);
+	 int ct = 0;
+	 for (FileFilter ff : user_filters) {
+	    if (ct++ == 0) file_chooser.setFileFilter(ff);
+	    file_chooser.addChoosableFileFilter(ff);
+	  }
        }
-   
+
       int rval = file_chooser.showOpenDialog(SwingGridPanel.this);
       if (rval == JFileChooser.APPROVE_OPTION) {
-         text_field.setText(file_chooser.getSelectedFile().getAbsolutePath());
-         text_field.postActionEvent();
+	 text_field.setText(file_chooser.getSelectedFile().getAbsolutePath());
+	 text_field.postActionEvent();
        }
     }
 
