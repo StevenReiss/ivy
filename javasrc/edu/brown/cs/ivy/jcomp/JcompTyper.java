@@ -93,6 +93,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -143,6 +144,7 @@ private final String [] BASE_TYPES = { "byte", "short", "char", "int", "long", "
 					  "double", "boolean", "void" };
 
 private static Set<String> known_prefix;
+private static String METHOD_PARAMETER = ".$M$.";
 
 
 static {
@@ -869,6 +871,7 @@ private class TypeFinder extends ASTVisitor {
    private Map<String,String> specific_names;
    private List<String> prefix_set;
    private String type_prefix;
+   private Stack<String> method_stack;
    private JcompType outer_type;
    private int anon_counter;
 
@@ -876,6 +879,7 @@ private class TypeFinder extends ASTVisitor {
       specific_names = s;
       prefix_set = p;
       type_prefix = null;
+      method_stack = new Stack<>();
       anon_counter = 0;
       outer_type = null;
     }
@@ -981,12 +985,25 @@ private class TypeFinder extends ASTVisitor {
 
    @Override public boolean visit(TypeParameter t) {
       String nm = type_prefix + "." + t.getName().getIdentifier();
+      if (t.getParent() instanceof MethodDeclaration && !method_stack.isEmpty()) {
+         nm = type_prefix + METHOD_PARAMETER + method_stack.peek() + "." +
+            t.getName().getIdentifier();
+       }
       JcompType jt = JcompType.createVariableType(nm);
       jt = fixJavaType(jt);
       setJavaType(t.getName(),jt);
       setJavaType(t,jt);
       addSpecificType(nm);
       return true;
+    }
+   
+   @Override public boolean visit(MethodDeclaration t) {
+      method_stack.push(t.getName().getIdentifier());
+      return true;
+    }
+   
+   @Override public void endVisit(MethodDeclaration t) {
+      if (!method_stack.isEmpty()) method_stack.pop();
     }
 
    private void addPrefixTypes(String pnm) {
@@ -1018,6 +1035,7 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    private List<String> prefix_set;
    protected JcompType outer_type;
    protected String type_prefix;
+   protected Stack<String> method_stack;
    protected boolean canbe_type;
    protected boolean set_types;
 
@@ -1067,12 +1085,12 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    @Override public void endVisit(TypeParameter t) {
       JcompType vart = JcompAst.getJavaType(t);
       for (Object o : t.typeBounds()) {
-	 Type tt = (Type) o;
-	 JcompType jt = JcompAst.getJavaType(tt);
-	 if (jt != null) {
-	    if (jt.isInterfaceType()) vart.addInterface(jt);
-	    else vart.setSuperType(jt);
-	  }
+         Type tt = (Type) o;
+         JcompType jt = JcompAst.getJavaType(tt);
+         if (jt != null) {
+            if (jt.isInterfaceType()) vart.addInterface(jt);
+            else vart.setSuperType(jt);
+          }
        }
     }
 
@@ -1102,8 +1120,8 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    @Override public void endVisit(UnionType t) {
       List<JcompType> tps = new ArrayList<JcompType>();
       for (Object o : t.types()) {
-	 JcompType jt = JcompAst.getJavaType((ASTNode) o);
-	 if (jt != null) tps.add(jt);
+         JcompType jt = JcompAst.getJavaType((ASTNode) o);
+         if (jt != null) tps.add(jt);
        }
       JcompType ut = JcompType.createUnionType(tps);
       ut = fixJavaType(ut);
@@ -1204,6 +1222,14 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
          if (jt != null) setJavaType(t,jt);
        }
     }
+   
+   protected void pushMethod(MethodDeclaration md) {
+      method_stack.push(md.getName().getIdentifier());
+    }
+   
+   protected void popMethod(MethodDeclaration md) {
+      if (!method_stack.isEmpty()) method_stack.pop();
+    }
 
    protected void visitItem(ASTNode n) {
       if (n != null) {
@@ -1273,54 +1299,60 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
 
    protected String findTypeName(String nm,boolean force) {
       if (outer_type != null) {
-	 String onm = findOuterTypeName(nm);
-	 if (onm != null) return onm;
+         String onm = findOuterTypeName(nm);
+         if (onm != null) return onm;
        }
-
+   
       if (specific_names != null) {
-	 String spn1 = specific_names.get(nm);
-	 if (spn1 != null) return spn1;
+         String spn1 = specific_names.get(nm);
+         if (spn1 != null) return spn1;
        }
       String spn = checkTypeName(nm,nm);
       if (spn != null) return spn;
-
-      int idx = nm.lastIndexOf('.');            // look for subtypes
+   
+      int idx = nm.lastIndexOf('.');            // look for inner types
       if (idx >= 0) {
-	 String pfx = nm.substring(0,idx);
-	 String s0 = findTypeName(pfx,false);
-	 if (s0 != null) {
-	    String s = s0 + nm.substring(idx);
-	    String s1 = checkTypeName(nm,s);
-	    if (s1 != null) {
-	       known_names.put(nm,s1);
-	       return s1;
-	     }
-	    JcompType jt = findSystemType(s0);
-	    if (jt != null) {
-	       String s2 = checkParentType(nm.substring(idx+1),jt,false,new HashSet<>());
-	       if (s2 != null) {
-		  known_names.put(nm,s2);
-		  return s2;
-		}
-	     }
-	  }
+         String pfx = nm.substring(0,idx);
+         String s0 = findTypeName(pfx,false);
+         if (s0 != null) {
+            String s = s0 + nm.substring(idx);
+            String s1 = checkTypeName(nm,s);
+            if (s1 != null) {
+               known_names.put(nm,s1);
+               return s1;
+             }
+            JcompType jt = findSystemType(s0);
+            if (jt != null) {
+               String s2 = checkParentType(nm.substring(idx+1),jt,false,new HashSet<>());
+               if (s2 != null) {
+        	  known_names.put(nm,s2);
+        	  return s2;
+        	}
+             }
+          }
        }
-
+   
       for (String p : prefix_set) {		// look for on-demand types
-	 String t = p + nm;
-	 spn = checkTypeName(nm,t);
-	 if (spn != null) return spn;
+         String t = p + nm;
+         spn = checkTypeName(nm,t);
+         if (spn != null) return spn;
        }
-
+   
       if (!force) return null;
-
+      
+      if (!method_stack.isEmpty() && idx < 0) {
+         String mnm = type_prefix + METHOD_PARAMETER + method_stack.peek() + "." + nm;
+         String kmnm = known_names.get(mnm);
+         if (kmnm != null) return kmnm;
+       }
+   
       if (type_prefix != null && idx < 0) {
-	 spn = type_prefix + "." + nm;
+         spn = type_prefix + "." + nm;
        }
       else spn = nm;
-
+   
       // known_names.put(nm,spn);
-
+   
       return spn;
     }
 
@@ -1757,10 +1789,12 @@ private class TypeSetter extends AbstractTypeSetter {
 
 
    @Override public boolean visit(MethodDeclaration t) {
+      pushMethod(t);
+      
       canbe_type = set_types;
+      visitList(t.typeParameters());
       visitItem(t.getReturnType2());
       visitList(t.thrownExceptionTypes());
-      visitList(t.typeParameters());
       canbe_type = false;
       visitList(t.parameters());
       if (t.isConstructor()) canbe_type = set_types;
@@ -1787,6 +1821,8 @@ private class TypeSetter extends AbstractTypeSetter {
       String sgn = getMethodSignature(t,jt,ljt);
       JcompType mt = createMethodType(jt,ljt,t.isVarargs(),sgn);
       setJavaType(t,mt);
+      
+      popMethod(t);
    
       return false;
     }

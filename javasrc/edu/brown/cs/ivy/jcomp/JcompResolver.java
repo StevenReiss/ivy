@@ -1379,7 +1379,7 @@ private class RefPass extends ASTVisitor {
       r.getType().accept(this);
       JcompType qt = JcompAst.getJavaType(r.getType());
       handleReference(r,qt,false,r.getName().getIdentifier());
-
+   
       return false;
     }
 
