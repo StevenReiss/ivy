@@ -2899,9 +2899,6 @@ private static class VarType extends ClassInterfaceType {
    }
 
    @Override void setSuperType(JcompType jt) {
-      if (jt.getName().contains("Enum")) {
-         System.err.println("CHECK HERE");
-       }
       super.setSuperType(jt);
       // recompute type name
     }
@@ -3061,11 +3058,12 @@ private static class MethodType extends JcompType {
                      boolean fg1 = t1.isCompatibleWith(t0);
                      if (fg1) fg = true;
                    }
-        	  isok &= fg;
-        	}
+                  isok &= fg;
+                }
              }
           }
-         if (!isok && mt.is_varargs && param_types.size() >= mt.param_types.size() -1 &&
+         if (!isok && 
+               mt.is_varargs && param_types.size() >= mt.param_types.size() -1 &&
                mt.param_types.size() > 0) {
             isok = true;
             for (int i = 0; i < mt.param_types.size()-1; ++i) {

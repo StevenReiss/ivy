@@ -849,6 +849,7 @@ private class RefPass extends ASTVisitor {
        }
       
       List<JcompType> atyp = buildArgumentList(n.arguments(),true);
+      
       lookupMethod(bt,atyp,n,n.getName(),null,isstatic,false,n.arguments(),targs);
       // might want to use outer types if this failed
    
@@ -1451,10 +1452,6 @@ private class RefPass extends ASTVisitor {
    
       if (id == null && nm != null) id = nm.getIdentifier();
       
-      if (n.toString().equals("d.equals(sel)")) {
-         System.err.println("CHECK HERE");
-       }
-      
       if (bt != null && bt.getSignature() != null) {
          if (!bt.isParameterizedType() || !bt.isComplete()) {
             JcompType rty = getReferenceType(n);
@@ -1581,8 +1578,6 @@ private class RefPass extends ASTVisitor {
    {
       JcompType t1 = s1.getClassType();
       JcompType t2 = s2.getClassType();
-      if (t1.getName().contains("Enum") || t2.getName().contains("java.lang.Enum"))
-         System.err.println("CHECK HERE");
       if (t1.equals(t2)) return s1;
       
       JcompType ts = t1.getCommonParent(type_data,t2);

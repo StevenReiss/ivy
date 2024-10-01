@@ -861,6 +861,23 @@ private void addTypeSignature(JcompType jt,StringBuffer buf)
 
 
 /********************************************************************************/
+/*                                                                              */
+/*      Helper methods                                                          */
+/*                                                                              */
+/********************************************************************************/
+ 
+private String getMethodTypeVar(String pfx,MethodDeclaration md,String nm)
+{
+   int key = Math.abs(md.parameters().toString().hashCode() % 1000);
+   String s = pfx + METHOD_PARAMETER;
+   s += md.getName().getIdentifier();
+   s += "$$" + key +  "." + nm;
+   
+   return s;
+}
+
+
+/********************************************************************************/
 /*										*/
 /*	Visitor for defining types						*/
 /*										*/
@@ -871,7 +888,7 @@ private class TypeFinder extends ASTVisitor {
    private Map<String,String> specific_names;
    private List<String> prefix_set;
    private String type_prefix;
-   private Stack<String> method_stack;
+   private Stack<MethodDeclaration> method_stack;
    private JcompType outer_type;
    private int anon_counter;
 
@@ -985,20 +1002,23 @@ private class TypeFinder extends ASTVisitor {
 
    @Override public boolean visit(TypeParameter t) {
       String nm = type_prefix + "." + t.getName().getIdentifier();
+   // boolean addspec = true;
       if (t.getParent() instanceof MethodDeclaration && !method_stack.isEmpty()) {
-         nm = type_prefix + METHOD_PARAMETER + method_stack.peek() + "." +
-            t.getName().getIdentifier();
+         nm = getMethodTypeVar(type_prefix,
+               method_stack.peek(),
+               t.getName().getIdentifier());
+   //    addspec = false;
        }
       JcompType jt = JcompType.createVariableType(nm);
       jt = fixJavaType(jt);
       setJavaType(t.getName(),jt);
       setJavaType(t,jt);
-      addSpecificType(nm);
+   // if (addspec) addSpecificType(nm);
       return true;
     }
    
    @Override public boolean visit(MethodDeclaration t) {
-      method_stack.push(t.getName().getIdentifier());
+      method_stack.push(t);
       return true;
     }
    
@@ -1035,7 +1055,7 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    private List<String> prefix_set;
    protected JcompType outer_type;
    protected String type_prefix;
-   protected Stack<String> method_stack;
+   protected Stack<MethodDeclaration> method_stack;
    protected boolean canbe_type;
    protected boolean set_types;
 
@@ -1047,13 +1067,14 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       outer_type = null;
       canbe_type = false;
       set_types = false;
+      method_stack = new Stack<>();
     }
 
    @Override public void endVisit(PrimitiveType t) {
       String nm = t.getPrimitiveTypeCode().toString().toLowerCase();
       JcompType jt = type_map.get(nm);
       if (jt == null)
-	 System.err.println("PRIMITIVE TYPE " + nm + " NOT FOUND");
+         System.err.println("PRIMITIVE TYPE " + nm + " NOT FOUND");
       setJavaType(t,jt);
     }
 
@@ -1064,19 +1085,19 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       visitItem(t.getType());
       visitList(t.typeArguments());
       canbe_type = fg;
-
+   
       JcompType jt0 = JcompAst.getJavaType(t.getType());
       List<JcompType> ljt = new ArrayList<JcompType>();
       for (Iterator<?> it = t.typeArguments().iterator(); it.hasNext(); ) {
-	 Type t1 = (Type) it.next();
-	 JcompType jt2 = JcompAst.getJavaType(t1);
-	 if (jt2 == null) jt2 = findType(TYPE_ERROR);
-	 ljt.add(jt2);
+         Type t1 = (Type) it.next();
+         JcompType jt2 = JcompAst.getJavaType(t1);
+         if (jt2 == null) jt2 = findType(TYPE_ERROR);
+         ljt.add(jt2);
        }
-
+   
       JcompType jt1 = jt0;
       if (ljt.size() > 0) {
-	 jt1 = JcompType.createParameterizedType(jt0,ljt,null,JcompTyper.this);
+         jt1 = JcompType.createParameterizedType(jt0,ljt,null,JcompTyper.this);
        }
       setJavaType(t,jt1);
       return false;
@@ -1149,14 +1170,14 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       JcompType t0 = JcompAst.getJavaType(t.getQualifier());
       JcompType qualt = t0;
       if (qualt.isParameterizedType())
-	 qualt = qualt.getBaseType();
+         qualt = qualt.getBaseType();
       String t1 = qualt.getName() + "." + t.getName().getIdentifier();
       JcompType jt = lookupType(t1);
       SortedMap<String,JcompType> outermap = t0.getOuterComponents();
       if (outermap != null && outermap.size() > 0) {
-	 JcompType njt = JcompType.createParameterizedType(jt,new ArrayList<>(),outermap,JcompTyper.this);
-	 njt = fixJavaType(njt);
-	 jt = njt;
+         JcompType njt = JcompType.createParameterizedType(jt,new ArrayList<>(),outermap,JcompTyper.this);
+         njt = fixJavaType(njt);
+         jt = njt;
        }
       setJavaType(t,jt);
       setJavaType(t.getName(),jt);
@@ -1224,7 +1245,7 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
     }
    
    protected void pushMethod(MethodDeclaration md) {
-      method_stack.push(md.getName().getIdentifier());
+      method_stack.push(md);
     }
    
    protected void popMethod(MethodDeclaration md) {
@@ -1243,9 +1264,9 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       if (l == null) return;
       boolean cbt = canbe_type;
       for (Iterator<?> it = l.iterator(); it.hasNext(); ) {
-	 ASTNode n = (ASTNode) it.next();
-	 n.accept(this);
-	 canbe_type = cbt;
+         ASTNode n = (ASTNode) it.next();
+         n.accept(this);
+         canbe_type = cbt;
        }
     }
 
@@ -1309,7 +1330,7 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
        }
       String spn = checkTypeName(nm,nm);
       if (spn != null) return spn;
-   
+      
       int idx = nm.lastIndexOf('.');            // look for inner types
       if (idx >= 0) {
          String pfx = nm.substring(0,idx);
@@ -1331,7 +1352,19 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
              }
           }
        }
-   
+      
+      if (!method_stack.isEmpty() && idx < 0) {
+         String mnm = getMethodTypeVar(type_prefix,method_stack.peek(),nm);
+         String kmnm = known_names.get(mnm);
+         if (kmnm != null) return kmnm;
+         JcompType rtyp = type_map.get(mnm);
+         if (rtyp != null) {
+            kmnm = rtyp.getName();
+            known_names.put(mnm,kmnm);
+            return kmnm;
+          }
+       }
+      
       for (String p : prefix_set) {		// look for on-demand types
          String t = p + nm;
          spn = checkTypeName(nm,t);
@@ -1340,12 +1373,7 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    
       if (!force) return null;
       
-      if (!method_stack.isEmpty() && idx < 0) {
-         String mnm = type_prefix + METHOD_PARAMETER + method_stack.peek() + "." + nm;
-         String kmnm = known_names.get(mnm);
-         if (kmnm != null) return kmnm;
-       }
-   
+     
       if (type_prefix != null && idx < 0) {
          spn = type_prefix + "." + nm;
        }
@@ -1378,10 +1406,10 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
    protected String findOuterTypeName(String nm)
    {
       if (!canbe_type) return null;
-
+   
       String s1 = checkParentType(nm,outer_type,true,new HashSet<JcompType>());
       if (s1 != null) return s1;
-
+   
       return null;
    }
 
@@ -1792,7 +1820,9 @@ private class TypeSetter extends AbstractTypeSetter {
       pushMethod(t);
       
       canbe_type = set_types;
-      visitList(t.typeParameters());
+      if (t.typeParameters() != null && !t.typeParameters().isEmpty()) {
+         visitList(t.typeParameters());
+       }
       visitItem(t.getReturnType2());
       visitList(t.thrownExceptionTypes());
       canbe_type = false;
