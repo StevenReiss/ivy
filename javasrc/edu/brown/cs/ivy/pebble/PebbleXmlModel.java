@@ -364,19 +364,19 @@ private abstract static class Parsable {
    protected Parsable(Element xml) {
       syntax_string = IvyXml.getAttrString(xml,"SYNTAX");
       use_items = new HashMap<String,UseItem>();
-
+   
       for (Iterator<Element> it = IvyXml.getElementsByTag(xml,"USE"); it.hasNext(); ) {
-	 Element e = it.next();
-	 UseItem u = UseItem.create(e);
-	 if (u != null) use_items.put(u.getName(),u);
+         Element e = it.next();
+         UseItem u = UseItem.create(e);
+         if (u != null) use_items.put(u.getName(),u);
        }
       StringBuffer regex = new StringBuffer();
       for (StringTokenizer tok = new StringTokenizer(syntax_string); tok.hasMoreTokens(); ) {
-	 String t = tok.nextToken();
-	 if (regex.length() > 0) regex.append("\\s*");
-	 UseItem u = use_items.get(t);
-	 if (u == null) regex.append(t);
-	 else regex.append(u.getRegex());
+         String t = tok.nextToken();
+         if (regex.length() > 0) regex.append("\\s*");
+         UseItem u = use_items.get(t);
+         if (u == null) regex.append(t);
+         else regex.append(u.getRegex());
        }
       String r = "^" + regex.toString() + "$";
       syntax_regex = Pattern.compile(r,Pattern.CASE_INSENSITIVE);
