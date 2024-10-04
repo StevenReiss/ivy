@@ -248,7 +248,7 @@ if ( "X$xxx" == X  && 0 == 1 ) then
    foreach i (jdt.core core.filebuffers core.resources core.runtime core.jobs \
 		core.contenttype equinox.common equinox.preferences equinox.registry \
 		equinox.app \
-		debug.core debug.ui jdt.debug \
+		debug.core debug.ui jdt.debug jdt.launching \
 		text core.runtime.compatibility.auth \
 		core.filesystem search \
 		jface ui.workbench swt $swt \
