@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class JcodeField extends FieldNode implements JcodeConstants
+public final class JcodeField extends FieldNode implements JcodeConstants
 {
 
 

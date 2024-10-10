@@ -85,6 +85,11 @@ private static Set<String>		stop_words;
 private static Map<String,String>	short_words;
 private static Set<String>		dictionary_words;
 
+private static final int SMALL_SIZE = 3;
+private static final int LARGE_SIZE = 24;
+private static final int BREAK_SIZE = 32;
+
+
 static {
    word_options = EnumSet.allOf(WordOptions.class);
    setupWordSets();
@@ -97,11 +102,12 @@ static {
 /*                                                                              */
 /********************************************************************************/
 
-public static List<String> getCandidateWords(IvyWordStemmer stm,String text,int off,int len,boolean filter_stopwords,boolean filter_short_long_words)
+public static List<String> getCandidateWords(IvyWordStemmer stm,String text,int off,int len,
+      boolean filterstopwords,boolean filtershortlongwords)
 {
-   if (filter_short_long_words && (len < 3 || len > 32)) return null;
+   if (filtershortlongwords && (len < SMALL_SIZE || len > BREAK_SIZE)) return null;
    
-   int [] breaks = new int[32];
+   int [] breaks = new int[BREAK_SIZE];
    int breakct = 0;
    
    char prev = 0;
@@ -132,22 +138,25 @@ public static List<String> getCandidateWords(IvyWordStemmer stm,String text,int 
    List<String> rslt = new ArrayList<String>();
    
    // first use whole word
-   addCandidateWords(stm,text,off,len,rslt,filter_stopwords,filter_short_long_words);
+   addCandidateWords(stm,text,off,len,rslt,filterstopwords,filtershortlongwords);
    
    if (breakct > 0) {
       int lbrk = 0;
       for (int i = 0; i < breakct; ++i) {
-         if (filter_short_long_words) {
-	    if (breaks[i] - lbrk >= 3) {
-               addCandidateWords(stm,text,off+lbrk,breaks[i]-lbrk,rslt,filter_stopwords,filter_short_long_words);
+         if (filtershortlongwords) {
+	    if (breaks[i] - lbrk >= SMALL_SIZE) {
+               addCandidateWords(stm,text,off+lbrk,breaks[i]-lbrk,rslt,
+                     filterstopwords,filtershortlongwords);
              }
           }
          else {
-	    addCandidateWords(stm,text,off+lbrk,breaks[i]-lbrk,rslt,filter_stopwords,filter_short_long_words);
+	    addCandidateWords(stm,text,off+lbrk,breaks[i]-lbrk,rslt,
+                  filterstopwords,filtershortlongwords);
           }
          lbrk = breaks[i];
        }
-      addCandidateWords(stm,text,off+lbrk,len-lbrk,rslt,filter_stopwords,filter_short_long_words);
+      addCandidateWords(stm,text,off+lbrk,len-lbrk,rslt,
+            filterstopwords,filtershortlongwords);
     }
    
    return rslt;
@@ -161,13 +170,14 @@ public static List<String> getCandidateWords(IvyWordStemmer stm,String text,int 
 /*                                                                              */
 /********************************************************************************/
 
-private static void addCandidateWords(IvyWordStemmer stm,String text,int off,int len,List<String> rslt,boolean filter_stopwords,boolean filter_short_long_words)
+private static void addCandidateWords(IvyWordStemmer stm,String text,int off,int len,
+      List<String> rslt,boolean filterstopwords,boolean filtershortlongwords)
 {
-   if (filter_short_long_words && (len < 3)) return;
+   if (filtershortlongwords && (len < SMALL_SIZE)) return;
    
    String wd1 = text.substring(off,off+len);
    String wd0 = wd1.toLowerCase();
-   addCandidateWord(wd0,rslt,filter_stopwords,filter_short_long_words);
+   addCandidateWord(wd0,rslt,filterstopwords,filtershortlongwords);
    
    String wd = wd0;
    if (word_options.contains(WordOptions.STEM)) {
@@ -177,21 +187,21 @@ private static void addCandidateWords(IvyWordStemmer stm,String text,int off,int
       wd = stm.stem();	  // stem and convert to lower case
       if (dictionary_words.contains(wd) && !wd0.equals(wd)) {
 	 // System.err.println("STEM " + wd0 + " => " + wd);
-	 addCandidateWord(wd,rslt,filter_stopwords,filter_short_long_words);
+	 addCandidateWord(wd,rslt,filterstopwords,filtershortlongwords);
        }
     }
    
    if (word_options.contains(WordOptions.SPLIT_COMPOUND)) {
       if (!dictionary_words.contains(wd0) && !dictionary_words.contains(wd) &&
 	    wd0.equals(wd1)) {
-	 for (int i = 3; i < len-3; ++i) {
+	 for (int i = SMALL_SIZE; i < len-SMALL_SIZE; ++i) {
 	    String s1 = wd0.substring(0,i);
 	    String s2 = wd0.substring(i);
 	    if (dictionary_words.contains(s1) || short_words.containsKey(s1)) {
 	       if (dictionary_words.contains(s2) || short_words.containsKey(s2)) {
 		  if (!s1.equals(wd)) {
-		     addCandidateWord(s1,rslt,filter_stopwords,filter_short_long_words);
-		     addCandidateWord(s2,rslt,filter_stopwords,filter_short_long_words);
+		     addCandidateWord(s1,rslt,filterstopwords,filtershortlongwords);
+		     addCandidateWord(s2,rslt,filterstopwords,filtershortlongwords);
 		   }
 		}
 	     }
@@ -204,10 +214,11 @@ private static void addCandidateWords(IvyWordStemmer stm,String text,int off,int
 
 
 
-private static void addCandidateWord(String wd,List<String> rslt,boolean filter_stopwords,boolean filter_short_long_words)
+private static void addCandidateWord(String wd,List<String> rslt,
+      boolean filterstopwords,boolean filtershortlongwords)
 {
-   if (filter_stopwords && stop_words.contains(wd)) return;
-   if (filter_short_long_words && (wd.length() < 3 || wd.length() > 24)) return;
+   if (filterstopwords && stop_words.contains(wd)) return;
+   if (filtershortlongwords && (wd.length() < SMALL_SIZE || wd.length() > LARGE_SIZE)) return;
    
    rslt.add(wd);
    
@@ -259,10 +270,10 @@ private static void setupWordSets()
    File f = null;
    InputStream ins = IvyWordSplitter.class.getClassLoader().getResourceAsStream("words");
    if (ins == null) {
-      String[] class_paths = System.getProperty("java.class.path").split(":");
-      for (String class_path : class_paths) {
-	 if (class_path.endsWith("ivy/java")) {
-	    f = new File(class_path+"../lib/words");
+      String[] classpaths = System.getProperty("java.class.path").split(":");
+      for (String classpath : classpaths) {
+	 if (classpath.endsWith("ivy/java")) {
+	    f = new File(classpath+"../lib/words");
 	    break;
 	  }
        }
@@ -279,11 +290,11 @@ private static void setupWordSets()
 	 String wd = br.readLine();
 	 if (wd == null) break;
 	 if (wd.contains("'") || wd.contains("-")) continue;
-	 if (wd.length() < 3 || wd.length() > 24) continue;
+	 if (wd.length() < SMALL_SIZE || wd.length() > LARGE_SIZE) continue;
 	 wd = wd.toLowerCase();
 	 dictionary_words.add(wd);
 	 String nwd = wd.replaceAll("[aeiou]","");
-	 if (!nwd.equals(wd) && nwd.length() >= 3) {
+	 if (!nwd.equals(wd) && nwd.length() >= SMALL_SIZE) {
 	    if (fnd.contains(nwd)) {
 	       short_words.remove(nwd);
 	     }

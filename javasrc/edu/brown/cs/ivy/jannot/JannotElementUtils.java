@@ -384,7 +384,7 @@ getElementValuesWithDefaults(AnnotationMirror a)
 /*                                                                              */
 /********************************************************************************/
 
-@Override public void printElements(Writer w,Element ... elements)
+@Override public void printElements(Writer w,Element... elements)
 {
    for (Element elt : elements) {
       JannotElement je = (JannotElement) elt;

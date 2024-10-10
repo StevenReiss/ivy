@@ -72,15 +72,15 @@ public static double stringDiff(CharSequence s,CharSequence t)
    for (int j = 0; j <= m; j++) d[0][j] = j;
    
    for (int i = 1; i <= n; ++i) {
-      char s_i = s.charAt(i-1);
+      char si = s.charAt(i-1);
       for (int j = 1; j <= m; ++j) {
-	 char t_j = t.charAt (j - 1);
-         double cost = subCost(s_i,t_j);
+	 char tj = t.charAt(j - 1);
+         double cost = subCost(si,tj);
          double del = d[i-1][j] + delete_cost;
          double ins = d[i][j-1] + insert_cost;
          double sub = d[i-1][j-1]+cost;
          d[i][j] = min3(del,ins,sub);
-         if (i > 1 && j > 1 && s_i == t.charAt(j-2) && s.charAt(i-2) == t_j) {
+         if (i > 1 && j > 1 && si == t.charAt(j-2) && s.charAt(i-2) == tj) {
             double trns = d[i-2][j-2] + transpose_cost;
             d[i][j] = Math.min(d[i][j],trns);
           }

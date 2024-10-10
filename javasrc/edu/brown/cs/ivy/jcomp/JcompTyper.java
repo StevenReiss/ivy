@@ -97,7 +97,7 @@ import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class JcompTyper implements JcompConstants {
+public final class JcompTyper implements JcompConstants {
 
 
 
@@ -316,7 +316,7 @@ public JcompType findSystemType(String nm)
     }
 
    if (nm.startsWith("REF$")) {
-
+        // check lambdas here
     }
 
    jt = type_context.defineKnownType(this,nm);
@@ -360,7 +360,8 @@ private JcompType findParameterizedSystemType(String t0,String args)
 
 
 
-public JcompType createMethodType(JcompType rettyp,List<JcompType> argtyps,boolean varargs,String signature)
+public JcompType createMethodType(JcompType rettyp,List<JcompType> argtyps,
+      boolean varargs,String signature)
 {
    JcompType jt = JcompType.createMethodType(rettyp,argtyps,varargs,signature);
    JcompType jt1 = fixJavaType(jt);
@@ -1175,7 +1176,8 @@ private abstract class AbstractTypeSetter extends ASTVisitor {
       JcompType jt = lookupType(t1);
       SortedMap<String,JcompType> outermap = t0.getOuterComponents();
       if (outermap != null && outermap.size() > 0) {
-         JcompType njt = JcompType.createParameterizedType(jt,new ArrayList<>(),outermap,JcompTyper.this);
+         JcompType njt = JcompType.createParameterizedType(jt,
+               new ArrayList<>(),outermap,JcompTyper.this);
          njt = fixJavaType(njt);
          jt = njt;
        }

@@ -38,68 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyDatabase.java,v 1.17 2019/02/23 02:58:58 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyDatabase.java,v $
- * Revision 1.17  2019/02/23 02:58:58  spr
- * Code clean up.
- *
- * Revision 1.16  2018/08/02 15:09:49  spr
- * Fix imports.  Add copy from input stream.
- *
- * Revision 1.15  2017/12/20 20:36:23  spr
- * Formating
- *
- * Revision 1.14  2015/03/31 02:19:14  spr
- * Formatting cleanup
- *
- * Revision 1.13  2013/11/15 02:38:50  spr
- * Minor update
- *
- * Revision 1.12  2013-06-11 23:14:30  spr
- * Code cleanup.
- *
- * Revision 1.11  2013-06-03 13:03:25  spr
- * Minor fixes
- *
- * Revision 1.10  2013-02-13 23:05:46  spr
- * Change for file loading.
- *
- * Revision 1.9  2012-01-12 01:25:44  spr
- * Fix up if semantics
- *
- * Revision 1.8  2011-08-19 23:10:16  spr
- * Start support for derby/javadb.
- *
- * Revision 1.7  2011-05-27 19:32:38  spr
- * Change copyrights.
- *
- * Revision 1.6  2010-06-01 15:39:10  spr
- * Update database for mysql booleans.
- *
- * Revision 1.5  2010-06-01 15:30:56  spr
- * fix up database load from file for mysql.
- *
- * Revision 1.4  2010-02-12 00:32:33  spr
- * Add code to do file-based loading.
- *
- * Revision 1.3  2009-10-02 00:18:22  spr
- * Import clean up.
- *
- * Revision 1.2  2009-09-27 23:56:43  spr
- * Updates for mac
- *
- * Revision 1.1  2009-09-17 01:55:38  spr
- * Add database and setup support.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.file;
 
 
@@ -128,7 +66,7 @@ public class IvyDatabase {
 /*										*/
 /********************************************************************************/
 
-private static enum DbmsType {
+private enum DbmsType {
    UNKNOWN,
    POSTGRESQL,
    MYSQL,
@@ -298,10 +236,12 @@ private static void setupProperties(Properties p0) throws SQLException
    else if (typ != null && typ.equalsIgnoreCase("MYSQL")) {
       checkLoad(MYSQL_DRIVERS,DbmsType.MYSQL);
     }
-   else if (typ != null && (typ.equalsIgnoreCase("JAVADB") || typ.equalsIgnoreCase("DERBY"))) {
+   else if (typ != null && (typ.equalsIgnoreCase("JAVADB") || 
+         typ.equalsIgnoreCase("DERBY"))) {
       checkLoad(DERBY_DRIVERS,DbmsType.DERBY);
     }
-   else if (typ != null && (typ.equalsIgnoreCase("JAVADBEMBED") || typ.equalsIgnoreCase("DERBYEMBED"))) {
+   else if (typ != null && (typ.equalsIgnoreCase("JAVADBEMBED") || 
+         typ.equalsIgnoreCase("DERBYEMBED"))) {
       checkLoad(DERBY_EMBED_DRIVERS,DbmsType.DERBY_EMBED);
     }
    else {
@@ -344,7 +284,8 @@ private static void setupProperties(Properties p0) throws SQLException
       case DERBY :
 	 File f1 = new File(System.getProperty("user.home"));
 	 File f2 = new File(f1,"derby.log");
-	 System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
+	 System.setProperty("derby.stream.error.field",
+               "edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
 	 System.setProperty("derby.stream.error.file",f2.getPath());
 	 System.setProperty("derby.system.home",f1.getPath());
 	 dbms_prefix = DERBY_PREFIX;
@@ -355,7 +296,8 @@ private static void setupProperties(Properties p0) throws SQLException
       case DERBY_EMBED :
 	 File f3 = new File(System.getProperty("user.home"));
 	 File f4 = new File(f3,"derby.log");
-	 System.setProperty("derby.stream.error.field","edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
+	 System.setProperty("derby.stream.error.field",
+               "edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
 	 System.setProperty("derby.stream.error.file",f4.getPath());
 	 System.setProperty("derby.system.home",f4.getPath());
 	 dbms_prefix = DERBY_PREFIX;

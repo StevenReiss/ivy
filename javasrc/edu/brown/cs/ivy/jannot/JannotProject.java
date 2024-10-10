@@ -75,7 +75,7 @@ protected JannotProject(JcompProject jp)
 /*                                                                              */
 /********************************************************************************/
 
-abstract public boolean addAnnotationProcessor(String clazz);
+public abstract boolean addAnnotationProcessor(String clazz);
 
 
 
@@ -85,14 +85,14 @@ abstract public boolean addAnnotationProcessor(String clazz);
 /*                                                                              */
 /********************************************************************************/
 
-abstract public boolean processProject();
+public abstract boolean processProject();
 
 public JcompProject getJcompProject()
 {
    return jcomp_project;
 }
 
-abstract public Class<? extends Annotation> findAnnotationClass(String name);
+public abstract Class<? extends Annotation> findAnnotationClass(String name);
 
 
 

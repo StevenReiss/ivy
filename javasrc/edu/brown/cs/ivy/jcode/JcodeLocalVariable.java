@@ -12,7 +12,7 @@ package edu.brown.cs.ivy.jcode;
 
 import org.objectweb.asm.tree.LocalVariableNode;
 
-public class JcodeLocalVariable implements JcodeConstants
+public final class JcodeLocalVariable implements JcodeConstants
 {
 
 

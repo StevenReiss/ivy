@@ -46,7 +46,7 @@ import org.slf4j.spi.SLF4JServiceProvider;
 
 import edu.brown.cs.ivy.file.IvyLog.LogLevel;
 
-public class IvySlf4jProvider implements SLF4JServiceProvider
+public final class IvySlf4jProvider implements SLF4JServiceProvider
 {
 
 
@@ -56,11 +56,11 @@ public class IvySlf4jProvider implements SLF4JServiceProvider
 /*										*/
 /********************************************************************************/
 
-private ILoggerFactory loggerFactory;
-private IMarkerFactory markerFactory;
-private NOPMDCAdapter mdcAdapter;
+private ILoggerFactory logger_factory;
+private IMarkerFactory makrer_factory;
+private NOPMDCAdapter mdc_adapter;
 
-public static String REQUESTED_API_VERSION = "2.0.99"; // !final
+private static final String REQUESTED_API_VERSION = "2.0.99"; // !final
 
 
 
@@ -76,12 +76,16 @@ public IvySlf4jProvider()
 }
 
 
+
+/**
+ *      Initialize the logger
+ **/
 @Override
 public void initialize()
 {
-   loggerFactory = new IvySlf4jLoggerFactory();
-   markerFactory = new BasicMarkerFactory();
-   mdcAdapter = new NOPMDCAdapter();
+   logger_factory = new IvySlf4jLoggerFactory();
+   makrer_factory = new BasicMarkerFactory();
+   mdc_adapter = new NOPMDCAdapter();
 }
 
 
@@ -91,23 +95,37 @@ public void initialize()
 /*										*/
 /********************************************************************************/
 
+/**
+ *      Retutrn the logger factory
+ **/
 public ILoggerFactory getLoggerFactory()
 {
-   return loggerFactory;
+   return logger_factory;
 }
 
+/**
+ *      Return the marker factory
+ **/
 @Override
 public IMarkerFactory getMarkerFactory()
 {
-   return markerFactory;
+   return makrer_factory;
 }
 
+
+/**
+ *      Return the MDC adapter
+ **/
 @Override
 public NOPMDCAdapter getMDCAdapter()
 {
-   return mdcAdapter;
+   return mdc_adapter;
 }
 
+
+/**
+ *      Return the API version
+ **/
 @Override
 public String getRequestedApiVersion()
 {
@@ -122,7 +140,7 @@ public String getRequestedApiVersion()
 /*										*/
 /********************************************************************************/
 
-private static class IvySlf4jLoggerFactory implements ILoggerFactory {
+private static final class IvySlf4jLoggerFactory implements ILoggerFactory {
 
    @Override public Logger getLogger(String name) {
       try {
@@ -141,7 +159,7 @@ private static class IvySlf4jLoggerFactory implements ILoggerFactory {
 /*										*/
 /********************************************************************************/
 
-private static class IvySlf4jAdapter implements Logger {
+private static final class IvySlf4jAdapter implements Logger {
 
    private String logger_name;
 
@@ -365,7 +383,7 @@ private static class IvySlf4jAdapter implements Logger {
       if (!IvyLog.isDoLogging(lvl)) return;
       IvyLog.outsideLog(lvl,logger_name,0,msg,t);
     }
-   private void doLog(LogLevel lvl,String ftm,Throwable t,Object ... args) {
+   private void doLog(LogLevel lvl,String ftm,Throwable t,Object... args) {
       if (!IvyLog.isDoLogging(lvl)) return;
       String msg = String.format(ftm,args);
       IvyLog.outsideLog(lvl,logger_name,0,msg,null);
@@ -379,7 +397,7 @@ private static class IvySlf4jAdapter implements Logger {
        }
       IvyLog.outsideLog(lvl,logger_name,0,msg,t);
     }
-   private void doLog(LogLevel lvl,Marker mrk,String fmt,Throwable t ,Object ... args) {
+   private void doLog(LogLevel lvl,Marker mrk,String fmt,Throwable t,Object... args) {
       if (!IvyLog.isDoLogging(lvl)) return;
       String msg = null;
       msg = String.format(fmt,args);

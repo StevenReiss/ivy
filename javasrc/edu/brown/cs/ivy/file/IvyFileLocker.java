@@ -31,25 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFileLocker.java,v 1.3 2019/02/23 02:58:58 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyFileLocker.java,v $
- * Revision 1.3  2019/02/23 02:58:58  spr
- * Code clean up.
- *
- * Revision 1.2  2018/12/17 14:08:06  spr
- * Fix locking protocol.
- *
- * Revision 1.1  2017/06/23 20:54:44  spr
- * Add file locking as a public class.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.file;
 
@@ -60,7 +41,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.FileLock;
 import java.nio.channels.FileLockInterruptionException;
 
-public class IvyFileLocker
+public final class IvyFileLocker
 {
 
 
@@ -122,7 +103,7 @@ public boolean lock()
    if (lock_file == null) return false;
    if (file_lock != null) return true;		// assumes only one lock per process
    
-   for (int i = 0; i < 250; ++i) {
+   for (int i = 0; i < 256; ++i) {
       try {
          file_lock = lock_file.getChannel().lock();
          return true;

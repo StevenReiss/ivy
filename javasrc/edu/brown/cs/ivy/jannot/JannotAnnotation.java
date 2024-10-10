@@ -128,7 +128,8 @@ Annotation getAstNode()
          for (Object o : na.values()) {
             MemberValuePair mvp = (MemberValuePair) o;
             // this is wrong -- name doesn't give executable element
-            JannotExecutableElement key = (JannotExecutableElement) JannotElement.createElement(mvp.getName());
+            JannotExecutableElement key = 
+               (JannotExecutableElement) JannotElement.createElement(mvp.getName());
             JannotAnnotationValue av = new JannotAnnotationValue(mvp.getValue());
             rslt.put(key,av);
           }

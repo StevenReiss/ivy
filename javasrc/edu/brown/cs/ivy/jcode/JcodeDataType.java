@@ -48,7 +48,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-public class JcodeDataType
+public final class JcodeDataType
 {
 
 
@@ -309,10 +309,14 @@ public boolean isDerivedFrom(JcodeDataType bdt)
 	    if (st == Type.CHAR || st == Type.SHORT || st == Type.BYTE) return true;
 	    break;
 	 case Type.LONG :
-	    if (st == Type.CHAR || st == Type.SHORT || st == Type.BYTE || st == Type.INT) return true;
+	    if (st == Type.CHAR || st == Type.SHORT || 
+                  st == Type.BYTE || st == Type.INT) 
+               return true;
 	    break;
 	 case Type.FLOAT :
-	    if (st == Type.CHAR || st == Type.SHORT || st == Type.BYTE || st == Type.INT) return true;
+	    if (st == Type.CHAR || st == Type.SHORT ||
+                  st == Type.BYTE || st == Type.INT) 
+               return true;
 	    break;
 	 case Type.DOUBLE :
 	    if (st == Type.CHAR || st == Type.SHORT || st == Type.BYTE || st == Type.INT ||
@@ -325,8 +329,9 @@ public boolean isDerivedFrom(JcodeDataType bdt)
 
    if (super_type != null && super_type.isDerivedFrom(bdt)) return true;
    if (iface_types != null) {
-      for (JcodeDataType ift : iface_types)
+      for (JcodeDataType ift : iface_types) {
 	 if (ift.isDerivedFrom(bdt)) return true;
+       }
     }
 
    if (isArray() && bdt.isArray()) {

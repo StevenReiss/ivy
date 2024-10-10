@@ -191,7 +191,8 @@ private class JannotTransformer extends ClassVisitor {
          String [] exc) {
       String ndesc = getOurDescriptor(desc);
       String nsgn = getOurSignature(sgn);
-      System.err.println("JANNOT: VISIT " + name + " " + desc + " " + ndesc + " " + sgn + " " + nsgn);
+      System.err.println("JANNOT: VISIT " + name + " " + desc + " " + 
+            ndesc + " " + sgn + " " + nsgn);
       MethodVisitor mv = super.visitMethod(acc,name,ndesc,nsgn,exc);
       if (do_debug) mv = new MethodTracer(mv,name,ndesc);
       mv = new TreeMapper(mv);
@@ -266,7 +267,7 @@ private String getOurSignature(String s)
 
 
 
-private class SignatureMapper extends SignatureWriter {
+private final class SignatureMapper extends SignatureWriter {
 
    @Override public void visitClassType(String name) {
       super.visitClassType(getOurClass(name));
@@ -301,7 +302,8 @@ private class TreeMapper extends MethodVisitor {
       super(ASM_API,mvx);
     }
    
-   @Override public void visitLocalVariable(String name,String desc,String sign,Label start,Label end,int idx) {
+   @Override public void visitLocalVariable(String name,String desc,String sign,
+         Label start,Label end,int idx) {
       super.visitLocalVariable(name,getOurDescriptor(desc),sign,start,end,idx);
     }
    
@@ -331,7 +333,9 @@ private class TreeMapper extends MethodVisitor {
          super.visitMethodInsn(opcode,getOurClass(owner),name,getOurDescriptor(desc),iface);
        }
       else if (owner.equals("com/sun/source/util/Trees") && name.equals("instance")) {
-         super.visitMethodInsn(opcode,"edu/brown/cs/ivy/jannot/tree/JannotTrees","jannotInstance",desc,iface);
+         super.visitMethodInsn(opcode,
+               "edu/brown/cs/ivy/jannot/tree/JannotTrees",
+               "jannotInstance",desc,iface);
        }
       else {
          super.visitMethodInsn(opcode,owner,name,getOurDescriptor(desc),iface);
@@ -347,7 +351,7 @@ private class TreeMapper extends MethodVisitor {
        }
     }
    
-   @Override public void visitInvokeDynamicInsn(String name,String desc,Handle hdl,Object ... obj) {
+   @Override public void visitInvokeDynamicInsn(String name,String desc,Handle hdl,Object... obj) {
       Handle nhdl = mapHandle(hdl);
       super.visitInvokeDynamicInsn(name,getOurDescriptor(desc),nhdl,obj);
     }

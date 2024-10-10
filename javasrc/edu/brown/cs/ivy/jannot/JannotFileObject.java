@@ -100,12 +100,18 @@ public static JannotFileObject createFileObject(JcompSource src)
 /*                                                                              */
 /********************************************************************************/
 
+/**
+ *      Check if file is closed
+ **/
 boolean isClosed()
 {
    if (output_buffer == null) return false;
    return output_buffer.isClosed();
 }
 
+/**
+ *      Get elements related to the file
+ **/
 Element [] getRelatedElements()
 {
    return related_elements;

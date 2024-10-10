@@ -107,7 +107,7 @@ List<JannotFileObject> getWrittenFiles()
 /*                                                                              */
 /********************************************************************************/
 
-@Override public JavaFileObject createClassFile(CharSequence name,Element ... elts)
+@Override public JavaFileObject createClassFile(CharSequence name,Element... elts)
         throws IOException
 {
    throw new IOException("Class file creation not supported");
@@ -115,7 +115,7 @@ List<JannotFileObject> getWrittenFiles()
 
 
 @Override public FileObject createResource(JavaFileManager.Location loc,
-      CharSequence module,CharSequence name,Element ... elts) throws IOException
+      CharSequence module,CharSequence name,Element... elts) throws IOException
 {
    throw new IOException("Resource file creation not supported");
 }
@@ -127,7 +127,7 @@ List<JannotFileObject> getWrittenFiles()
    throw new IOException("Resource file creation not supported");
 }
 
-@Override public JavaFileObject createSourceFile(CharSequence name,Element ... elts)
+@Override public JavaFileObject createSourceFile(CharSequence name,Element... elts)
         throws IOException
 {
    try {

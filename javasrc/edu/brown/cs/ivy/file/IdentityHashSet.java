@@ -66,8 +66,9 @@ IdentityHashSet()
 @Override public boolean addAll(Collection<? extends E> c)
 {
    boolean chng = false;
-   for (E pt : c)
+   for (E pt : c) {
       chng |= set_map.put(pt, Boolean.TRUE);
+    }
    return chng;
 }
 
@@ -130,7 +131,7 @@ IdentityHashSet()
 @Override public boolean retainAll(Collection<?> c)
 {
    boolean chng = false;
-   for (Iterator<?> it = set_map.keySet().iterator(); it.hasNext();) {
+   for (Iterator<?> it = set_map.keySet().iterator(); it.hasNext(); ) {
       Object pt = it.next();
       if (!c.contains(pt)) {
 	 it.remove();

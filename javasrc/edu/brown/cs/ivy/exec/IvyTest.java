@@ -38,37 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyTest.java,v 1.7 2013/11/08 00:03:49 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyTest.java,v $
- * Revision 1.7  2013/11/08 00:03:49  spr
- * Minor update
- *
- * Revision 1.6  2011-05-27 19:32:35  spr
- * Change copyrights.
- *
- * Revision 1.5  2011-02-17 23:15:38  spr
- * Add format test.
- *
- * Revision 1.4  2009-09-17 01:55:24  spr
- * Use jps or equivalent to find processes; add setup code for windows, etc.
- *
- * Revision 1.3  2007-05-04 01:59:26  spr
- * Change test program to test ExecQuery.
- *
- * Revision 1.2  2006/07/10 14:52:13  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/23 02:15:54  spr
- * Test program for 64 bit java.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.exec;
 

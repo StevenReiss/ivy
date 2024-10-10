@@ -179,7 +179,9 @@ public static String expandName(String name,Map<String,String> vals)
 	  }
 	 if (erslt != null) buf.append(erslt);
        }
-      else if (c == '/' && (vals == null || !vals.containsKey("NOSLASH"))) buf.append(File.separatorChar);
+      else if (c == '/' && (vals == null || !vals.containsKey("NOSLASH"))) {
+         buf.append(File.separatorChar);
+       }
       else buf.append(c);
     }
 
@@ -718,7 +720,7 @@ public static String computeHostName()
       String h = lh.getCanonicalHostName();
       if (h != null) return h;
     }
-   catch (IOException e ) {
+   catch (IOException e) {
       System.err.println("IVY: Problem getting host name: " + e);
     }
 

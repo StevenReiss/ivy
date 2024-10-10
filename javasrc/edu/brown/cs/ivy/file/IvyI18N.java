@@ -79,6 +79,9 @@ IvyI18N()
 /*                                                                              */
 /********************************************************************************/
 
+/**
+ *      Set the locale for internationalization
+ **/
 public void setLocale(Locale lcl) 
 {
    if (lcl == null) lcl = Locale.getDefault();
@@ -89,13 +92,17 @@ public void setLocale(Locale lcl)
     }
 }
 
-
+/**
+ *      Add a resource bundle
+ **/
 public void addBundle(String nm)
 {
    known_bundles.put(nm,ResourceBundle.getBundle(nm,use_locale));
 }
 
-
+/**
+ *      Set the default resource bundle to use
+ **/
 public IvyI18N setDefaultBundle(String dflt)
 {
    return new SubI18N(this,dflt);
@@ -109,6 +116,9 @@ public IvyI18N setDefaultBundle(String dflt)
 /*                                                                              */
 /********************************************************************************/
 
+/**
+ *      Get the internationalized string for a key
+ **/
 public String getString(String key)
 {
    if (key == null) return null;
@@ -117,7 +127,9 @@ public String getString(String key)
 }
 
 
-
+/**
+ *      Get the internationalized string for a key given its bundle
+ **/
 public String getString(String bndl,String key)
 {
    if (key == null) return null;
@@ -135,6 +147,7 @@ public String getString(String bndl,String key)
    
    return key;
 }
+
 
 
 /********************************************************************************/

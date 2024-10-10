@@ -38,53 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvySetup.java,v 1.13 2018/08/02 15:09:37 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvySetup.java,v $
- * Revision 1.13  2018/08/02 15:09:37  spr
- * Fix imports
- *
- * Revision 1.12  2017/12/20 20:36:15  spr
- * Make setup work without user intervention.
- *
- * Revision 1.11  2017/08/04 02:02:57  spr
- * Remove excess at end of file.
- *
- * Revision 1.10  2017/07/07 20:56:08  spr
- * Fix problem with running setup.
- *
- * Revision 1.9  2013/09/24 01:06:52  spr
- * Minor fix
- *
- * Revision 1.8  2012-06-14 12:39:32  spr
- * Add error messages for bad settings.
- *
- * Revision 1.7  2011-06-16 17:45:29  spr
- * Fixups for registry usage.
- *
- * Revision 1.6  2011-05-27 19:32:35  spr
- * Change copyrights.
- *
- * Revision 1.5  2010-02-26 21:04:49  spr
- * Update setup and exec to work better with windows and bubbles.
- *
- * Revision 1.4  2010-02-12 00:32:11  spr
- * Fix spacing and error messages.
- *
- * Revision 1.3  2009-10-02 00:18:16  spr
- * Import clean up.
- *
- * Revision 1.2  2009-09-17 01:55:24  spr
- * Use jps or equivalent to find processes; add setup code for windows, etc.
- *
- * Revision 1.1  2009-06-04 18:51:34  spr
- * Add setup code for handling binary distributions.
- *
- *
- ********************************************************************************/
 
 
 
@@ -106,7 +59,7 @@ import java.util.StringTokenizer;
 
 
 
-public class IvySetup {
+public final class IvySetup {
 
 
 
@@ -337,6 +290,16 @@ private static String findIvyDirectory()
     }
    return null;
 }
+
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Hide the constructor                                                    */
+/*                                                                              */
+/********************************************************************************/
+
+private IvySetup() { }
 
 
 }	// end of class IvySetup

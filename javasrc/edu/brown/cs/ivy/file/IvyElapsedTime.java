@@ -32,20 +32,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyElapsedTime.java,v 1.2 2015/07/02 19:01:27 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyElapsedTime.java,v $
- * Revision 1.2  2015/07/02 19:01:27  spr
- * Minor bug fixes
- *
- * Revision 1.1  2015/04/08 13:51:36  spr
- * Add elapsed time manager.
- *
- *
- ********************************************************************************/
 
 package edu.brown.cs.ivy.file;
 
@@ -63,7 +49,7 @@ import java.util.Date;
  *
  */
 
-public class IvyElapsedTime {
+public final class IvyElapsedTime {
 
 
 

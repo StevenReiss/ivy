@@ -71,7 +71,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 
-public class JcodeFactory implements JcodeConstants
+public final class JcodeFactory implements JcodeConstants
 {
 
 
@@ -632,6 +632,7 @@ public JcodeMethod findMethod(String nm,String cls,String mnm,String desc)
    if (bm != null) return bm;
    
    if (cls != null && cls.startsWith("REF$")) {
+      // possible special lambda handling here
     }
 
    synchronized (known_methods) {
@@ -811,12 +812,12 @@ private class LoadExecutor extends ThreadPoolExecutor implements ThreadFactory {
     }
 
 
-   @Override synchronized protected void beforeExecute(Thread t,Runnable r) {
+   @Override protected synchronized void beforeExecute(Thread t,Runnable r) {
       ++num_active;
       work_pending = false;
     }
 
-   @Override synchronized protected void afterExecute(Runnable r,Throwable t) {
+   @Override protected synchronized void afterExecute(Runnable r,Throwable t) {
       --num_active;
       if (num_active == 0 && getQueue().size() == 0) {
 	 notifyAll();
@@ -893,7 +894,7 @@ private class LoadTask implements Runnable {
                System.err.println("JCODE: Can't open file for class " + load_class);
              }
             else {
-               ClassReader cr = new ClassReader(ins)	  ;
+               ClassReader cr = new ClassReader(ins);
                cr.accept(bc,0);
                ins.close();
              }

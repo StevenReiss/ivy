@@ -50,7 +50,7 @@ import java.util.List;
 
 
 
-public class JcodeClass extends ClassNode implements JcodeConstants
+public final class JcodeClass extends ClassNode implements JcodeConstants
 {
 
 
@@ -444,7 +444,9 @@ public Collection<JcodeMethod> findChildMethods(String nm,String desc,boolean ch
    base_type = Type.getObjectType(cname);
    if (sup != null) bcode_factory.noteClass(sup);
    if (ifaces != null)
-      for (String f : ifaces) bcode_factory.noteClass(f);
+      for (String f : ifaces) {
+         bcode_factory.noteClass(f);
+       }
 }
 
 

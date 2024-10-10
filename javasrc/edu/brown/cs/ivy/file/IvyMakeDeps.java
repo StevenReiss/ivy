@@ -47,7 +47,7 @@ import java.util.StringTokenizer;
 
 import edu.brown.cs.ivy.exec.IvyExec;
 
-public class IvyMakeDeps
+public final class IvyMakeDeps
 {
 
 

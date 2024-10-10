@@ -62,10 +62,12 @@ public class IvyExecQuery
 
 /********************************************************************************/
 /*										*/
-/*	Initializers								*/
+/*	Private storage 							*/
 /*										*/
 /********************************************************************************/
 
+private static final int COMMAND_LINE_SIZE = 1000000;
+private static final int BUFFER_SIZE = 4096;
 
 
 /********************************************************************************/
@@ -84,7 +86,7 @@ public static String [] getCommandLine()
       if (f.exists()) {
 	 FileReader fr = new FileReader(f);
          try {
-            char [] buf = new char[100000];
+            char [] buf = new char[COMMAND_LINE_SIZE];
             int fsz = buf.length;
             int off = 0;
             for ( ; ; ) {
@@ -93,7 +95,7 @@ public static String [] getCommandLine()
                off += rsz;
              }
             int sz = off;
-            if (sz != 0 && sz != 4096) {
+            if (sz != 0 && sz != BUFFER_SIZE) {
                int st = 0;
                for (int i = 1; i < sz; ++i) {
                   if (buf[i] == 0) {
@@ -181,6 +183,8 @@ public static String getProcessId()
    return null;
 }
 
+
+
 public static Integer getProcessNumber()
 {
    String s = getProcessId();
@@ -201,7 +205,7 @@ public static String getHostName()
       h = lh.getCanonicalHostName();
       if (h != null) return h;
     }
-   catch (IOException e ) {
+   catch (IOException e) {
       System.err.println("IVY: Problem getting host name: " + e);
     }
 
@@ -217,7 +221,7 @@ public static String computeHostName()
       String h = lh.getCanonicalHostName();
       if (h != null) return h;
     }
-   catch (IOException e ) {
+   catch (IOException e) {
       System.err.println("IVY: Problem getting host name: " + e);
     }
 

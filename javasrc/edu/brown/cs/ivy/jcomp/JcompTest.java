@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class JcompTest {
+public final class JcompTest {
 
 
 
@@ -23,14 +23,14 @@ public class JcompTest {
 
 private JcompControl	 jcomp_control;
 
-private static String test1 = "class Simple {\n" +
+private static String test_1 = "class Simple {\n" +
 	"static void main() {\n" +
 	"   System.out.println();\n" +
 	"}\n" +
 	"}\n";
 
 
-private static String test2 = "public class A {\n" +
+private static String test_2 = "public class A {\n" +
 	"   int x = 3;\n" +
 	"   B b;\n" +
 	"   double x = Math.PI;\n" +
@@ -38,7 +38,7 @@ private static String test2 = "public class A {\n" +
 	"}\n";
 
 
-private static String test3 = "import java.util.*;\n" +
+private static String test_3 = "import java.util.*;\n" +
 	"import java.io.*;\n" +
 	"import java.util.PriorityQueue;\n" +
 	"public class Node implements Comparable<Node> {\n" +
@@ -99,7 +99,7 @@ private static String test3 = "import java.util.*;\n" +
 	"}\n";
 
 
-private static String test4 = "public class Tester {\n" +
+private static String test_4 = "public class Tester {\n" +
 	"   private String the_string;\n" +
 	"   private static enum TEST { A, B, C };\n" +
 	"   Tester(String s) {\n" +
@@ -123,7 +123,7 @@ private static String test4 = "public class Tester {\n" +
 
 
 
-private static String test5 = "public class TwoTypePair<T1, T2>\n" +
+private static String test_5 = "public class TwoTypePair<T1, T2>\n" +
 	"{\n" +
 	"   private T1 first;\n" +
 	"   private T2 second;\n" +
@@ -225,7 +225,7 @@ private static int showMessages(String what,JcompProject proj)
 @Test
 public void jcompTest1()
 {
-   JcompSource s1 = new StringSource("test1",test1);
+   JcompSource s1 = new StringSource("test1",test_1);
    List<JcompSource> srcs = Collections.singletonList(s1);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test1",proj);
@@ -237,7 +237,7 @@ public void jcompTest1()
 @Test
 public void jcompTest2()
 {
-   StringSource s2 = new StringSource("test2",test2);
+   StringSource s2 = new StringSource("test2",test_2);
    List<JcompSource> srcs = Collections.singletonList(s2);
    JcompProject proj = jcomp_control.getProject("/pro/ivy/jcomp/src/test.jar",srcs);
    int ct = showMessages("test2",proj);
@@ -249,7 +249,7 @@ public void jcompTest2()
 @Test
 public void jcompTest3()
 {
-   StringSource s3 = new StringSource("test3",test3);
+   StringSource s3 = new StringSource("test3",test_3);
    List<JcompSource> srcs = Collections.singletonList(s3);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test3",proj);
@@ -261,7 +261,7 @@ public void jcompTest3()
 @Test
 public void jcompTest4()
 {
-   StringSource s4 = new StringSource("test4",test4);
+   StringSource s4 = new StringSource("test4",test_4);
    List<JcompSource> srcs = Collections.singletonList(s4);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test4",proj);
@@ -273,7 +273,7 @@ public void jcompTest4()
 @Test
 public void jcompTest5()
 {
-   StringSource s5 = new StringSource("test5",test5);
+   StringSource s5 = new StringSource("test5",test_5);
    List<JcompSource> srcs = Collections.singletonList(s5);
    JcompProject proj = jcomp_control.getProject(srcs);
    int ct = showMessages("test5",proj);

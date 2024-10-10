@@ -15,7 +15,7 @@ import org.objectweb.asm.tree.AnnotationNode;
 import java.util.HashMap;
 import java.util.Map;
 
-public class JcodeAnnotation implements JcodeConstants
+public final class JcodeAnnotation implements JcodeConstants
 {
 
 

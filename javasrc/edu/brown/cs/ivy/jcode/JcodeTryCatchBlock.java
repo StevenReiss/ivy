@@ -39,7 +39,7 @@ package edu.brown.cs.ivy.jcode;
 import org.objectweb.asm.Label;
 
 
-public class JcodeTryCatchBlock
+public final class JcodeTryCatchBlock
 {
 
 

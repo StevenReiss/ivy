@@ -136,7 +136,8 @@ JannotProjectImpl(JcompProject jp)
 /*										*/
 /********************************************************************************/
 
-@SuppressWarnings("unchecked") @Override public Class<? extends java.lang.annotation.Annotation> findAnnotationClass(String name)
+@SuppressWarnings("unchecked") 
+@Override public Class<? extends java.lang.annotation.Annotation> findAnnotationClass(String name)
 {
    try {
       Class<?> c = class_loader.loadClass(name);

@@ -40,7 +40,7 @@ import java.util.Map;
 
 import edu.brown.cs.ivy.jcomp.JcompProject;
 
-public class JannotFactory implements JannotConstants
+public final class JannotFactory implements JannotConstants
 {
 
 
@@ -51,7 +51,7 @@ public class JannotFactory implements JannotConstants
 /*                                                                              */
 /********************************************************************************/
 
-static synchronized public JannotFactory getFactory()
+public static synchronized JannotFactory getFactory()
 {
    if (the_factory == null) {
       the_factory = new JannotFactory();

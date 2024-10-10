@@ -303,7 +303,8 @@ public ASTNode getAstNode()             { return ast_node; }
          case ASTNode.TYPE_DECLARATION :
          case ASTNode.ENUM_DECLARATION :
          case ASTNode.METHOD_DECLARATION :
-         case ASTNode.ANNOTATION_TYPE_MEMBER_DECLARATION :       case ASTNode.ENUM_CONSTANT_DECLARATION :
+         case ASTNode.ANNOTATION_TYPE_MEMBER_DECLARATION :      
+         case ASTNode.ENUM_CONSTANT_DECLARATION :
          case ASTNode.SINGLE_VARIABLE_DECLARATION :
          case ASTNode.VARIABLE_DECLARATION_FRAGMENT :
          case ASTNode.TYPE_PARAMETER :
@@ -393,7 +394,8 @@ private static class EnclosedVisitor extends ASTVisitor {
 
 
 @SuppressWarnings("unchecked") 
-@Override public <A extends java.lang.annotation.Annotation> A[] getAnnotationsByType(Class<A> annottype)
+@Override public <A extends java.lang.annotation.Annotation> A[] 
+        getAnnotationsByType(Class<A> annottype)
 {
    List<JannotAnnotation> rslt = new ArrayList<>();
    if (ast_node instanceof AnnotatableType) {

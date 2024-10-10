@@ -71,6 +71,9 @@ public ConcurrentHashSet(Collection<E> e)
    return chng;
 }
 
+/**
+ *      Add a value to set if it isn't there already
+ **/
 public E addIfAbsent(E pt)
 {
   return set_map.putIfAbsent(pt,pt);
@@ -136,7 +139,7 @@ public E addIfAbsent(E pt)
 @Override public boolean retainAll(Collection<?> c)
 {
    boolean chng = false;
-   for (Iterator<?> it = set_map.keySet().iterator(); it.hasNext();) {
+   for (Iterator<?> it = set_map.keySet().iterator(); it.hasNext(); ) {
       Object pt = it.next();
       if (!c.contains(pt)) {
 	 it.remove();

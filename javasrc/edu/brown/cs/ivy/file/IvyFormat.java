@@ -38,65 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/file/IvyFormat.java,v 1.16 2019/09/12 12:48:14 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyFormat.java,v $
- * Revision 1.16  2019/09/12 12:48:14  spr
- * Changes for annotation processor.
- *
- * Revision 1.15  2019/04/25 20:09:56  spr
- * Add decoding strings.
- *
- * Revision 1.14  2015/02/14 18:45:34  spr
- * Avoid errors on bad types.
- *
- * Revision 1.13  2013/09/24 01:06:53  spr
- * Minor fix
- *
- * Revision 1.12  2011-05-27 19:32:38  spr
- * Change copyrights.
- *
- * Revision 1.11  2011-02-17 23:15:56  spr
- * Handle class type <?> which shows up as <*>
- *
- * Revision 1.10  2010-09-16 23:36:53  spr
- * No change.
- *
- * Revision 1.9  2010-08-14 00:43:49  spr
- * Handle empty string passed to format type.
- *
- * Revision 1.8  2010-08-14 00:28:51  spr
- * Add formatting for multiple types
- *
- * Revision 1.7  2010-07-24 02:00:26  spr
- * Update formatting options for java internals.
- *
- * Revision 1.6  2010-03-10 18:42:12  spr
- * Fix formatting of parameters in method types.
- *
- * Revision 1.5  2010-02-26 21:05:07  spr
- * Add Eclipse-specific type formatting.
- *
- * Revision 1.4  2009-09-17 01:55:38  spr
- * Add database and setup support.
- *
- * Revision 1.3  2009-05-12 22:21:12  spr
- * Fix class formatting for sizes.
- *
- * Revision 1.2  2009-05-01 23:08:12  spr
- * Remove unneeded declaration.
- *
- * Revision 1.1  2009-04-11 01:43:36  spr
- * Add IvyFormat with various numeric and string formatting routines.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.file;
 
 import java.text.DecimalFormat;
@@ -104,7 +45,7 @@ import java.util.Formatter;
 
 
 
-public class IvyFormat {
+public final class IvyFormat {
 
 
 
@@ -207,7 +148,7 @@ public static String formatCount(double v0,double max)
       tail = "K";
     }
    else {
-      v = (long)(v + 0.5);
+      v = (long) (v + 0.5);
     }
 
    String s = COUNT_FORMAT.format(v) + tail;

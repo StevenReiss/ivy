@@ -57,7 +57,7 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipException;
 
 
-public class IvyImplBuilder
+public final class IvyImplBuilder
 {
 
 
@@ -173,7 +173,8 @@ private void scanArgs(String [] args)
 
 private void badArgs()
 {
-   System.err.println("IvyImplBuilder [-cp <classpath>] [-S <system pfx>] [-x <startclass>] [-j <outfile>] {<type>}");
+   System.err.println("IvyImplBuilder [-cp <classpath>] [-S <system pfx>] " + 
+         "[-x <startclass>] [-j <outfile>] {<type>}");
    System.exit(1);
 }
 

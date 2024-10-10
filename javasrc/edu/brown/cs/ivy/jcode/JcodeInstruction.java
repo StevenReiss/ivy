@@ -58,7 +58,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-public class JcodeInstruction implements JcodeConstants
+public final class JcodeInstruction implements JcodeConstants
 {
 
 
@@ -81,7 +81,7 @@ private AbstractInsnNode for_inst;
 /*										*/
 /********************************************************************************/
 
-private static final short  opcode_stack_height[][] = {
+private static final short[][] OPCODE_STACK_HEIGHT = {
    {0, 0},		// nop
    {0, 1},		// aconst_null
    {0, 1},		// iconst_m1
@@ -837,7 +837,7 @@ public int getStackDiff()
 	 return -ct;
     }
 
-   return opcode_stack_height[opc][1] - opcode_stack_height[opc][0];
+   return OPCODE_STACK_HEIGHT[opc][1] - OPCODE_STACK_HEIGHT[opc][0];
 }
 
 
@@ -890,7 +890,7 @@ public int getStackPop()
 	 return ct;
     }
    
-   return opcode_stack_height[opc][0];
+   return OPCODE_STACK_HEIGHT[opc][0];
 }
 
 
@@ -908,7 +908,7 @@ public int getStackPush()
 	 return 0;
     }
    
-   return opcode_stack_height[opc][1];
+   return OPCODE_STACK_HEIGHT[opc][1];
 }
 
 public List<JcodeAnnotation> getAnnotations()
@@ -939,7 +939,7 @@ private List<JcodeAnnotation> addInstructionAnnotations(List<TypeAnnotationNode>
 public int getPoppedStackDiff()
 {
    int opc = getOpcode();
-   return -opcode_stack_height[opc][0];
+   return -OPCODE_STACK_HEIGHT[opc][0];
 }
 
 

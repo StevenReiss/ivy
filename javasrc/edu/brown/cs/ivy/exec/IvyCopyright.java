@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class IvyCopyright
+public final class IvyCopyright
 {
 
 

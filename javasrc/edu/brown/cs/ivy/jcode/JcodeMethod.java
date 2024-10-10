@@ -62,7 +62,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class JcodeMethod extends MethodNode implements JcodeConstants
+public final class JcodeMethod extends MethodNode implements JcodeConstants
 {
 
 
@@ -110,7 +110,8 @@ JcodeMethod(JcodeFactory bf,JcodeClass cls,int a,String n,String d,String s,Stri
 
 private JcodeMethod(JcodeMethod base,String description)
 {
-   super(base.api,base.access,base.name,description,base.signature,base.exceptions.toArray(string_array));
+   super(base.api,base.access,base.name,description,
+         base.signature,base.exceptions.toArray(string_array));
    bcode_factory = base.bcode_factory;
    in_class = base.in_class;
    match_name = base.match_name;

@@ -38,115 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/exec/IvyExec.java,v 1.33 2020/05/03 01:18:24 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyExec.java,v $
- * Revision 1.33  2020/05/03 01:18:24  spr
- * GIve us a local copy of expandString to avoid circular dependencies.
- *
- * Revision 1.32  2018/09/20 23:56:50  spr
- * Handle space in java path name
- *
- * Revision 1.31  2018/08/02 15:09:36  spr
- * Fix imports
- *
- * Revision 1.30  2017/09/08 18:23:24  spr
- * Handle running the correct version of java.
- *
- * Revision 1.29  2015/11/20 15:09:12  spr
- * Reformatting.
- *
- * Revision 1.28  2013/09/24 01:06:51  spr
- * Minor fix
- *
- * Revision 1.27  2013-06-11 23:14:28  spr
- * Code cleanup.
- *
- * Revision 1.26  2012-11-04 02:11:18  spr
- * Remove extra print.
- *
- * Revision 1.25  2012-11-04 02:10:39  spr
- * Add debugging
- *
- * Revision 1.24  2012-10-05 00:46:33  spr
- * Make line splitter public.
- *
- * Revision 1.23  2012-02-29 01:53:47  spr
- * Minor changes.
- *
- * Revision 1.22  2011-06-29 20:24:17  spr
- * no change
- *
- * Revision 1.21  2011-06-24 20:15:44  spr
- * Add working directory option to exec.
- *
- * Revision 1.20  2011-05-27 19:32:35  spr
- * Change copyrights.
- *
- * Revision 1.19  2011-04-01 23:07:38  spr
- * Add method taking list.
- *
- * Revision 1.18  2010-06-01 02:07:58  spr
- * Let java run windows commands directly.
- *
- * Revision 1.17  2010-03-30 16:25:27  spr
- * Minor fixes to setup code.
- *
- * Revision 1.16  2010-02-26 21:04:49  spr
- * Update setup and exec to work better with windows and bubbles.
- *
- * Revision 1.15  2009-09-17 01:55:24  spr
- * Use jps or equivalent to find processes; add setup code for windows, etc.
- *
- * Revision 1.14  2009-06-04 18:49:37  spr
- * Add ivyJava call and remove getenv.
- *
- * Revision 1.13  2008-11-12 13:44:58  spr
- * Add single threaded file management facility.
- *
- * Revision 1.12  2008-06-11 01:46:14  spr
- * Try to close things better.
- *
- * Revision 1.11  2008-03-14 12:25:30  spr
- * Code cleanup.
- *
- * Revision 1.10  2006-12-01 03:22:42  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.9  2006-11-09 00:32:51  spr
- * Fix up get command and args list.
- *
- * Revision 1.8  2006/07/10 14:52:13  spr
- * Code cleanup.
- *
- * Revision 1.7  2005/09/19 23:32:00  spr
- * Fixups based on findbugs.
- *
- * Revision 1.6  2005/05/07 22:25:40  spr
- * Updates for java 5.0
- *
- * Revision 1.5  2004/09/20 22:22:05  spr
- * Minor changes to handle windows better.
- *
- * Revision 1.4  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.3  2003/04/24 20:06:04  spr
- * Shorten thread names and add command to them.
- *
- * Revision 1.2  2003/03/29 03:40:52  spr
- * Provide a dialog-based wait mechanism.
- *
- * Revision 1.1.1.1  2003/03/17 17:12:50  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.exec;
 
@@ -177,12 +68,12 @@ public class IvyExec
 /*										*/
 /********************************************************************************/
 
-public final static int ERROR_OUTPUT = 0x1;	// redirect all output to stderr
-public final static int IGNORE_OUTPUT = 0x2;	// ignore all output
-public final static int PROVIDE_INPUT = 0x10;	// app will provide input
-public final static int READ_OUTPUT = 0x20;	// app will read the output
-public final static int READ_ERROR = 0x40;	// app will read std error
-public final static int USER_PROCESS = 0x80;	// explicitly a user process
+public static final int ERROR_OUTPUT = 0x1;	// redirect all output to stderr
+public static final int IGNORE_OUTPUT = 0x2;	// ignore all output
+public static final int PROVIDE_INPUT = 0x10;	// app will provide input
+public static final int READ_OUTPUT = 0x20;	// app will read the output
+public static final int READ_ERROR = 0x40;	// app will read std error
+public static final int USER_PROCESS = 0x80;	// explicitly a user process
 
 
 
@@ -380,6 +271,9 @@ private void doExec(String [] args,String [] env,File cwd,int flags) throws IOEx
 /*										*/
 /********************************************************************************/
 
+/**
+ *      Get the input stream for stderr
+ **/
 public InputStream getErrorStream()
 {
    if ((exec_flags & READ_ERROR) == 0) {
@@ -392,8 +286,9 @@ public InputStream getErrorStream()
 
 
 
-
-
+/**
+ *      Get the input stream for stdout
+ **/
 public InputStream getInputStream()
 {
    if ((exec_flags & READ_OUTPUT) == 0) {
@@ -407,7 +302,9 @@ public InputStream getInputStream()
 
 
 
-
+/**
+ *      Get the output stream for stdin
+ **/
 public OutputStream getOutputStream()
 {
    if ((exec_flags & PROVIDE_INPUT) == 0) {
@@ -419,7 +316,9 @@ public OutputStream getOutputStream()
 }
 
 
-
+/**
+ *      Wait for process to terminate, return status code
+ **/
 public int waitFor()
 {
    int rslt = 0;
@@ -437,14 +336,18 @@ public int waitFor()
 }
 
 
-
+/**
+ *      Get the exit value (status code)
+ **/
 public int exitValue()
 {
    return exec_process.exitValue();
 }
 
 
-
+/**
+ *      Kill the process, remove streams, etc.
+ **/
 public void destroy()
 {
    if (isRunning()) exec_process.destroy();
@@ -476,7 +379,9 @@ public void destroy()
 }
 
 
-
+/**
+ *      Check if the process is still running
+ **/
 public boolean isRunning()
 {
    try {
@@ -492,14 +397,20 @@ public boolean isRunning()
 }
 
 
-
+/**
+ *      Return the command string
+ **/
 public String getCommand()			{ return exec_command; }
 
 
-
+/**
+ *      Set option to use polling
+ **/
 public static void usePolling(boolean fg)	{ use_polling = fg; }
 
-
+/**
+ *      Return the process id
+ **/
 public long getPid()
 {
    if (exec_process == null) return 0;
@@ -513,6 +424,10 @@ public long getPid()
    return 0;
 }
 
+
+/**
+ *      Return the parent process id
+ **/
 public long getParentPid()
 {
    if (exec_process == null) return 0;

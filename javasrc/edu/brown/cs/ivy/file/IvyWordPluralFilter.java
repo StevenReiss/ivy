@@ -40,6 +40,8 @@ public class IvyWordPluralFilter
 
 private static final HashMap<String,String> IRREGULAR_WORDS;
 
+private static final int SHORT_LENGTH = 3;
+
 static {
    IRREGULAR_WORDS = new HashMap<String,String>();
 
@@ -124,36 +126,41 @@ static {
 public static final String findSingular(String w)
 {	
    // quick check
-   if(w.length() <= 3 || w.charAt(w.length()-1) != 's')
+   if (w.length() <= SHORT_LENGTH || w.charAt(w.length()-1) != 's') {
       return w;
+    }
 
    // don't strip posssesive form
-   if(w.endsWith("'s")){
-      //if(w.length() > 2)
+   if (w.endsWith("'s")) {
+      //if (w.length() > 2)
       //      return w.substring(0,w.length()-2);
       return w;
     }
 
    // irregular forms
    String irregular = IRREGULAR_WORDS.get(w);
-   if(irregular != null)
+   if (irregular != null)
       return irregular;
 
    // similar to step 1a of porter2 stemmer
-   if(w.endsWith("sses"))
+   if (w.endsWith("sses")) {
       return w.substring(0,w.length()-2);
-   else if(w.endsWith("ies")){
-      if(w.length() == 4) // ties -> tie
-	 return w.substring(0,3);
-      else // flies -> fly
-	 return w.substring(0,w.length()-3)+"y";
     }
-   else if(w.endsWith("ss") || w.endsWith("us"))
+   else if (w.endsWith("ies")){
+      if (w.length() == SHORT_LENGTH+1) // ties -> tie
+	 return w.substring(0,SHORT_LENGTH);
+      else // flies -> fly
+	 return w.substring(0,w.length()-SHORT_LENGTH)+"y";
+    }
+   else if (w.endsWith("ss") || w.endsWith("us")) {
       return w;
-   else if(w.endsWith("xes"))
+    }
+   else if (w.endsWith("xes")) {
       return w.substring(0,w.length()-2);
-   else if(w.endsWith("s"))
+    }
+   else if (w.endsWith("s")) {
       return w.substring(0,w.length()-1);
+    }
 
    return w;
 }
