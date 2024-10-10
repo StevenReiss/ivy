@@ -85,35 +85,35 @@ public static String [] getCommandLine()
       boolean fnd = false;
       if (f.exists()) {
 	 FileReader fr = new FileReader(f);
-         try {
-            char [] buf = new char[COMMAND_LINE_SIZE];
-            int fsz = buf.length;
-            int off = 0;
-            for ( ; ; ) {
-               int rsz = fr.read(buf,off,fsz-off);
-               if (rsz < 0) break;
-               off += rsz;
-             }
-            int sz = off;
-            if (sz != 0 && sz != BUFFER_SIZE) {
-               int st = 0;
-               for (int i = 1; i < sz; ++i) {
-                  if (buf[i] == 0) {
-                     String s = new String(buf,st,i-st);
-                     cmds.add(s);
-                     st = i+1;
-                   }
-                }
-               if (sz > st) {
-                  String s = new String(buf,st,sz-st);
-                  cmds.add(s);
-                }
-               fnd = true;
-             }
-          }
-         finally {
-            fr.close();
-          }
+	 try {
+	    char [] buf = new char[COMMAND_LINE_SIZE];
+	    int fsz = buf.length;
+	    int off = 0;
+	    for ( ; ; ) {
+	       int rsz = fr.read(buf,off,fsz-off);
+	       if (rsz < 0) break;
+	       off += rsz;
+	     }
+	    int sz = off;
+	    if (sz != 0 && sz != BUFFER_SIZE) {
+	       int st = 0;
+	       for (int i = 1; i < sz; ++i) {
+		  if (buf[i] == 0) {
+		     String s = new String(buf,st,i-st);
+		     cmds.add(s);
+		     st = i+1;
+		   }
+		}
+	       if (sz > st) {
+		  String s = new String(buf,st,sz-st);
+		  cmds.add(s);
+		}
+	       fnd = true;
+	     }
+	  }
+	 finally {
+	    fr.close();
+	  }
        }
       if (!fnd) {
 	 tryUsingJps(cmds);
@@ -123,7 +123,7 @@ public static String [] getCommandLine()
    catch (Throwable t) {
       System.err.println("IVY: EXEC: Problem getting command line: " + t);
     }
-   
+
    String [] r = new String[cmds.size()];
    r = cmds.toArray(r);
 
@@ -143,18 +143,18 @@ public static String getProcessId()
    try {
       File f = new File("/proc/self/stat");
       if (f.exists()) {
-         int pid = 0;
-         FileReader fr = new FileReader(f);
-         try {
-            for ( ; ; ) {
-               int c = fr.read();
-               if (c < '0' || c > '9') break;
-               pid = pid * 10 + c - '0';
-             }
-          }
-         finally {
-            fr.close();
-          }
+	 int pid = 0;
+	 FileReader fr = new FileReader(f);
+	 try {
+	    for ( ; ; ) {
+	       int c = fr.read();
+	       if (c < '0' || c > '9') break;
+	       pid = pid * 10 + c - '0';
+	     }
+	  }
+	 finally {
+	    fr.close();
+	  }
 	 return Integer.toString(pid);
        }
     }
@@ -192,7 +192,7 @@ public static Integer getProcessNumber()
    int i = Integer.parseInt(s);
    return i;
 }
-   
+
 
 
 public static String getHostName()
@@ -237,12 +237,12 @@ public static String getJavaPath()
    File f1 = new File(jhome,"bin");
    File f2 = new File(f1,"java");
    if (f2.exists() && f2.canExecute()) return f2.getPath();
-   
+
    File f3 = new File(jpath,"jre");
    File f4 = new File(f3,"bin");
    File f5 = new File(f4,"java");
    if (f5.exists() && f5.canExecute()) return f5.getPath();
-      
+
    return "java";
 }
 
@@ -269,17 +269,17 @@ public static List<File> computeBasePath(String javahome)
    File f1 = new File(javahome);
    File f2 = new File(f1,"lib");
    File f3 = new File(f1,"jmods");
-   
+
    if (f3.exists()) addToBasePath(f3,rslt);
    else addToBasePath(f2,rslt);
-   
+
    return rslt;
 }
 
 
 private static void addToBasePath(File dir,List<File> rslt)
 {
-   if (!dir.exists()) ;
+   if (!dir.exists()) { }
    else if (dir.isDirectory()) {
       File [] cnts = dir.listFiles();
       for (int i = 0; i < cnts.length; ++i) addToBasePath(cnts[i],rslt);
@@ -291,17 +291,17 @@ private static void addToBasePath(File dir,List<File> rslt)
 	 jf.close();
        }
       catch (IOException e) {
-         IvyLog.logE("IVY","Can't open system jar file " + dir);
+	 IvyLog.logE("IVY","Can't open system jar file " + dir);
        }
     }
    else if (dir.getName().endsWith(".jmod")) {
       try {
-         ZipFile zf = new ZipFile(dir);
-         rslt.add(dir);
-         zf.close();
+	 ZipFile zf = new ZipFile(dir);
+	 rslt.add(dir);
+	 zf.close();
        }
       catch (IOException e) {
-         IvyLog.logE("IVY","Can't open system jmod file " + dir);
+	 IvyLog.logE("IVY","Can't open system jmod file " + dir);
        }
     }
 }
@@ -364,3 +364,47 @@ private static void tryUsingPs(List<String> args) throws IOException
 
 
 /* end of IvyExecQuery.java */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
