@@ -210,7 +210,7 @@ char[] getResultBuffer()
 
 /* cons(i) is true <=> b[i] is a consonant. */
 
-private final boolean cons(int i)
+private boolean cons(int i)
 {
    switch (stem_buffer[i]) {
       case 'a':
@@ -237,7 +237,7 @@ private final boolean cons(int i)
       ....
 */
 
-private final int m()
+private int m()
 {
    int n = 0;
    int i = 0;
@@ -268,7 +268,7 @@ private final int m()
 
 /* vowelinstem() is true <=> 0,...j contains a vowel */
 
-private final boolean vowelinstem()
+private boolean vowelinstem()
 {
    int i;
    for (i = 0; i <= stem_pos1; i++)
@@ -280,7 +280,7 @@ private final boolean vowelinstem()
 
 /* doublec(j) is true <=> j,(j-1) contain a double consonant. */
 
-private final boolean doublec(int j)
+private boolean doublec(int j)
 {
    if (j < 1) return false;
    if (stem_buffer[j] != stem_buffer[j - 1]) return false;
@@ -298,7 +298,7 @@ private final boolean doublec(int j)
 
 */
 
-private final boolean cvc(int i)
+private boolean cvc(int i)
 {
    if (i < 2 || !cons(i) || cons(i - 1) || !cons(i - 2)) return false;
 
@@ -309,7 +309,7 @@ private final boolean cvc(int i)
 }
 
 
-private final boolean ends(String s)
+private boolean ends(String s)
 {
    int l = s.length();
    int o = stem_pos2 - l + 1;
@@ -324,7 +324,7 @@ private final boolean ends(String s)
 /* setto(s) sets (j+1),...k to the characters in the string s, readjusting
    k. */
 
-private final void setto(String s)
+private void setto(String s)
 {
    int l = s.length();
    int o = stem_pos1 + 1;
@@ -335,7 +335,7 @@ private final void setto(String s)
 
 /* r(s) is used further down. */
 
-private final void r(String s)
+private void r(String s)
 {
    if (m() > 0) setto(s);
 }
@@ -371,7 +371,7 @@ private final void r(String s)
 
 */
 
-private final void step1()
+private void step1()
 {
    if (stem_buffer[stem_pos2] == 's') {
       if (ends("sses")) stem_pos2 -= 2;
@@ -400,7 +400,7 @@ private final void step1()
 
 /* step2() turns terminal y to i when there is another vowel in the stem. */
 
-private final void step2()
+private void step2()
 {
    if (ends("y") && vowelinstem()) stem_buffer[stem_pos2] = 'i';
 }
@@ -409,7 +409,7 @@ private final void step2()
    -ation) maps to -ize etc. note that the string before the suffix must give
    m() > 0. */
 
-private final void step3()
+private void step3()
 {
    if (stem_pos2 == 0) return; /* For Bug 1 */
    switch (stem_buffer[stem_pos2 - 1]) {
@@ -517,7 +517,7 @@ private final void step3()
 
 /* step4() deals with -ic-, -full, -ness etc. similar strategy to step3. */
 
-private final void step4()
+private void step4()
 {
    switch (stem_buffer[stem_pos2]) {
       case 'e':
@@ -561,7 +561,7 @@ private final void step4()
 
 /* step5() takes off -ant, -ence etc., in context <c>vcvc<v>. */
 
-private final void step5()
+private void step5()
 {
    if (stem_pos2 == 0) return; /* for Bug 1 */
    switch (stem_buffer[stem_pos2 - 1]) {
@@ -619,7 +619,7 @@ private final void step5()
 
 /* step6() removes a final -e if m() > 1. */
 
-private final void step6()
+private void step6()
 {
    stem_pos1 = stem_pos2;
    if (stem_pos2 < 0 || stem_pos2 > stem_buffer.length) return;

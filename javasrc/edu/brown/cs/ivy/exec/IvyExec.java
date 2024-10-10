@@ -177,12 +177,12 @@ public class IvyExec
 /*										*/
 /********************************************************************************/
 
-public final static int ERROR_OUTPUT = 0x1;	// redirect all output to stderr
-public final static int IGNORE_OUTPUT = 0x2;	// ignore all output
-public final static int PROVIDE_INPUT = 0x10;	// app will provide input
-public final static int READ_OUTPUT = 0x20;	// app will read the output
-public final static int READ_ERROR = 0x40;	// app will read std error
-public final static int USER_PROCESS = 0x80;	// explicitly a user process
+public static final int ERROR_OUTPUT = 0x1;	// redirect all output to stderr
+public static final int IGNORE_OUTPUT = 0x2;	// ignore all output
+public static final int PROVIDE_INPUT = 0x10;	// app will provide input
+public static final int READ_OUTPUT = 0x20;	// app will read the output
+public static final int READ_ERROR = 0x40;	// app will read std error
+public static final int USER_PROCESS = 0x80;	// explicitly a user process
 
 
 
@@ -724,14 +724,14 @@ private static class ReaderThread extends Thread {
 
    @Override public void run() {
       try {
-         for ( ; ; ) {
-            String l = input_reader.readLine();
-            if (l == null) break;
-            if (output_writer != null) output_writer.println(l);
-          }
+	 for ( ; ; ) {
+	    String l = input_reader.readLine();
+	    if (l == null) break;
+	    if (output_writer != null) output_writer.println(l);
+	  }
        }
       catch (IOException e) {
-         return;
+	 return;
        }
     }
 
