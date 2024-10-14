@@ -32,87 +32,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderManager.java,v 1.23 2018/08/02 15:09:29 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: CinderManager.java,v $
- * Revision 1.23  2018/08/02 15:09:29  spr
- * Fix imports
- *
- * Revision 1.22  2015/11/20 15:09:10  spr
- * Reformatting.
- *
- * Revision 1.21  2011-09-26 23:07:39  spr
- * Use proper base path from variables.
- *
- * Revision 1.20  2009-10-02 00:18:13  spr
- * Import clean up.
- *
- * Revision 1.19  2009-09-17 01:54:51  spr
- * Enable patching at line number level.
- *
- * Revision 1.18  2009-06-04 18:49:20  spr
- * Remove getenv calls.
- *
- * Revision 1.17  2008-06-02 22:16:39  spr
- * Allow others to set debugging flag.
- *
- * Revision 1.16  2008-03-14 12:25:18  spr
- * Fixes for java 1.6; code cleanup.
- *
- * Revision 1.15  2007-08-10 02:10:02  spr
- * Cleanups from Eclipse
- *
- * Revision 1.14  2007-05-10 01:47:59  spr
- * Formating changes.
- *
- * Revision 1.13  2007-05-05 15:22:18  spr
- * Fix boot path for mac.
- *
- * Revision 1.12  2006-11-09 00:32:07  spr
- * Move base path computation to common file.
- *
- * Revision 1.11  2006/07/03 18:14:37  spr
- * Make checkIfClassExists static.
- *
- * Revision 1.10  2006/06/21 02:18:08  spr
- * Add call to get patch type.
- *
- * Revision 1.9  2006/04/07 20:23:42  spr
- * Add error check.
- *
- * Revision 1.8  2005/07/08 20:56:58  spr
- * Upgrade patching to handle constructors; add call to create local variable.
- *
- * Revision 1.7  2005/06/07 02:18:19  spr
- * Update for java 5.0
- *
- * Revision 1.6  2005/05/07 22:25:39  spr
- * Updates for java 5.0
- *
- * Revision 1.5  2005/04/28 21:48:04  spr
- * Check for loading problems; add special call creation method.
- *
- * Revision 1.4  2004/05/05 02:31:32  spr
- * Fix up import conflicts.
- *
- * Revision 1.3  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.2  2003/05/24 00:28:25  spr
- * Add a class filter for package classes.
- *
- * Revision 1.1  2003/03/29 03:40:25  spr
- * Move CINDER interface to JikesBT from Bloom to Ivy.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.cinder;
 
 
@@ -159,7 +78,7 @@ private boolean 	patch_all;
 private Map<BT_Class,String>   class_files;
 private CinderFilter	patch_filter;
 
-public	static boolean	do_debug = false;
+private static boolean	do_debug = false;
 
 
 

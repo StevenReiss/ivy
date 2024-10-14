@@ -38,32 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/client/MintClientServer.java,v 1.5 2018/08/02 15:10:28 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintClientServer.java,v $
- * Revision 1.5  2018/08/02 15:10:28  spr
- * Fix imports.
- *
- * Revision 1.4  2011-05-27 19:32:43  spr
- * Change copyrights.
- *
- * Revision 1.3  2007-08-10 02:11:09  spr
- * Cleanups from eclipse; bug fixes to avoid deadlock.
- *
- * Revision 1.2  2007-05-04 02:00:13  spr
- * Fix bugs related to polling.
- *
- * Revision 1.1  2005/07/08 23:32:57  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.client;
 
 
@@ -145,7 +119,9 @@ PrintWriter getWriter()
 	 OutputStreamWriter osw = new OutputStreamWriter(ots);
 	 pw = new PrintWriter(osw,true);
        }
-      catch (IOException e) { pw = null; }
+      catch (IOException e) {
+         pw = null; 
+       }
     }
 
    return pw;

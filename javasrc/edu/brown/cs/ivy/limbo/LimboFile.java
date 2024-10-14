@@ -38,32 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/limbo/LimboFile.java,v 1.7 2018/08/02 15:10:22 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: LimboFile.java,v $
- * Revision 1.7  2018/08/02 15:10:22  spr
- * Fix imports.
- *
- * Revision 1.6  2011-05-27 19:32:41  spr
- * Change copyrights.
- *
- * Revision 1.5  2010-02-26 21:05:18  spr
- * Fix potential errors in limbo with first/last lines
- *
- * Revision 1.4  2010-02-12 00:35:16  spr
- * Fix spacing; avoid null pointer no missing attribute.
- *
- * Revision 1.3  2008-03-14 12:26:31  spr
- * Add limbo implementation (not testing of it).
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.limbo;
 
 

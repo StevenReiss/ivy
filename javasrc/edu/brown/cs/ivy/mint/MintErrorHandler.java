@@ -38,26 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintErrorHandler.java,v 1.3 2011-05-27 19:32:42 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintErrorHandler.java,v $
- * Revision 1.3  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.2  2010-02-12 00:37:05  spr
- * Move int constants to enum.  Handle nodes going down and bad read returns.
- *
- * Revision 1.1  2005/07/08 23:32:52  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 
@@ -78,7 +58,7 @@ public interface MintErrorHandler
  *	Callback to accept a server error.
  **/
 
-public void handleServerError(String what);
+void handleServerError(String what);
 
 
 

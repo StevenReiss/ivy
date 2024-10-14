@@ -38,25 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalModelListener.java,v 1.3 2013/11/15 02:39:14 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalModelListener.java,v $
- * Revision 1.3  2013/11/15 02:39:14  spr
- * Fix imports
- *
- * Revision 1.2  2011-05-27 19:32:49  spr
- * Change copyrights.
- *
- * Revision 1.1  2010-11-18 23:10:05  spr
- * Add model listener interface.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.petal;
 
 import java.util.EventListener;

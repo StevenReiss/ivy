@@ -31,21 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowDummy.java,v 1.2 2010-02-12 00:33:07 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowDummy.java,v $
- * Revision 1.2  2010-02-12 00:33:07  spr
- * Headers changed.
- *
- * Revision 1.1  2006/06/21 02:18:29  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow;
 
@@ -63,7 +48,7 @@ public class JflowDummy
 /*										*/
 /********************************************************************************/
 
-public void callbackHandler_awt()		{ }
+public void callbackHandlerAwt()		{ }
 
 
 

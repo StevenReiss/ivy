@@ -38,33 +38,13 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingMonitoredWindow.java,v 1.3 2011-05-27 19:32:51 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingMonitoredWindow.java,v $
- * Revision 1.3  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.2  2010-02-12 00:40:02  spr
- * Fix file-based options.  Fix spacing.
- *
- * Revision 1.1.1.1  2003/03/17 19:37:58  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.swing;
 
 
 public interface SwingMonitoredWindow
 {
 
-   public void closeWindow();
+   void closeWindow();
 
 
 }	// end of interface SwingMonitoredWindow

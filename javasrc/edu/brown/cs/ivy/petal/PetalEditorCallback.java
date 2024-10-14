@@ -38,28 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalEditorCallback.java,v 1.4 2011-05-27 19:32:48 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalEditorCallback.java,v $
- * Revision 1.4  2011-05-27 19:32:48  spr
- * Change copyrights.
- *
- * Revision 1.3  2008-11-12 13:46:48  spr
- * No change.
- *
- * Revision 1.2  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/07/16 19:44:58  spr
- * Move petal from bloom to ivy.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.petal;
 
 

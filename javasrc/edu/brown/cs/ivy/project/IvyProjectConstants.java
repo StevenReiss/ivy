@@ -31,25 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/project/IvyProjectConstants.java,v 1.3 2010-02-12 00:39:12 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyProjectConstants.java,v $
- * Revision 1.3  2010-02-12 00:39:12  spr
- * Fix spacing.
- *
- * Revision 1.2  2009-10-02 00:18:29  spr
- * Import clean up.
- *
- * Revision 1.1  2009-09-19 00:22:01  spr
- * Add IvyProject implementaton.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.project;
 
@@ -73,7 +54,8 @@ String IVY_CURRENT_PROJECT = ".currentproject";
 String IVY_PROJECT_EXTENSION = ".ivy";
 
 
-String IVY_PATH_VAR_FILE = IvyFile.expandName(".metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.jdt.core.prefs");
+String IVY_PATH_VAR_FILE = IvyFile.expandName(".metadata/.plugins/org.eclipse.core.runtime/" + 
+      ".settings/org.eclipse.jdt.core.prefs");
 String IVY_EXEC_DIR = IvyFile.expandName(".metadata/.plugins/org.eclipse.debug.core/.launches");
 
 		

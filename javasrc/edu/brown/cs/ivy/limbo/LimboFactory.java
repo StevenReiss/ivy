@@ -38,37 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/limbo/LimboFactory.java,v 1.9 2017/04/14 23:39:02 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: LimboFactory.java,v $
- * Revision 1.9  2017/04/14 23:39:02  spr
- * Fix ups to support limbo from bedrock.
- *
- * Revision 1.8  2011-05-27 19:32:41  spr
- * Change copyrights.
- *
- * Revision 1.7  2011-03-23 23:24:24  spr
- * Add force validate; clean up.
- *
- * Revision 1.6  2010-08-06 12:40:54  spr
- * Allow files to be deleted from table.
- *
- * Revision 1.5  2009-09-17 01:58:24  spr
- * Fixup limbo so its actually usable (by dyvise).
- *
- * Revision 1.4  2008-06-11 01:46:32  spr
- * Clean imports.
- *
- * Revision 1.3  2008-03-14 12:26:31  spr
- * Add limbo implementation (not testing of it).
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.limbo;
 
@@ -98,7 +67,7 @@ public class LimboFactory
 
 private File	cur_file;
 
-static Map<File,LimboFile> file_map = new HashMap<File,LimboFile>();
+private static Map<File,LimboFile> file_map = new HashMap<>();
 
 
 

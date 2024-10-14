@@ -86,7 +86,7 @@ public SwingMenu(String text,IvyI18N intl)
 
 public SwingMenu(String text,boolean b)
 {
-   this (text,b,null);
+   this(text,b,null);
 }
 
 public SwingMenu(String text,boolean b,IvyI18N intl)

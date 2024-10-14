@@ -38,26 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/MintPolicyException.java,v 1.3 2011-05-27 19:32:45 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintPolicyException.java,v $
- * Revision 1.3  2011-05-27 19:32:45  spr
- * Change copyrights.
- *
- * Revision 1.2  2010-02-12 00:38:04  spr
- * Augment error messages.
- *
- * Revision 1.1  2005/07/08 23:33:07  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.server;
 
 

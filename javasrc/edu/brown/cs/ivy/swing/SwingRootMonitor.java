@@ -38,32 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingRootMonitor.java,v 1.5 2015/11/20 15:09:26 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingRootMonitor.java,v $
- * Revision 1.5  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.4  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.3  2008-11-12 13:46:51  spr
- * No change.
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1.1.1  2003/03/17 19:38:07  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.swing;
 
 import java.awt.Window;

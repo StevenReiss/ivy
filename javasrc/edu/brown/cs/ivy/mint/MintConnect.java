@@ -38,41 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintConnect.java,v 1.8 2018/08/02 15:10:26 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintConnect.java,v $
- * Revision 1.8  2018/08/02 15:10:26  spr
- * Fix imports.
- *
- * Revision 1.7  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.6  2010-08-20 20:58:24  spr
- * Add logging and options for port numbers
- *
- * Revision 1.5  2010-08-04 22:01:53  spr
- * Master server not ready for localhost.
- *
- * Revision 1.4  2009-06-04 18:50:41  spr
- * Use ivyJava call when necessary.
- *
- * Revision 1.3  2007-05-04 02:00:11  spr
- * Fix bugs related to polling.
- *
- * Revision 1.2  2006/02/21 17:06:23  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.1  2005/07/08 23:32:52  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 import edu.brown.cs.ivy.mint.match.MintMatchSelector;
@@ -141,7 +106,9 @@ public static Socket findServer(String id)
 	    "_" + host;
 	 id = id.replace(" ","_");
        }
-      catch (IOException e) { return null; }
+      catch (IOException e) { 
+         return null;
+       }
     }
 
    String dbg = "";

@@ -76,9 +76,9 @@ public static final String	MENU_KEY = "menu";
 public static final String	XALT_KEY = "xalt";
 public static final String      YALT_KEY = "yalt";
 
-private static final String	menu_keyname;
-private static final String	xalt_keyname;
-private static final String     yalt_keyname; 
+private static String	menu_keyname;
+private static String	xalt_keyname;
+private static String   yalt_keyname; 
 
 private static Map<String,Map<String,Set<String>>> command_keys = new HashMap<>();
 private static Map<String,Map<String,String>> defined_keys = new TreeMap<>();
@@ -359,7 +359,7 @@ private static String getCommandName(Action a)
 /*                                                                              */
 /********************************************************************************/
 
-public static void registerKeyAction(JComponent jc,Action a,String ... key)
+public static void registerKeyAction(JComponent jc,Action a,String... key)
 {
    registerKeyAction(jc,getCommandName(a),a,key);
 }
@@ -371,7 +371,7 @@ public static void registerKeyAction(String when,JComponent jc,Action a,String..
 }
 
 
-public static void registerKeyAction(JComponent jc,String nm,Action a,String ... key) 
+public static void registerKeyAction(JComponent jc,String nm,Action a,String... key) 
 {
    SwingKey sk = new SwingKey(nm,a,key);
    sk.registerKeyAction(jc);
@@ -379,14 +379,14 @@ public static void registerKeyAction(JComponent jc,String nm,Action a,String ...
 
 
 public static void registerKeyAction(String when,JComponent jc,String nm,
-      Action a,String ... key) 
+      Action a,String... key) 
 {
    SwingKey sk = new SwingKey(when,nm,a,key);
    sk.registerKeyAction(jc);
 }
 
 
-public static void registerKeyAction(String when,String nm,String ... key) 
+public static void registerKeyAction(String when,String nm,String... key) 
 {
     new SwingKey(when,nm,null,key);
 } 

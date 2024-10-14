@@ -32,30 +32,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowMethod.java,v 1.5 2018/08/02 15:10:13 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowMethod.java,v $
- * Revision 1.5  2018/08/02 15:10:13  spr
- * Fix imports.
- *
- * Revision 1.4  2007-02-27 18:53:26  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.3  2006/07/10 14:52:15  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:11  spr
- * Update flow with inlining options.  Clean up.
- *
- * Revision 1.1  2006/06/21 02:18:29  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow;
 

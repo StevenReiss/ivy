@@ -31,19 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/project/IvyProjectException.java,v 1.1 2009-09-19 00:22:01 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyProjectException.java,v $
- * Revision 1.1  2009-09-19 00:22:01  spr
- * Add IvyProject implementaton.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.project;
 

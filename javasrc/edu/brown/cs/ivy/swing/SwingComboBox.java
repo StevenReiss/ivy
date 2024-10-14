@@ -44,86 +44,6 @@
  * @version 1.0
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingComboBox.java,v 1.23 2018/08/02 15:10:53 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingComboBox.java,v $
- * Revision 1.23  2018/08/02 15:10:53  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.22  2018/05/25 17:57:16  spr
- * Clean up a little.
- *
- * Revision 1.21  2016/12/20 21:31:18  spr
- * Formating changes.
- *
- * Revision 1.20  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.19  2015/02/14 18:46:18  spr
- * Clean up; add helper methods.
- *
- * Revision 1.18  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.17  2013/09/24 01:07:53  spr
- * data format
- *
- * Revision 1.16  2013-06-03 13:03:42  spr
- * *** empty log message ***
- *
- * Revision 1.15  2011-05-27 19:32:50  spr
- * Change copyrights.
- *
- * Revision 1.14  2011-02-17 23:16:12  spr
- * Minor cleanups.
- *
- * Revision 1.13  2010-09-16 23:37:42  spr
- * Avoid eclipse java errors.
- *
- * Revision 1.12  2010-07-24 02:01:02  spr
- * Add permanent option for freeze panes; code clean up; add mac support for text components.
- *
- * Revision 1.11  2009-10-02 00:18:30  spr
- * Import clean up.
- *
- * Revision 1.10  2009-09-18 01:44:15  spr
- * Fix up autocompletion and add Collection constructor.
- *
- * Revision 1.9  2009-09-17 02:00:45  spr
- * Add autocomplete, new grid options, fix up lists, add range scroll bar.
- *
- * Revision 1.8  2009-03-20 01:59:50  spr
- * Add enum-based choice box; add remove/update calls to lists; loosen numeric field checking.
- *
- * Revision 1.7  2007-08-10 02:11:23  spr
- * Cleanups from eclipse.
- *
- * Revision 1.6  2007-05-04 02:00:37  spr
- * Import fixups.
- *
- * Revision 1.5  2006/07/23 02:25:33  spr
- * Move list panel and its support to swing; move range slider to swing.
- *
- * Revision 1.4  2006/07/10 14:52:25  spr
- * Code cleanup.
- *
- * Revision 1.3  2005/05/07 22:25:44  spr
- * Updates for java 5.0
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1.1.1  2003/03/17 19:37:41  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
 
 package edu.brown.cs.ivy.swing;
 
@@ -396,7 +316,7 @@ private class ComboBoxCommand extends AbstractUndoableEdit {
    private transient Object new_item;
    private static final long serialVersionUID = 1;
 
-   public ComboBoxCommand() {
+   ComboBoxCommand() {
       old_item = selected_item;
       new_item = getSelectedItem();
     }
@@ -440,9 +360,9 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
     private static final long serialVersionUID = 1;
 
 
-    public AutoCompleteDocument() {
+    AutoCompleteDocument() {
       completion_model = getModel();
-      text_comp = (JTextComponent)getEditor().getEditorComponent();
+      text_comp = (JTextComponent) getEditor().getEditorComponent();
       text_comp.addKeyListener(new AutoKeyer(this));
       text_comp.addFocusListener(new AutoFocus(this));
     }
@@ -477,59 +397,59 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
       int key = e.getKeyCode();
       int count = getItemCount() - 1;
     
-      if (( key == KeyEvent.VK_DOWN ) && ( cur_index < count )){
+      if ((key == KeyEvent.VK_DOWN) && (cur_index < count)) {
          cur_index += 1;
          do_navigate = true;
        }
-      else if(( key == KeyEvent.VK_UP ) && ( cur_index > 0 )){
+      else if ((key == KeyEvent.VK_UP) && (cur_index > 0)) {
          cur_index -= 1;
          do_navigate = true;
        }
     
-      if ( do_navigate ) {
-         String selection = (String) getItemAt( cur_index );
+      if (do_navigate) {
+         String selection = (String) getItemAt(cur_index);
          try {
-            insertString( 0, selection, null );
-            highLightText( 0 );
+            insertString(0, selection, null);
+            highLightText(0);
           }
-         catch(Throwable ex) { }
+         catch (Throwable ex) { }
          do_navigate = false;
        }
      }
 
-    @Override public void insertString(int offs,String str,AttributeSet a ) throws BadLocationException {
-       if ( do_select ) return;
-       if ( do_navigate || offs == 0) super.remove( 0, getLength() );
+    @Override public void insertString(int offs,String str,AttributeSet a) throws BadLocationException {
+       if (do_select) return;
+       if (do_navigate || offs == 0) super.remove(0, getLength());
     
-       super.insertString( offs, str, a );
-       Object item = lookupItem( getText( 0, getLength() ));
-       if ( item != null ){
+       super.insertString(offs, str, a);
+       Object item = lookupItem(getText(0, getLength()));
+       if (item != null) {
           if (!do_navigate) setSelectedItem(item);
-          super.remove( 0, getLength() );
-          super.insertString( 0, item.toString(), a );
+          super.remove(0, getLength());
+          super.insertString(0, item.toString(), a);
           // highLightText( offs + str.length() );
         }
-       else{
-          if (isPopupVisible()) setPopupVisible( false );
+       else {
+          if (isPopupVisible()) setPopupVisible(false);
           text_comp.setSelectionEnd(0);
           text_comp.setCaretPosition(text_comp.getText().length());
         }
      }
 
     @Override public void remove(int offs,int len) throws BadLocationException {
-       if ( do_select ) return;
-       super.remove( offs, len );
+       if (do_select) return;
+       super.remove(offs, len);
      }
 
     private void setSelectedItem(Object item) {
        do_select = true;
-       completion_model.setSelectedItem( item );
+       completion_model.setSelectedItem(item);
        do_select = false;
      }
 
     private Object lookupItem(String pattern) {
        int n = completion_model.getSize();
-       for ( int i = 0; i < n; ++i) {
+       for (int i = 0; i < n; ++i) {
           String itm = completion_model.getElementAt(i).toString();
           if (itm.equals(pattern)) {
              cur_index = i;
@@ -537,8 +457,8 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
            }
         }
         
-       for ( int i = 0; i < n; i++ ){
-          String currentItem = completion_model.getElementAt( i ).toString();
+       for (int i = 0; i < n; ++i) {
+          String currentItem = completion_model.getElementAt(i).toString();
           if (case_sensitive) {
              if (currentItem.contains(pattern)) {
                 cur_index = i;
@@ -546,7 +466,7 @@ private class AutoCompleteDocument<S extends T> extends PlainDocument {
               }
            }
           else {
-             if ( currentItem.toLowerCase().contains( pattern.toLowerCase() )) {
+             if (currentItem.toLowerCase().contains(pattern.toLowerCase())) {
                 cur_index = i;
                 return currentItem;
               }

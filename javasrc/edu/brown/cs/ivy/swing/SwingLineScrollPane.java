@@ -218,7 +218,7 @@ private class LineNumbersView extends JComponent implements DocumentListener, Ca
     }
    
    private void documentChanged() {
-      SwingUtilities.invokeLater( () -> { repaint(); } );
+      SwingUtilities.invokeLater(() -> { repaint(); });
     }
    
    private void updateSize() {

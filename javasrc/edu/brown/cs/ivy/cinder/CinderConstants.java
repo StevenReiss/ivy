@@ -32,30 +32,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderConstants.java,v 1.4 2018/08/08 18:46:36 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: CinderConstants.java,v $
- * Revision 1.4  2018/08/08 18:46:36  spr
- * Bad checkin for some reason.
- *
- * Revision 1.3  2008-11-12 13:44:40  spr
- * No changes.
- *
- * Revision 1.2  2003/06/07 02:59:21  spr
- * Cleanups prompted by eclipse
- *
- * Revision 1.1  2003/03/29 03:40:25  spr
- * Move CINDER interface to JikesBT from Bloom to Ivy.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.cinder;
 
 

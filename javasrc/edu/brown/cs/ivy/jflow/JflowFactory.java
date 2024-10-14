@@ -31,27 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowFactory.java,v 1.5 2017/12/20 20:36:41 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowFactory.java,v $
- * Revision 1.5  2017/12/20 20:36:41  spr
- * Formatting
- *
- * Revision 1.4  2010-02-12 00:33:07  spr
- * Headers changed.
- *
- * Revision 1.3  2006/07/10 14:52:15  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:11  spr
- * Update flow with inlining options.  Clean up.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow;
 

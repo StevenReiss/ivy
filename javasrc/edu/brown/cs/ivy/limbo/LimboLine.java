@@ -38,38 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/limbo/LimboLine.java,v 1.7 2017/04/14 23:39:02 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: LimboLine.java,v $
- * Revision 1.7  2017/04/14 23:39:02  spr
- * Fix ups to support limbo from bedrock.
- *
- * Revision 1.6  2011-05-27 19:32:41  spr
- * Change copyrights.
- *
- * Revision 1.5  2011-03-23 23:24:24  spr
- * Add force validate; clean up.
- *
- * Revision 1.4  2010-07-01 21:55:10  spr
- * Ensure we compare lines to lines
- *
- * Revision 1.3  2009-09-17 01:58:24  spr
- * Fixup limbo so its actually usable (by dyvise).
- *
- * Revision 1.2  2008-06-11 01:46:32  spr
- * Clean imports.
- *
- * Revision 1.1  2008-03-14 12:26:31  spr
- * Add limbo implementation (not testing of it).
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.limbo;
 
 
@@ -307,10 +275,10 @@ protected static int stringDiff(CharSequence s,CharSequence t)
    for (int j = 0; j <= m; j++) d[0][j] = j;
 
    for (int i = 1; i <= n; ++i) {
-      char s_i = s.charAt(i-1);
+      char si = s.charAt(i-1);
       for (int j = 1; j <= m; ++j) {
-	 char t_j = t.charAt (j - 1);
-	 int cost = (s_i == t_j ? 0 : 1);
+	 char tj = t.charAt(j - 1);
+	 int cost = (si == tj ? 0 : 1);
 	 d[i][j] = min3(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+cost);
        }
     }

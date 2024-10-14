@@ -71,7 +71,7 @@ static String randomString(int len)
 }
 
 
-static public String unescape(String s) 
+public static String unescape(String s) 
 {
    if (s == null) return null;
    try {

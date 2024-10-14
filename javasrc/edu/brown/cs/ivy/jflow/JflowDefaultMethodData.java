@@ -31,31 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowDefaultMethodData.java,v 1.5 2018/08/02 15:10:13 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowDefaultMethodData.java,v $
- * Revision 1.5  2018/08/02 15:10:13  spr
- * Fix imports.
- *
- * Revision 1.4  2015/11/20 15:09:13  spr
- * Reformatting.
- *
- * Revision 1.3  2007-05-04 01:59:52  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.2  2007-01-03 03:24:15  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.1  2006/07/10 14:52:15  spr
- * Code cleanup.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.jflow;
 

@@ -75,17 +75,17 @@ public SwingMenuItem(IvyI18N intl)
 
 public SwingMenuItem(String text)
 {
-   this (text,null,null);
+   this(text,null,null);
 }
 
 public SwingMenuItem(String text,IvyI18N intl)
 {
-   this (text,null,intl);
+   this(text,null,intl);
 }
 
 public SwingMenuItem(String text,int mnem)
 {
-   this (text,mnem,null);
+   this(text,mnem,null);
 }
 
 public SwingMenuItem(String text,int mnem,IvyI18N intl)

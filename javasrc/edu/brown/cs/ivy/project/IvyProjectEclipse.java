@@ -31,46 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/project/IvyProjectEclipse.java,v 1.10 2018/08/02 15:10:38 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyProjectEclipse.java,v $
- * Revision 1.10  2018/08/02 15:10:38  spr
- * Fix imports.
- *
- * Revision 1.9  2015/11/20 15:09:25  spr
- * Reformatting.
- *
- * Revision 1.8  2013/09/24 01:07:52  spr
- * data format
- *
- * Revision 1.7  2012-01-12 01:27:55  spr
- * Fix exceptions
- *
- * Revision 1.6  2011-01-15 18:45:25  spr
- * Handle indirect links to projects
- *
- * Revision 1.5  2010-09-16 23:37:19  spr
- * Delete one blank line.
- *
- * Revision 1.4  2010-07-01 21:57:59  spr
- * Always check files at startup.
- *
- * Revision 1.3  2010-06-01 15:38:00  spr
- * Updates for eclipse.
- *
- * Revision 1.2  2009-10-02 00:18:29  spr
- * Import clean up.
- *
- * Revision 1.1  2009-09-19 00:22:01  spr
- * Add IvyProject implementaton.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.project;
 
@@ -199,7 +159,7 @@ private void initialize(String ename) throws IvyProjectException
 /*										*/
 /********************************************************************************/
 
-protected synchronized @Override void clear()
+@Override protected synchronized void clear()
 {
    super.clear();
 
@@ -582,7 +542,7 @@ private boolean fileNameMatches(String nm,String pfx,String pat)
 
 
 
-private class EclipseSourceFilter extends SourceFilter {
+private final class EclipseSourceFilter extends SourceFilter {
 
    @Override public boolean accept(File p) {
       if (!super.accept(p)) return false;

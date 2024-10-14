@@ -75,12 +75,12 @@ public SwingButton(IvyI18N intl)
 
 public SwingButton(String text)
 {
-   this (text,null,null);
+   this(text,null,null);
 }
 
 public SwingButton(String text,IvyI18N intl)
 {
-   this (text,null,intl);
+   this(text,null,intl);
 }
 
 public SwingButton(String text,Icon icon)

@@ -38,41 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/MintServerMessage.java,v 1.8 2015/11/20 15:09:20 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintServerMessage.java,v $
- * Revision 1.8  2015/11/20 15:09:20  spr
- * Reformatting.
- *
- * Revision 1.7  2011-05-27 19:32:45  spr
- * Change copyrights.
- *
- * Revision 1.6  2011-05-20 23:30:04  spr
- * Updates to avoid infinite message loops.
- *
- * Revision 1.5  2011-05-17 01:05:07  spr
- * Mint server to support web-scale messages.
- *
- * Revision 1.4  2007-08-10 02:11:14  spr
- * Cleanups from eclipse; bug fixes to avoid deadlock.
- *
- * Revision 1.3  2007-05-04 02:00:24  spr
- * Fix bugs related to polling.
- *
- * Revision 1.2  2006/02/21 17:06:28  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.1  2005/07/08 23:33:08  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.server;
 
 
@@ -107,7 +72,7 @@ private int global_rid;
 private int message_flags;
 private int replies_sent;
 
-static private int reply_counter = 0;
+private static int reply_counter = 0;
 
 
 
@@ -135,7 +100,7 @@ MintServerMessage(MintServer svr,MintServerConnection cl,String tx,int rid,int f
    if (rid == MINT_REPLY_NONE) global_rid = MINT_REPLY_NONE;
    else if ((fgs & MINT_MSG_NO_REPLY) != 0) global_rid = MINT_REPLY_NONE;
    else {
-      synchronized(MintServerMessage.class) {
+      synchronized (MintServerMessage.class) {
 	 global_rid = ++reply_counter;
        }
     }
@@ -161,7 +126,7 @@ MintServerMessage(MintServerMessage omsg,Element xml,boolean clone)
    if (client_rid == MINT_REPLY_NONE) global_rid = MINT_REPLY_NONE;
    else if ((message_flags & MINT_MSG_NO_REPLY) != 0) global_rid = MINT_REPLY_NONE;
    else {
-      synchronized(MintServerMessage.class) {
+      synchronized (MintServerMessage.class) {
 	 global_rid = ++reply_counter;
        }
     }

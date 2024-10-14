@@ -38,39 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorButton.java,v 1.7 2018/08/02 15:10:53 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingColorButton.java,v $
- * Revision 1.7  2018/08/02 15:10:53  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.6  2015/11/20 15:09:25  spr
- * Reformatting.
- *
- * Revision 1.5  2013/11/15 02:38:18  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.4  2012-03-21 23:54:43  spr
- * Clean up the code.
- *
- * Revision 1.3  2011-06-29 01:58:26  spr
- * Fix up new grid options.
- *
- * Revision 1.2  2011-06-28 00:12:31  spr
- * Add new swing dialog options.
- *
- * Revision 1.1  2011-06-24 20:17:24  spr
- * Add new field handlers.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.swing;
 
 

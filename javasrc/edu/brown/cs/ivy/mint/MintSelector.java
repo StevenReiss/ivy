@@ -38,29 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintSelector.java,v 1.4 2011-05-27 19:32:42 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintSelector.java,v $
- * Revision 1.4  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.3  2010-02-12 00:37:05  spr
- * Move int constants to enum.  Handle nodes going down and bad read returns.
- *
- * Revision 1.2  2006/02/21 17:06:23  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.1  2005/07/08 23:32:53  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 
@@ -85,7 +62,7 @@ public interface MintSelector
  *	returned containing the matched arguments.
  **/
 
-public MintArguments matchMessage(MintMessage msg);
+MintArguments matchMessage(MintMessage msg);
 
 
 
@@ -94,7 +71,7 @@ public MintArguments matchMessage(MintMessage msg);
  *	arguments.
  **/
 
-public boolean testMatchMessage(MintMessage msg);
+boolean testMatchMessage(MintMessage msg);
 
 
 
@@ -108,7 +85,7 @@ public boolean testMatchMessage(MintMessage msg);
  *	Return the text string representation of the XML pattern.
  **/
 
-public String getText();
+String getText();
 
 
 
@@ -117,7 +94,7 @@ public String getText();
  *	Return the XML document representation of the pattern.
  **/
 
-public Element getXml();
+Element getXml();
 
 
 

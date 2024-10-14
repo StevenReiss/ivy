@@ -31,57 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/pebble/PebbleAutomata.java,v 1.14 2018/08/02 15:10:34 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PebbleAutomata.java,v $
- * Revision 1.14  2018/08/02 15:10:34  spr
- * Fix imports.
- *
- * Revision 1.13  2015/11/20 15:09:22  spr
- * Reformatting.
- *
- * Revision 1.12  2013-06-03 13:03:32  spr
- * Minor fixes
- *
- * Revision 1.11  2009-09-17 02:00:09  spr
- * Eclipse cleanup.
- *
- * Revision 1.10  2007-08-10 02:11:18  spr
- * Cleanups from eclipse.
- *
- * Revision 1.9  2006-12-01 03:22:53  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.8  2006/07/10 14:52:23  spr
- * Code cleanup.
- *
- * Revision 1.7  2006/02/21 17:06:42  spr
- * Changes to Pebble to support external data models.
- *
- * Revision 1.6  2005/07/08 20:57:06  spr
- * Charles' upgrade to Pebble UI.
- *
- * Revision 1.5  2005/06/28 17:20:53  spr
- * UI enhancements (CAR)
- *
- * Revision 1.4  2005/06/07 02:18:20  spr
- * Update for java 5.0
- *
- * Revision 1.3  2005/05/07 22:25:41  spr
- * Updates for java 5.0
- *
- * Revision 1.2  2005/04/29 18:15:26  spr
- * Add normalization and class type; fix minor problems.
- *
- * Revision 1.1  2005/04/28 21:48:16  spr
- * Initial release of the pebble automata editor.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.pebble;
 
@@ -531,9 +480,6 @@ private boolean showArc(PebbleTransition pt)
 {
    if (!for_editor.getShowSelfArcs()) {
       if (pt.getSource() == pt.getTarget()) return false;
-    }
-
-   if (!for_editor.getShowDefaultArcs()) {
     }
 
    return true;

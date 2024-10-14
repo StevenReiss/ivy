@@ -38,90 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingText.java,v 1.24 2020/05/03 01:19:39 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingText.java,v $
- * Revision 1.24  2020/05/03 01:19:39  spr
- * Code cleanup.
- *
- * Revision 1.23  2020/01/28 21:14:06  spr
- * Clean up.
- *
- * Revision 1.22  2018/09/20 23:57:40  spr
- * Java 10 changes
- *
- * Revision 1.21  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.20  2018/05/25 17:57:16  spr
- * Clean up a little.
- *
- * Revision 1.19  2017/06/20 00:53:17  spr
- * Add DPI getting routine.
- *
- * Revision 1.18  2016/11/17 15:56:22  spr
- * Clean up keyboard mappings.
- *
- * Revision 1.17  2016/10/15 00:29:03  spr
- * Handle parent on mac; fix selection model for tree + table.
- *
- * Revision 1.16  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.15  2015/07/02 19:01:33  spr
- * Minor bug fixes
- *
- * Revision 1.14  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.13  2011-09-12 20:50:31  spr
- * Code cleanup.
- *
- * Revision 1.12  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.11  2011-01-11 00:26:57  spr
- * Handle empty freeze pane; code cleanup.
- *
- * Revision 1.10  2010-09-17 16:25:06  spr
- * Fix text character input.
- *
- * Revision 1.9  2010-09-17 15:46:19  spr
- * Add Keymap converter for mac; clean up and finish tree table.
- *
- * Revision 1.8  2010-07-24 02:01:02  spr
- * Add permanent option for freeze panes; code clean up; add mac support for text components.
- *
- * Revision 1.7  2009-10-02 00:18:30  spr
- * Import clean up.
- *
- * Revision 1.6  2009-04-11 01:43:02  spr
- * Prevent text from getting too big.
- *
- * Revision 1.5  2009-03-20 01:59:50  spr
- * Add enum-based choice box; add remove/update calls to lists; loosen numeric field checking.
- *
- * Revision 1.4  2009-01-27 00:40:33  spr
- * IvyXmlWriter cleanup.
- *
- * Revision 1.3  2008-06-11 01:46:38  spr
- * Clean imports.
- *
- * Revision 1.2  2008-03-14 12:27:44  spr
- * Code cleanup.
- *
- * Revision 1.1  2007-11-06 00:22:17  spr
- * Add methods to draw text in a 2d box with proper scaling.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.swing;
 
 
@@ -437,8 +353,8 @@ private static class MacKeyTypedAction extends TextAction {
    
       if ((content != null) && (content.length() > 0) &&
              (((mod & ActionEvent.META_MASK) == 0) &&
-        	 ! (((mod & ActionEvent.CTRL_MASK) != 0) &&
-        	       ((mod & ActionEvent.ALT_MASK) == 0) ))) {
+        	 !((mod & ActionEvent.CTRL_MASK) != 0) &&
+        	       ((mod & ActionEvent.ALT_MASK) == 0))) {
          char c = content.charAt(0);
          if (c >= 0x20 && (c != 0x7F)) { // Filter out CTRL chars and delete
             if (target != null)

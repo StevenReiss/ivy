@@ -40,47 +40,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/limbo/LimboBestLine.java,v 1.10 2018/08/02 15:10:22 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: LimboBestLine.java,v $
- * Revision 1.10  2018/08/02 15:10:22  spr
- * Fix imports.
- *
- * Revision 1.9  2015/11/20 15:09:16  spr
- * Reformatting.
- *
- * Revision 1.8  2012-02-29 01:53:54  spr
- * Code clean up.
- *
- * Revision 1.7  2012-01-12 01:25:51  spr
- * Formatting
- *
- * Revision 1.6  2011-05-27 19:32:40  spr
- * Change copyrights.
- *
- * Revision 1.5  2011-03-23 23:24:24  spr
- * Add force validate; clean up.
- *
- * Revision 1.4  2010-02-26 21:05:18  spr
- * Fix potential errors in limbo with first/last lines
- *
- * Revision 1.3  2010-02-12 00:35:16  spr
- * Fix spacing; avoid null pointer no missing attribute.
- *
- * Revision 1.2  2008-06-11 01:46:32  spr
- * Clean imports.
- *
- * Revision 1.1  2008-03-14 12:26:31  spr
- * Add limbo implementation (not testing of it).
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.limbo;
 
 
@@ -110,16 +69,16 @@ private String		line_text;
 private int []		pre_context;
 private int []		post_context;
 
-private final static int	CONTEXT_SIZE = 4;
-private final static boolean	IGNORE_SPACE = false;
-private final static double	CONTEXT_THRESHOLD = 0.35;
-private final static double	CONTEXT_SCALE = 0.4;
+private static final int	CONTEXT_SIZE = 4;
+private static final boolean	IGNORE_SPACE = false;
+private static final double	CONTEXT_THRESHOLD = 0.35;
+private static final double	CONTEXT_SCALE = 0.4;
 
-private final static boolean	LINE_IGNORE_SPACE = true;
-private final static double	LINE_THRESHOLD = 0.5;
-private final static double	LINE_SCALE = (1.0 - CONTEXT_SCALE);
+private static final boolean	LINE_IGNORE_SPACE = true;
+private static final double	LINE_THRESHOLD = 0.5;
+private static final double	LINE_SCALE = (1.0 - CONTEXT_SCALE);
 
-private final static double	THRESHOLD_VALUE = 0.35;
+private static final double	THRESHOLD_VALUE = 0.35;
 
 
 

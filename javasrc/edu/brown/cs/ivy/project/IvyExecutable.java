@@ -31,22 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/project/IvyExecutable.java,v 1.2 2019/09/12 12:48:33 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyExecutable.java,v $
- * Revision 1.2  2019/09/12 12:48:33  spr
- * Code cleanup.
- *
- * Revision 1.1  2009-09-19 00:22:01  spr
- * Add IvyProject implementaton.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.project;
 

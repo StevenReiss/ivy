@@ -38,36 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorRangeChooser.java,v 1.6 2015/11/20 15:09:25 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingColorRangeChooser.java,v $
- * Revision 1.6  2015/11/20 15:09:25  spr
- * Reformatting.
- *
- * Revision 1.5  2013/11/15 02:38:18  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.4  2013-06-03 13:03:42  spr
- * *** empty log message ***
- *
- * Revision 1.3  2012-03-21 23:54:43  spr
- * Clean up the code.
- *
- * Revision 1.2  2011-06-28 00:12:31  spr
- * Add new swing dialog options.
- *
- * Revision 1.1  2011-06-24 20:17:24  spr
- * Add new field handlers.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.swing;
 
 
@@ -98,7 +68,7 @@ private SwingColorButton first_color;
 private SwingColorButton second_color;
 private JComboBox<String> gradient_choice;
 
-private final static long serialVersionUID = 1;
+private static final long serialVersionUID = 1;
 
 private String []	gradient_options = {
    "SINGLE", "GRADIENT"

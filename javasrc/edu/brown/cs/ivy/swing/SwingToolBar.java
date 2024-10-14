@@ -38,38 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingToolBar.java,v 1.7 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingToolBar.java,v $
- * Revision 1.7  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.6  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.5  2008-11-12 13:46:51  spr
- * No change.
- *
- * Revision 1.4  2006-12-01 03:22:55  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.3  2005/05/07 22:25:44  spr
- * Updates for java 5.0
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1.1.1  2003/03/17 19:38:17  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.swing;
 
 import javax.swing.AbstractButton;

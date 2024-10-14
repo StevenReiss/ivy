@@ -32,33 +32,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderFilter.java,v 1.4 2018/08/08 18:46:36 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: CinderFilter.java,v $
- * Revision 1.4  2018/08/08 18:46:36  spr
- * Bad checkin for some reason.
- *
- * Revision 1.3  2008-11-12 13:44:40  spr
- * No changes.
- *
- * Revision 1.2  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/05/24 00:28:25  spr
- * Add a class filter for package classes.
- *
- * Revision 1.1  2003/03/29 03:40:25  spr
- * Move CINDER interface to JikesBT from Bloom to Ivy.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.cinder;
 
 
@@ -72,7 +45,7 @@ public interface CinderFilter
 
 
 
-public boolean isProjectClass(String cls,Object file,boolean fg);
+boolean isProjectClass(String cls,Object file,boolean fg);
 
 
 

@@ -38,35 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColors.java,v 1.6 2018/09/20 23:57:40 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingColors.java,v $
- * Revision 1.6  2018/09/20 23:57:40  spr
- * Java 10 changes
- *
- * Revision 1.5  2011-05-27 19:32:50  spr
- * Change copyrights.
- *
- * Revision 1.4  2010-08-14 00:29:06  spr
- * Add invisible color.
- *
- * Revision 1.3  2008-11-12 13:46:51  spr
- * No change.
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1.1.1  2003/03/17 19:37:36  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.swing;
 
 

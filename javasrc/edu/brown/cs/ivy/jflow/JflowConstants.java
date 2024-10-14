@@ -31,36 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowConstants.java,v 1.7 2013/09/24 01:06:55 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowConstants.java,v $
- * Revision 1.7  2013/09/24 01:06:55  spr
- * Minor fix
- *
- * Revision 1.6  2007-08-10 02:10:32  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.5  2007-05-04 01:59:52  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.4  2007-02-27 18:53:26  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.3  2006/07/10 14:52:15  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:11  spr
- * Update flow with inlining options.  Clean up.
- *
- * Revision 1.1  2006/06/21 02:18:29  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow;
 
@@ -183,7 +153,7 @@ int JFLOW_VALUE_MAX_RANGE = 3;
 int JFLOW_MAX_THREADS = 4;
 int JFLOW_VALUE_MAX_INCR = 2;
 
-int opc_bblock = 186;
+int OPC_BBLOCK = 186;
 
 
 
@@ -204,7 +174,7 @@ String JFLOW_DUMMY_JAR_FILE = IvyFile.expandName("$(IVY)/lib/jflowdummy.jar");
 /*										*/
 /********************************************************************************/
 
-public class IntRange {
+class IntRange {
 
    private int from_value;
    private int to_value;

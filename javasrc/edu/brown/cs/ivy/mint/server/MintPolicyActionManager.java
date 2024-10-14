@@ -38,44 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/MintPolicyActionManager.java,v 1.9 2018/08/02 15:10:30 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintPolicyActionManager.java,v $
- * Revision 1.9  2018/08/02 15:10:30  spr
- * Fix imports.
- *
- * Revision 1.8  2015/11/20 15:09:20  spr
- * Reformatting.
- *
- * Revision 1.7  2012-01-12 01:26:28  spr
- * Formatting
- *
- * Revision 1.6  2011-05-27 19:32:45  spr
- * Change copyrights.
- *
- * Revision 1.5  2007-08-10 02:11:14  spr
- * Cleanups from eclipse; bug fixes to avoid deadlock.
- *
- * Revision 1.4  2007-05-04 02:00:24  spr
- * Fix bugs related to polling.
- *
- * Revision 1.3  2006/07/10 14:52:22  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/02/21 17:06:28  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.1  2005/07/08 23:33:06  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.server;
 
 

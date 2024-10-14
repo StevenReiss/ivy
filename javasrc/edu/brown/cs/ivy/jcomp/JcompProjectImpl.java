@@ -187,7 +187,7 @@ synchronized void setResolved(boolean fg,JcompTyper typer)
 
 
 
-synchronized public boolean isResolved()
+public synchronized boolean isResolved()
 {
    if (!is_resolved) {
       boolean done = true;
@@ -229,7 +229,7 @@ Object getProjectKey()
 /*										*/
 /********************************************************************************/
 
-@Override synchronized public void resolve()
+@Override public synchronized void resolve()
 {
    while (doing_resolve) {
       try {

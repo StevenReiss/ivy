@@ -38,63 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingFreezePane.java,v 1.15 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingFreezePane.java,v $
- * Revision 1.15  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.14  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.13  2011-06-14 22:00:14  spr
- * Minor cleanup.
- *
- * Revision 1.12  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.11  2011-04-21 22:17:34  spr
- * Fix sizing problem.
- *
- * Revision 1.10  2011-02-17 23:16:12  spr
- * Minor cleanups.
- *
- * Revision 1.9  2011-01-11 00:26:56  spr
- * Handle empty freeze pane; code cleanup.
- *
- * Revision 1.8  2010-11-18 23:09:16  spr
- * Bug fixes for bubbles.
- *
- * Revision 1.7  2010-08-12 01:12:16  spr
- * Add dispose method.
- *
- * Revision 1.6  2010-08-04 22:02:11  spr
- * Clean up freeze pane.
- *
- * Revision 1.5  2010-07-28 01:21:33  spr
- * code cleanpu.
- *
- * Revision 1.4  2010-07-24 02:01:02  spr
- * Add permanent option for freeze panes; code clean up; add mac support for text components.
- *
- * Revision 1.3  2010-07-08 11:08:51  spr
- * Add immediate freeze option.
- *
- * Revision 1.2  2010-07-07 01:37:51  spr
- * Add freeze option to freeze pane; caret listener for files.
- *
- * Revision 1.1  2010-07-02 23:30:46  spr
- * Add freeze pane implementation.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.swing;
 
 
@@ -273,7 +216,7 @@ public void setThreshold(int ct)
 
 
 
-private class ChildManager extends ComponentAdapter {
+private final class ChildManager extends ComponentAdapter {
 
    @Override public void componentShown(ComponentEvent e) {
       setVisible(true);
@@ -452,7 +395,7 @@ private boolean childrenHaveFocus(Component comp)
 
 
 
-private class ImageSetter implements Runnable {
+private final class ImageSetter implements Runnable {
 
    @Override public void run() {
       setupImage();
@@ -468,7 +411,7 @@ private class ImageSetter implements Runnable {
 /*										*/
 /********************************************************************************/
 
-private static class FreezeRepainter extends RepaintManager {
+private static final class FreezeRepainter extends RepaintManager {
 
    @Override public void addDirtyRegion(JComponent c,int x,int y,int w,int h) {
       super.addDirtyRegion(c,x,y,w,h);

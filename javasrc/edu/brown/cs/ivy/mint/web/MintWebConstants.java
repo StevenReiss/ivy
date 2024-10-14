@@ -38,24 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebConstants.java,v 1.3 2018/12/17 14:09:16 spr Exp $ */
-
-/*********************************************************************************
- *
- * $Log: MintWebConstants.java,v $
- * Revision 1.3  2018/12/17 14:09:16  spr
- * Fix up web messaging
- *
- * Revision 1.2  2011-05-27 19:32:47  spr
- * Change copyrights.
- *
- * Revision 1.1  2011-05-17 01:05:26  spr
- * Mint servlet for messaging.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.mint.web;
 
 

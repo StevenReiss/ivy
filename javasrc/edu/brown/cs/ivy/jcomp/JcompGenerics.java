@@ -368,7 +368,7 @@ static List<String> getTypeVariableNames(String sgn,boolean all)
 }
 
 
-static private JcompType lookupClassType(JcompTyper typer,String name) {
+private static JcompType lookupClassType(JcompTyper typer,String name) {
    int arrct = 0;
    while (name.startsWith("[")) {
       ++arrct;
@@ -442,7 +442,7 @@ private static class SkipVisitor extends SignatureVisitor {
 /*										*/
 /********************************************************************************/
 
-private static abstract class GenericSignatureVisitor extends SignatureVisitor {
+private abstract static class GenericSignatureVisitor extends SignatureVisitor {
 
    protected JcompTyper type_data;
    protected SortedMap<String,JcompType> type_map;

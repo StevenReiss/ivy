@@ -295,7 +295,7 @@ static void sendResponse(HttpExchange exchange, String response,int rcode)
 {
    IvyLog.logD("BOWER","Sending response: " + response);
    
-   try{
+   try {
       exchange.sendResponseHeaders(rcode, response.getBytes().length);
       OutputStream os = exchange.getResponseBody();
       os.write(response.getBytes());

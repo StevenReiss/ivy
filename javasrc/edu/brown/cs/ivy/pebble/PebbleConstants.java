@@ -31,45 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/pebble/PebbleConstants.java,v 1.10 2015/11/20 15:09:22 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PebbleConstants.java,v $
- * Revision 1.10  2015/11/20 15:09:22  spr
- * Reformatting.
- *
- * Revision 1.9  2007-05-04 02:00:28  spr
- * Fix bugs related to polling.
- *
- * Revision 1.8  2006/07/23 02:25:14  spr
- * Add support for action editing and creation.
- *
- * Revision 1.7  2006/07/10 14:52:23  spr
- * Code cleanup.
- *
- * Revision 1.6  2006/02/21 17:06:42  spr
- * Changes to Pebble to support external data models.
- *
- * Revision 1.5  2005/07/08 20:57:06  spr
- * Charles' upgrade to Pebble UI.
- *
- * Revision 1.4  2005/06/28 17:20:53  spr
- * UI enhancements (CAR)
- *
- * Revision 1.3  2005/06/07 02:18:20  spr
- * Update for java 5.0
- *
- * Revision 1.2  2005/04/29 18:15:26  spr
- * Add normalization and class type; fix minor problems.
- *
- * Revision 1.1  2005/04/28 21:48:16  spr
- * Initial release of the pebble automata editor.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.pebble;
 
@@ -99,9 +60,9 @@ enum StateType {
 
    private String type_label;
 
-   private StateType(String s)			{ type_label = s; }
+   StateType(String s)			                { type_label = s; }
 
-   @Override public String toString()		       { return type_label; }
+   @Override public String toString()		        { return type_label; }
 }
 
 

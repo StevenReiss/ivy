@@ -38,29 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintReply.java,v 1.4 2011-05-27 19:32:42 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintReply.java,v $
- * Revision 1.4  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.3  2010-02-12 00:37:05  spr
- * Move int constants to enum.  Handle nodes going down and bad read returns.
- *
- * Revision 1.2  2006/01/30 19:05:48  spr
- * Handle sync only on replies option.
- *
- * Revision 1.1  2005/07/08 23:32:53  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 
@@ -84,14 +61,14 @@ public interface MintReply
  *	be null if no reply was returned.
  **/
 
-public void handleReply(MintMessage msg,MintMessage reply);
+void handleReply(MintMessage msg,MintMessage reply);
 
 
 /**
  *	Callback when a message has been completely handled
  **/
 
-public void handleReplyDone(MintMessage msg);
+void handleReplyDone(MintMessage msg);
 
 
 

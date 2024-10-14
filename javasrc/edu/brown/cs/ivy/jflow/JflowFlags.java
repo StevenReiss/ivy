@@ -31,21 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowFlags.java,v 1.2 2007-08-10 02:10:32 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowFlags.java,v $
- * Revision 1.2  2007-08-10 02:10:32  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.1  2007-05-04 02:07:15  spr
- * Add new flags class.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow;
 

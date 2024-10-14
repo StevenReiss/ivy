@@ -68,58 +68,6 @@
  */
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalRelaxLayout.java,v 1.14 2018/08/02 15:10:36 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalRelaxLayout.java,v $
- * Revision 1.14  2018/08/02 15:10:36  spr
- * Fix imports.
- *
- * Revision 1.13  2017/07/21 14:42:11  spr
- * Fix relaxation layout so it works better.
- *
- * Revision 1.12  2015/11/20 15:09:23  spr
- * Reformatting.
- *
- * Revision 1.11  2011-05-27 19:32:49  spr
- * Change copyrights.
- *
- * Revision 1.10  2010-12-08 22:50:39  spr
- * Fix up dipslay and add new layouts
- *
- * Revision 1.9  2010-07-28 01:21:20  spr
- * Bug fixes in petal.
- *
- * Revision 1.8  2007-05-04 02:00:35  spr
- * Import fixups.
- *
- * Revision 1.7  2006/07/10 14:52:24  spr
- * Code cleanup.
- *
- * Revision 1.6  2005/07/08 20:57:47  spr
- * Change imports.
- *
- * Revision 1.5  2005/05/07 22:25:43  spr
- * Updates for java 5.0
- *
- * Revision 1.4  2005/04/28 21:48:40  spr
- * Fix up petal to support pebble.
- *
- * Revision 1.3  2004/05/20 16:03:37  spr
- * Bug fixes for Petal related to CHIA; add oval helper.
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/07/16 19:44:59  spr
- * Move petal from bloom to ivy.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.petal;
 
@@ -159,7 +107,7 @@ private int		border_size;
 private Dimension	graph_size;
 private Map<PetalNode,Integer> node_map;
 
-private final static double THRESHOLD = 0.1;
+private static final double THRESHOLD = 0.1;
 
 
 
@@ -259,8 +207,8 @@ public void setDistance(double v)		{ push_distance = v; }
    if (is_random) {
       for (int i = 0; i < num_nodes; ++i) {
 	 Dimension csz = node_set[i].getSize();
-	 node_set[i].x = (graph_size.width-csz.width) * Math.random();
-	 node_set[i].y = (graph_size.height-csz.height) * Math.random();
+	 node_set[i].node_x = (graph_size.width-csz.width) * Math.random();
+	 node_set[i].node_y = (graph_size.height-csz.height) * Math.random();
        }
     }
 
@@ -289,35 +237,35 @@ private boolean relax()
 {
    boolean chng = false;
 
-   for (int i = 0 ; i < num_edges ; i++) {
+   for (int i = 0; i < num_edges; i++) {
       Edge e = edge_set[i];
-      double p0 = e.priority;
-      double vx = node_set[e.to].x - node_set[e.from].x;
-      double vy = node_set[e.to].y - node_set[e.from].y;
+      double p0 = e.edge_priority;
+      double vx = node_set[e.to_node].node_x - node_set[e.from_node].node_x;
+      double vy = node_set[e.to_node].node_y - node_set[e.from_node].node_y;
       double len = Math.sqrt(vx * vx + vy * vy);
 
-      if (len < e.len) continue;	// ignore if too close
+      if (len < e.edge_length) continue;	// ignore if too close
 
-      double f = (e.len - len) / (len * 3) / num_edges;
+      double f = (e.edge_length - len) / (len * 3) / num_edges;
       double dx = f * vx * p0;
       double dy = f * vy * p0;
 
-      node_set[e.to].dx += dx;
-      node_set[e.to].dy += dy;
-      node_set[e.from].dx += -dx;
-      node_set[e.from].dy += -dy;
+      node_set[e.to_node].node_dx += dx;
+      node_set[e.to_node].node_dy += dy;
+      node_set[e.from_node].node_dx += -dx;
+      node_set[e.from_node].node_dy += -dy;
     }
 
-   for (int i = 0 ; i < num_nodes ; i++) {
+   for (int i = 0; i < num_nodes; i++) {
       Node n1 = node_set[i];
       double dx = 0;
       double dy = 0;
 
-      for (int j = 0 ; j < num_nodes ; j++) {
+      for (int j = 0; j < num_nodes; j++) {
 	 if (i == j) continue;
 	 Node n2 = node_set[j];
-	 double vx = n1.x - n2.x;
-	 double vy = n1.y - n2.y;
+	 double vx = n1.node_x - n2.node_x;
+	 double vy = n1.node_y - n2.node_y;
 	 double len = vx * vx + vy * vy;
 	 if (len >= 4*push_distance*push_distance) continue;
 	 double d;
@@ -333,8 +281,8 @@ private boolean relax()
        }
 
       if (dx != 0 || dy != 0) {
-	 n1.dx += dx;
-	 n1.dy += dy;
+	 n1.node_dx += dx;
+	 n1.node_dy += dy;
        }
     }
 
@@ -343,27 +291,27 @@ private boolean relax()
    double szx = Math.max(graph_size.width / 100.0,5);
    double szy = Math.max(graph_size.height / 100.0,5);
 
-   for (int i = 0 ; i < num_nodes ; i++) {
+   for (int i = 0; i < num_nodes; i++) {
       Node n = node_set[i];
       // Dimension csz = n.getSize();
-      if (!n.fixed) {
-	 n.x += Math.max(-szx, Math.min(szx, n.dx));
-	 n.y += Math.max(-szy, Math.min(szy, n.dy));
-	 if (n.dx >= THRESHOLD || n.dy >= THRESHOLD) chng = true;
+      if (!n.is_fixed) {
+	 n.node_x += Math.max(-szx, Math.min(szx, n.node_dx));
+	 n.node_y += Math.max(-szy, Math.min(szy, n.node_dy));
+	 if (n.node_dx >= THRESHOLD || n.node_dy >= THRESHOLD) chng = true;
 	 // System.out.println("v= " + n.dx + "," + n.dy);
-	 if (i == 0 || n.x < minx) minx = n.x;
-	 if (i == 0 || n.y < miny) miny = n.y;
+	 if (i == 0 || n.node_x < minx) minx = n.node_x;
+	 if (i == 0 || n.node_y < miny) miny = n.node_y;
        }
-      n.dx /= 2;
-      n.dy /= 2;
+      n.node_dx /= 2;
+      n.node_dy /= 2;
     }
 
    if (minx != 0 || miny != 0) {
       for (int i = 0; i < num_nodes; ++i) {
 	 Node n = node_set[i];
-	 if (!n.fixed) {
-	    n.x -= minx;
-	    n.y -= miny;
+	 if (!n.is_fixed) {
+	    n.node_x -= minx;
+	    n.node_y -= miny;
 	 }
       }
    }
@@ -388,13 +336,13 @@ private void reposition()
 
    for (int i = 0; i < num_nodes; ++i) {
       Node n = node_set[i];
-      if (n.x < minx) minx = n.x;
-      if (n.y < miny) miny = n.y;
+      if (n.node_x < minx) minx = n.node_x;
+      if (n.node_y < miny) miny = n.node_y;
     }
 
    for (int i = 0; i < num_nodes; ++i) {
-      node_set[i].x -= minx + border_size;
-      node_set[i].y -= miny + border_size;
+      node_set[i].node_x -= minx + border_size;
+      node_set[i].node_y -= miny + border_size;
     }
 }
 
@@ -409,59 +357,59 @@ private void reposition()
 
 private class Node {
 
-    double x;
-    double y;
-    double dx;
-    double dy;
-    boolean fixed;
+    private double node_x;
+    private double node_y;
+    private double node_dx;
+    private double node_dy;
+    private boolean is_fixed;
     private PetalNode for_node;
 
     Node(PetalNode pn) {
        for_node = pn;
        Component cmp = pn.getComponent();
        Point p = cmp.getLocation();
-       x = p.x;
-       y = p.y;
-       dx = 0;
-       dy = 0;
-       fixed = false;
+       node_x = p.x;
+       node_y = p.y;
+       node_dx = 0;
+       node_dy = 0;
+       is_fixed = false;
      }
 
     Dimension getSize() 		{ return for_node.getComponent().getSize(); }
 
     void setPosition() {
-       int xpos = (int) x;
-       int ypos = (int) y;
+       int xpos = (int) node_x;
+       int ypos = (int) node_y;
        for_editor.commandMoveNode(for_node,new Point(xpos,ypos));
      }
 
-}	// end of subclass Node
+}	// end of inner class Node
 
 
 
 private class Edge {
 
-   int from;
-   int to;
-   double len;
+   private int from_node;
+   private int to_node;
+   private double edge_length;
    private PetalArc for_arc;
-   double priority;
+   private double edge_priority;
 
    Edge(PetalArc pa) {
       for_arc = pa;
       Integer vl = node_map.get(pa.getSource());
-      from = vl.intValue();
+      from_node = vl.intValue();
       vl = node_map.get(pa.getTarget());
-      to = vl.intValue();
-      len = arc_length;
-      priority = pa.getLayoutPriority();
+      to_node = vl.intValue();
+      edge_length = arc_length;
+      edge_priority = pa.getLayoutPriority();
     }
 
    void setPosition() {
       for_editor.commandReplacePivots(for_arc,null);
     }
 
-}
+}       // end of inneer class Edge
 
 
 

@@ -157,8 +157,8 @@ public SwingHelpFrame(String title, String dir, String ext, String defau)
       default_page = new URI(help_prefix + defau).toURL();
     }
    catch (java.net.MalformedURLException | java.net.URISyntaxException exc) {
-      System.err.println("Attempted to create a "
-			    + "bad URL: " + help_prefix + defau);
+      System.err.println("Attempted to create a " +
+            "bad URL: " + help_prefix + defau);
     }
 
    prev_page = new Vector<URL>();
@@ -292,8 +292,8 @@ protected void initHelp(String name)
       if (help_files[i].endsWith(name)) {
 	 String s = help_files[i];
 	 try {
-	    URL help_url = new URI(s).toURL();
-	    displayFile(help_url);
+	    URL helpurl = new URI(s).toURL();
+	    displayFile(helpurl);
 	  }
 	 catch (Exception e) {
 	    System.err.println("Couldn't create help URL: " + s);
@@ -330,7 +330,7 @@ protected void setupTree(JTree tree)
 
 
 
-private class SelectionListener implements TreeSelectionListener {
+private final class SelectionListener implements TreeSelectionListener {
 
    @Override public void valueChanged(TreeSelectionEvent e) {
       DefaultMutableTreeNode node = (DefaultMutableTreeNode)
@@ -340,8 +340,8 @@ private class SelectionListener implements TreeSelectionListener {
 
       Object nodeInfo = node.getUserObject();
       if (nodeInfo instanceof HelpInfo) {
-	 HelpInfo help = (HelpInfo)nodeInfo;
-	 displayFile(help.fileName);
+	 HelpInfo help = (HelpInfo) nodeInfo;
+	 displayFile(help.file_name);
        }
     }
 
@@ -378,23 +378,23 @@ protected abstract void createIndex();
 
 protected class HelpInfo {
 
-   public String helpName;
-   public URL fileName;
+   private String help_name;
+   private URL file_name;
 
    public HelpInfo(String help, String file) {
-      helpName = help;
+      help_name = help;
       try {
-         fileName = new URI(help_prefix + file).toURL();
+         file_name = new URI(help_prefix + file).toURL();
        }
       catch (java.net.MalformedURLException | java.net.URISyntaxException exc) {
-         System.err.println("Attempted to create a HelpInfo "
-        		       + "with a bad URL: " + fileName);
-         fileName = null;
+         System.err.println("Attempted to create a HelpInfo " +
+        		       "with a bad URL: " + file_name);
+         file_name = null;
        }
     }
 
    @Override public String toString() {
-      return helpName;
+      return help_name;
     }
 
 }	// end of subclass HelpInfo
@@ -431,10 +431,11 @@ protected class HelpInfo {
       URL url = next_page.remove(next_page.size()-1);
       try {
 	 help_pane.setPage(url);
-       } catch (Throwable t) {
-	    t.printStackTrace();
-	  }
-	 enableButtons();
+       } 
+      catch (Throwable t) {
+         t.printStackTrace();
+       }
+      enableButtons();
     }
    else if (cmd.equals("HOME")) {
       if (prev_page.isEmpty()) {
@@ -443,7 +444,9 @@ protected class HelpInfo {
       else {
 	 URL url = help_pane.getPage();
 	 URL url2 = prev_page.get(prev_page.size()-1);
-	 if (! url.equals(url2)) { prev_page.add(url); }
+	 if (!url.equals(url2)) {
+            prev_page.add(url);
+          }
        }
       try {
 	 help_pane.setPage(default_page);
@@ -484,7 +487,7 @@ class SwingHelpFrameEditorPane extends SwingEditorPane {
    private SwingHelpFrame help_frame;
    private static final long serialVersionUID = 1;
 
-   public SwingHelpFrameEditorPane(SwingHelpFrame frame) {
+   SwingHelpFrameEditorPane(SwingHelpFrame frame) {
       help_frame = frame;
     }
 
@@ -506,20 +509,22 @@ class Hyperactive implements HyperlinkListener {
    @Override public void hyperlinkUpdate(HyperlinkEvent e) {
       if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 	 SwingHelpFrameEditorPane pane = (SwingHelpFrameEditorPane) e.getSource();
-	 SwingHelpFrame help_frame = pane.getHelpFrame();
-	 Vector<URL> prevpage = help_frame.getPreviousPages();
+	 SwingHelpFrame helpframe = pane.getHelpFrame();
+	 Vector<URL> prevpage = helpframe.getPreviousPages();
 	 if (prevpage.isEmpty()) {
 	    prevpage.add(pane.getPage());
 	  }
 	 else {
 	    URL url = pane.getPage();
 	    URL url2 = prevpage.get(prevpage.size()-1);
-	    if (! url.equals(url2)) { prevpage.add(url); }
+	    if (!url.equals(url2)) { 
+               prevpage.add(url);
+             }
 	  }
-	 help_frame.enableButtons();
+	 helpframe.enableButtons();
 	 if (e instanceof HTMLFrameHyperlinkEvent) {
-	    HTMLFrameHyperlinkEvent  evt = (HTMLFrameHyperlinkEvent)e;
-	    HTMLDocument doc = (HTMLDocument)pane.getDocument();
+	    HTMLFrameHyperlinkEvent  evt = (HTMLFrameHyperlinkEvent) e;
+	    HTMLDocument doc = (HTMLDocument) pane.getDocument();
 	    doc.processHTMLFrameHyperlinkEvent(evt);
 	  }
 	 else {
@@ -548,7 +553,7 @@ public class Mouser extends MouseAdapter {
    public void mouseClicked(MouseEvent e) {
       if (e.getClickCount() == 2) {
 	 HelpInfo item = glossary_list.getSelectedValue();
-	 if (item != null) displayFile(item.fileName);
+	 if (item != null) displayFile(item.file_name);
        }
     }
 

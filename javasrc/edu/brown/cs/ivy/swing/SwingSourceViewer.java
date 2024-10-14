@@ -38,66 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingSourceViewer.java,v 1.10 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingSourceViewer.java,v $
- * Revision 1.10  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.9  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.8  2012-08-29 01:40:54  spr
- * Code cleanup for new compiler.
- *
- * Revision 1.7  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.6  2007-05-04 02:00:37  spr
- * Import fixups.
- *
- * Revision 1.5  2005/12/22 20:40:17  spr
- * Add action button to grid; try to make file choosers uneditable; fix source viewer.
- *
- * Revision 1.4  2005/07/08 20:57:50  spr
- * Change imports.
- *
- * Revision 1.3  2005/05/07 22:25:44  spr
- * Updates for java 5.0
- *
- * Revision 1.2  2005/02/14 21:09:04  spr
- * Handle \r\n pairs in the source file correctly.
- *
- * Revision 1.1  2004/07/02 20:57:24  spr
- * Add a source program viewer window that supports multiple and independent
- * highlighted regions.
- *
- * Revision 1.6  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.5  2004/02/26 02:57:10  spr
- * Make methods final that shouldn't be overridden.
- *
- * Revision 1.4  2003/04/03 19:43:14  spr
- * Add colors to tree nodes as an option.
- *
- * Revision 1.3  2003/04/01 18:19:55  spr
- * Fix up file fields; fix selection color in trees.
- *
- * Revision 1.2  2003/03/29 03:41:30  spr
- * Add new button types to grid panel and menu bars; extend trees to support icons.
- *
- * Revision 1.1.1.1  2003/03/17 19:38:24  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.swing;
 
 import javax.swing.text.AbstractDocument;
@@ -372,7 +312,7 @@ public void addHighlight(int startline,int thruline,String nm) throws BadLocatio
 
 
 
-private static class LocalEditorKit extends StyledEditorKit {
+private static final class LocalEditorKit extends StyledEditorKit {
 
    private static final long serialVersionUID = 1;
 
@@ -383,7 +323,7 @@ private static class LocalEditorKit extends StyledEditorKit {
 }	// end of subclass LocalEditorKit
 
 
-private static class LocalViewFactory implements ViewFactory {
+private static final class LocalViewFactory implements ViewFactory {
 
    @Override public View create(Element elem) {
       String kind = elem.getName();

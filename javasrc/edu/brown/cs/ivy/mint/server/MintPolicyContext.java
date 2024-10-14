@@ -38,29 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/MintPolicyContext.java,v 1.4 2011-05-27 19:32:45 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintPolicyContext.java,v $
- * Revision 1.4  2011-05-27 19:32:45  spr
- * Change copyrights.
- *
- * Revision 1.3  2007-05-04 02:00:24  spr
- * Fix bugs related to polling.
- *
- * Revision 1.2  2006/02/21 17:06:28  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.1  2005/07/08 23:33:06  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.server;
 
 

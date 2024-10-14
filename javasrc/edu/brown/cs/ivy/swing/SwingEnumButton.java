@@ -38,35 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingEnumButton.java,v 1.6 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingEnumButton.java,v $
- * Revision 1.6  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.5  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.4  2011-05-27 19:32:50  spr
- * Change copyrights.
- *
- * Revision 1.3  2010-10-05 23:54:49  spr
- * Add expansion listener support to tree tables.
- *
- * Revision 1.2  2010-10-01 20:59:28  spr
- * Use swing/awt event lists.
- *
- * Revision 1.1  2010-06-30 23:24:58  spr
- * Add enumeration button.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.swing;
 
 
@@ -207,7 +178,7 @@ public void removeValueListener(ChangeListener cl)
 /*										*/
 /********************************************************************************/
 
-private final void setDisplay()
+private void setDisplay()
 {
    if (icon_set[cur_index] == null) {
       setIcon(null);

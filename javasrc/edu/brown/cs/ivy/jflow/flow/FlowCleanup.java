@@ -150,8 +150,8 @@ private void doCodeChecks(FlowQueue wq,Map<BT_Ins,Boolean> execset)
       BT_Ins ins = wq.getInstruction(ino);
       st1 = wq.getState(ins);
 
-      switch (ins.opcode) {
-	 case opc_bblock :
+      switch (ins.opcode) { 
+         case OPC_BBLOCK :
 	    Boolean bfg = execset.get(ins);
 	    if (bfg == null || !bfg.booleanValue()) bfg = Boolean.valueOf(st1 != null);
 	    execset.put(ins,bfg);

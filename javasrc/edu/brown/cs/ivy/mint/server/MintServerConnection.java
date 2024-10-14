@@ -38,53 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/MintServerConnection.java,v 1.12 2013/11/15 02:39:12 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintServerConnection.java,v $
- * Revision 1.12  2013/11/15 02:39:12  spr
- * Fix imports
- *
- * Revision 1.11  2011-05-27 19:32:45  spr
- * Change copyrights.
- *
- * Revision 1.10  2011-05-18 23:33:00  spr
- * Fixes for mint web interface.
- *
- * Revision 1.9  2011-05-17 01:05:07  spr
- * Mint server to support web-scale messages.
- *
- * Revision 1.8  2010-08-20 20:58:34  spr
- * Add logging and options for port numbers
- *
- * Revision 1.7  2010-02-12 00:38:04  spr
- * Augment error messages.
- *
- * Revision 1.6  2009-09-17 01:59:52  spr
- * Check for overly long queues.
- *
- * Revision 1.5  2008-11-12 13:46:22  spr
- * Minor cleanups and fixes.
- *
- * Revision 1.4  2007-09-22 01:48:36  spr
- * Catch out of memory errors and clean up.
- *
- * Revision 1.3  2007-08-10 02:11:14  spr
- * Cleanups from eclipse; bug fixes to avoid deadlock.
- *
- * Revision 1.2  2007-01-03 03:24:42  spr
- * Handle new flags.
- *
- * Revision 1.1  2005/07/08 23:33:08  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.server;
 
 

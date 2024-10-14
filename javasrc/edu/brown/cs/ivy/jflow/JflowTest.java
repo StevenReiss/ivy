@@ -31,59 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowTest.java,v 1.16 2018/08/02 15:10:13 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowTest.java,v $
- * Revision 1.16  2018/08/02 15:10:13  spr
- * Fix imports.
- *
- * Revision 1.15  2017/06/20 00:52:45  spr
- * Formatting.
- *
- * Revision 1.14  2016/07/22 13:26:38  spr
- * Update makefiles for external use. Fix test to compile.
- *
- * Revision 1.12  2015/11/20 15:09:13  spr
- * Reformatting.
- *
- * Revision 1.11  2013/09/24 01:06:55  spr
- * Minor fix
- *
- * Revision 1.10  2011-04-16 01:02:41  spr
- * UPdate test programs, external hints to jflow
- *
- * Revision 1.9  2011-04-13 21:03:08  spr
- * Fix bugs in flow analysis; add bubbles test case.
- *
- * Revision 1.8  2007-12-13 20:20:23  spr
- * Update test.
- *
- * Revision 1.7  2007-08-10 02:10:32  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.6  2007-02-27 18:53:26  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.5  2007-01-03 03:24:15  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.4  2006-12-01 03:22:45  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.3  2006/07/10 14:52:16  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:11  spr
- * Update flow with inlining options.  Clean up.
- *
- * Revision 1.1  2006/06/21 02:18:30  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
 
 
 package edu.brown.cs.ivy.jflow;
@@ -522,15 +469,15 @@ public static class TestIOControl extends TestControl {
 /*										*/
 /********************************************************************************/
 
-static int source_ctr = 0;
+private static int source_ctr = 0;
 
 
 private static class TestSource implements JflowModelSource {
 
-   int source_id;
-   JflowMethod for_method;
-   int for_inst;
-   String base_class;
+   private int source_id;
+   private JflowMethod for_method;
+   private int for_inst;
+   private String base_class;
 
    TestSource(JflowMethod jm,int ino,String cls) {
       for_method = jm;

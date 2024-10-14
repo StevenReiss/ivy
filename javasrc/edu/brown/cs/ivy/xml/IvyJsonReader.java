@@ -38,24 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyJsonReader.java,v 1.2 2018/08/02 15:11:00 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyJsonReader.java,v $
- * Revision 1.2  2018/08/02 15:11:00  spr
- * Fix imports.
- *
- * Revision 1.1  2015/07/02 19:01:35  spr
- * Minor bug fixes
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.xml;
 
 import java.io.FilterReader;

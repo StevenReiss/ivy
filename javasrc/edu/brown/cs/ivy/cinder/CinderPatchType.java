@@ -32,33 +32,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderPatchType.java,v 1.5 2017/12/20 20:36:05 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: CinderPatchType.java,v $
- * Revision 1.5  2017/12/20 20:36:05  spr
- * Formatting
- *
- * Revision 1.4  2009-09-17 01:54:51  spr
- * Enable patching at line number level.
- *
- * Revision 1.3  2008-11-12 13:44:40  spr
- * No changes.
- *
- * Revision 1.2  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/03/29 03:40:25  spr
- * Move CINDER interface to JikesBT from Bloom to Ivy.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.cinder;
 
 

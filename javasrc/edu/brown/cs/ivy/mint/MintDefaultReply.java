@@ -38,35 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintDefaultReply.java,v 1.6 2015/11/20 15:09:17 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintDefaultReply.java,v $
- * Revision 1.6  2015/11/20 15:09:17  spr
- * Reformatting.
- *
- * Revision 1.5  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.4  2010-07-24 02:00:34  spr
- * Clean up error wait.
- *
- * Revision 1.3  2008-11-12 13:46:17  spr
- * Minor cleanups and fixes.
- *
- * Revision 1.2  2007-08-10 02:11:04  spr
- * Cleanups from eclipse; bug fixes to avoid deadlock.
- *
- * Revision 1.1  2007-05-04 02:05:35  spr
- * Add basic implementation of waiting for and storing a reply.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 

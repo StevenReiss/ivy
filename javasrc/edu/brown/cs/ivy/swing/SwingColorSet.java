@@ -38,41 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingColorSet.java,v 1.8 2019/11/22 13:14:21 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingColorSet.java,v $
- * Revision 1.8  2019/11/22 13:14:21  spr
- * Fixups for inverting colors.
- *
- * Revision 1.7  2018/08/02 15:10:53  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.6  2017/07/14 19:36:58  spr
- * Update colors.	Make inner classes private.
- *
- * Revision 1.5  2017/06/23 20:55:07  spr
- * Output erroreous lines for debugging.
- *
- * Revision 1.4  2017/06/07 01:59:00  spr
- * Provide a general String to color routine.
- *
- * Revision 1.3  2016/03/22 13:10:16  spr
- * Handle Color[...] as string.
- *
- * Revision 1.2  2013/11/15 02:38:18  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.1  2012-10-25 01:27:17  spr
- * Code clean up.	Add color lookup by name.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.swing;
 
 
@@ -175,7 +140,7 @@ public static Color getColorByName(String v,boolean force)
    if (nv.length() == 3 || nv.length() >= 6) {
       try {
 	 long lv = Long.parseLong(nv,16);
-	 int cv = (int)(lv & 0xffffffff);
+	 int cv = (int) (lv & 0xffffffff);
 	 if ((cv & 0xff000000) == 0 && nv.length() <= 6) c = new Color(cv);
 	 else c = new Color(cv,true);
 	 color_map.put(v.toLowerCase(),c);

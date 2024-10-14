@@ -38,41 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/MintServerUserConnection.java,v 1.8 2018/08/02 15:10:30 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintServerUserConnection.java,v $
- * Revision 1.8  2018/08/02 15:10:30  spr
- * Fix imports.
- *
- * Revision 1.7  2015/11/20 15:09:20  spr
- * Reformatting.
- *
- * Revision 1.6  2015/04/08 13:51:45  spr
- * Code clean up.
- *
- * Revision 1.5  2013/09/24 01:06:59  spr
- * Minor fix
- *
- * Revision 1.4  2012-01-28 03:17:58  spr
- * Formatting
- *
- * Revision 1.3  2011-05-27 19:32:45  spr
- * Change copyrights.
- *
- * Revision 1.2  2011-05-18 23:33:00  spr
- * Fixes for mint web interface.
- *
- * Revision 1.1  2011-05-17 01:05:07  spr
- * Mint server to support web-scale messages.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.server;
 
 

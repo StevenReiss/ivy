@@ -38,116 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintMaster.java,v 1.33 2019/06/28 17:12:33 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintMaster.java,v $
- * Revision 1.33  2019/06/28 17:12:33  spr
- * Fix permission settings
- *
- * Revision 1.32  2019/02/23 02:59:10  spr
- * Bug fix.
- *
- * Revision 1.31  2018/12/17 14:08:40  spr
- * Minor bug fixes.
- *
- * Revision 1.30  2018/08/02 15:10:26  spr
- * Fix imports.
- *
- * Revision 1.29  2017/06/23 20:54:54  spr
- * Use public file locking class.
- *
- * Revision 1.28  2014/08/29 15:10:27  spr
- * Fix up memory size
- *
- * Revision 1.27  2014/06/12 01:06:30  spr
- * Minor updates
- *
- * Revision 1.26  2013/11/15 02:38:56  spr
- * Fix imports.
- *
- * Revision 1.25  2013-06-11 23:14:31  spr
- * Code cleanup.
- *
- * Revision 1.24  2012-11-04 02:10:45  spr
- * Code cleanup
- *
- * Revision 1.23  2012-05-22 00:42:06  spr
- * Formatting changes.
- *
- * Revision 1.22  2012-03-21 23:54:25  spr
- * Code cleanup
- *
- * Revision 1.21  2011-06-17 12:31:30  spr
- * Use qualified registry name.
- *
- * Revision 1.20  2011-06-16 17:45:38  spr
- * Use registry names rather than values.
- *
- * Revision 1.19  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.18  2010-08-20 20:58:24  spr
- * Add logging and options for port numbers
- *
- * Revision 1.17  2010-08-09 17:10:31  spr
- * Check that we are using all local addresses.
- *
- * Revision 1.16  2010-08-06 01:28:11  spr
- * Use 127.0.0.1 rather than localhost
- *
- * Revision 1.15  2010-08-04 22:01:53  spr
- * Master server not ready for localhost.
- *
- * Revision 1.14  2010-04-29 18:46:04  spr
- * Ensure path is quoted for windows.
- *
- * Revision 1.13  2010-02-26 21:05:33  spr
- * Formatting issues and minor additions
- *
- * Revision 1.12  2009-10-02 00:18:27  spr
- * Import clean up.
- *
- * Revision 1.11  2009-09-17 01:58:59  spr
- * Use IVY setup and IvyExec.runJava for running mint (for windows).
- *
- * Revision 1.10  2009-06-04 18:50:41  spr
- * Use ivyJava call when necessary.
- *
- * Revision 1.9  2009-04-12 01:54:17  spr
- * Let the connect to master time out rather than hang forever.
- *
- * Revision 1.8  2009-03-20 01:57:33  spr
- * Use environment variables if present.
- *
- * Revision 1.7  2008-11-24 23:36:22  spr
- * Provide for rmi registry based lookup.
- *
- * Revision 1.6  2008-11-12 13:46:17  spr
- * Minor cleanups and fixes.
- *
- * Revision 1.5  2006-12-01 03:22:50  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.4  2006/07/10 14:52:20  spr
- * Code cleanup.
- *
- * Revision 1.3  2005/11/07 21:09:26  spr
- * Proper static calls.
- *
- * Revision 1.2  2005/09/19 23:32:00  spr
- * Fixups based on findbugs.
- *
- * Revision 1.1  2005/07/08 23:32:53  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 
@@ -278,7 +168,9 @@ public static Socket findServer(String id,String startargs)
 	       IvyExec.ivyJava("edu.brown.cs.ivy.mint.server.MintServer",jargs,startargs);
 	     }
 	  }
-	 catch (IOException e) { break; }
+	 catch (IOException e) { 
+            break; 
+          }
        }
 
       try {

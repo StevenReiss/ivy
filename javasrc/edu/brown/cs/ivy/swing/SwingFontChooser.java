@@ -38,42 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingFontChooser.java,v 1.8 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingFontChooser.java,v $
- * Revision 1.8  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.7  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.6  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.5  2013-06-03 13:03:42  spr
- * *** empty log message ***
- *
- * Revision 1.4  2012-03-21 23:54:43  spr
- * Clean up the code.
- *
- * Revision 1.3  2011-06-29 01:58:26  spr
- * Fix up new grid options.
- *
- * Revision 1.2  2011-06-28 00:12:31  spr
- * Add new swing dialog options.
- *
- * Revision 1.1  2011-06-24 20:16:25  spr
- * Add new types of fields to grid panel.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.swing;
 
 
@@ -119,7 +83,7 @@ private JLabel		sample_text;
 private Font		current_font;
 private Color		current_color;
 
-private final static long serialVersionUID = 1;
+private static final long serialVersionUID = 1;
 
 private Integer []	default_sizes = new Integer [] { 4,6,8,9,10,11,12,13,14,16,18 };
 private String []	default_options = {

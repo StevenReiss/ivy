@@ -38,48 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebServlet.java,v 1.11 2018/12/17 14:09:16 spr Exp $ */
-
-/*********************************************************************************
- *
- * $Log: MintWebServlet.java,v $
- * Revision 1.11  2018/12/17 14:09:16  spr
- * Fix up web messaging
- *
- * Revision 1.10  2018/08/02 15:10:32  spr
- * Fix imports.
- *
- * Revision 1.9  2016/10/28 18:31:43  spr
- * Add annotation back in for now.
- *
- * Revision 1.8  2016/07/22 13:27:00  spr
- * Update makefiles for external use.  Remove annotation to get jdeps to work.
- *
- * Revision 1.7  2013/11/15 02:39:13  spr
- * Fix imports
- *
- * Revision 1.6  2012-01-12 01:27:16  spr
- * Avoid possible null pointer
- *
- * Revision 1.5  2011-05-27 19:32:47  spr
- * Change copyrights.
- *
- * Revision 1.4  2011-05-19 23:34:15  spr
- * Fix web connection debugging.
- *
- * Revision 1.3  2011-05-18 23:33:04  spr
- * Fixes for mint web interface.
- *
- * Revision 1.2  2011-05-18 01:02:12  spr
- * Clean up servlet code.
- *
- * Revision 1.1  2011-05-17 01:05:26  spr
- * Mint servlet for messaging.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.mint.web;
 
 
@@ -241,7 +199,7 @@ private void handleMessage(HttpServletRequest req,HttpServletResponse resp)
 	 mwu = new MintWebUser();
 	 um.put(uid,mwu);
        }
-      if(!typ.equals("RECV") && !typ.equals("END")) others = new ArrayList<MintWebUser>(um.values());
+      if (!typ.equals("RECV") && !typ.equals("END")) others = new ArrayList<MintWebUser>(um.values());
     }
 
    if (typ.equals("RECV")) {
@@ -362,7 +320,7 @@ private void checkConnections()
 
 
 
-private class ConnectionChecker extends TimerTask {
+private final class ConnectionChecker extends TimerTask {
 
    @Override public void run() {
       checkConnections();
@@ -427,7 +385,7 @@ private class ReplyData {
     }
 
    private void sendReply(MintWebMessage msg) {
-      synchronized(this) {
+      synchronized (this) {
 	 if (reply_sent) return;
 	 reply_sent = true;
        }

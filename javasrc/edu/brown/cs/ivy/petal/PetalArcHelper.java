@@ -38,70 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalArcHelper.java,v 1.18 2018/08/02 15:10:36 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalArcHelper.java,v $
- * Revision 1.18  2018/08/02 15:10:36  spr
- * Fix imports.
- *
- * Revision 1.17  2016/10/28 18:31:56  spr
- * Clean up possible concurrent modification exception.
- *
- * Revision 1.16  2015/11/20 15:09:23  spr
- * Reformatting.
- *
- * Revision 1.15  2011-05-27 19:32:48  spr
- * Change copyrights.
- *
- * Revision 1.14  2010-12-08 22:50:39  spr
- * Fix up dipslay and add new layouts
- *
- * Revision 1.13  2010-12-02 23:46:49  spr
- * Petal bug fixes
- *
- * Revision 1.12  2010-11-20 00:28:39  spr
- * Color arcs; add new features to Petal editor.
- *
- * Revision 1.11  2010-11-18 23:09:02  spr
- * Updates to petal to work with bubbles.
- *
- * Revision 1.10  2009-09-17 02:00:14  spr
- * Eclipse cleanup.
- *
- * Revision 1.9  2006-12-01 03:22:54  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.8  2005/07/08 20:57:47  spr
- * Change imports.
- *
- * Revision 1.7  2005/06/07 02:18:22  spr
- * Update for java 5.0
- *
- * Revision 1.6  2005/05/07 22:25:43  spr
- * Updates for java 5.0
- *
- * Revision 1.5  2005/04/28 21:48:40  spr
- * Fix up petal to support pebble.
- *
- * Revision 1.4  2004/05/20 19:09:38  spr
- * Fix problem doing layout before drawing.
- *
- * Revision 1.3  2004/05/20 16:03:37  spr
- * Bug fixes for Petal related to CHIA; add oval helper.
- *
- * Revision 1.2  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/07/16 19:44:58  spr
- * Move petal from bloom to ivy.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.petal;
 
 
@@ -464,7 +400,7 @@ private void calcBSpline(Point2D cm1,Point2D c,Point2D cp1,Point2D cp2)
 
 private void thirdPoint(Point2D p,Point2D q,Point2D r)
 {
-   r.setLocation((2*p.getX()+q.getX())/3.0 , (2*p.getY()+q.getY())/3.0);
+   r.setLocation((2*p.getX()+q.getX())/3.0, (2*p.getY()+q.getY())/3.0);
 }
 
 
@@ -654,7 +590,8 @@ private void midPoint(Point2D p,Point2D q,Point2D r)
       return 0;
     }
 
-   double x1,y1;
+   double x1 = 0;
+   double y1 = 0;
 
    double f = pt1.x - pt0.x;
    double g = pt1.y - pt0.y;

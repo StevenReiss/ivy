@@ -38,32 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintLogger.java,v 1.5 2018/08/02 15:10:26 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintLogger.java,v $
- * Revision 1.5  2018/08/02 15:10:26  spr
- * Fix imports.
- *
- * Revision 1.4  2013/11/15 02:38:56  spr
- * Fix imports.
- *
- * Revision 1.3  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.2  2010-10-19 22:00:58  spr
- * Add trace back on xml failures.
- *
- * Revision 1.1  2010-08-20 20:58:24  spr
- * Add logging and options for port numbers
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 
@@ -76,7 +50,7 @@ import java.io.PrintStream;
 
 
 
-public class MintLogger implements MintConstants {
+public final class MintLogger implements MintConstants {
 
 
 

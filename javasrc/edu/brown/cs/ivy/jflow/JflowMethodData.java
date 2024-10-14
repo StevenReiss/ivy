@@ -31,30 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowMethodData.java,v 1.5 2017/10/24 12:46:21 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowMethodData.java,v $
- * Revision 1.5  2017/10/24 12:46:21  spr
- * Clean up.
- *
- * Revision 1.4  2007-01-03 14:04:57  spr
- * Fix imports
- *
- * Revision 1.3  2007-01-03 03:24:15  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.2  2006/07/10 14:52:16  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:30  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow;
 
@@ -77,14 +53,14 @@ public interface JflowMethodData extends JflowConstants
 /*										*/
 /********************************************************************************/
 
-abstract public void setAssociation(AssociationType typ,BT_Ins ins,JflowValue value);
+void setAssociation(AssociationType typ,BT_Ins ins,JflowValue value);
 
-abstract public JflowValue getAssociation(AssociationType typ,BT_Ins ins);
+JflowValue getAssociation(AssociationType typ,BT_Ins ins);
 
-abstract public void clear();
+void clear();
 
 
-abstract public void updateValues(Map<JflowValue,JflowValue> valupdates);
+void updateValues(Map<JflowValue,JflowValue> valupdates);
 
 
 

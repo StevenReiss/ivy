@@ -38,46 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingListSet.java,v 1.10 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingListSet.java,v $
- * Revision 1.10  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.9  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.8  2015/02/14 18:46:19  spr
- * Clean up; add helper methods.
- *
- * Revision 1.7  2013-06-03 13:03:42  spr
- * *** empty log message ***
- *
- * Revision 1.6  2012-10-05 00:46:40  spr
- * Code cleanup.
- *
- * Revision 1.5  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.4  2009-09-17 02:00:45  spr
- * Add autocomplete, new grid options, fix up lists, add range scroll bar.
- *
- * Revision 1.3  2009-03-20 01:59:50  spr
- * Add enum-based choice box; add remove/update calls to lists; loosen numeric field checking.
- *
- * Revision 1.2  2007-05-04 02:00:37  spr
- * Import fixups.
- *
- * Revision 1.1  2006/07/23 02:25:33  spr
- * Move list panel and its support to swing; move range slider to swing.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.swing;
 

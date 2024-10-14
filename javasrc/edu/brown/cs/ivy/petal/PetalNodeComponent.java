@@ -94,7 +94,8 @@ PetalNodeComponent(PetalNodeShape sh,String cnts)
       case SQUARE :
       case RECTANGLE :
       default :
-         r.x = r.y = 0;
+         r.x = 0;
+         r.y = 0;
          s = r;
          break;
       case TRIANGLE :
@@ -269,9 +270,9 @@ private void setupShape()
          ps.addPoint(r.width/2,0);
          if (node_contents == null) {
             double a1 = Math.tan(Math.toRadians(54));
-            int h1 = (int)(r.width / 2.0 / a1);
+            int h1 = (int) (r.width / 2.0 / a1);
             double a2 = Math.tan(Math.toRadians(18));
-            int h2 = (int)(a2 * (r.height - h1));
+            int h2 = (int) (a2 * (r.height - h1));
             ps.addPoint(r.width,h1);
             ps.addPoint(r.width - h2,r.height);
             ps.addPoint(h2,r.height);

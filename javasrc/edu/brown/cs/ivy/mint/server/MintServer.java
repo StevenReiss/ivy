@@ -38,62 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/MintServer.java,v 1.15 2018/08/02 15:10:30 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintServer.java,v $
- * Revision 1.15  2018/08/02 15:10:30  spr
- * Fix imports.
- *
- * Revision 1.14  2016/03/22 13:10:05  spr
- * Formatting
- *
- * Revision 1.13  2015/11/20 15:09:20  spr
- * Reformatting.
- *
- * Revision 1.12  2013/11/15 02:39:11  spr
- * Fix imports
- *
- * Revision 1.11  2011-05-27 19:32:45  spr
- * Change copyrights.
- *
- * Revision 1.10  2011-05-18 23:32:59  spr
- * Fixes for mint web interface.
- *
- * Revision 1.9  2011-05-17 01:05:07  spr
- * Mint server to support web-scale messages.
- *
- * Revision 1.8  2010-08-20 20:58:34  spr
- * Add logging and options for port numbers
- *
- * Revision 1.7  2010-08-09 17:10:38  spr
- * Check that we are using all local addresses.
- *
- * Revision 1.6  2010-08-04 22:02:01  spr
- * Master server not ready for localhost.
- *
- * Revision 1.5  2010-07-01 21:56:16  spr
- * Clear socket when done
- *
- * Revision 1.4  2007-08-10 02:11:14  spr
- * Cleanups from eclipse; bug fixes to avoid deadlock.
- *
- * Revision 1.3  2006-12-01 03:22:51  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.2  2006/02/21 17:06:28  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.1  2005/07/08 23:33:08  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.server;
 
 
@@ -115,7 +59,7 @@ import java.util.Map;
 
 
 
-public class MintServer implements MintConstants
+public final class MintServer implements MintConstants
 {
 
 
@@ -167,7 +111,9 @@ private MintServer(String [] args)
    try {
       host_name = InetAddress.getLocalHost().getHostName();
     }
-   catch (UnknownHostException e) { host_name = "localhost"; }
+   catch (UnknownHostException e) {
+      host_name = "localhost"; 
+    }
 
    debug_output = false;
    port_number = 0;

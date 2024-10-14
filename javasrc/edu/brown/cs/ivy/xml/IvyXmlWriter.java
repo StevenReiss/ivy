@@ -38,125 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXmlWriter.java,v 1.36 2019/09/12 12:48:57 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyXmlWriter.java,v $
- * Revision 1.36  2019/09/12 12:48:57  spr
- * Code cleanup
- *
- * Revision 1.35  2019/02/23 02:59:15  spr
- * Code cleanup.
- *
- * Revision 1.34  2018/08/02 15:11:00  spr
- * Fix imports.
- *
- * Revision 1.33  2015/11/20 15:09:27  spr
- * Reformatting.
- *
- * Revision 1.32  2014/01/22 00:31:35  spr
- * Handle escapes for cdata.
- *
- * Revision 1.31  2013/11/15 02:39:15  spr
- * Fix imports
- *
- * Revision 1.30  2013/09/24 01:07:54  spr
- * data format
- *
- * Revision 1.29  2012-10-05 00:46:49  spr
- * Bug fix.
- *
- * Revision 1.28  2012-08-29 01:40:56  spr
- * Code cleanup for new compiler.
- *
- * Revision 1.27  2012-05-22 00:43:49  spr
- * Handle data input and output as fields.
- *
- * Revision 1.26  2011-07-14 12:49:43  spr
- * Add support for partial byte arrays.
- *
- * Revision 1.25  2011-05-27 19:32:52  spr
- * Change copyrights.
- *
- * Revision 1.24  2010-07-24 01:59:45  spr
- * USe UTF-8 to write XML files.
- *
- * Revision 1.23  2010-07-01 21:58:27  spr
- * Add getLength call to IvyXmlWriter for strings.
- *
- * Revision 1.22  2010-05-18 22:05:48  spr
- * Update xml formatting.
- *
- * Revision 1.21  2010-02-12 00:40:22  spr
- * Add code to handle java beans.
- *
- * Revision 1.20  2009-09-17 02:01:29  spr
- * Code cleanup.
- *
- * Revision 1.19  2008-11-12 13:47:07  spr
- * Better CDATA handling.
- *
- * Revision 1.18  2008-03-14 12:28:00  spr
- * Handle namespaces.
- *
- * Revision 1.17  2007-08-10 02:11:29  spr
- * Cleanups from eclipse.
- *
- * Revision 1.16  2007-05-04 16:12:51  spr
- * Add constructor for implicit StringWriter (and toString method).
- *
-r* Revision 1.15  2007-02-27 18:54:24  spr
- * Add load from File object.
- *
- * Revision 1.14  2006-11-09 00:33:31  spr
- * Add file name based constructor.
- *
- * Revision 1.13  2006/07/10 14:52:26  spr
- * Code cleanup.
- *
- * Revision 1.12  2006/05/10 15:13:37  spr
- * Better error handling.
- *
- * Revision 1.11  2006/04/21 23:11:10  spr
- * Add color support for I/O.
- *
- * Revision 1.10  2005/10/31 19:21:16  spr
- * Add xml output conversion method (copied from IvyXmlWriter)
- *
- * Revision 1.9  2005/07/08 20:58:15  spr
- * Check for null text.
- *
- * Revision 1.8  2005/05/07 22:25:45  spr
- * Updates for java 5.0
- *
- * Revision 1.7  2005/01/05 15:31:02  spr
- * Fix error message and formatting.
- *
- * Revision 1.6  2004/12/20 15:34:57  spr
- * Better handling of XML formatting of XML messages (omit extra white space)./
- *
- * Revision 1.5  2004/11/09 20:33:06  spr
- * Fix up bugs we introduced into xml scanner.
- *
- * Revision 1.4  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.3  2003/09/24 13:29:01  spr
- * Update parser for 1.4 with large number of elements; add cdata calls to writer.
- *
- * Revision 1.2  2003/05/30 16:11:49  spr
- * Change format on error output.
- *
- * Revision 1.1.1.1  2003/02/14 20:23:15  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.xml;
 
 import org.w3c.dom.Attr;
@@ -319,14 +200,14 @@ public int getLength()
 /*										*/
 /********************************************************************************/
 
-synchronized public void outputHeader()
+public synchronized void outputHeader()
 {
    println("<?xml version='1.0' encoding='utf-8' ?>");
 }
 
 
 
-synchronized public void outputComment(String cmmt)
+public synchronized void outputComment(String cmmt)
 {
    println();
    println("<!-- " + cmmt + "-->");
@@ -336,7 +217,7 @@ synchronized public void outputComment(String cmmt)
 
 
 
-synchronized public void begin(String elt)
+public synchronized void begin(String elt)
 {
    if (name_space != null) elt = name_space + ":" + elt;
 
@@ -365,7 +246,7 @@ synchronized public void begin(String elt)
 
 
 
-synchronized public void end()
+public synchronized void end()
 {
    int ln = element_stack.size();
    if (ln == 0) throw new Error("End with no corresponding begin");
@@ -390,7 +271,7 @@ synchronized public void end()
 
 
 
-synchronized public void end(String telt)
+public synchronized void end(String telt)
 {
    int ln = element_stack.size();
    if (ln == 0) throw new Error("End with no corresponding begin");
@@ -403,7 +284,7 @@ synchronized public void end(String telt)
 
 
 
-synchronized public void field(String elt,String val)
+public synchronized void field(String elt,String val)
 {
    if (open_state != STATE_OPEN) {
       throw new Error("Field must be specified inside an element");
@@ -418,7 +299,7 @@ synchronized public void field(String elt,String val)
 
 
 
-synchronized public void field(String elt,char [] data)
+public synchronized void field(String elt,char [] data)
 {
    if (data == null) return;
 
@@ -427,7 +308,7 @@ synchronized public void field(String elt,char [] data)
 
 
 
-synchronized public void field(String elt,boolean fg)
+public synchronized void field(String elt,boolean fg)
 {
    field(elt,String.valueOf(fg));
 }
@@ -435,7 +316,7 @@ synchronized public void field(String elt,boolean fg)
 
 
 
-synchronized public void field(String elt,short v)
+public synchronized void field(String elt,short v)
 {
    field(elt,String.valueOf(v));
 }
@@ -443,7 +324,7 @@ synchronized public void field(String elt,short v)
 
 
 
-synchronized public void field(String elt,int v)
+public synchronized void field(String elt,int v)
 {
    field(elt,String.valueOf(v));
 }
@@ -451,7 +332,7 @@ synchronized public void field(String elt,int v)
 
 
 
-synchronized public void field(String elt,long v)
+public synchronized void field(String elt,long v)
 {
    field(elt,Long.toString(v));
 }
@@ -459,21 +340,21 @@ synchronized public void field(String elt,long v)
 
 
 
-synchronized public void field(String elt,double v)
+public synchronized void field(String elt,double v)
 {
    field(elt,String.valueOf(v));
 }
 
 
 
-synchronized public void field(String elt,Enum<?> v)
+public synchronized void field(String elt,Enum<?> v)
 {
    if (v != null) field(elt,v.toString());
 }
 
 
 
-synchronized public void field(String elt,Color c)
+public synchronized void field(String elt,Color c)
 {
    if (c == null) field(elt,(String) null);
    else {
@@ -483,7 +364,7 @@ synchronized public void field(String elt,Color c)
 }
 
 
-synchronized public void field(String elt,Date d)
+public synchronized void field(String elt,Date d)
 {
    if (d == null) field(elt,(long) -1);
    else {
@@ -493,21 +374,21 @@ synchronized public void field(String elt,Date d)
 }
 
 
-synchronized public void field(String elt,File f)
+public synchronized void field(String elt,File f)
 {
    if (f != null) field(elt,f.getPath());
 }
 
 
 
-synchronized public void field(String elt,Object o)
+public synchronized void field(String elt,Object o)
 {
    if (o != null) field(elt,o.toString());
 }
 
 
 
-synchronized public void emptyElement(String elt)
+public synchronized void emptyElement(String elt)
 {
    begin(elt);
    end(elt);
@@ -515,7 +396,7 @@ synchronized public void emptyElement(String elt)
 
 
 
-synchronized public void textElement(String elt,String t)
+public synchronized void textElement(String elt,String t)
 {
    begin(elt);
    if (t != null) text(t);
@@ -524,7 +405,7 @@ synchronized public void textElement(String elt,String t)
 
 
 
-synchronized public void cdataElement(String elt,String t)
+public synchronized void cdataElement(String elt,String t)
 {
    begin(elt);
    if (t != null) {
@@ -535,7 +416,7 @@ synchronized public void cdataElement(String elt,String t)
 
 
 
-synchronized public void textElement(String elt,Object t)
+public synchronized void textElement(String elt,Object t)
 {
    begin(elt);
    if (t != null) text(t.toString());
@@ -544,7 +425,7 @@ synchronized public void textElement(String elt,Object t)
 
 
 
-synchronized public void cdataElement(String elt,Object t)
+public synchronized void cdataElement(String elt,Object t)
 {
    if (t != null) cdataElement(elt,t.toString());
    else cdataElement(elt,null);
@@ -552,7 +433,7 @@ synchronized public void cdataElement(String elt,Object t)
 
 
 
-synchronized public void bytesElement(String elt,byte [] data)
+public synchronized void bytesElement(String elt,byte [] data)
 {
    begin(elt);
    if (data != null) text(IvyXml.byteArrayToString(data));
@@ -560,7 +441,7 @@ synchronized public void bytesElement(String elt,byte [] data)
 }
 
 
-synchronized public void bytesElement(String elt,byte [] data,int off,int len)
+public synchronized void bytesElement(String elt,byte [] data,int off,int len)
 {
    begin(elt);
    if (data != null) text(IvyXml.byteArrayToString(data,off,len));
@@ -569,7 +450,7 @@ synchronized public void bytesElement(String elt,byte [] data,int off,int len)
 
 
 
-synchronized public void text(String t)
+public synchronized void text(String t)
 {
    if (t == null) return;
 
@@ -582,7 +463,7 @@ synchronized public void text(String t)
 
 
 
-synchronized public void cdata(String t)
+public synchronized void cdata(String t)
 {
    if (t == null) return;
 
@@ -599,7 +480,7 @@ synchronized public void cdata(String t)
 
 
 
-synchronized public void xmlText(String t)
+public synchronized void xmlText(String t)
 {
    if (t == null) return;
 
@@ -635,7 +516,7 @@ private void indent()
 /*										*/
 /********************************************************************************/
 
-synchronized public void writeXml(Node n)
+public synchronized void writeXml(Node n)
 {
    if (n == null) return;
    if (n.getNodeType() == Node.ELEMENT_NODE) {

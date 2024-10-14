@@ -315,7 +315,7 @@ void processInstruction(InsState ist)
    BT_SwitchIns sins;
 
    switch (ins.opcode) {
-      case opc_bblock : 			// basic block
+      case OPC_BBLOCK : 			// basic block
 	 if (for_method.getIgnoreBlock(ins))
 	    return;
 	 nst = ModelState.createSimpleState(for_method,getLine(ino));
@@ -879,7 +879,7 @@ private ValueState maintainValues(BT_Ins ins,ValueState vals)
 	 break;
       case opc_return :
 	 break;
-      case opc_bblock : 		// basic block
+      case OPC_BBLOCK : 		// basic block
 	 break;
     }
 

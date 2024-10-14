@@ -38,51 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/server/MintServerWebConnection.java,v 1.12 2018/12/17 14:09:00 spr Exp $ */
-
-/*********************************************************************************
- *
- * $Log: MintServerWebConnection.java,v $
- * Revision 1.12  2018/12/17 14:09:00  spr
- * Fix up web message serving.
- *
- * Revision 1.11  2018/08/02 15:10:30  spr
- * Fix imports.
- *
- * Revision 1.10  2013/11/15 02:39:12  spr
- * Fix imports
- *
- * Revision 1.9  2012-01-12 01:26:28  spr
- * Formatting
- *
- * Revision 1.8  2011-05-27 19:32:45  spr
- * Change copyrights.
- *
- * Revision 1.7  2011-05-20 23:30:04  spr
- * Updates to avoid infinite message loops.
- *
- * Revision 1.6  2011-05-19 23:34:02  spr
- * Fix web connection reply ids.
- *
- * Revision 1.5  2011-05-18 23:33:00  spr
- * Fixes for mint web interface.
- *
- * Revision 1.4  2011-05-18 01:38:17  spr
- * Get the right names for items coming from the server.
- *
- * Revision 1.3  2011-05-18 01:02:04  spr
- * Changes to fix up web connection user id.
- *
- * Revision 1.2  2011-05-17 01:29:46  spr
- * Clean up debugging message.
- *
- * Revision 1.1  2011-05-17 01:05:07  spr
- * Mint server to support web-scale messages.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.mint.server;
 
 import edu.brown.cs.ivy.exec.IvyExecQuery;
@@ -122,14 +77,14 @@ private String		web_url;
 private SecretKey	encode_key;
 private WebReaderThread web_reader;
 
-byte [] KEY_SALT = new byte [] {
-   (byte)0xa9,(byte)0x9b,(byte)0xc8,(byte)0x32,
-   (byte)0x56,(byte)0x35,(byte)0xe3,(byte)0x03
+private static final byte [] KEY_SALT = new byte [] {
+   (byte) 0xa9,(byte) 0x9b,(byte) 0xc8,(byte) 0x32,
+   (byte) 0x56,(byte) 0x35,(byte) 0xe3,(byte) 0x03
 };
 
-int KEY_COUNT = 19;
+private static final int KEY_COUNT = 19;
 
-private static final boolean	debug_only = false;
+private static boolean	debug_only = false;
 
 
 
@@ -332,8 +287,8 @@ private String encodeString(String s)
       int x = b[i] & 0xff;
       int x1 = x & 0xf;
       int x2 = (x & 0xf0) >> 4;
-      char c1 = (char)('a' + x1);
-      char c2 = (char)('a' + x2);
+      char c1 = (char) ('a' + x1);
+      char c2 = (char) ('a' + x2);
       buf.append(c1);
       buf.append(c2);
     }

@@ -347,7 +347,7 @@ private static class LocalSource implements JcompExtendedSource {
 /*										*/
 /********************************************************************************/
 
-static public JcompScope getJavaScope(ASTNode n)
+public static JcompScope getJavaScope(ASTNode n)
 {
    return (JcompScope) n.getProperty(PROP_JAVA_SCOPE);
 }
@@ -608,7 +608,7 @@ public static JcompSource getSource(ASTNode n)
 
 
 
-static public void setSource(ASTNode n,JcompSource s)
+public static void setSource(ASTNode n,JcompSource s)
 {
    if (n != null) {
       n = n.getRoot();
@@ -635,7 +635,7 @@ static void setResolved(ASTNode n,JcompTyper jt)
 
 
 
-static public boolean isResolved(ASTNode n)
+public static boolean isResolved(ASTNode n)
 {
    if (n == null) return true;
 
@@ -659,7 +659,7 @@ public static void setKeep(ASTNode n,boolean fg)
 
 
 
-static public boolean isKeep(ASTNode n)
+public static boolean isKeep(ASTNode n)
 {
    n = n.getRoot();
    return n.getProperty(PROP_JAVA_KEEP) == Boolean.TRUE;
@@ -701,7 +701,7 @@ public static void setProject(ASTNode n,JcompProject p)
 /*										*/
 /********************************************************************************/
 
-static public void clearSubtree(ASTNode n,boolean refsonly)
+public static void clearSubtree(ASTNode n,boolean refsonly)
 {
    if (n == null) return;
 
@@ -710,7 +710,7 @@ static public void clearSubtree(ASTNode n,boolean refsonly)
 }
 
 
-static public void clearAll(ASTNode n)
+public static void clearAll(ASTNode n)
 {
    if (n == null) return;
 
@@ -724,7 +724,7 @@ static public void clearAll(ASTNode n)
 }
 
 
-static public void clearRefs(ASTNode n)
+public static void clearRefs(ASTNode n)
 {
    if (n == null) return;
 
@@ -851,7 +851,7 @@ public static NumberLiteral newNumberLiteral(AST ast,String v)
 }
 
 
-static AtomicInteger unique_counter = new AtomicInteger();
+private static AtomicInteger unique_counter = new AtomicInteger();
 
 /**
  *	Return a new string with the given prefix

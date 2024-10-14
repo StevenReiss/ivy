@@ -539,7 +539,7 @@ private void testField(BT_Field fld,JflowMethod cm,int idx)
    int i = idx+2;
    while (i < iv.size()) {
       BT_Ins ins = iv.elementAt(i);
-      if (ins.opcode == opc_bblock) break;
+      if (ins.opcode == OPC_BBLOCK) break;
       if (findEvent(cm,ins,true,null) != null || findEvent(cm,ins,false,null) != null) evt = true;
       ++i;
     }
@@ -548,7 +548,7 @@ private void testField(BT_Field fld,JflowMethod cm,int idx)
    if (i != bidx) {
       for (i = bidx+1; i < iv.size(); ++i) {
 	 BT_Ins ins = iv.elementAt(i);
-	 if (ins.opcode == opc_bblock) break;
+	 if (ins.opcode == OPC_BBLOCK) break;
 	 if (findEvent(cm,ins,true,null) != null || findEvent(cm,ins,false,null) != null) evt = true;
        }
     }

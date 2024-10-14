@@ -38,26 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintHandler.java,v 1.3 2011-05-27 19:32:42 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintHandler.java,v $
- * Revision 1.3  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.2  2009-04-28 17:59:45  spr
- * Clean up unneeded code.
- *
- * Revision 1.1  2005/07/08 23:32:53  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 
@@ -80,7 +60,7 @@ public interface MintHandler
  *	by the pattern match.
  **/
 
-public void receive(MintMessage msg,MintArguments args);
+void receive(MintMessage msg,MintArguments args);
 
 
 

@@ -38,43 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalModelBase.java,v 1.9 2018/08/02 15:10:36 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalModelBase.java,v $
- * Revision 1.9  2018/08/02 15:10:36  spr
- * Fix imports.
- *
- * Revision 1.8  2015/11/20 15:09:23  spr
- * Reformatting.
- *
- * Revision 1.7  2013/11/15 02:39:14  spr
- * Fix imports
- *
- * Revision 1.6  2011-05-27 19:32:49  spr
- * Change copyrights.
- *
- * Revision 1.5  2010-11-18 23:09:02  spr
- * Updates to petal to work with bubbles.
- *
- * Revision 1.4  2009-01-27 00:40:02  spr
- * IvyXmlWriter cleanup.
- *
- * Revision 1.3  2007-05-04 02:00:35  spr
- * Import fixups.
- *
- * Revision 1.2  2005/07/08 20:57:47  spr
- * Change imports.
- *
- * Revision 1.1  2005/04/28 21:48:40  spr
- * Fix up petal to support pebble.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.petal;
 
 

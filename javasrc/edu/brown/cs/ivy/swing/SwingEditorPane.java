@@ -38,24 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingEditorPane.java,v 1.2 2013/11/15 02:38:19 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingEditorPane.java,v $
- * Revision 1.2  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.1  2011-11-22 12:07:34  spr
- * Add editor pane extensions.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.swing;
 
 

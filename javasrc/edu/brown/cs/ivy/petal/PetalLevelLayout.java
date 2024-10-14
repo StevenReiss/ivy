@@ -38,88 +38,6 @@
  ********************************************************************************/
 
 
-
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalLevelLayout.java,v 1.23 2018/08/02 15:10:36 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalLevelLayout.java,v $
- * Revision 1.23  2018/08/02 15:10:36  spr
- * Fix imports.
- *
- * Revision 1.22  2017/11/17 14:24:34  spr
- * Formatting change.
- *
- * Revision 1.21  2017/08/04 12:42:56  spr
- * Clean up
- *
- * Revision 1.20  2017/07/07 20:56:18  spr
- * Fix problem with possible index out of bounds
- *
- * Revision 1.19  2016/10/28 18:31:56  spr
- * Clean up possible concurrent modification exception.
- *
- * Revision 1.18  2015/11/20 15:09:23  spr
- * Reformatting.
- *
- * Revision 1.17  2011-09-12 20:50:27  spr
- * Code cleanup.
- *
- * Revision 1.16  2011-05-27 19:32:49  spr
- * Change copyrights.
- *
- * Revision 1.15  2011-05-03 01:16:38  spr
- * Add options to set white space.
- *
- * Revision 1.14  2010-12-08 22:50:39  spr
- * Fix up dipslay and add new layouts
- *
- * Revision 1.13  2010-11-18 23:09:02  spr
- * Updates to petal to work with bubbles.
- *
- * Revision 1.12  2009-09-17 02:00:14  spr
- * Eclipse cleanup.
- *
- * Revision 1.11  2006-12-01 03:22:54  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.10  2006/07/10 14:52:24  spr
- * Code cleanup.
- *
- * Revision 1.9  2005/06/07 02:18:22  spr
- * Update for java 5.0
- *
- * Revision 1.8  2005/05/07 22:25:43  spr
- * Updates for java 5.0
- *
- * Revision 1.7  2005/02/14 21:07:30  spr
- * Use simpler algorithms for large graphs.
- *
- * Revision 1.6  2004/05/28 20:57:31  spr
- * Add printing and minor fixes to level layout.
- *
- * Revision 1.5  2004/05/26 13:43:26  spr
- * Fix problems with level ranking heuristics.
- *
- * Revision 1.4  2004/05/22 02:37:59  spr
- * Fix bugs in the editor where update is called before things are initialized;
- * minor fixups to level layout (more needed).
- *
- * Revision 1.3  2004/05/20 16:03:37  spr
- * Bug fixes for Petal related to CHIA; add oval helper.
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/07/16 19:44:59  spr
- * Move petal from bloom to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.petal;
 
 
@@ -610,9 +528,9 @@ private void setupRanks()
 
 private class Item {
 
-   Node item_node;
-   double item_value;
-   int item_rank;
+   private Node item_node;
+   private double item_value;
+   private int item_rank;
 
    Item(Node n) {
       item_node = n;
@@ -656,7 +574,9 @@ private void computeRanks()
 
 private boolean nextPass()
 {
-   int slvl,elvl,dlvl;
+   int slvl = 0;
+   int elvl = 0;
+   int dlvl = 0;
    ItemCompare ic = new ItemCompare();
 
    if (cur_pass == 1) {
@@ -867,10 +787,7 @@ private void assignRanks(int ct,Item [] itms)
 
 
 
-
-
-
-private static class ItemCompare implements Comparator<Item>
+private static final class ItemCompare implements Comparator<Item>
 {
    @Override public int compare(Item i1,Item i2) {
       if (i1.item_value < i2.item_value) return -1;
@@ -914,7 +831,12 @@ private void convertToAbsPositions()
    double [] ysiz = new double[mxcol+4];
    double [] xpos = new double[mxcol+4];
    double [] ypos = new double[mxcol+4];
-   for (int i = 0; i < mxcol+4; ++i) xsiz[i] = ysiz[i] = xpos[i] = ypos[i] = 0;
+   for (int i = 0; i < mxcol+4; ++i) {
+      xsiz[i] = 0;
+      ysiz[i] = 0;
+      xpos[i] = 0;
+      ypos[i] = 0;
+    }
 
    for (Node gn : graph_id.getNodes()) {
       Dimension sz = gn.getSize();
@@ -988,7 +910,8 @@ private void convertToAbsPositions()
 	    double vx2 = xpos[ix2];
 	    double vy1 = ypos[iy1];
 	    double vy2 = ypos[iy2];
-	    double xp,yp;
+	    double xp = 0; 
+            double yp = 0;
 	    if (vx1 == vx2) {
 	       if (iy1 < iy2) xp = vx1 + xsiz[ix1];
 	       else xp = vx1;
@@ -1026,9 +949,9 @@ private Point computeWhiteSpace(Point mx)
    Point wsp = new Point(0,0);
 
    if (mx.x == 0) wsp.x = MIN_WHITE_SPACE;
-   else wsp.x = (int)(mx.x * white_fraction + white_space);
+   else wsp.x = (int) (mx.x * white_fraction + white_space);
    if (mx.y == 0) wsp.y = MIN_WHITE_SPACE;
-   else wsp.y = (int)(mx.y * white_fraction + white_space);
+   else wsp.y = (int) (mx.y * white_fraction + white_space);
 
    return wsp;
 }
@@ -1045,9 +968,9 @@ private Point computeWhiteSpace(Point mx)
 
 private class Graph {
 
-   Vector<Node> graph_nodes;
-   Vector<Arc> graph_arcs;
-   Map<PetalNode,Node> node_map;
+   private Vector<Node> graph_nodes;
+   private Vector<Arc> graph_arcs;
+   private Map<PetalNode,Node> node_map;
 
    Graph(PetalModel pm) {
       node_map = new HashMap<PetalNode,Node>();

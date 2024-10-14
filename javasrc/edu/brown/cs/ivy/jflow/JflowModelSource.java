@@ -31,30 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowModelSource.java,v 1.5 2017/02/15 02:09:09 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowModelSource.java,v $
- * Revision 1.5  2017/02/15 02:09:09  spr
- * Formatting
- *
- * Revision 1.4  2007-08-10 02:10:32  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.3  2006/07/10 14:52:16  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:11  spr
- * Update flow with inlining options.  Clean up.
- *
- * Revision 1.1  2006/06/21 02:18:30  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow;
 
@@ -74,9 +50,9 @@ public interface JflowModelSource extends JflowConstants
 /*										*/
 /********************************************************************************/
 
-public String getModelSourceType();
+String getModelSourceType();
 
-public void outputLocalXml(IvyXmlWriter xw);
+void outputLocalXml(IvyXmlWriter xw);
 
 
 

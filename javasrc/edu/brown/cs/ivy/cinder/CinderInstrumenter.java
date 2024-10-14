@@ -32,90 +32,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderInstrumenter.java,v 1.24 2018/08/02 15:09:29 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: CinderInstrumenter.java,v $
- * Revision 1.24  2018/08/02 15:09:29  spr
- * Fix imports
- *
- * Revision 1.23  2015/11/20 15:09:10  spr
- * Reformatting.
- *
- * Revision 1.22  2010-07-01 21:54:24  spr
- * Catch errors in writing xml.
- *
- * Revision 1.21  2009-09-17 01:54:51  spr
- * Enable patching at line number level.
- *
- * Revision 1.20  2008-12-04 17:43:45  spr
- * Remove extra prints.
- *
- * Revision 1.19  2008-12-04 17:42:28  spr
- * Add debugging for mac
- *
- * Revision 1.18  2008-05-29 23:24:18  spr
- * Add call to build field load instruction.
- *
- * Revision 1.17  2007-08-10 02:10:02  spr
- * Cleanups from Eclipse
- *
- * Revision 1.16  2007-05-04 01:59:07  spr
- * Fix up line number methods.
- *
- * Revision 1.15  2006-12-01 03:22:37  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.14  2006/07/10 14:52:09  spr
- * Code cleanup.
- *
- * Revision 1.13  2005/09/19 23:32:00  spr
- * Fixups based on findbugs.
- *
- * Revision 1.12  2005/09/02 14:42:17  spr
- * Add file to source location.
- *
- * Revision 1.11  2005/07/08 20:56:58  spr
- * Upgrade patching to handle constructors; add call to create local variable.
- *
- * Revision 1.10  2005/06/07 02:18:19  spr
- * Update for java 5.0
- *
- * Revision 1.9  2005/05/07 22:25:39  spr
- * Updates for java 5.0
- *
- * Revision 1.8  2005/04/28 21:48:04  spr
- * Check for loading problems; add special call creation method.
- *
- * Revision 1.7  2004/09/20 22:21:49  spr
- * Augment block output with counts and allocation types.
- *
- * Revision 1.6  2004/07/08 19:49:06  spr
- * Add utility method to generate a string load instruction.
- *
- * Revision 1.5  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.4  2004/02/26 02:57:03  spr
- * Make methods final that shouldn't be overridden.
- *
- * Revision 1.3  2003/12/17 21:23:42  spr
- * Add start class callback at the start of a class.
- *
- * Revision 1.2  2003/06/07 02:59:22  spr
- * Cleanups prompted by eclipse
- *
- * Revision 1.1  2003/03/29 03:40:25  spr
- * Move CINDER interface to JikesBT from Bloom to Ivy.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.cinder;
 
 
@@ -569,7 +485,7 @@ protected void createThrowStub(BT_Class bc,BT_Method bm)
    short fgs = BT_Item.PRIVATE;
    if (bm.isStatic()) fgs |= BT_Item.STATIC;
    boolean synfg = bm.isSynchronized() && !bm.isStatic();	//***** handle static sync methods
-   if (synfg) bm.flags &= ~ BT_Item.SYNCHRONIZED;
+   if (synfg) bm.flags &= ~BT_Item.SYNCHRONIZED;
 
    BT_Method nbm = BT_Method.createMethod(bc,fgs,msgn,nnm,null);
 
@@ -587,7 +503,9 @@ private BT_CodeAttribute createThrowStubCode(BT_Method bm,boolean synfg,int mid)
    BT_MethodSignature msgn = bm.getSignature();
 
    BT_Ins ins;
-   int sidx,eidx,cidx;
+   int sidx;
+   int eidx;
+   int cidx;
    int aidx = 0;
 
    if (synfg) {
@@ -605,7 +523,7 @@ private BT_CodeAttribute createThrowStubCode(BT_Method bm,boolean synfg,int mid)
       ++aidx;
     }
 
-   for (int i = 0; i < atyps.size(); ++i ) {
+   for (int i = 0; i < atyps.size(); ++i) {
       BT_Class abc = atyps.elementAt(i);
       ins = createLocalLoad(aidx++,abc);
       if (isCategory2(abc)) ++aidx;
@@ -680,7 +598,7 @@ protected int getBlockEndIndex(int sidx)
 /*										*/
 /********************************************************************************/
 
-final public void setLineTable(BT_Method bm)
+public final void setLineTable(BT_Method bm)
 {
    BT_LineNumberAttribute lns = null;
    BT_CodeAttribute ca = bm.getCode();

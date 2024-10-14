@@ -37,35 +37,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingRoundedCornerLabel.java,v 1.6 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingRoundedCornerLabel.java,v $
- * Revision 1.6  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.5  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.4  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.3  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.2  2010-07-24 02:01:02  spr
- * Add permanent option for freeze panes; code clean up; add mac support for text components.
- *
- * Revision 1.1  2010-05-18 22:05:40  spr
- * New rounded corner version of JLabel
- *
- *
- ********************************************************************************/
-
-
-
 
 package edu.brown.cs.ivy.swing;
 
@@ -96,7 +67,8 @@ public class SwingRoundedCornerLabel extends JLabel
 
 private static final long serialVersionUID = 1;
 
-private Color start_color, end_color;
+private Color start_color;
+private Color end_color;
 private int[] ary_separate_loc;
 private int[] ary_separate_height;
 
@@ -147,7 +119,8 @@ public SwingRoundedCornerLabel(int[] locs, int[] hts, int bwidth)
 
    graphics2.setColor(Color.LIGHT_GRAY);
    graphics2.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL));
-   RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(border_width, border_width, getWidth() - border_width * 2, getHeight() - border_width * 2, 10, 10);
+   RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(border_width, border_width, 
+         getWidth() - border_width * 2, getHeight() - border_width * 2, 10, 10);
 
    graphics2.draw(roundedRectangle);
 

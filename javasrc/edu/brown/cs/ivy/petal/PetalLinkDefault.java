@@ -38,37 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalLinkDefault.java,v 1.7 2018/08/02 15:10:36 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalLinkDefault.java,v $
- * Revision 1.7  2018/08/02 15:10:36  spr
- * Fix imports.
- *
- * Revision 1.6  2015/11/20 15:09:23  spr
- * Reformatting.
- *
- * Revision 1.5  2011-05-27 19:32:49  spr
- * Change copyrights.
- *
- * Revision 1.4  2006-12-01 03:22:54  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.3  2005/05/07 22:25:43  spr
- * Updates for java 5.0
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/07/16 19:44:59  spr
- * Move petal from bloom to ivy.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.petal;
 
 
@@ -162,7 +131,8 @@ public void setOnPath(boolean fg)			{ on_path = fg; }
    Point p = getLocation(a,n);
 
    if (on_path) {
-      node_x_offset = node_y_offset = 0;
+      node_x_offset = 0;
+      node_y_offset = 0;
     }
 
    Component c = n.getComponent();

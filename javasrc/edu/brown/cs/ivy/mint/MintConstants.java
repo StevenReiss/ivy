@@ -38,65 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintConstants.java,v 1.16 2018/05/25 17:57:03 spr Exp $ */
-
-
-/***************2*****************************************************************
- *
- * $Log: MintConstants.java,v $
- * Revision 1.16  2018/05/25 17:57:03  spr
- * Add CommandArgs for client usage.
- *
- * Revision 1.15  2016/12/09 21:46:50  spr
- * Formatting
- *
- * Revision 1.14  2013-06-11 23:14:31  spr
- * Code cleanup.
- *
- * Revision 1.13  2011-06-17 12:31:30  spr
- * Use qualified registry name.
- *
- * Revision 1.12  2011-06-06 20:55:41  spr
- * Update to try getting rmi to work better.
- *
- * Revision 1.11  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.10  2011-05-17 01:04:55  spr
- * Update mint to allow web-scale messaging.
- *
- * Revision 1.9  2010-02-26 21:05:32  spr
- * Formatting issues and minor additions
- *
- * Revision 1.8  2010-02-12 00:37:05  spr
- * Move int constants to enum.	Handle nodes going down and bad read returns.
- *
- * Revision 1.7  2009-10-02 00:18:27  spr
- * Import clean up.
- *
- * Revision 1.6  2009-06-04 18:50:41  spr
- * Use ivyJava call when necessary.
- *
- * Revision 1.5  2008-11-24 23:36:22  spr
- * Provide for rmi registry based lookup.
- *
- * Revision 1.4  2007-08-10 02:11:04  spr
- * Cleanups from eclipse; bug fixes to avoid deadlock.
- *
- * Revision 1.3  2007-01-03 03:24:32  spr
- * Add combination flags.
- *
- * Revision 1.2  2006/01/30 19:05:48  spr
- * Handle sync only on replies option.
- *
- * Revision 1.1  2005/07/08 23:32:52  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 
@@ -118,8 +59,8 @@ public interface MintConstants
 /*										*/
 /********************************************************************************/
 
-static final String	MINT_DEFAULT_SERVICE_NAME = "mint";
-static final String	MINT_SERVER_START_CMD = IvyFile.expandName("$(IVY)/bin/startmint");
+String	MINT_DEFAULT_SERVICE_NAME = "mint";
+String	MINT_SERVER_START_CMD = IvyFile.expandName("$(IVY)/bin/startmint");
 
 
 
@@ -130,8 +71,8 @@ static final String	MINT_SERVER_START_CMD = IvyFile.expandName("$(IVY)/bin/start
 /*										*/
 /********************************************************************************/
 
-static final String	MINT_MASTER_FILE = IvyFile.expandName("$(IVY)/lib/registry/mint.master");
-static final String	MINT_MASTER_CMD = IvyFile.expandName("$(IVY)/bin/startmaster");
+String	MINT_MASTER_FILE = IvyFile.expandName("$(IVY)/lib/registry/mint.master");
+String	MINT_MASTER_CMD = IvyFile.expandName("$(IVY)/bin/startmaster");
 
 
 
@@ -141,12 +82,12 @@ static final String	MINT_MASTER_CMD = IvyFile.expandName("$(IVY)/bin/startmaster
 /*										*/
 /********************************************************************************/
 
-static final String	MINT_REGISTRY_HOST_PROP = "edu.brown.cs.ivy.mint.registryhost";
-static final String	MINT_REGISTRY_HOST_ENV = "MINT_REGISTRY_HOST";
-static final String	MINT_REGISTRY_PROP = "edu.brown.cs.ivy.mint.registry";
-static final String	MINT_REGISTRY_PREFIX = "edu.brown.cs.ivy.mint.MintMaster[";
-static final String	MINT_MASTER_HOST_PROP = "edu.brown.cs.ivy.mint.master.host";
-static final String	MINT_MASTER_PORT_PROP = "edu.brown.cs.ivy.mint.master.port";
+String	MINT_REGISTRY_HOST_PROP = "edu.brown.cs.ivy.mint.registryhost";
+String	MINT_REGISTRY_HOST_ENV = "MINT_REGISTRY_HOST";
+String	MINT_REGISTRY_PROP = "edu.brown.cs.ivy.mint.registry";
+String	MINT_REGISTRY_PREFIX = "edu.brown.cs.ivy.mint.MintMaster[";
+String	MINT_MASTER_HOST_PROP = "edu.brown.cs.ivy.mint.master.host";
+String	MINT_MASTER_PORT_PROP = "edu.brown.cs.ivy.mint.master.port";
 
 
 
@@ -157,13 +98,13 @@ static final String	MINT_MASTER_PORT_PROP = "edu.brown.cs.ivy.mint.master.port";
 /*										*/
 /********************************************************************************/
 
-static final int	MINT_MSG_NONE = 0;
-static final int	MINT_MSG_NO_REPLY = 0x1;	// no reply expected
-static final int	MINT_MSG_FIRST_REPLY = 0x2;	// return first reply
-static final int	MINT_MSG_ALL_REPLIES = 0x4;	// return after each reply
-static final int	MINT_MSG_NON_NULL_ONLY = 0x8;	// return first non-null
-static final int	MINT_MSG_WAIT_FOR_ALL = 0x10;	// wait for all replies
-static final int	MINT_MSG_FIRST_NON_NULL = 0xa;
+int	MINT_MSG_NONE = 0;
+int	MINT_MSG_NO_REPLY = 0x1;	// no reply expected
+int	MINT_MSG_FIRST_REPLY = 0x2;	// return first reply
+int	MINT_MSG_ALL_REPLIES = 0x4;	// return after each reply
+int	MINT_MSG_NON_NULL_ONLY = 0x8;	// return first non-null
+int	MINT_MSG_WAIT_FOR_ALL = 0x10;	// wait for all replies
+int	MINT_MSG_FIRST_NON_NULL = 0xa;
 
 
 
@@ -192,8 +133,8 @@ enum MintSyncMode {
 /*										*/
 /********************************************************************************/
 
-static final String MINT_XML_ANY = "_ANY_";     // tag to match Any subtree/value
-static final String MINT_XML_VAR = "_VAR_";     // prefix for variables
+String MINT_XML_ANY = "_ANY_";     // tag to match Any subtree/value
+String MINT_XML_VAR = "_VAR_";     // prefix for variables
 						// variables consist of this tag
 						// followed by a number, i.e.
 						// <_VAR_0 />, <_VAR_1 />, ...
@@ -208,7 +149,7 @@ static final String MINT_XML_VAR = "_VAR_";     // prefix for variables
 /*										*/
 /********************************************************************************/
 
-static final int MINT_REPLY_NONE = 0;		// no reply needed
+int MINT_REPLY_NONE = 0;		// no reply needed
 
 
 
@@ -218,35 +159,35 @@ static final int MINT_REPLY_NONE = 0;		// no reply needed
 /*										*/
 /********************************************************************************/
 
-static final String MINT_XML_ENVIRONMENT = "edu.brown.cs.ivy.mint.XmlFile";  // file location
-static final String MINT_XML_DEFAULT_FILE = "mintpolicy.xml";
+String MINT_XML_ENVIRONMENT = "edu.brown.cs.ivy.mint.XmlFile";  // file location
+String MINT_XML_DEFAULT_FILE = "mintpolicy.xml";
 
-static final String MINT_XML_MAPPINGS = "MAPPINGS";     // <MAPPINGS> ..
+String MINT_XML_MAPPINGS = "MAPPINGS";     // <MAPPINGS> ..
 
-static final String MINT_XML_MAP = "MAP";               // <MAP>when actions</>
-static final String MINT_XML_MAP_USER = "USER";         //    USER="spr"
+String MINT_XML_MAP = "MAP";               // <MAP>when actions</>
+String MINT_XML_MAP_USER = "USER";         //    USER="spr"
 
-static final String MINT_XML_MATCH = "MATCH";           // <MATCH><pattern></MATCH>
+String MINT_XML_MATCH = "MATCH";           // <MATCH><pattern></MATCH>
 
-static final String MINT_XML_FILTER = "FILTER";         // <FILTER><pattern></>
+String MINT_XML_FILTER = "FILTER";         // <FILTER><pattern></>
 
-static final String MINT_XML_WHEN_COND = "COND";        // <COND>when</>
-static final String MINT_XML_COND_VAR = "VAR";          //    VAR="xyz"
-static final String MINT_XML_COND_VALUE = "VALUE";      //    VALUE="abc"
+String MINT_XML_WHEN_COND = "COND";        // <COND>when</>
+String MINT_XML_COND_VAR = "VAR";          //    VAR="xyz"
+String MINT_XML_COND_VALUE = "VALUE";      //    VALUE="abc"
 
-static final String MINT_XML_ACTIONS = "ACTIONS";       // <ACTIONS>action*</>
+String MINT_XML_ACTIONS = "ACTIONS";       // <ACTIONS>action*</>
 
-static final String MINT_XML_SEND = "SEND";             // <SEND>msg</>
+String MINT_XML_SEND = "SEND";             // <SEND>msg</>
 
-static final String MINT_XML_SET = "SET";               // <SET/>
-static final String MINT_XML_SET_VAR = "VAR";           //    VAR="xyz"
-static final String MINT_XML_SET_VALUE = "VALUE";       //    VALUE="abc"
+String MINT_XML_SET = "SET";               // <SET/>
+String MINT_XML_SET_VAR = "VAR";           //    VAR="xyz"
+String MINT_XML_SET_VALUE = "VALUE";       //    VALUE="abc"
 
-static final String MINT_XML_YIELD = "YIELD";           // <YIELD>msg</>
+String MINT_XML_YIELD = "YIELD";           // <YIELD>msg</>
 
-static final String MINT_XML_REPLY = "REPLY";           // <REPLY>msg</>
+String MINT_XML_REPLY = "REPLY";           // <REPLY>msg</>
 
-static final String MINT_XML_ACTION_COND = "COND";      // <COND>when</>
+String MINT_XML_ACTION_COND = "COND";      // <COND>when</>
 
 
 
@@ -280,14 +221,14 @@ static final String MINT_XML_ACTION_COND = "COND";      // <COND>when</>
 //	  EMSG
 
 
-static final String MINT_HEADER_SEND = "SEND";
-static final String MINT_HEADER_REPLY = "RPLY";
-static final String MINT_HEADER_REGISTER = "CPAT";
-static final String MINT_HEADER_UNREGISTER = "UPAT";
-static final String MINT_HEADER_GET = "GETM";
-static final String MINT_HEADER_DONE = "DONE";
+String MINT_HEADER_SEND = "SEND";
+String MINT_HEADER_REPLY = "RPLY";
+String MINT_HEADER_REGISTER = "CPAT";
+String MINT_HEADER_UNREGISTER = "UPAT";
+String MINT_HEADER_GET = "GETM";
+String MINT_HEADER_DONE = "DONE";
 
-static final String MINT_TRAILER = "EMSG";
+String MINT_TRAILER = "EMSG";
 
 
 /********************************************************************************/
@@ -296,12 +237,12 @@ static final String MINT_TRAILER = "EMSG";
 /*										*/
 /********************************************************************************/
 
-static final String MINT_CONTEXT_ELT_MINT = "MINT";
-static final String MINT_CONTEXT_ELT_SET = "CONTEXT_SET";
-static final String MINT_CONTEXT_ELT_GET = "CONTEXT_GET";
-static final String MINT_CONTEXT_ELT_WEB = "WEB";
+String MINT_CONTEXT_ELT_MINT = "MINT";
+String MINT_CONTEXT_ELT_SET = "CONTEXT_SET";
+String MINT_CONTEXT_ELT_GET = "CONTEXT_GET";
+String MINT_CONTEXT_ELT_WEB = "WEB";
 
-static final String MINT_CONTEXT_ELT_STATE = "CONTEXT";
+String MINT_CONTEXT_ELT_STATE = "CONTEXT";
 
 
 
@@ -313,8 +254,8 @@ static final String MINT_CONTEXT_ELT_STATE = "CONTEXT";
 
 interface HostPort extends Remote {
 
-   public String getHost() throws RemoteException;
-   public int getPort() throws RemoteException;
+   String getHost() throws RemoteException;
+   int getPort() throws RemoteException;
 
 }	// end of interface HostPort
 
@@ -331,7 +272,7 @@ class CommandArgs extends HashMap<String,Object> {
    private static final long serialVersionUID = 1;
    
    public CommandArgs()                                 { }
-   public CommandArgs(String key,Object ... args) {
+   public CommandArgs(String key,Object... args) {
       this();
       if (args.length == 0) return;
       put(key,args[0]);
@@ -340,7 +281,7 @@ class CommandArgs extends HashMap<String,Object> {
        }
     }
    
-   public void put(String key,Object ... args) {
+   public void put(String key,Object... args) {
       if (args.length == 0) return;
       put(key,args[0]);
       for (int i = 2; i < args.length; i += 2) {

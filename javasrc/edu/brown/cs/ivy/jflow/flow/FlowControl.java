@@ -983,7 +983,7 @@ private void processInstruction(int ino,FlowQueue wq)
 	 nino = -1;
 	 break;
 
-      case opc_bblock : 		// basic block
+      case OPC_BBLOCK : 		// basic block
 	 break;
 
       // handle opc_wide

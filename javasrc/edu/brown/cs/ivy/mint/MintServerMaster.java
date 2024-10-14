@@ -38,101 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintServerMaster.java,v 1.28 2019/06/28 17:12:33 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintServerMaster.java,v $
- * Revision 1.28  2019/06/28 17:12:33  spr
- * Fix permission settings
- *
- * Revision 1.27  2019/02/23 02:59:10  spr
- * Bug fix.
- *
- * Revision 1.26  2018/08/02 15:10:26  spr
- * Fix imports.
- *
- * Revision 1.25  2016/03/22 13:09:42  spr
- * Better debugging
- *
- * Revision 1.24  2015/11/20 15:09:17  spr
- * Reformatting.
- *
- * Revision 1.23  2013/11/15 02:38:56  spr
- * Fix imports.
- *
- * Revision 1.22  2011-06-24 20:16:09  spr
- * Add debug output.
- *
- * Revision 1.21  2011-06-17 12:31:30  spr
- * Use qualified registry name.
- *
- * Revision 1.20  2011-06-16 17:45:39  spr
- * Use registry names rather than values.
- *
- * Revision 1.19  2011-06-06 20:55:41  spr
- * Update to try getting rmi to work better.
- *
- * Revision 1.18  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.17  2011-05-17 01:04:55  spr
- * Update mint to allow web-scale messaging.
- *
- * Revision 1.16  2010-08-20 20:58:24  spr
- * Add logging and options for port numbers
- *
- * Revision 1.15  2010-08-09 17:15:17  spr
- * Report state of socket.
- *
- * Revision 1.14  2010-08-05 17:43:40  spr
- * Allow mint server to be accessed via localhost.
- *
- * Revision 1.13  2010-07-01 21:55:30  spr
- * Clear socket when done.
- *
- * Revision 1.12  2010-04-29 18:59:41  spr
- * Name threads, handle IO errors.
- *
- * Revision 1.11  2010-02-26 21:05:33  spr
- * Formatting issues and minor additions
- *
- * Revision 1.10  2010-02-12 00:37:05  spr
- * Move int constants to enum.	Handle nodes going down and bad read returns.
- *
- * Revision 1.9  2009-10-02 00:18:27  spr
- * Import clean up.
- *
- * Revision 1.8  2009-09-17 01:58:59  spr
- * Use IVY setup and IvyExec.runJava for running mint (for windows).
- *
- * Revision 1.7  2009-03-20 01:57:33  spr
- * Use environment variables if present.
- *
- * Revision 1.6  2009-01-27 00:39:39  spr
- * Initial connection setup.
- *
- * Revision 1.5  2008-11-24 23:36:22  spr
- * Provide for rmi registry based lookup.
- *
- * Revision 1.4  2008-11-12 13:46:17  spr
- * Minor cleanups and fixes.
- *
- * Revision 1.3  2006-12-01 03:22:50  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.2  2006/07/10 14:52:20  spr
- * Code cleanup.
- *
- * Revision 1.1  2005/07/08 23:32:53  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 import java.io.BufferedInputStream;
@@ -160,7 +65,7 @@ import java.util.StringTokenizer;
 
 
 
-public class MintServerMaster implements MintConstants
+public final class MintServerMaster implements MintConstants
 {
 
 

@@ -129,26 +129,26 @@ public boolean update()
 /*										*/
 /********************************************************************************/
 
-public boolean monitor(File ... dir)
+public boolean monitor(File... dir)
 {
    return fileCommand("MONITOR",dir);
 }
 
 
-public boolean unmonitor(File ... dir)
+public boolean unmonitor(File... dir)
 {
    return fileCommand("UNMONITOR",dir);
 }
 
 
 
-public boolean whitelist(File ... dir)
+public boolean whitelist(File... dir)
 {
    return fileCommand("WHITELIST",dir);
 }
 
 
-public boolean blackList(File ... dir)
+public boolean blackList(File... dir)
 {
    return fileCommand("BLACKLIST",dir);
 }

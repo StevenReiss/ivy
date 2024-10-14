@@ -32,33 +32,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderTaj.java,v 1.5 2018/08/02 15:09:29 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: CinderTaj.java,v $
- * Revision 1.5  2018/08/02 15:09:29  spr
- * Fix imports
- *
- * Revision 1.4  2015/11/20 15:09:11  spr
- * Reformatting.
- *
- * Revision 1.3  2006-12-01 03:22:37  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.2  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/03/29 03:40:25  spr
- * Move CINDER interface to JikesBT from Bloom to Ivy.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.cinder;
 
 
@@ -367,7 +340,8 @@ CinderTaj()
    int ctr = 0;
    int del = (enter ? 1 : 0);
 
-   BT_Ins i0,i1;
+   BT_Ins i0;
+   BT_Ins i1;
 
    i0 = BT_Ins.make(BT_Opcodes.opc_dup);
    iv.insertElementAt(i0,idx+del+ctr++);

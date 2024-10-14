@@ -34,42 +34,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowMaster.java,v 1.9 2018/08/02 15:10:13 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowMaster.java,v $
- * Revision 1.9  2018/08/02 15:10:13  spr
- * Fix imports.
- *
- * Revision 1.8  2015/07/02 19:01:30  spr
- * Minor bug fixes
- *
- * Revision 1.7  2007-08-10 02:10:32  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.6  2007-02-27 18:53:26  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.5  2007-01-03 14:04:57  spr
- * Fix imports
- *
- * Revision 1.4  2007-01-03 03:24:15  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.3  2006/07/10 14:52:15  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:11  spr
- * Update flow with inlining options.  Clean up.
- *
- * Revision 1.1  2006/06/21 02:18:29  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow;
 
@@ -100,9 +64,9 @@ public interface JflowMaster extends JflowConstants
  *
  **/
 
-public void setClassPath(String classpath);
+void setClassPath(String classpath);
 
-public void addToClassPath(String classorjar);
+void addToClassPath(String classorjar);
 
 
 
@@ -116,7 +80,7 @@ public void addToClassPath(String classorjar);
  *
  **/
 
-public void addClass(String cls);
+void addClass(String cls);
 
 
 
@@ -124,9 +88,9 @@ public void addClass(String cls);
  *	Load XML file describing special cases.
  **/
 
-public void addDescriptionFile(String xmlfile);
+void addDescriptionFile(String xmlfile);
 
-public void addDefaultDescriptionFile();
+void addDefaultDescriptionFile();
 
 
 
@@ -135,7 +99,7 @@ public void addDefaultDescriptionFile();
  *	Set options for control flow
  **/
 
-public void setOption(FlowOption opt,boolean fg);
+void setOption(FlowOption opt,boolean fg);
 
 
 
@@ -143,7 +107,7 @@ public void setOption(FlowOption opt,boolean fg);
  *	Set the start class (otherwise all starts are considered).
  **/
 
-public void setStartClass(String cls);
+void setStartClass(String cls);
 
 
 
@@ -159,11 +123,11 @@ public void setStartClass(String cls);
  *	classes are analyzed in more detail than system classes.
  **/
 
-public void setProjectFilter(ProjectFilter pf);
+void setProjectFilter(ProjectFilter pf);
 
 
 
-public interface ProjectFilter {
+interface ProjectFilter {
 
    boolean isProjectClass(String cls);
 
@@ -171,7 +135,7 @@ public interface ProjectFilter {
 }	// end of subinterface ProjectFilter
 
 
-public boolean isProjectClass(BT_Class bc);
+boolean isProjectClass(BT_Class bc);
 
 
 
@@ -181,7 +145,7 @@ public boolean isProjectClass(BT_Class bc);
 /*										*/
 /********************************************************************************/
 
-public void setupAnalysis();
+void setupAnalysis();
 
 
 
@@ -195,11 +159,11 @@ public void setupAnalysis();
  *
  **/
 
-public void analyze() throws JflowException;
+void analyze() throws JflowException;
 
 
 
-public void cleanup();
+void cleanup();
 
 
 
@@ -214,10 +178,10 @@ public void cleanup();
  *	Note that a give file might have changed
  **/
 
-public void noteChanged(File file);
-public void noteChanged(BT_Method bm);
+void noteChanged(File file);
+void noteChanged(BT_Method bm);
 
-public void updateChanged() throws JflowException;
+void updateChanged() throws JflowException;
 
 
 

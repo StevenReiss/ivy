@@ -79,78 +79,6 @@
  * @author Scott Violet
  */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingTreeTable.java,v 1.21 2019/06/28 17:12:55 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingTreeTable.java,v $
- * Revision 1.21  2019/06/28 17:12:55  spr
- * Formatting.
- *
- * Revision 1.20  2018/08/02 15:10:55  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.19  2017/07/14 19:36:58  spr
- * Update colors.	Make inner classes private.
- *
- * Revision 1.18  2017/02/15 02:09:50  spr
- * Use Class.getEnumConstants.
- *
- * Revision 1.17  2016/10/15 00:29:04  spr
- * Handle parent on mac; fix selection model for tree + table.
- *
- * Revision 1.16  2016/09/30 20:45:37  spr
- * Fix problem with default models.
- *
- * Revision 1.15  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.14  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.13  2011-11-22 12:07:34  spr
- * Add editor pane extensions.
- *
- * Revision 1.12  2011-09-12 20:50:31  spr
- * Code cleanup.
- *
- * Revision 1.11  2011-07-14 12:49:32  spr
- * Clean up.
- *
- * Revision 1.10  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.9  2011-05-17 01:05:43  spr
- * Fix variable shadowing.
- *
- * Revision 1.8  2011-01-11 00:26:57  spr
- * Handle empty freeze pane; code cleanup.
- *
- * Revision 1.7  2010-11-18 23:09:16  spr
- * Bug fixes for bubbles.
- *
- * Revision 1.6  2010-10-05 23:54:49  spr
- * Add expansion listener support to tree tables.
- *
- * Revision 1.5  2010-09-30 17:57:51  spr
- * Handle empty paths.
- *
- * Revision 1.4  2010-09-28 01:31:04  spr
- * Minor changes for opaqueness and drawing.
- *
- * Revision 1.3  2010-09-23 16:24:56  spr
- * Update tree table.
- *
- * Revision 1.2  2010-09-17 15:46:19  spr
- * Add Keymap converter for mac; clean up and finish tree table.
- *
- * Revision 1.1  2010-09-16 23:41:26  spr
- * Add initial tree table implementation.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.swing;
 
@@ -371,10 +299,10 @@ public void removeTreeExpansionListener(TreeExpansionListener tel)
 private class TreeTableCellRenderer extends SwingTree implements TableCellRenderer {
 
    /** Last table/tree row asked to renderer. */
-   protected int visibleRow;
+   protected int visible_row;
    private static final long serialVersionUID = 1;
 
-   public TreeTableCellRenderer(TreeModel model) {
+   TreeTableCellRenderer(TreeModel model) {
       super(model);
     }
 
@@ -387,7 +315,7 @@ private class TreeTableCellRenderer extends SwingTree implements TableCellRender
       // Make the tree's cell renderer use the table's cell selection colors
       TreeCellRenderer tcr = getCellRenderer();
       if (tcr instanceof DefaultTreeCellRenderer) {
-	 DefaultTreeCellRenderer dtcr = ((DefaultTreeCellRenderer)tcr);
+	 DefaultTreeCellRenderer dtcr = ((DefaultTreeCellRenderer) tcr);
 	 // For 1.1 uncomment this, 1.2 has a bug that will cause an
 	 // exception to be thrown if the border selection color is
 	 // null.
@@ -424,7 +352,7 @@ private class TreeTableCellRenderer extends SwingTree implements TableCellRender
     */
    @Override public void paint(Graphics g) {
       Graphics2D g2 = (Graphics2D) g.create();
-      double ht = -visibleRow * getRowHeight();
+      double ht = -visible_row * getRowHeight();
       g2.translate(0,ht);
 //    System.err.println("PAINT TREE " + visibleRow + " " + g2.getTransform());
 //    System.err.println("   " +  g2.getClip() + " " + ((Graphics2D) g).getTransform());
@@ -441,7 +369,7 @@ private class TreeTableCellRenderer extends SwingTree implements TableCellRender
         					     int row, int column) {
       if (isSelected) setBackground(table.getSelectionBackground());
       else setBackground(table.getBackground());
-      visibleRow = row;
+      visible_row = row;
 //    System.err.println("PERF TABLE CELL " + row + " " + value);
       return this;
     }
@@ -462,7 +390,7 @@ private class TreeTableCellRenderer extends SwingTree implements TableCellRender
  * JTree.
  */
 
-private class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
+private final class TreeTableCellEditor extends AbstractCellEditor implements TableCellEditor {
 
    @Override public Component getTableCellEditorComponent(JTable table,
 						   Object value,
@@ -493,7 +421,7 @@ private class TreeTableCellEditor extends AbstractCellEditor implements TableCel
       if (e instanceof MouseEvent) {
          for (int counter = getColumnCount() - 1; counter >= 0; counter--) {
             if (getColumnClass(counter) == TreeTableModel.class) {
-               MouseEvent me = (MouseEvent)e;
+               MouseEvent me = (MouseEvent) e;
                MouseEvent newME = new MouseEvent(tree_renderer, me.getID(),
         					    me.getWhen(), me.getModifiersEx(),
         					    me.getX() - getCellRect(0, counter, true).x,
@@ -532,10 +460,10 @@ private class TreeTableCellEditor extends AbstractCellEditor implements TableCel
 private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel {
 
    /** Set to true when we are updating the ListSelectionModel. */
-   protected boolean	     updatingListSelectionModel;
+   protected boolean	     updating_list_selection_model;
    private static final long serialVersionUID = 1;
 
-   public ListToTreeSelectionModelWrapper() {
+   ListToTreeSelectionModelWrapper() {
       super();
       getListSelectionModel().addListSelectionListener(createListSelectionListener());
     }
@@ -555,13 +483,13 @@ private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel 
     * alters the ListSelectionModel.
     */
    @Override public void resetRowSelection() {
-      if(!updatingListSelectionModel) {
-	 updatingListSelectionModel = true;
+      if (!updating_list_selection_model) {
+	 updating_list_selection_model = true;
 	 try {
 	    super.resetRowSelection();
 	  }
 	 finally {
-	    updatingListSelectionModel = false;
+	    updating_list_selection_model = false;
 	  }
        }
       // Notice how we don't message super if
@@ -584,8 +512,8 @@ private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel 
     * selection model.
     */
    protected void updateSelectedPathsFromSelectedRows() {
-      if(!updatingListSelectionModel) {
-	 updatingListSelectionModel = true;
+      if (!updating_list_selection_model) {
+	 updating_list_selection_model = true;
 	 try {
 	    // This is way expensive, ListSelectionModel needs an
 	    // enumerator for iterating.
@@ -593,12 +521,12 @@ private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel 
 	    int        max = listSelectionModel.getMaxSelectionIndex();
 
 	    clearSelection();
-	    if(min != -1 && max != -1) {
-	       for(int counter = min; counter <= max; counter++) {
-		  if(listSelectionModel.isSelectedIndex(counter)) {
+	    if (min != -1 && max != -1) {
+	       for (int counter = min; counter <= max; counter++) {
+		  if (listSelectionModel.isSelectedIndex(counter)) {
 		     TreePath	  selPath = tree_renderer.getPathForRow(counter);
 
-		     if(selPath != null) {
+		     if (selPath != null) {
 			addSelectionPath(selPath);
 		      }
 		   }
@@ -606,7 +534,7 @@ private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel 
 	     }
 	  }
 	 finally {
-	    updatingListSelectionModel = false;
+	    updating_list_selection_model = false;
 	  }
        }
     }
@@ -615,7 +543,7 @@ private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel 
     * Class responsible for calling updateSelectedPathsFromSelectedRows
     * when the selection of the list changes.
     */
-   private class ListSelectionHandler implements ListSelectionListener {
+   private final class ListSelectionHandler implements ListSelectionListener {
       @Override public void valueChanged(ListSelectionEvent e) {
 	 updateSelectedPathsFromSelectedRows();
        }
@@ -632,40 +560,40 @@ private class ListToTreeSelectionModelWrapper extends DefaultTreeSelectionModel 
 /*										*/
 /********************************************************************************/
 
-public static interface TreeTableModel extends TreeModel
+public interface TreeTableModel extends TreeModel
 {
     /**
      * Returns the number of available columns.
      */
-    public int getColumnCount();
+    int getColumnCount();
 
     /**
      * Returns the name for column number <code>column</code>.
      */
-    public String getColumnName(int column);
+    String getColumnName(int column);
 
     /**
      * Returns the type for column number <code>column</code>.
      */
-    public Class<?> getColumnClass(int column);
+    Class<?> getColumnClass(int column);
 
     /**
      * Returns the value to be displayed for node <code>node</code>,
      * at column number <code>column</code>.
      */
-    public Object getValueAt(Object node, int column);
+    Object getValueAt(Object node, int column);
 
     /**
      * Indicates whether the the value for node <code>node</code>,
      * at column number <code>column</code> is editable.
      */
-    public boolean isCellEditable(Object node, int column);
+    boolean isCellEditable(Object node, int column);
 
     /**
      * Sets the value for node <code>node</code>,
      * at column number <code>column</code>.
      */
-    public void setValueAt(Object aValue, Object node, int column);
+    void setValueAt(Object aValue, Object node, int column);
 
 }	// end of interface SwingTreeTableModel
 
@@ -678,10 +606,10 @@ public static interface TreeTableModel extends TreeModel
 /*										*/
 /********************************************************************************/
 
-public static abstract class AbstractTreeTableModel implements TreeTableModel
+public abstract static class AbstractTreeTableModel implements TreeTableModel
 {
    protected Object model_root;
-   protected EventListenerList listenerList = new EventListenerList();
+   protected EventListenerList listener_list = new EventListenerList();
 
    public AbstractTreeTableModel(Object root) {
       this.model_root = root;
@@ -706,18 +634,18 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 
 
    @Override public void addTreeModelListener(TreeModelListener l) {
-      listenerList.add(TreeModelListener.class, l);
+      listener_list.add(TreeModelListener.class, l);
     }
 
    @Override public void removeTreeModelListener(TreeModelListener l) {
-      listenerList.remove(TreeModelListener.class, l);
+      listener_list.remove(TreeModelListener.class, l);
     }
 
    protected void fireTreeNodesChanged(Object source, Object[] path,
 					  int[] childIndices,
 					  Object[] children) {
       // Guaranteed to return a non-null array
-      Object[] listeners = listenerList.getListenerList();
+      Object[] listeners = listener_list.getListenerList();
       TreeModelEvent e = null;
       // Process the listeners last to first, notifying
       // those that are interested in this event
@@ -726,7 +654,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 	    // Lazily create the event:
 	    if (e == null)
 	       e = new TreeModelEvent(source, path, childIndices, children);
-	    ((TreeModelListener)listeners[i+1]).treeNodesChanged(e);
+	    ((TreeModelListener) listeners[i+1]).treeNodesChanged(e);
 	  }
        }
     }
@@ -736,7 +664,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 					   int[] childIndices,
 					   Object[] children) {
       // Guaranteed to return a non-null array
-      Object[] listeners = listenerList.getListenerList();
+      Object[] listeners = listener_list.getListenerList();
       TreeModelEvent e = null;
       // Process the listeners last to first, notifying
       // those that are interested in this event
@@ -745,7 +673,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 	    // Lazily create the event:
 	    if (e == null)
 	       e = new TreeModelEvent(source, path, childIndices, children);
-	    ((TreeModelListener)listeners[i+1]).treeNodesInserted(e);
+	    ((TreeModelListener) listeners[i+1]).treeNodesInserted(e);
 	  }
        }
     }
@@ -754,7 +682,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 					  int[] childIndices,
 					  Object[] children) {
       // Guaranteed to return a non-null array
-      Object[] listeners = listenerList.getListenerList();
+      Object[] listeners = listener_list.getListenerList();
       TreeModelEvent e = null;
       // Process the listeners last to first, notifying
       // those that are interested in this event
@@ -763,7 +691,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 	    // Lazily create the event:
 	    if (e == null)
 	       e = new TreeModelEvent(source, path, childIndices, children);
-	    ((TreeModelListener)listeners[i+1]).treeNodesRemoved(e);
+	    ((TreeModelListener) listeners[i+1]).treeNodesRemoved(e);
 	  }
        }
     }
@@ -772,7 +700,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
         					      int[] childIndices,
         				      Object[] children) {
       // Guaranteed to return a non-null array
-      Object[] listeners = listenerList.getListenerList();
+      Object[] listeners = listener_list.getListenerList();
       TreeModelEvent e = null;
       // Process the listeners last to first, notifying
       // those that are interested in this event
@@ -782,8 +710,8 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
             if (e == null)
                e = new TreeModelEvent(source, path, childIndices, children);
             try {
-               ((TreeModelListener)listeners[i+1]).treeStructureChanged(e);
-             }
+               ((TreeModelListener) listeners[i+1]).treeStructureChanged(e);
+             } 
             catch (Throwable t) { }
           }
        }
@@ -803,11 +731,11 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
    @Override public void setValueAt(Object aValue, Object node, int column) { }
 
 
-   @Override abstract public Object getChild(Object par,int index);
-   @Override abstract public int getChildCount(Object par);
-   @Override abstract public int getColumnCount();
-   @Override abstract public String getColumnName(int col);
-   @Override abstract public Object getValueAt(Object node,int col);
+   @Override public abstract Object getChild(Object par,int index);
+   @Override public abstract int getChildCount(Object par);
+   @Override public abstract int getColumnCount();
+   @Override public abstract String getColumnName(int col);
+   @Override public abstract Object getValueAt(Object node,int col);
    
 }	// end of abstract inner class AbstractTreeTableModel
 
@@ -823,7 +751,7 @@ public static abstract class AbstractTreeTableModel implements TreeTableModel
 
 public static class AbstractCellEditor implements CellEditor {
 
-    protected EventListenerList listenerList = new EventListenerList();
+    protected EventListenerList listener_list = new EventListenerList();
 
     @Override public Object getCellEditorValue()				{ return null; }
     @Override public boolean isCellEditable(EventObject e)		{ return true; }
@@ -832,33 +760,33 @@ public static class AbstractCellEditor implements CellEditor {
     @Override public void cancelCellEditing()				{ }
 
     @Override public void addCellEditorListener(CellEditorListener l) {
-       listenerList.add(CellEditorListener.class, l);
+       listener_list.add(CellEditorListener.class, l);
      }
 
     @Override public void removeCellEditorListener(CellEditorListener l) {
-       listenerList.remove(CellEditorListener.class, l);
+       listener_list.remove(CellEditorListener.class, l);
      }
 
     protected void fireEditingStopped() {
        // Guaranteed to return a non-null array
-       Object[] listeners = listenerList.getListenerList();
+       Object[] listeners = listener_list.getListenerList();
        // Process the listeners last to first, notifying
        // those that are interested in this event
        for (int i = listeners.length-2; i>=0; i-=2) {
 	  if (listeners[i]==CellEditorListener.class) {
-	     ((CellEditorListener)listeners[i+1]).editingStopped(new ChangeEvent(this));
+	     ((CellEditorListener) listeners[i+1]).editingStopped(new ChangeEvent(this));
 	   }
 	}
      }
 
     protected void fireEditingCanceled() {
        // Guaranteed to return a non-null array
-       Object[] listeners = listenerList.getListenerList();
+       Object[] listeners = listener_list.getListenerList();
        // Process the listeners last to first, notifying
        // those that are interested in this event
        for (int i = listeners.length-2; i>=0; i-=2) {
 	  if (listeners[i]==CellEditorListener.class) {
-	     ((CellEditorListener)listeners[i+1]).editingCanceled(new ChangeEvent(this));
+	     ((CellEditorListener) listeners[i+1]).editingCanceled(new ChangeEvent(this));
 	   }
 	}
      }
@@ -883,7 +811,7 @@ private static class TreeTableModelAdapter extends AbstractTableModel
 
    private static final long serialVersionUID = 1;
 
-   public TreeTableModelAdapter(TreeTableModel treetablemodel, JTree tree) {
+   TreeTableModelAdapter(TreeTableModel treetablemodel, JTree tree) {
       for_tree = tree;
       tree_table_model = treetablemodel;
       TreeTableModelListener listener = new TreeTableModelListener(this);

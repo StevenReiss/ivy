@@ -198,7 +198,7 @@ void defineMethod(JcompSymbol js,JcompScope scp)
 JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompScope scope,JcompType basetype,ASTNode n)
 {
    List<MethodElement> lme = null;
-   synchronized(method_names) {
+   synchronized (method_names) {
       lme = method_names.get(id);
       if (lme == null) {
 	 return null;
@@ -236,7 +236,7 @@ JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType aty,JcompScope sco
 JcompSymbol lookupExactMethod(String id,JcompType aty,JcompScope js)
 {
    List<MethodElement> lme = method_names.get(id);
-   synchronized(method_names) {
+   synchronized (method_names) {
       lme = method_names.get(id);
       if (lme == null) {
 	 return null;

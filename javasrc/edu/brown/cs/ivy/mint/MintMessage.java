@@ -38,32 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintMessage.java,v 1.5 2017/06/23 20:54:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintMessage.java,v $
- * Revision 1.5  2017/06/23 20:54:54  spr
- * Use public file locking class.
- *
- * Revision 1.4  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.3  2010-02-12 00:37:05  spr
- * Move int constants to enum.  Handle nodes going down and bad read returns.
- *
- * Revision 1.2  2006/02/21 17:06:23  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.1  2005/07/08 23:32:53  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 
@@ -87,11 +61,11 @@ public interface MintMessage
  *	a valid XML document, either given directly or as a string.
  **/
 
-public void replyTo(String r);
+void replyTo(String r);
 
-public void replyTo(Element xml);
+void replyTo(Element xml);
 
-public void replyTo();
+void replyTo();
 
 
 
@@ -105,7 +79,7 @@ public void replyTo();
  *	Return the text string representation of the XML message.
  **/
 
-public String getText();
+String getText();
 
 
 
@@ -114,7 +88,7 @@ public String getText();
  *	Return the XML document representation of the message.
  **/
 
-public Element getXml();
+Element getXml();
 
 
 

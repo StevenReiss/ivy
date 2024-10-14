@@ -38,54 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingSetup.java,v 1.12 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingSetup.java,v $
- * Revision 1.12  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.11  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.10  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.9  2009-04-11 01:43:02  spr
- * Prevent text from getting too big.
- *
- * Revision 1.8  2008-03-14 12:27:44  spr
- * Code cleanup.
- *
- * Revision 1.7  2007-12-13 20:22:13  spr
- * Add call to set the fill when adding a component.
- *
- * Revision 1.6  2007-05-04 02:00:37  spr
- * Import fixups.
- *
- * Revision 1.5  2006/07/10 14:52:25  spr
- * Code cleanup.
- *
- * Revision 1.4  2005/12/22 20:40:17  spr
- * Add action button to grid; try to make file choosers uneditable; fix source viewer.
- *
- * Revision 1.3  2005/05/07 22:25:44  spr
- * Updates for java 5.0
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1.1.1  2003/03/17 19:38:12  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.swing;
 
 
@@ -141,27 +93,27 @@ public SwingSetup()
 /****************************************************************************************/
 
 
-private static class BrownTheme extends DefaultMetalTheme {
+private static final class BrownTheme extends DefaultMetalTheme {
 
    @Override public String getName()		{ return "Brown"; }
 
-   private final ColorUIResource primary1 = new ColorUIResource(SWING_DARK_COLOR);
-   private final ColorUIResource primary2 = new ColorUIResource(SWING_SELECT_COLOR);
-   private final ColorUIResource primary3 = new ColorUIResource(SWING_BACKGROUND_COLOR);
+   private final ColorUIResource primary_1 = new ColorUIResource(SWING_DARK_COLOR);
+   private final ColorUIResource primary_2 = new ColorUIResource(SWING_SELECT_COLOR);
+   private final ColorUIResource primary_3 = new ColorUIResource(SWING_BACKGROUND_COLOR);
 
-   private final ColorUIResource secondary1 = new ColorUIResource(SWING_DARK_COLOR);
-   private final ColorUIResource secondary3 = new ColorUIResource(SWING_BACKGROUND_COLOR);
-   private final ColorUIResource secondary2 = new ColorUIResource(SWING_DISABLE_COLOR);
+   private final ColorUIResource secondary_1 = new ColorUIResource(SWING_DARK_COLOR);
+   private final ColorUIResource secondary_2 = new ColorUIResource(SWING_DISABLE_COLOR);
+   private final ColorUIResource secondary_3 = new ColorUIResource(SWING_BACKGROUND_COLOR);
 
-   @Override protected ColorUIResource getPrimary1()	{ return primary1; }
-   @Override protected ColorUIResource getPrimary2()	{ return primary2; }
-   @Override protected ColorUIResource getPrimary3()	{ return primary3; }
+   @Override protected ColorUIResource getPrimary1()	{ return primary_1; }
+   @Override protected ColorUIResource getPrimary2()	{ return primary_2; }
+   @Override protected ColorUIResource getPrimary3()	{ return primary_3; }
 
-   @Override protected ColorUIResource getSecondary1()	{ return secondary1; }
-   @Override protected ColorUIResource getSecondary2()	{ return secondary2; }
-   @Override protected ColorUIResource getSecondary3()	{ return secondary3; }
+   @Override protected ColorUIResource getSecondary1()	{ return secondary_1; }
+   @Override protected ColorUIResource getSecondary2()	{ return secondary_2; }
+   @Override protected ColorUIResource getSecondary3()	{ return secondary_3; }
 
-   @Override public ColorUIResource getTextHighlightColor()	{ return primary2; }
+   @Override public ColorUIResource getTextHighlightColor()	{ return primary_2; }
 }
 
 
@@ -253,17 +205,19 @@ static class BaseColor extends Color {
 
 private static int midColorI(Color c1,double v1,double v2)
 {
-   int r,g,b;
+   int r = 0;
+   int b = 0;
+   int g = 0;
 
    if (v1 >= 0) {
-      r = (int)(c1.getRed() * v1 + 255 * v2);
-      g = (int)(c1.getGreen() * v1 + 255 * v2);
-      b = (int)(c1.getBlue() * v1 + 255 * v2);
+      r = (int) (c1.getRed() * v1 + 255 * v2);
+      g = (int) (c1.getGreen() * v1 + 255 * v2);
+      b = (int) (c1.getBlue() * v1 + 255 * v2);
     }
    else {
-      r = (int)((255-c1.getRed()) * v1 + 255 * v2);
-      g = (int)((255-c1.getGreen()) * v1 + 255 * v2);
-      b = (int)((255-c1.getBlue()) * v1 + 255 * v2);
+      r = (int) ((255-c1.getRed()) * v1 + 255 * v2);
+      g = (int) ((255-c1.getGreen()) * v1 + 255 * v2);
+      b = (int) ((255-c1.getBlue()) * v1 + 255 * v2);
     }
 
    return (b&0xff) | ((g&0xff)<<8) | ((r&0xff)<<16);
@@ -286,10 +240,10 @@ private static int baseColorI(int r,int g,int b)
       double va = Math.sqrt(ra*ra+ga*ga+ba*ba);
       if (va == 0) continue;
       double a = v1/va;
-      if ((int)(mx*a) <= 255) {
-	 r = (int)(ra*a);
-	 g = (int)(ga*a);
-	 b = (int)(ba*a);
+      if ((int) (mx*a) <= 255) {
+	 r = (int) (ra*a);
+	 g = (int) (ga*a);
+	 b = (int) (ba*a);
 	 return (b&0xff) | ((g&0xff)<<8) | ((r&0xff)<<16);
        }
     }

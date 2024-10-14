@@ -50,7 +50,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-abstract public class JcompScope implements JcompConstants {
+public abstract class JcompScope implements JcompConstants {
 
 
 
@@ -78,7 +78,7 @@ void defineDupVar(JcompSymbol s)
    defineVar(s);
 }
 
-abstract public JcompSymbol lookupVariable(String nm);
+public abstract JcompSymbol lookupVariable(String nm);
 
 public Collection<JcompSymbol> getAllSymbols()
 {
@@ -91,7 +91,7 @@ public Collection<JcompSymbol> getAllSymbols()
 }
 
 
-abstract protected void getAllSymbols(Collection<JcompSymbol> rslt);
+protected abstract void getAllSymbols(Collection<JcompSymbol> rslt);
 
 
 
@@ -177,8 +177,7 @@ static boolean isBetterMethod(JcompType ctyp,JcompSymbol mth1,JcompSymbol mth2)
    List<JcompType> m2args = m2.getComponents();
 
    if (m1args.size() != m2args.size()) {
-      if (m1args.size() == args.size()) return true;
-      else return false;
+      return (m1args.size() == args.size());
     }
    if (m1args.size() != args.size()) return false;
 

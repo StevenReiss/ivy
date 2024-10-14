@@ -38,113 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/client/MintClient.java,v 1.32 2018/08/02 15:10:28 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintClient.java,v $
- * Revision 1.32  2018/08/02 15:10:28  spr
- * Fix imports.
- *
- * Revision 1.31  2017/03/14 14:00:30  spr
- * Formattig
- *
- * Revision 1.30  2017/02/21 23:13:47  spr
- * Formatting.
- *
- * Revision 1.29  2015/11/20 15:09:18  spr
- * Reformatting.
- *
- * Revision 1.28  2014/06/12 01:06:31  spr
- * Minor updates
- *
- * Revision 1.27  2013/11/15 02:39:07  spr
- * Fix imports
- *
- * Revision 1.26  2013/09/24 01:06:58  spr
- * Minor fix
- *
- * Revision 1.25  2012-06-14 12:39:46  spr
- * Check connections.
- *
- * Revision 1.24  2012-05-22 00:43:02  spr
- * Formatting changes.
- *
- * Revision 1.23  2012-04-26 01:02:41  spr
- * Formating, thread naming
- *
- * Revision 1.22  2012-02-29 01:53:57  spr
- * Code clean up.
- *
- * Revision 1.21  2012-01-12 01:26:25  spr
- * Formatting
- *
- * Revision 1.20  2011-05-27 19:32:43  spr
- * Change copyrights.
- *
- * Revision 1.19  2010-12-08 22:50:30  spr
- * Add thread pool
- *
- * Revision 1.18  2010-12-03 21:57:22  spr
- * Use a thread pool to avoid new thread creation.
- *
- * Revision 1.17  2010-08-20 20:58:28  spr
- * Add logging and options for port numbers
- *
- * Revision 1.16  2010-08-04 22:01:59  spr
- * Master server not ready for localhost.
- *
- * Revision 1.15  2010-07-01 21:55:57  spr
- * Don't allow mint client to be superclassed
- *
- * Revision 1.14  2010-06-01 02:08:39  spr
- * Force load to handle dyvise monitoring of ivy-based apps.
- *
- * Revision 1.13  2010-02-12 00:37:28  spr
- * Move int constants to enums
- *
- * Revision 1.12  2009-09-17 01:59:15  spr
- * Use IVY setup and IvyExec.runJava for running mint (for windows).
- *
- * Revision 1.11  2009-03-20 01:58:00  spr
- * Throw error rather than terminating on server disconnectd.
- *
- * Revision 1.10  2008-11-12 13:46:20  spr
- * Minor cleanups and fixes.
- *
- * Revision 1.9  2008-03-14 12:27:12  spr
- * Synchronize writes.
- *
- * Revision 1.8  2007-09-22 01:47:39  spr
- * Clean up error handling so it isn't synchronized.
- *
- * Revision 1.7  2007-08-10 02:11:09  spr
- * Cleanups from eclipse; bug fixes to avoid deadlock.
- *
- * Revision 1.6  2007-05-04 02:00:13  spr
- * Fix bugs related to polling.
- *
- * Revision 1.5  2006/07/10 14:52:21  spr
- * Code cleanup.
- *
- * Revision 1.4  2006/02/21 17:06:25  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.3  2006/01/30 19:05:52  spr
- * Handle sync only on replies option.
- *
- * Revision 1.2  2005/09/02 14:42:46  spr
- * Make threads daemons.
- *
- * Revision 1.1  2005/07/08 23:32:57  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.client;
 
 
@@ -470,7 +363,7 @@ private static class PatternInfo {
           }
          catch (Throwable t) {
             MintLogger.log("Problem in MintHandler: " + t);
-            t.printStackTrace()   ;
+            t.printStackTrace();
           }
        }
    
@@ -658,7 +551,7 @@ private void asynchProcessMessage(Object o)
 
 
 
-private class RunThreadFactory implements ThreadFactory {
+private final class RunThreadFactory implements ThreadFactory {
 
    @Override public Thread newThread(Runnable r) {
       return new Thread(r,"MintRunThread_" + mint_name + "_" + thread_counter.incrementAndGet());

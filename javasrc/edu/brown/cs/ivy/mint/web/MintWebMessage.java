@@ -38,24 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/web/MintWebMessage.java,v 1.3 2013/11/15 02:39:13 spr Exp $ */
-
-/*********************************************************************************
- *
- * $Log: MintWebMessage.java,v $
- * Revision 1.3  2013/11/15 02:39:13  spr
- * Fix imports
- *
- * Revision 1.2  2011-05-27 19:32:47  spr
- * Change copyrights.
- *
- * Revision 1.1  2011-05-17 01:05:26  spr
- * Mint servlet for messaging.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.mint.web;
 
 

@@ -167,7 +167,7 @@ public static String handleParameters(HttpExchange e)
 {
    Map<String,List<String>> params = parseQueryParameters(e);
    if (!e.getRequestMethod().equals("GET")) {
-      synchronized(params) {
+      synchronized (params) {
          try {
             // Parse the request body and populate the filemap
             parsePostParameters(e,params);
@@ -212,7 +212,7 @@ public static String getParameter(HttpExchange e,String name)
 public static void setParameter(HttpExchange exchange,String name,String val)
 {
    Map<String,List<String>> parameters = (Map<String,List<String>>) exchange.getAttribute("paramMap");
-   synchronized(parameters){
+   synchronized (parameters){
       if (val == null) {
          parameters.remove(name);
        }
@@ -299,7 +299,7 @@ public static boolean parsePostParameters(HttpExchange exchange,Map<String,List<
    else if (json) {
       if (cntlen == 0) cntlen = 2*1024*1024;
       String cnts = "";
-      char buf[] = new char[512];
+      char [] buf = new char[512];
       while (cntlen > 0) {
 	 int rln = Math.min(cntlen,512);
 	 int aln = br.read(buf,0,rln);

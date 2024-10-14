@@ -38,30 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingEventListenerList.java,v 1.4 2015/11/20 15:09:26 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingEventListenerList.java,v $
- * Revision 1.4  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.3  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.2  2011-05-27 19:32:50  spr
- * Change copyrights.
- *
- * Revision 1.1  2010-10-06 23:33:06  spr
- * Add event listener list implementation.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.swing;
 
 

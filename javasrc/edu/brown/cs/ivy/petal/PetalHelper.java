@@ -38,46 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalHelper.java,v 1.10 2018/08/02 15:10:36 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalHelper.java,v $
- * Revision 1.10  2018/08/02 15:10:36  spr
- * Fix imports.
- *
- * Revision 1.9  2013/11/15 02:39:14  spr
- * Fix imports
- *
- * Revision 1.8  2011-05-27 19:32:48  spr
- * Change copyrights.
- *
- * Revision 1.7  2011-04-23 00:43:46  spr
- * Fix line segment intersect routine.
- *
- * Revision 1.6  2010-12-08 22:50:39  spr
- * Fix up dipslay and add new layouts
- *
- * Revision 1.5  2006-12-01 03:22:54  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.4  2005/07/08 20:57:47  spr
- * Change imports.
- *
- * Revision 1.3  2004/05/20 16:03:37  spr
- * Bug fixes for Petal related to CHIA; add oval helper.
- *
- * Revision 1.2  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/07/16 19:44:58  spr
- * Move petal from bloom to ivy.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.petal;
 
 
@@ -110,7 +70,7 @@ public static Point findPortPoint(Rectangle b,Point at,Point from)
 
    if (v0 == 1) return at;
 
-   return new Point((int)(from.x + (at.x-from.x)*v0),(int)(from.y + (at.y - from.y)*v0));
+   return new Point((int) (from.x + (at.x-from.x)*v0),(int) (from.y + (at.y - from.y)*v0));
 }
 
 
@@ -185,7 +145,7 @@ public static Point findShapePortPoint(Component c,Shape shape,Point at,Point fr
 
    if (v0 == 1 || v0 < 0) return at;
 
-   return new Point((int)(from.x + (at.x-from.x)*v0),(int)(from.y + (at.y - from.y)*v0));
+   return new Point((int) (from.x + (at.x-from.x)*v0),(int) (from.y + (at.y - from.y)*v0));
 }
 
 

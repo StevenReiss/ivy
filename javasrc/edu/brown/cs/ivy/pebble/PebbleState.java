@@ -31,50 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/pebble/PebbleState.java,v 1.12 2018/08/02 15:10:34 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PebbleState.java,v $
- * Revision 1.12  2018/08/02 15:10:34  spr
- * Fix imports.
- *
- * Revision 1.11  2015/11/20 15:09:22  spr
- * Reformatting.
- *
- * Revision 1.10  2013-06-03 13:03:32  spr
- * Minor fixes
- *
- * Revision 1.9  2007-08-10 02:11:18  spr
- * Cleanups from eclipse.
- *
- * Revision 1.8  2006-12-01 03:22:53  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.7  2006/07/23 02:25:14  spr
- * Add support for action editing and creation.
- *
- * Revision 1.6  2006/07/10 14:52:23  spr
- * Code cleanup.
- *
- * Revision 1.5  2006/02/21 17:06:42  spr
- * Changes to Pebble to support external data models.
- *
- * Revision 1.4  2005/07/08 20:57:06  spr
- * Charles' upgrade to Pebble UI.
- *
- * Revision 1.3  2005/06/28 17:20:53  spr
- * UI enhancements (CAR)
- *
- * Revision 1.2  2005/05/07 22:25:41  spr
- * Updates for java 5.0
- *
- * Revision 1.1  2005/04/28 21:48:16  spr
- * Initial release of the pebble automata editor.
- *
- *
- ********************************************************************************/
 
 
 package edu.brown.cs.ivy.pebble;
@@ -187,7 +143,7 @@ PebbleState(PebbleEditor pe,String name,boolean start)
 
 
 
-@Override public String getToolTip(Point _at)
+@Override public String getToolTip(Point at)
 {
    return "State " + state_name;
 }
@@ -378,11 +334,12 @@ private class StateDialog implements ActionListener
 	 String newName = normalizeInput(dstate_name.getText());
 	 if (!newName.equals(for_state.getName())) {
 	    if (for_state.base_editor.getEditModel().findState(newName) != null) {
-		JOptionPane.showMessageDialog(c, "State name must be unique, ignored.");
-	    } else {
-		for_state.setName(normalizeInput(dstate_name.getText()));
-	    }
-	 }
+               JOptionPane.showMessageDialog(c, "State name must be unique, ignored.");
+             } 
+            else {
+               for_state.setName(normalizeInput(dstate_name.getText()));
+             }
+          }
 	 if (next_state != null) for_state.setDefaultNextState(next_state);
 	 for_state.setStateLabel(normalizeInput(dstate_label.getText()));
 	 if (action_panel != null) {
@@ -422,10 +379,11 @@ private class StateDialog implements ActionListener
 	 PebbleState ps = (PebbleState) sts[i];
 	 if (ps.getName().equals(next_state)) idx = i;
 	 if (ps.getStateLabel() == null) {
-	     sts[i] = ps.getName();
-	 } else {
-	     sts[i] = ps.getStateLabel() + " (" + ps.getName() + ")";
-	 }
+            sts[i] = ps.getName();
+          }
+         else {
+            sts[i] = ps.getStateLabel() + " (" + ps.getName() + ")";
+          }
        }
       message_box.addChoice("Default Next State",sts,idx,this);
     }
@@ -480,7 +438,7 @@ private class StateIcon implements Icon {
    @Override public int getIconWidth()				{ return icon_width; }
    @Override public int getIconHeight()				{ return icon_height; }
 
-   @Override public void paintIcon(Component _c,Graphics g,int x,int y) {
+   @Override public void paintIcon(Component c,Graphics g,int x,int y) {
       Color oc = g.getColor();
 
       g.setColor(fill_color);

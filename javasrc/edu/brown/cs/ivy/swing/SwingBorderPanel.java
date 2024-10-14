@@ -38,26 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingBorderPanel.java,v 1.3 2011-05-27 19:32:50 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingBorderPanel.java,v $
- * Revision 1.3  2011-05-27 19:32:50  spr
- * Change copyrights.
- *
- * Revision 1.2  2009-10-02 00:18:30  spr
- * Import clean up.
- *
- * Revision 1.1  2009-09-17 02:00:45  spr
- * Add autocomplete, new grid options, fix up lists, add range scroll bar.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.swing;
 
 

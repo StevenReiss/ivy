@@ -90,7 +90,7 @@ LeashConnection(String typ,File dir)
    is_active = true;
    database_name = null;
    findActiveHostAndPort();
-   if (is_active == false) {
+   if (!is_active) {
       String nm = "cocker." + analysis_type.toLowerCase() + ".props";
       File pfile = new File(index_directory,nm);
       pfile.delete();

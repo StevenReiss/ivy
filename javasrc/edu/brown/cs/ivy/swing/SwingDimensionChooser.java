@@ -38,33 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingDimensionChooser.java,v 1.5 2015/11/20 15:09:26 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingDimensionChooser.java,v $
- * Revision 1.5  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.4  2013/11/15 02:38:19  spr
- * Update imports; add features to combo box.
- *
- * Revision 1.3  2012-03-21 23:54:43  spr
- * Clean up the code.
- *
- * Revision 1.2  2011-06-28 00:12:31  spr
- * Add new swing dialog options.
- *
- * Revision 1.1  2011-06-24 20:17:24  spr
- * Add new field handlers.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.swing;
 
 
@@ -92,7 +65,7 @@ private String		action_name;
 private SwingNumericField width_field;
 private SwingNumericField height_field;
 
-private final static long serialVersionUID = 1;
+private static final long serialVersionUID = 1;
 
 
 

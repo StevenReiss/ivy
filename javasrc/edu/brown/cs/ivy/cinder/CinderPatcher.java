@@ -32,66 +32,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderPatcher.java,v 1.16 2018/08/02 15:09:29 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: CinderPatcher.java,v $
- * Revision 1.16  2018/08/02 15:09:29  spr
- * Fix imports
- *
- * Revision 1.15  2009-09-17 01:54:51  spr
- * Enable patching at line number level.
- *
- * Revision 1.14  2008-03-14 12:25:18  spr
- * Fixes for java 1.6; code cleanup.
- *
- * Revision 1.13  2007-08-10 02:10:02  spr
- * Cleanups from Eclipse
- *
- * Revision 1.12  2006-12-01 03:22:37  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.11  2006-08-30 20:19:10  spr
- * Better checking for superclass call in constructors.
- *
- * Revision 1.10  2006/07/10 14:52:09  spr
- * Code cleanup.
- *
- * Revision 1.9  2006/02/21 17:06:09  spr
- * Remove unused code.
- *
- * Revision 1.8  2005/07/08 20:56:58  spr
- * Upgrade patching to handle constructors; add call to create local variable.
- *
- * Revision 1.7  2005/05/11 22:20:08  spr
- * More updates for java 5.0.
- *
- * Revision 1.6  2005/05/10 17:18:16  spr
- * Updates for java 5.0.
- *
- * Revision 1.5  2005/05/07 22:25:39  spr
- * Updates for java 5.0
- *
- * Revision 1.4  2004/11/09 20:32:54  spr
- * Formatting changes.
- *
- * Revision 1.3  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.2  2003/12/17 21:23:42  spr
- * Add start class callback at the start of a class.
- *
- * Revision 1.1  2003/03/29 03:40:25  spr
- * Move CINDER interface to JikesBT from Bloom to Ivy.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.cinder;
 
 

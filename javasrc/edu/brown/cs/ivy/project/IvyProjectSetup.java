@@ -31,22 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/project/IvyProjectSetup.java,v 1.2 2009-10-02 00:18:29 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyProjectSetup.java,v $
- * Revision 1.2  2009-10-02 00:18:29  spr
- * Import clean up.
- *
- * Revision 1.1  2009-09-19 00:22:01  spr
- * Add IvyProject implementaton.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.project;
 
@@ -54,7 +38,7 @@ import java.io.File;
 
 
 
-public class IvyProjectSetup implements IvyProjectConstants {
+public final class IvyProjectSetup implements IvyProjectConstants {
 
 
 /********************************************************************************/

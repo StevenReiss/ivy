@@ -45,7 +45,7 @@ public interface BowerConstants
  *      Functional event handler with Session and input data
  **/
 
-public interface BowerSessionHandler {
+interface BowerSessionHandler {
    
    String handle(BowerSession cs, HttpExchange e);
    
@@ -56,7 +56,7 @@ public interface BowerSessionHandler {
  *      Functional event handler without session data
  **/ 
 
-public interface BowerHandler {
+interface BowerHandler {
    
    String handle(HttpExchange e);
    

@@ -31,46 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/pebble/PebbleXmlModel.java,v 1.10 2018/08/02 15:10:34 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PebbleXmlModel.java,v $
- * Revision 1.10  2018/08/02 15:10:34  spr
- * Fix imports.
- *
- * Revision 1.9  2018/05/25 17:57:07  spr
- * Formatting.
- *
- * Revision 1.8  2015/11/20 15:09:22  spr
- * Reformatting.
- *
- * Revision 1.7  2013/09/24 01:07:50  spr
- * data format
- *
- * Revision 1.6  2009-09-17 02:00:09  spr
- * Eclipse cleanup.
- *
- * Revision 1.5  2007-08-10 02:11:18  spr
- * Cleanups from eclipse.
- *
- * Revision 1.4  2006-12-01 03:22:53  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.3  2006/07/23 02:25:14  spr
- * Add support for action editing and creation.
- *
- * Revision 1.2  2006/07/10 14:52:23  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/03/10 03:25:52  spr
- * Move the old model to PebbleXmlModel.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.pebble;
 
 
@@ -414,7 +374,7 @@ private abstract static class Parsable {
 
 
 
-private static abstract class UseItem {
+private abstract static class UseItem {
 
    protected String use_name;
 

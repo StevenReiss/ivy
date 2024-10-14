@@ -81,7 +81,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  **/
 
 
-abstract public class JcompSymbol implements JcompConstants {
+public abstract class JcompSymbol implements JcompConstants {
 
 
 
@@ -482,7 +482,7 @@ public JcompType getClassType() 	{ return null; }
  *	Get the fully qualified name for a symbol.
  **/
 
-final public String getFullName()
+public final String getFullName()
 {
    return getFullName(false);
 }
@@ -547,7 +547,7 @@ public String getCompleteName()
  *      Get non-generic name
  **/
 
-final public String getNongenericName()
+public final String getNongenericName()
 {
    return getFullName(true);
 }
@@ -1104,7 +1104,9 @@ private static class EnumSymbol extends JcompSymbol {
    @Override public boolean isEnumSymbol()		{ return true; }
    @Override public ASTNode getNameNode()		{ return ast_node; }
    @Override public JcompSymbolKind getSymbolKind()	{ return JcompSymbolKind.FIELD; }
-   @Override public int getModifiers()			{ return ast_node.getModifiers() | Modifier.STATIC | Modifier.PUBLIC; }
+   @Override public int getModifiers() { 
+      return ast_node.getModifiers() | Modifier.STATIC | Modifier.PUBLIC;
+    }
    @Override public JcompType getClassType()		{ return java_type; }
 
    @Override public String getHandle(String proj) {

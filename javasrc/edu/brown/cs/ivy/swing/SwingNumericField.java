@@ -38,50 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingNumericField.java,v 1.11 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingNumericField.java,v $
- * Revision 1.11  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.10  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.9  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.8  2009-09-17 02:00:45  spr
- * Add autocomplete, new grid options, fix up lists, add range scroll bar.
- *
- * Revision 1.7  2009-03-20 01:59:50  spr
- * Add enum-based choice box; add remove/update calls to lists; loosen numeric field checking.
- *
- * Revision 1.6  2007-05-04 02:00:37  spr
- * Import fixups.
- *
- * Revision 1.5  2006/07/10 14:52:25  spr
- * Code cleanup.
- *
- * Revision 1.4  2006/02/21 17:07:45  spr
- * Add new choice box option; handle focus and add a getValue call for numeric fields.
- *
- * Revision 1.3  2005/05/07 22:25:44  spr
- * Updates for java 5.0
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1.1.1  2003/03/17 19:38:02  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.swing;
 
 import javax.swing.text.AttributeSet;

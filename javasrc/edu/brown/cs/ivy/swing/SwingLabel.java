@@ -79,7 +79,7 @@ public SwingLabel(String text)
 
 public SwingLabel(String text,IvyI18N intl)
 {
-   this (text,null,JLabel.LEADING,intl);
+   this(text,null,JLabel.LEADING,intl);
 }
 
 
@@ -90,7 +90,7 @@ public SwingLabel(String text,int align)
 
 public SwingLabel(String text,int align,IvyI18N intl)
 {
-   this (text,null,align,intl);
+   this(text,null,align,intl);
 }
 
 
@@ -101,22 +101,22 @@ public SwingLabel(String text,Icon icon,int align)
 
 public SwingLabel(Icon image)
 {
-   this (null,image,JLabel.LEADING,null);
+   this(null,image,JLabel.LEADING,null);
 }
 
 public SwingLabel(Icon image,IvyI18N intl)
 {
-   this (null,image,JLabel.LEADING,intl);
+   this(null,image,JLabel.LEADING,intl);
 }
 
 public SwingLabel(Icon image,int align)
 {
-   this (null,image,align,null);
+   this(null,image,align,null);
 }
 
 public SwingLabel(Icon image,int align,IvyI18N intl)
 {
-   this (null,image,align,intl);
+   this(null,image,align,intl);
 }
 
 public SwingLabel(String text,Icon icn,int align,IvyI18N intl)

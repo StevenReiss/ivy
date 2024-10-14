@@ -38,41 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/test/MintTest.java,v 1.8 2018/08/02 15:10:31 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintTest.java,v $
- * Revision 1.8  2018/08/02 15:10:31  spr
- * Fix imports.
- *
- * Revision 1.7  2015/11/20 15:09:21  spr
- * Reformatting.
- *
- * Revision 1.6  2011-05-27 19:32:46  spr
- * Change copyrights.
- *
- * Revision 1.5  2011-05-17 01:05:18  spr
- * Test web scale messaging.
- *
- * Revision 1.4  2010-02-12 00:38:12  spr
- * Change test message.
- *
- * Revision 1.3  2007-05-04 02:00:26  spr
- * Fix bugs related to polling.
- *
- * Revision 1.2  2006/02/21 17:06:29  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.1  2005/07/08 23:33:10  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint.test;
 
 
@@ -85,11 +50,11 @@ import edu.brown.cs.ivy.mint.MintReply;
 
 
 
-public class MintTest implements MintConstants
+public final class MintTest implements MintConstants
 {
 
 
-static public void main(String [] args)
+public static void main(String [] args)
 {
    MintTest mt = new MintTest(args);
 
@@ -131,7 +96,9 @@ private MintTest(String [] args)
 private synchronized void waitForCompletion()
 {
    while (message_count > 0) {
-      try { wait(); }
+      try {
+         wait(); 
+       }
       catch (InterruptedException e) { }
     }
 }
@@ -219,12 +186,12 @@ private class TestAHandler implements MintHandler {
 
 
 
-private class TestAReplyHandler implements MintReply {
+private final class TestAReplyHandler implements MintReply {
 
    @Override public void handleReply(MintMessage msg,MintMessage reply) {
       System.out.println("Reply received for: " + msg.getText());
       System.out.println("Reply is: " + reply.getText());
-      countMessage();
+      countMessage();   
     }
 
    @Override public void handleReplyDone(MintMessage msg) {

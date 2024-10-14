@@ -211,7 +211,7 @@ private int findEndOfTypes(String pat,int idx1)
    int lvl = 0;
    for (int i = idx1; i < pat.length(); ++i) {
       char c = pat.charAt(i);
-      if (c == '<') ++ lvl;
+      if (c == '<') ++lvl;
       else if (c == '>') {
 	 if (--lvl == 0) return i;
        }

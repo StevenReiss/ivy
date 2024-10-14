@@ -357,7 +357,7 @@ private class DefPass extends ASTVisitor {
       cur_scope = new JcompScopeAst(null);
     }
 
-   public @Override boolean visit(AnnotationTypeMemberDeclaration n) {
+   @Override public boolean visit(AnnotationTypeMemberDeclaration n) {
       String nm = n.getName().getIdentifier();
       JcompSymbol jm = cur_scope.defineMethod(nm,n);
       cur_scope = new JcompScopeAst(cur_scope);
@@ -367,13 +367,13 @@ private class DefPass extends ASTVisitor {
       return true;
    }
 
-   public @Override void endVisit(AnnotationTypeMemberDeclaration n) {
+   @Override public void endVisit(AnnotationTypeMemberDeclaration n) {
       cur_scope = cur_scope.getParent();
    }
 
-   public @Override boolean visit(PackageDeclaration n) 		{ return false; }
+   @Override public boolean visit(PackageDeclaration n) 		{ return false; }
 
-   public @Override void preVisit(ASTNode n) {
+   @Override public void preVisit(ASTNode n) {
       switch (n.getNodeType()) {
 	 case ASTNode.ANONYMOUS_CLASS_DECLARATION :
 	 case ASTNode.TYPE_DECLARATION :
@@ -393,13 +393,13 @@ private class DefPass extends ASTVisitor {
        }
     }
 
-   public @Override void postVisit(ASTNode n) {
+   @Override public void postVisit(ASTNode n) {
       JcompScope s = JcompAst.getJavaScope(n);
       if (s != null) cur_scope = s.getParent();
     }
 
 
-   public @Override boolean visit(ImportDeclaration n) {
+   @Override public boolean visit(ImportDeclaration n) {
       Name nm = n.getName();
       if (nm.isQualifiedName()) {
 	 QualifiedName qn = (QualifiedName) nm;
@@ -433,7 +433,7 @@ private class DefPass extends ASTVisitor {
       return false;
     }
 
-   public @Override boolean visit(MethodDeclaration n) {
+   @Override public boolean visit(MethodDeclaration n) {
       String nm;
       if (n.isConstructor()) nm = "<init>";
       else nm = n.getName().getIdentifier();
@@ -445,11 +445,11 @@ private class DefPass extends ASTVisitor {
       return true;
     }
 
-   public @Override void endVisit(MethodDeclaration n) {
+   @Override public void endVisit(MethodDeclaration n) {
       cur_scope = cur_scope.getParent();
     }
 
-   public @Override boolean visit(LambdaExpression n) {
+   @Override public boolean visit(LambdaExpression n) {
       JcompSymbol js = cur_scope.defineLambda(n);
       JcompAst.setDefinition(n,js);
       cur_scope = new JcompScopeAst(cur_scope);
@@ -457,40 +457,40 @@ private class DefPass extends ASTVisitor {
       return true;
     }
 
-   public @Override boolean visit(CreationReference n) {
+   @Override public boolean visit(CreationReference n) {
       JcompSymbol js = cur_scope.defineReference(n);
       JcompAst.setDefinition(n,js);
       return true;
    }
 
-   public @Override boolean visit(TypeMethodReference n) {
+   @Override public boolean visit(TypeMethodReference n) {
       JcompSymbol js = cur_scope.defineReference(n);
       JcompAst.setDefinition(n,js);
       return true;
    }
 
-   public @Override boolean visit(ExpressionMethodReference n) {
+   @Override public boolean visit(ExpressionMethodReference n) {
       JcompSymbol js = cur_scope.defineReference(n);
       JcompAst.setDefinition(n,js);
       return true;
    }
 
-   public @Override boolean visit(SuperMethodReference n) {
+   @Override public boolean visit(SuperMethodReference n) {
       JcompSymbol js = cur_scope.defineReference(n);
       JcompAst.setDefinition(n,js);
       return true;
    }
 
-   public @Override void endVisit(LambdaExpression n) {
+   @Override public void endVisit(LambdaExpression n) {
       cur_scope = cur_scope.getParent();
     }
 
-   public @Override void endVisit(CreationReference n) {
+   @Override public void endVisit(CreationReference n) {
       JcompSymbol js = cur_scope.defineReference(n);
       JcompAst.setDefinition(n,js);
     }
 
-   public @Override boolean visit(SingleVariableDeclaration n) {
+   @Override public boolean visit(SingleVariableDeclaration n) {
       JcompSymbol js = JcompSymbol.createSymbol(n,type_data);
       cur_scope.defineVar(js);
       JcompAst.setDefinition(n,js);
@@ -498,7 +498,7 @@ private class DefPass extends ASTVisitor {
       return true;
     }
 
-   public @Override boolean visit(VariableDeclarationFragment n) {
+   @Override public boolean visit(VariableDeclarationFragment n) {
       JcompSymbol js = JcompSymbol.createSymbol(n,type_data);
       cur_scope.defineVar(js);
       JcompAst.setDefinition(n,js);
@@ -506,21 +506,21 @@ private class DefPass extends ASTVisitor {
       return true;
     }
 
-   public @Override boolean visit(EnumConstantDeclaration n) {
+   @Override public boolean visit(EnumConstantDeclaration n) {
       JcompSymbol js = JcompSymbol.createSymbol(n);
       cur_scope.defineVar(js);
       JcompAst.setDefinition(n,js);
       return true;
     }
 
-   public @Override boolean visit(LabeledStatement n) {
+   @Override public boolean visit(LabeledStatement n) {
       JcompSymbol js = JcompSymbol.createSymbol(n);
       cur_scope.defineVar(js);
       JcompAst.setDefinition(n,js);
       return true;
     }
 
-   public @Override void endVisit(TypeDeclaration n) {
+   @Override public void endVisit(TypeDeclaration n) {
       JcompType jt = JcompAst.getJavaType(n);
       if (jt == null) return;
       JcompAst.setJavaType(n.getName(),jt);
@@ -537,14 +537,14 @@ private class DefPass extends ASTVisitor {
     }
 
 
-   public @Override void endVisit(AnonymousClassDeclaration n) {
+   @Override public void endVisit(AnonymousClassDeclaration n) {
       JcompType jt = JcompAst.getJavaType(n);
       if (jt == null) return;
       JcompSymbol thisjs = JcompSymbol.createNestedThis(jt,jt.getOuterType());
       jt.getScope().defineVar(thisjs);
    }
 
-   public @Override void endVisit(AnnotationTypeDeclaration n) {
+   @Override public void endVisit(AnnotationTypeDeclaration n) {
       JcompType jt = JcompAst.getJavaType(n);
       if (jt == null) return;
       JcompAst.setJavaType(n.getName(),jt);
@@ -555,7 +555,7 @@ private class DefPass extends ASTVisitor {
       JcompAst.setDefinition(n.getName(),js);
     }
 
-   public @Override void endVisit(EnumDeclaration n) {
+   @Override public void endVisit(EnumDeclaration n) {
       JcompType jt = JcompAst.getJavaType(n);
       JcompAst.setJavaType(n.getName(),jt);
       JcompSymbol js = jt.getDefinition();
@@ -565,7 +565,7 @@ private class DefPass extends ASTVisitor {
       JcompAst.setDefinition(n.getName(),js);
     }
 
-   public @Override void endVisit(Initializer n) {
+   @Override public void endVisit(Initializer n) {
       // TODO: create static initializer name
     }
 
@@ -598,10 +598,10 @@ private class RefPass extends ASTVisitor {
 
 
 
-   public @Override boolean visit(AnnotationTypeMemberDeclaration n)	{ return false; }
-   public @Override boolean visit(AnnotationTypeDeclaration n)		{ return false; }
-   public @Override boolean visit(PackageDeclaration n) 		{ return false; }
-   public @Override boolean visit(ImportDeclaration n) {
+   @Override public boolean visit(AnnotationTypeMemberDeclaration n)	{ return false; }
+   @Override public boolean visit(AnnotationTypeDeclaration n)		{ return false; }
+   @Override public boolean visit(PackageDeclaration n) 		{ return false; }
+   @Override public boolean visit(ImportDeclaration n) {
       Name nm = n.getName();
       if (nm.isQualifiedName()) {
 	 QualifiedName qn = (QualifiedName) nm;
@@ -637,54 +637,54 @@ private class RefPass extends ASTVisitor {
        }
       return false;
    }
-   public @Override boolean visit(ArrayType n)				{ return true; }
-   public @Override boolean visit(ParameterizedType n)			{ return false; }
-   public @Override boolean visit(PrimitiveType n)			{ return false; }
-   public @Override boolean visit(QualifiedType n)			{ return true; }
-   public @Override boolean visit(NameQualifiedType n)			{ return true; }
-   public @Override boolean visit(SimpleType n) 			{ return true; }
-   public @Override boolean visit(WildcardType n)			{ return false; }
-   public @Override boolean visit(UnionType n)				{ return true; }
-   public @Override boolean visit(IntersectionType n)			{ return true; }
+   @Override public boolean visit(ArrayType n)				{ return true; }
+   @Override public boolean visit(ParameterizedType n)			{ return false; }
+   @Override public boolean visit(PrimitiveType n)			{ return false; }
+   @Override public boolean visit(QualifiedType n)			{ return true; }
+   @Override public boolean visit(NameQualifiedType n)			{ return true; }
+   @Override public boolean visit(SimpleType n) 			{ return true; }
+   @Override public boolean visit(WildcardType n)			{ return false; }
+   @Override public boolean visit(UnionType n)				{ return true; }
+   @Override public boolean visit(IntersectionType n)			{ return true; }
 
 
 
-   public @Override void preVisit(ASTNode n) {
+   @Override public void preVisit(ASTNode n) {
       JcompScope s = JcompAst.getJavaScope(n);
       if (s != null) cur_scope = s;
     }
 
-   public @Override void postVisit(ASTNode n) {
+   @Override public void postVisit(ASTNode n) {
       JcompScope s = JcompAst.getJavaScope(n);
       if (s != null) cur_scope = s.getParent();
     }
 
-   public @Override void endVisit(BooleanLiteral n) {
+   @Override public void endVisit(BooleanLiteral n) {
       JcompAst.setExprType(n,findType("boolean"));
     }
 
-   public @Override void endVisit(CharacterLiteral n) {
+   @Override public void endVisit(CharacterLiteral n) {
       JcompAst.setExprType(n,findType("char"));
     }
 
-   public @Override void endVisit(NullLiteral n) {
+   @Override public void endVisit(NullLiteral n) {
       JcompAst.setExprType(n,findType(TYPE_ANY_CLASS));
     }
 
-   public @Override void endVisit(NumberLiteral n) {
+   @Override public void endVisit(NumberLiteral n) {
       JcompType t = findNumberType(n.getToken());
       JcompAst.setExprType(n,t);
     }
 
-   public @Override void endVisit(StringLiteral n) {
+   @Override public void endVisit(StringLiteral n) {
       JcompAst.setExprType(n,findType("java.lang.String"));
     }
 
-   public @Override void endVisit(TextBlock n) {
+   @Override public void endVisit(TextBlock n) {
       JcompAst.setExprType(n,findType("java.lang.String"));
    }
 
-   public @Override void endVisit(TypeLiteral n) {
+   @Override public void endVisit(TypeLiteral n) {
       JcompType t0 = findType("java.lang.Class");
       JcompType t1 = JcompAst.getJavaType(n.getType());
       if (t1 != null && !t1.isErrorType()) {
@@ -696,7 +696,7 @@ private class RefPass extends ASTVisitor {
       JcompAst.setExprType(n,t0);
     }
 
-   public @Override boolean visit(FieldAccess n) {
+   @Override public boolean visit(FieldAccess n) {
       n.getExpression().accept(this);
       JcompType t = JcompAst.getExprType(n.getExpression());
       if (t == null) {
@@ -721,7 +721,7 @@ private class RefPass extends ASTVisitor {
       return false;
     }
 
-   public @Override boolean visit(SuperFieldAccess n) {
+   @Override public boolean visit(SuperFieldAccess n) {
       Name qn = n.getQualifier();
       if (qn != null) qn.accept(this);
       JcompSymbol js = null;
@@ -740,7 +740,7 @@ private class RefPass extends ASTVisitor {
       return false;
     }
 
-   public @Override boolean visit(QualifiedName n) {
+   @Override public boolean visit(QualifiedName n) {
       JcompType nt = JcompAst.getJavaType(n);
       if (nt != null) {
 	 JcompAst.setExprType(n,nt);
@@ -778,7 +778,7 @@ private class RefPass extends ASTVisitor {
       return false;
     }
 
-   public @Override void endVisit(SimpleName n) {
+   @Override public void endVisit(SimpleName n) {
       JcompSymbol js = JcompAst.getReference(n);
       if (js != null) {
 	 JcompAst.setExprType(n,js.getType());
@@ -819,14 +819,14 @@ private class RefPass extends ASTVisitor {
     }
 
 
-   public @Override void endVisit(SimpleType t) {
+   @Override public void endVisit(SimpleType t) {
       Name n = t.getName();
       JcompType jt = JcompAst.getExprType(n);
       if (jt == null) jt = findType(TYPE_ERROR);
       JcompAst.setExprType(t,jt);
    }
    
-   public @Override boolean visit(MethodInvocation n) {
+   @Override public boolean visit(MethodInvocation n) {
       JcompType bt = cur_type;
       Expression e = n.getExpression();
       boolean isstatic = false;
@@ -856,7 +856,7 @@ private class RefPass extends ASTVisitor {
       return false;
     }
 
-   public @Override boolean visit(SuperMethodInvocation n) {
+   @Override public boolean visit(SuperMethodInvocation n) {
       JcompType bt = null;
       if (cur_type != null) bt = cur_type.getSuperType();
       if (bt == null) bt = type_data.findSystemType("java.lang.Object");
@@ -882,7 +882,7 @@ private class RefPass extends ASTVisitor {
       return false;
     }
 
-   public @Override void endVisit(ClassInstanceCreation n) {
+   @Override public void endVisit(ClassInstanceCreation n) {
       JcompType xt = null;
       Expression e = n.getExpression();
       if (e != null) {
@@ -914,7 +914,7 @@ private class RefPass extends ASTVisitor {
       lookupMethod(bt,atys,n,null,"<init>",false,dfltcnst,n.arguments(),targs);    // this can reset the type
    }
 
-   public @Override void endVisit(ConstructorInvocation n) {
+   @Override public void endVisit(ConstructorInvocation n) {
       List<JcompType> atys = buildArgumentList(n.arguments(),false);
       if (cur_type.needsOuterClass()) {
          JcompType oty = cur_type.getOuterType();
@@ -932,7 +932,7 @@ private class RefPass extends ASTVisitor {
       lookupMethod(cur_type,atys,n,null,"<init>",false,atys.size() == 0,n.arguments(),targs);
     }
 
-   public @Override void endVisit(SuperConstructorInvocation n) {
+   @Override public void endVisit(SuperConstructorInvocation n) {
       List<JcompType> atys = buildArgumentList(n.arguments(),false);
       JcompType  bt = null;
       if (cur_type != null) bt = cur_type.getSuperType();
@@ -958,14 +958,14 @@ private class RefPass extends ASTVisitor {
 	 JcompAst.setExprType(n,findType(TYPE_ERROR));
     }
 
-   public @Override void endVisit(ArrayAccess n) {
+   @Override public void endVisit(ArrayAccess n) {
       JcompType t = JcompAst.getExprType(n.getArray());
       if (t != null && !t.isErrorType()) t = t.getBaseType();
       if (t == null) t = findType(TYPE_ERROR);
       JcompAst.setExprType(n,t);
     }
 
-   public @Override void endVisit(ArrayCreation n) {
+   @Override public void endVisit(ArrayCreation n) {
       JcompType bt = JcompAst.getJavaType(n.getType());
 
       for (Object o : n.dimensions()) {
@@ -981,7 +981,7 @@ private class RefPass extends ASTVisitor {
       JcompAst.setExprType(n,bt);
     }
 
-   public @Override void endVisit(ArrayInitializer n) {
+   @Override public void endVisit(ArrayInitializer n) {
       JcompType bt = getImpliedBaseType(n.getParent());
       if (bt == null) {
 	 for (Iterator<?> it = n.expressions().iterator(); it.hasNext(); ) {
@@ -1019,7 +1019,7 @@ private class RefPass extends ASTVisitor {
       JcompAst.setExprType(n,rslt);
     }
 
-   public @Override void endVisit(Assignment n) {
+   @Override public void endVisit(Assignment n) {
       JcompType b = JcompAst.getExprType(n.getRightHandSide());
       JcompType b1 = JcompAst.getExprType(n.getLeftHandSide());
       if (b != null && b.isAssignCompatibleWith(b1)) ;
@@ -1038,7 +1038,7 @@ private class RefPass extends ASTVisitor {
       JcompAst.setExprType(n,b);
     }
 
-   public @Override void endVisit(VariableDeclarationFragment n) {
+   @Override public void endVisit(VariableDeclarationFragment n) {
       if (n.getInitializer() == null) return;
       JcompType b = JcompAst.getExprType(n.getInitializer());
       if (b != null && b.isErrorType())
@@ -1067,7 +1067,7 @@ private class RefPass extends ASTVisitor {
       JcompAst.setExprType(n.getInitializer(),b2);
    }
 
-   public @Override void endVisit(CastExpression n) {
+   @Override public void endVisit(CastExpression n) {
       JcompType jt = JcompAst.getJavaType(n.getType());
       if (jt != null && jt.isCompiledType()) jt = null;
       if (jt == null) jt = JcompAst.getExprType(n.getType());
@@ -1076,14 +1076,14 @@ private class RefPass extends ASTVisitor {
       JcompAst.setExprType(n,JcompAst.getJavaType(n.getType()));
     }
 
-   public @Override void endVisit(ConditionalExpression n) {
+   @Override public void endVisit(ConditionalExpression n) {
       JcompType t1 = JcompAst.getExprType(n.getThenExpression());
       JcompType t2 = JcompAst.getExprType(n.getElseExpression());
       t1 = JcompType.mergeTypes(type_data,t1,t2);
       JcompAst.setExprType(n,t1);
     }
 
-   public @Override void endVisit(InfixExpression n) {
+   @Override public void endVisit(InfixExpression n) {
       JcompType t1 = JcompAst.getExprType(n.getLeftOperand());
       JcompType t2 = JcompAst.getExprType(n.getRightOperand());
       if (t1 == null) {
@@ -1158,27 +1158,27 @@ private class RefPass extends ASTVisitor {
       JcompAst.setExprType(n,t1);
    }
 
-   public @Override void endVisit(InstanceofExpression n) {
+   @Override public void endVisit(InstanceofExpression n) {
       JcompAst.setExprType(n,findType("boolean"));
     }
 
-   public @Override void endVisit(ParenthesizedExpression n) {
+   @Override public void endVisit(ParenthesizedExpression n) {
       JcompAst.setExprType(n,JcompAst.getExprType(n.getExpression()));
     }
 
-   public @Override void endVisit(PostfixExpression n) {
+   @Override public void endVisit(PostfixExpression n) {
       JcompType typ = JcompAst.getExprType(n.getOperand());
       if (typ == null) typ = findType(TYPE_ERROR);
       JcompAst.setExprType(n,typ);
     }
 
-   public @Override void endVisit(PrefixExpression n) {
+   @Override public void endVisit(PrefixExpression n) {
       JcompType typ = JcompAst.getExprType(n.getOperand());
       if (typ == null) typ = findType(TYPE_ERROR);
       JcompAst.setExprType(n,typ);
     }
 
-   public @Override void endVisit(ThisExpression n) {
+   @Override public void endVisit(ThisExpression n) {
       Name nm = n.getQualifier();
       JcompType jt = cur_type;
       if (nm != null) {
@@ -1189,50 +1189,50 @@ private class RefPass extends ASTVisitor {
       JcompAst.setExprType(n,jt);
     }
 
-   public @Override void endVisit(VariableDeclarationExpression n) {
+   @Override public void endVisit(VariableDeclarationExpression n) {
       JcompType jt = JcompAst.getJavaType(n.getType());
       if (jt == null) JcompAst.setExprType(n,findType(TYPE_ERROR));
       else JcompAst.setExprType(n,jt);
     }
 
-   public @Override boolean visit(TypeDeclaration n) {
+   @Override public boolean visit(TypeDeclaration n) {
       outer_types.push(cur_type);
       cur_type = JcompAst.getJavaType(n);
       return true;
     }
 
-   public @Override void endVisit(TypeDeclaration n) {
+   @Override public void endVisit(TypeDeclaration n) {
       cur_type = outer_types.pop();
     }
 
-   public @Override boolean visit(EnumDeclaration n) {
+   @Override public boolean visit(EnumDeclaration n) {
       outer_types.push(cur_type);
       cur_type = JcompAst.getJavaType(n);
       return true;
     }
 
-   public @Override void endVisit(EnumDeclaration n) {
+   @Override public void endVisit(EnumDeclaration n) {
       cur_type = outer_types.pop();
     }
 
-   public @Override boolean visit(MemberValuePair n) {
+   @Override public boolean visit(MemberValuePair n) {
       Expression ex = n.getValue();
       if (ex != null) ex.accept(this);
       return false;
     }
 
-   public @Override boolean visit(AnonymousClassDeclaration n) {
+   @Override public boolean visit(AnonymousClassDeclaration n) {
       outer_types.push(cur_type);
       cur_type = JcompAst.getJavaType(n);
       return true;
     }
 
-   public @Override void endVisit(AnonymousClassDeclaration n) {
+   @Override public void endVisit(AnonymousClassDeclaration n) {
       cur_type = outer_types.pop();
     }
 
    @SuppressWarnings("deprecation")
-   public @Override boolean visit(SwitchCase n) {
+   @Override public boolean visit(SwitchCase n) {
       SwitchStatement ss = null;
       for (ASTNode p = n; p != null; p = p.getParent()) {
 	 if (p instanceof SwitchStatement) {
@@ -1282,17 +1282,17 @@ private class RefPass extends ASTVisitor {
 
 
 
-   public @Override void endVisit(UnionType t) {
+   @Override public void endVisit(UnionType t) {
       JcompType jt = JcompAst.getJavaType(t);
       JcompAst.setExprType(t,jt);
     }
-   public @Override void endVisit(IntersectionType t) {
+   @Override public void endVisit(IntersectionType t) {
       JcompType jt = JcompAst.getJavaType(t);
       JcompAst.setExprType(t,jt);
     }
 
 
-   public @Override boolean visit(LambdaExpression e)
+   @Override public boolean visit(LambdaExpression e)
    {
       JcompType typ = getReferenceType(e);
       if (typ == null) {
@@ -1320,7 +1320,7 @@ private class RefPass extends ASTVisitor {
 
 
 
-   public @Override void endVisit(LambdaExpression e) {
+   @Override public void endVisit(LambdaExpression e) {
       List<JcompType> argtypes = new ArrayList<JcompType>();
       for (Object o : e.parameters()) {
          JcompType jt = type_data.findSystemType("?");
@@ -1345,7 +1345,7 @@ private class RefPass extends ASTVisitor {
       JcompAst.setJavaType(e,reftype);
     }
 
-   public @Override void endVisit(CreationReference r) {
+   @Override public void endVisit(CreationReference r) {
       r.getType().accept(this);
       for (Object o : r.typeArguments()) {
 	 Type t = (Type) o;
@@ -1355,7 +1355,7 @@ private class RefPass extends ASTVisitor {
       if (typ == null) typ = JcompAst.getExprType(r.getType());
       handleReference(r,typ,true,"<init>");
     }
-   public @Override boolean visit(ExpressionMethodReference r) {
+   @Override public boolean visit(ExpressionMethodReference r) {
       r.getExpression().accept(this);
       boolean oref = false;
       JcompType qt = JcompAst.getJavaType(r.getExpression());
@@ -1366,7 +1366,7 @@ private class RefPass extends ASTVisitor {
       handleReference(r,qt,oref,r.getName().getIdentifier());
       return false;
     }
-   public @Override void endVisit(SuperMethodReference r) {
+   @Override public void endVisit(SuperMethodReference r) {
       JcompType typ = cur_type;
       if (r.getQualifier() != null) {
 	 r.getQualifier().accept(this);
@@ -1376,7 +1376,7 @@ private class RefPass extends ASTVisitor {
       if (typ != null) typ = typ.getSuperType();
       handleReference(r,typ,false,r.getName().getIdentifier());
     }
-   public @Override boolean visit(TypeMethodReference r) {
+   @Override public boolean visit(TypeMethodReference r) {
       r.getType().accept(this);
       JcompType qt = JcompAst.getJavaType(r.getType());
       handleReference(r,qt,false,r.getName().getIdentifier());
@@ -1384,7 +1384,7 @@ private class RefPass extends ASTVisitor {
       return false;
     }
 
-   public @Override void endVisit(IfStatement s) {
+   @Override public void endVisit(IfStatement s) {
       JcompType typ = JcompAst.getExprType(s.getExpression());
       if (typ == null) {
 	 JcompAst.setExprType(s.getExpression(),findType(TYPE_ERROR));
@@ -1396,7 +1396,7 @@ private class RefPass extends ASTVisitor {
        }
     }
 
-   public @Override void endVisit(WhileStatement s) {
+   @Override public void endVisit(WhileStatement s) {
       JcompType typ = JcompAst.getExprType(s.getExpression());
       if (!typ.isBooleanType()) {
 	 if (!typ.isNumericType()) {
@@ -1405,7 +1405,7 @@ private class RefPass extends ASTVisitor {
        }
     }
 
-   public @Override void endVisit(DoStatement s) {
+   @Override public void endVisit(DoStatement s) {
       JcompType typ = JcompAst.getExprType(s.getExpression());
       if (!typ.isBooleanType()) {
 	 if (!typ.isNumericType()) {

@@ -38,252 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/xml/IvyXml.java,v 1.78 2019/04/25 20:10:57 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: IvyXml.java,v $
- * Revision 1.78  2019/04/25 20:10:57  spr
- * Avoid errors on external DTD not available.
- *
- * Revision 1.77  2018/08/02 15:11:00  spr
- * Fix imports.
- *
- * Revision 1.76  2018/05/25 17:57:38  spr
- * Formatting.
- *
- * Revision 1.75  2017/12/20 20:36:57  spr
- * Formatting
- *
- * Revision 1.74  2017/10/24 12:46:54  spr
- * Clean up.
- *
- * Revision 1.73  2017/08/04 12:43:13  spr
- * Add ant capability.
- *
- * Revision 1.72  2017/05/12 20:54:03  spr
- * Unsyncrhonize parser
- *
- * Revision 1.71  2016/05/10 13:43:21  spr
- * Clean up code.
- *
- * Revision 1.70  2016/03/22 13:10:34  spr
- * Handle null document.
- *
- * Revision 1.69  2016/01/14 16:57:21  spr
- * Add clone element, debugging code.
- *
- * Revision 1.68  2015/11/20 15:09:27  spr
- * Reformatting.
- *
- * Revision 1.67  2015/09/23 17:59:08  spr
- * Add minor features for output.
- *
- * Revision 1.66  2015/07/02 19:01:35  spr
- * Minor bug fixes
- *
- * Revision 1.65  2015/04/08 13:51:55  spr
- * Handle control characters
- *
- * Revision 1.64  2015/03/31 02:19:28  spr
- * Add getTextElements
- *
- * Revision 1.63  2015/02/14 18:46:52  spr
- * Fix formatting.
- *
- * Revision 1.62  2014/06/12 01:06:34  spr
- * Minor updates
- *
- * Revision 1.61  2014/01/22 00:31:35  spr
- * Handle escapes for cdata.
- *
- * Revision 1.60  2013/11/15 02:39:15  spr
- * Fix imports
- *
- * Revision 1.59  2013/09/24 01:07:54  spr
- * data format
- *
- * Revision 1.58  2012-08-29 01:40:56  spr
- * Code cleanup for new compiler.
- *
- * Revision 1.57  2012-08-19 01:03:02  spr
- * Cleanuo,
- *
- * Revision 1.56  2012-05-22 00:43:48  spr
- * Handle data input and output as fields.
- *
- * Revision 1.55  2012-02-29 01:54:00  spr
- * Code clean up.
- *
- * Revision 1.54  2012-01-12 01:28:25  spr
- * Minor code fixups.
- *
- * Revision 1.53  2011-09-12 20:50:44  spr
- * Add calls for formatting html.
- *
- * Revision 1.52  2011-08-19 23:10:33  spr
- * Code cleanup.
- *
- * Revision 1.51  2011-07-14 12:49:43  spr
- * Add support for partial byte arrays.
- *
- * Revision 1.50  2011-06-29 20:24:22  spr
- * Check for null stream.
- *
- * Revision 1.49  2011-06-29 01:58:43  spr
- * Handle null input streams.
- *
- * Revision 1.48  2011-05-27 19:32:52  spr
- * Change copyrights.
- *
- * Revision 1.47  2011-02-17 23:16:41  spr
- * Handle old versions of java without failing.
- *
- * Revision 1.46  2010-10-21 22:16:00  spr
- * Try to avoid synchronization problems by normalizing the resultant document.
- *
- * Revision 1.45  2010-10-09 02:22:56  spr
- * Top level call to sanitize non-field
- *
- * Revision 1.44  2010-10-08 19:39:10  spr
- * Don't special case tabs in text output.
- *
- * Revision 1.43  2010-10-07 20:10:19  spr
- * Better handling of special characters.
- *
- * Revision 1.42  2010-09-30 17:58:00  spr
- * Allow sanitizing null string
- *
- * Revision 1.41  2010-09-16 23:37:57  spr
- * Add string sanitizing routine.
- *
- * Revision 1.40  2010-08-14 00:29:16  spr
- * Handle possible exception.
- *
- * Revision 1.39  2010-07-24 02:01:27  spr
- * Fix findbugs issue.
- *
- * Revision 1.38  2010-06-01 02:09:06  spr
- * Force loading for dyvise monitoring of ivy-based apps.
- *
- * Revision 1.37  2010-05-18 22:05:48  spr
- * Update xml formatting.
- *
- * Revision 1.36  2010-04-29 18:46:47  spr
- * Handle newer version of java xml parser.
- *
- * Revision 1.35  2010-03-10 18:42:34  spr
- * Handle null elements in access methods.
- *
- * Revision 1.34  2009-09-17 02:01:29  spr
- * Code cleanup.
- *
- * Revision 1.33  2009-06-04 18:50:50  spr
- * Add string attribute with default method.
- *
- * Revision 1.32  2009-03-20 02:00:28  spr
- * Fix up error handling in reader; allow new parser possibility.
- *
- * Revision 1.31  2009-01-27 00:41:56  spr
- * Handle parser memory release.
- *
- * Revision 1.30  2008-06-11 01:46:53  spr
- * Remove unused code.
- *
- * Revision 1.29  2008-05-07 21:15:46  spr
- * Handle CDATA on input.	Children should iterate only locally.
- *
- * Revision 1.28  2008-03-14 12:28:00  spr
- * Handle namespaces.
- *
- * Revision 1.27  2007-11-06 00:22:43  spr
- * Debug checks.
- *
- * Revision 1.26  2007-08-10 02:11:29  spr
- * Cleanups from eclipse.
- *
- * Revision 1.25  2007-05-04 02:00:45  spr
- * Import fixups.
- *
- * Revision 1.24  2007-02-27 18:54:24  spr
- * Add load from File object.
- *
- * Revision 1.23  2006-12-01 03:22:58  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.22  2006/07/10 14:52:26  spr
- * Code cleanup.
- *
- * Revision 1.21  2006/04/21 23:11:10  spr
- * Add color support for I/O.
- *
- * Revision 1.20  2006/01/11 03:11:56  spr
- * Remove commented out code.
- *
- * Revision 1.19  2005/12/08 16:07:45  spr
- * Minor fixup/cleanups.  Hide close errors.
- *
- * Revision 1.18  2005/11/07 21:09:37  spr
- * Add getTextElement and stream parsing calls.
- *
- * Revision 1.17  2005/10/31 19:21:16  spr
- * Add xml output conversion method (copied from IvyXmlWriter)
- *
- * Revision 1.16  2005/09/02 14:43:03  spr
- * Add iterable collection for elementsByName.
- *
- * Revision 1.15  2005/07/23 01:10:14  spr
- * Change return type of parsing methods.
- *
- * Revision 1.14  2005/06/07 02:18:24  spr
- * Update for java 5.0
- *
- * Revision 1.13  2005/02/14 21:09:48  spr
- * Compute node length once (avoid n**2 loop) for large lists.
- *
- * Revision 1.12  2004/11/09 20:33:06  spr
- * Fix up bugs we introduced into xml scanner.
- *
- * Revision 1.11  2004/06/16 19:43:14  spr
- * Add default case of getAttrBool.
- *
- * Revision 1.10  2004/05/28 20:57:38  spr
- * Handle null cases.
- *
- * Revision 1.9  2004/05/20 16:03:55  spr
- * Add iterator over elements with a given tag and routine to return unique such.
- *
- * Revision 1.8  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.7  2003/12/17 21:24:24  spr
- * Set expansion limit to something very large.
- *
- * Revision 1.6  2003/09/24 13:29:00  spr
- * Update parser for 1.4 with large number of elements; add cdata calls to writer.
- *
- * Revision 1.5  2003/08/14 19:13:59  spr
- * Fix up string parsing a bit.  Ensure parsing is synchronized.  Add methods to
- * build xml structures.
- *
- * Revision 1.4  2003/08/04 13:06:54  spr
- * Add code for creating a document.
- *
- * Revision 1.3  2003/05/16 19:12:20  spr
- * Print stack trace on xml errors.
- *
- * Revision 1.2  2003/04/09 21:46:06  spr
- * Add calls for getting int/long attributes with user defaults.
- *
- * Revision 1.1.1.1  2003/02/14 19:48:25  spr
- * Initial version of the common code for various Brown projects.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.xml;
 
 import org.w3c.dom.Attr;
@@ -377,7 +131,7 @@ public static Element convertStringToXml(String s,boolean nsa)
 
 
 
-public synchronized static Document convertStringToDocument(String s)
+public static synchronized Document convertStringToDocument(String s)
 {
    return convertStringToDocument(s,false);
 }
@@ -586,8 +340,16 @@ public static void outputXmlString(String s,boolean field,boolean html,Writer pw
 public static String decodeXmlString(String pcdata)
 {
    if (pcdata == null) return null;
-
-   char c,c1,c2,c3,c4,c5,c6,c7;
+  
+   char c;
+   char c1;
+   char c2;
+   char c3;
+   char c4;
+   char c5;
+   char c6;
+   char c7;
+   
    StringBuffer n = new StringBuffer(pcdata.length());
 
    for (int i = 0; i < pcdata.length(); i++) {
@@ -658,7 +420,7 @@ public static String decodeXmlString(String pcdata)
 
 
 
-private final static char lookAhead(int la,int offset,String data)
+private static char lookAhead(int la,int offset,String data)
 {
    if (offset + la >= data.length()) return 0;
 
@@ -766,7 +528,7 @@ public static Element loadXmlFromFile(String file)
 }
 
 
-public synchronized static Element loadXmlFromFile(String file,boolean nsa)
+public static synchronized Element loadXmlFromFile(String file,boolean nsa)
 {
    FileReader fr = null;
 
@@ -785,13 +547,13 @@ public synchronized static Element loadXmlFromFile(String file,boolean nsa)
 
 
 
-public synchronized static Element loadXmlFromFile(File file)
+public static synchronized Element loadXmlFromFile(File file)
 {
    return loadXmlFromFile(file,false);
 }
 
 
-public synchronized static Element loadXmlFromFile(File file,boolean nsa)
+public static synchronized Element loadXmlFromFile(File file,boolean nsa)
 {
    FileReader fr = null;
 
@@ -810,13 +572,13 @@ public synchronized static Element loadXmlFromFile(File file,boolean nsa)
 
 
 
-public synchronized static Element loadXmlFromURL(String url)
+public static synchronized Element loadXmlFromURL(String url)
 {
    return loadXmlFromURL(url,false);
 }
 
 
-public synchronized static Element loadXmlFromURL(String url,boolean nsa)
+public static synchronized Element loadXmlFromURL(String url,boolean nsa)
 {
    Element rslt = null;
    XmlParser xp = (nsa ? ns_xml_parser : xml_parser);
@@ -842,13 +604,13 @@ public synchronized static Element loadXmlFromURL(String url,boolean nsa)
 
 
 
-public synchronized static Element loadXmlFromStream(InputStream inf)
+public static synchronized Element loadXmlFromStream(InputStream inf)
 {
    return loadXmlFromStream(inf,false);
 }
 
 
-public synchronized static Element loadXmlFromStream(InputStream inf,boolean nsa)
+public static synchronized Element loadXmlFromStream(InputStream inf,boolean nsa)
 {
    Element rslt = null;
    XmlParser xp = (nsa ? ns_xml_parser : xml_parser);
@@ -877,21 +639,21 @@ public synchronized static Element loadXmlFromStream(InputStream inf,boolean nsa
 
 
 
-public synchronized static Element loadXmlFromReader(Reader inf)
+public static synchronized Element loadXmlFromReader(Reader inf)
 {
    return loadXmlFromReader(inf,false,null);
 }
 
 
 
-public synchronized static Element loadXmlFromReader(Reader inf,boolean nsa)
+public static synchronized Element loadXmlFromReader(Reader inf,boolean nsa)
 {
    return loadXmlFromReader(inf,nsa,null);
 }
 
 
 
-private synchronized static Element loadXmlFromReader(Reader inf,boolean nsa,String src)
+private static synchronized Element loadXmlFromReader(Reader inf,boolean nsa,String src)
 {
    Element rslt = null;
    XmlParser xp = (nsa ? ns_xml_parser : xml_parser);
@@ -926,14 +688,14 @@ private synchronized static Element loadXmlFromReader(Reader inf,boolean nsa,Str
 /*										*/
 /********************************************************************************/
 
-static public String getAttrString(Node frm,String id)
+public static String getAttrString(Node frm,String id)
 {
    return getAttrString(frm,id,null);
 }
 
 
 
-static public String getAttrString(Node frm,String id,String dflt)
+public static String getAttrString(Node frm,String id,String dflt)
 {
    if (frm == null) return dflt;
 
@@ -950,7 +712,7 @@ static public String getAttrString(Node frm,String id,String dflt)
 
 
 
-static public boolean getAttrPresent(Node frm,String id)
+public static boolean getAttrPresent(Node frm,String id)
 {
    if (frm == null) return false;
 
@@ -965,7 +727,7 @@ static public boolean getAttrPresent(Node frm,String id)
 
 
 
-static public Integer getAttrInteger(Node frm,String id)
+public static Integer getAttrInteger(Node frm,String id)
 {
    if (frm == null) return null;
 
@@ -987,9 +749,9 @@ static public Integer getAttrInteger(Node frm,String id)
 
 
 
-static public boolean getAttrBool(Node frm,String id)	{ return getAttrBool(frm,id,false); }
+public static boolean getAttrBool(Node frm,String id)	{ return getAttrBool(frm,id,false); }
 
-static public boolean getAttrBool(Node frm,String id,boolean dv)
+public static boolean getAttrBool(Node frm,String id,boolean dv)
 {
    if (frm == null) return dv;
 
@@ -1012,8 +774,8 @@ static public boolean getAttrBool(Node frm,String id,boolean dv)
 
 
 
-static public int getAttrInt(Node frm,String id)	{ return getAttrInt(frm,id,-1); }
-static public int getAttrInt(Node frm,String id,int v)
+public static int getAttrInt(Node frm,String id)	{ return getAttrInt(frm,id,-1); }
+public static int getAttrInt(Node frm,String id,int v)
 {
    if (frm == null) return v;
 
@@ -1052,8 +814,8 @@ static public int getAttrInt(Node frm,String id,int v)
 
 
 
-static public long getAttrLong(Node frm,String id)	{ return getAttrLong(frm,id,-1); }
-static public long getAttrLong(Node frm,String id,long v)
+public static long getAttrLong(Node frm,String id)	{ return getAttrLong(frm,id,-1); }
+public static long getAttrLong(Node frm,String id,long v)
 {
    if (frm == null) return v;
 
@@ -1075,7 +837,7 @@ static public long getAttrLong(Node frm,String id,long v)
 
 
 
-static public Float getAttrFloat(Node frm,String id)
+public static Float getAttrFloat(Node frm,String id)
 {
    if (frm == null) return null;
 
@@ -1097,7 +859,7 @@ static public Float getAttrFloat(Node frm,String id)
 
 
 
-static public float getAttrFloat(Node frm,String id,float dflt)
+public static float getAttrFloat(Node frm,String id,float dflt)
 {
    Float d = getAttrFloat(frm,id);
    if (d == null) return dflt;
@@ -1107,7 +869,7 @@ static public float getAttrFloat(Node frm,String id,float dflt)
 
 
 
-static public Double getAttrDouble(Node frm,String id)
+public static Double getAttrDouble(Node frm,String id)
 {
    if (frm == null) return null;
 
@@ -1129,7 +891,7 @@ static public Double getAttrDouble(Node frm,String id)
 
 
 
-static public double getAttrDouble(Node frm,String id,double dflt)
+public static double getAttrDouble(Node frm,String id,double dflt)
 {
    Double d = getAttrDouble(frm,id);
    if (d == null) return dflt;
@@ -1139,7 +901,7 @@ static public double getAttrDouble(Node frm,String id,double dflt)
 
 
 
-static public Color getAttrColor(Node frm,String id)
+public static Color getAttrColor(Node frm,String id)
 {
    String s = getAttrString(frm,id);
    if (s == null || s.length() == 0) return null;
@@ -1163,7 +925,7 @@ static public Color getAttrColor(Node frm,String id)
 
 
 
-static public Color getAttrColor(Node frm,String id,Color dflt)
+public static Color getAttrColor(Node frm,String id,Color dflt)
 {
    Color r = getAttrColor(frm,id);
    if (r == null) r = dflt;
@@ -1171,7 +933,7 @@ static public Color getAttrColor(Node frm,String id,Color dflt)
 }
 
 
-static public Date getAttrDate(Node frm,String id)
+public static Date getAttrDate(Node frm,String id)
 {
    long v = getAttrLong(frm,id);
    if (v < 0) return null;
@@ -1181,7 +943,7 @@ static public Date getAttrDate(Node frm,String id)
 
 
 @SuppressWarnings("unchecked")
-static public <T extends Enum<T>> T getAttrEnum(Node frm,String id,T dflt)
+public static <T extends Enum<T>> T getAttrEnum(Node frm,String id,T dflt)
 {
    if (frm == null) return dflt;
 
@@ -1202,7 +964,7 @@ static public <T extends Enum<T>> T getAttrEnum(Node frm,String id,T dflt)
 }
 
 
-static public <T extends Enum<T>> EnumSet<T> getAttrEnumSet(Node frm,String id,
+public static <T extends Enum<T>> EnumSet<T> getAttrEnumSet(Node frm,String id,
       Class<T> clazz,boolean dfltall)
 {
    EnumSet<T> rslt = EnumSet.noneOf(clazz);
@@ -1240,14 +1002,14 @@ static public <T extends Enum<T>> EnumSet<T> getAttrEnumSet(Node frm,String id,
 /*										*/
 /********************************************************************************/
 
-static public boolean isElement(Node xml)
+public static boolean isElement(Node xml)
 {
    return xml != null && xml.getNodeType() == Node.ELEMENT_NODE;
 }
 
 
 
-static public boolean isElement(Node xml,String id)
+public static boolean isElement(Node xml,String id)
 {
    if (xml == null) return false;
    if (xml.getNodeType() != Node.ELEMENT_NODE) return false;
@@ -1268,27 +1030,27 @@ static public boolean isElement(Node xml,String id)
 
 
 
-static public Iterator<Element> getChildren(Node xml)
+public static Iterator<Element> getChildren(Node xml)
 {
    return new NodeIterator(xml,null);
 }
 
 
 
-static public Iterable<Element> children(Node xml)
+public static Iterable<Element> children(Node xml)
 {
    return new NodeIterator(xml,null);
 }
 
 
 
-static public Iterator<Element> getChildren(Node xml,String e)
+public static Iterator<Element> getChildren(Node xml,String e)
 {
    return new NodeIterator(xml,e);
 }
 
 
-static public Element getChild(Node xml,String c)
+public static Element getChild(Node xml,String c)
 {
    if (xml == null) return null;
 
@@ -1300,7 +1062,7 @@ static public Element getChild(Node xml,String c)
 
 
 
-static public Iterable<Element> children(Node xml,String e)
+public static Iterable<Element> children(Node xml,String e)
 {
    return new NodeIterator(xml,e);
 }
@@ -1354,20 +1116,20 @@ private static class NodeIterator implements Iterable<Element>, Iterator<Element
 /*										*/
 /********************************************************************************/
 
-static public Iterator<Element> getElementsByTag(Node n,String nm)
+public static Iterator<Element> getElementsByTag(Node n,String nm)
 {
    return new NodeSpecIterator(n,nm);
 }
 
 
-static public Iterable<Element> elementsByTag(Node n,String nm)
+public static Iterable<Element> elementsByTag(Node n,String nm)
 {
    return new NodeSpecIterator(n,nm);
 }
 
 
 
-static public Element getElementByTag(Node n,String nm)
+public static Element getElementByTag(Node n,String nm)
 {
    for (Iterator<Element> it = getElementsByTag(n,nm); it.hasNext(); ) {
       Element e = it.next();
@@ -1453,14 +1215,14 @@ private static class NodeSpecIterator implements Iterable<Element>, Iterator<Ele
 /*										*/
 /********************************************************************************/
 
-static public String getText(Node xml)
+public static String getText(Node xml)
 {
    return getText(xml,true);
 }
 
 
 
-static public String getText(Node xml,boolean trim)
+public static String getText(Node xml,boolean trim)
 {
    if (xml == null) return null;
    if (xml.getNodeType() == Node.TEXT_NODE) {
@@ -1502,7 +1264,7 @@ static public String getText(Node xml,boolean trim)
 
 
 
-static public String getTextElement(Node xml,String elt)
+public static String getTextElement(Node xml,String elt)
 {
    if (xml == null) return null;
 
@@ -1518,7 +1280,7 @@ static public String getTextElement(Node xml,String elt)
 
 
 
-static public List<String> getTextElements(Node xml,String elt)
+public static List<String> getTextElements(Node xml,String elt)
 {
    if (xml == null) return null;
 
@@ -1535,7 +1297,7 @@ static public List<String> getTextElements(Node xml,String elt)
 
 
 
-static public byte [] getBytesElement(Node xml,String elt)
+public static byte [] getBytesElement(Node xml,String elt)
 {
    String s = getTextElement(xml,elt);
 
@@ -1553,7 +1315,7 @@ static public byte [] getBytesElement(Node xml,String elt)
 /*										*/
 /********************************************************************************/
 
-static public Element cloneElement(String name,Element orig)
+public static Element cloneElement(String name,Element orig)
 {
    Document doc = null;
    for (Node n = orig; n != null; n = n.getParentNode()) {
@@ -1608,14 +1370,14 @@ public static Document newNSDocument()
 /*										*/
 /********************************************************************************/
 
-static public String byteArrayToString(byte [] byt)
+public static String byteArrayToString(byte [] byt)
 {
    return byteArrayToString(byt,0,byt.length);
 }
 
 
 
-static public String byteArrayToString(byte [] byt,int off,int len)
+public static String byteArrayToString(byte [] byt,int off,int len)
 {
    StringBuffer sb = new StringBuffer();
    for (int i = off; i < len; ++i) {
@@ -1632,7 +1394,7 @@ static public String byteArrayToString(byte [] byt,int off,int len)
 
 
 
-static public byte [] stringToByteArray(String s)
+public static byte [] stringToByteArray(String s)
 {
    if (s == null) return null;
 
@@ -1647,7 +1409,7 @@ static public byte [] stringToByteArray(String s)
 }
 
 
-static public String decodeCharacters(String val)
+public static String decodeCharacters(String val)
 {
    StringTokenizer tok = new StringTokenizer(val," ,;");
    return decodeCharacters(val,tok.countTokens());
@@ -1656,7 +1418,7 @@ static public String decodeCharacters(String val)
 
 
 
-static public String decodeCharacters(String val,int len)
+public static String decodeCharacters(String val,int len)
 {
    try {
       char[] buf = new char[len];
@@ -1676,7 +1438,7 @@ static public String decodeCharacters(String val,int len)
 }
 
 
-static public String encodeCharacters(String txt)
+public static String encodeCharacters(String txt)
 {
    StringBuffer buf = new StringBuffer();
    for (int i = 0; i < txt.length(); ++i) {
@@ -1697,7 +1459,7 @@ static public String encodeCharacters(String txt)
 
 private static class XmlParser {
 
-   DocumentBuilder parser_object;
+   private DocumentBuilder parser_object;
 
    XmlParser(boolean ns) throws Exception {
       DocumentBuilderFactory dbf = null;

@@ -38,32 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/mint/MintArguments.java,v 1.5 2017/08/04 12:42:39 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MintArguments.java,v $
- * Revision 1.5  2017/08/04 12:42:39  spr
- * clean up
- *
- * Revision 1.4  2011-05-27 19:32:42  spr
- * Change copyrights.
- *
- * Revision 1.3  2007-08-10 02:11:04  spr
- * Cleanups from eclipse; bug fixes to avoid deadlock.
- *
- * Revision 1.2  2006/02/21 17:06:23  spr
- * Upgrade interface to use Element instead of Node for XML.
- *
- * Revision 1.1  2005/07/08 23:32:52  spr
- * Add mint (Java message interface) to ivy.
- *
- *
- ********************************************************************************/
-
-
-
 package edu.brown.cs.ivy.mint;
 
 
@@ -85,7 +59,7 @@ public interface MintArguments
  *	Return the number of matched arguments
  **/
 
-public int getNumArguments();
+int getNumArguments();
 
 
 
@@ -93,7 +67,7 @@ public int getNumArguments();
  *	Return the ith argument as a string
  **/
 
-public String getArgument(int idx);
+String getArgument(int idx);
 
 
 
@@ -101,7 +75,7 @@ public String getArgument(int idx);
  *	Return the ith argument as an integer
  **/
 
-public int getIntArgument(int idx);
+int getIntArgument(int idx);
 
 
 
@@ -109,7 +83,7 @@ public int getIntArgument(int idx);
  *	Return the ith argument as an integer
  **/
 
-public long getLongArgument(int idx);
+long getLongArgument(int idx);
 
 
 
@@ -117,7 +91,7 @@ public long getLongArgument(int idx);
  *	Return the ith argument as a floating point value
  **/
 
-public double getRealArgument(int idx);
+double getRealArgument(int idx);
 
 
 
@@ -125,7 +99,7 @@ public double getRealArgument(int idx);
  *	Return the ith argument as an XML element
  **/
 
-public Element getXmlArgument(int idx);
+Element getXmlArgument(int idx);
 
 
 

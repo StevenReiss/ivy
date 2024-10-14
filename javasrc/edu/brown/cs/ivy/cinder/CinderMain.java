@@ -32,48 +32,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/cinder/CinderMain.java,v 1.10 2018/08/02 15:09:29 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: CinderMain.java,v $
- * Revision 1.10  2018/08/02 15:09:29  spr
- * Fix imports
- *
- * Revision 1.9  2013/09/24 01:06:48  spr
- * Minor fix
- *
- * Revision 1.8  2009-09-17 01:54:51  spr
- * Enable patching at line number level.
- *
- * Revision 1.7  2008-03-14 12:25:18  spr
- * Fixes for java 1.6; code cleanup.
- *
- * Revision 1.6  2007-08-10 02:10:02  spr
- * Cleanups from Eclipse
- *
- * Revision 1.5  2006-12-01 03:22:37  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.4  2006/07/10 14:52:09  spr
- * Code cleanup.
- *
- * Revision 1.3  2005/09/19 23:32:00  spr
- * Fixups based on findbugs.
- *
- * Revision 1.2  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/03/29 03:40:25  spr
- * Move CINDER interface to JikesBT from Bloom to Ivy.
- *
- *
- ********************************************************************************/
-
-
-
-
 package edu.brown.cs.ivy.cinder;
 
 
@@ -92,7 +50,7 @@ import java.util.StringTokenizer;
 
 
 
-public class CinderMain
+public final class CinderMain
 {
 
 
@@ -103,7 +61,7 @@ public class CinderMain
 /*										*/
 /********************************************************************************/
 
-static public void main(String [] args)
+public static void main(String [] args)
 {
    CinderMain cm = new CinderMain(args);
    cm.process();
@@ -359,7 +317,8 @@ System.err.println("CINDER: Server command: " + cmd);
 	 StringTokenizer tok = new StringTokenizer(cmd.toString());
 	 if (tok.hasMoreTokens()) {
 	    String what = tok.nextToken();
-	    String ifile,ofile;
+	    String ifile;
+            String ofile;
 	    File tmpf = null;
 	    ofile = null;
 	    if (what.equals("PATCH") && tok.hasMoreTokens()) {

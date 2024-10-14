@@ -75,22 +75,22 @@ public SwingToggleButton(IvyI18N intl)
 
 public SwingToggleButton(String text)
 {
-   this (text,null,null);
+   this(text,null,null);
 }
 
 public SwingToggleButton(String text,IvyI18N intl)
 {
-   this (text,null,intl);
+   this(text,null,intl);
 }
 
 public SwingToggleButton(String text,boolean sel)
 {
-   this (text,null,sel,null);
+   this(text,null,sel,null);
 }
 
 public SwingToggleButton(String text,boolean sel,IvyI18N intl)
 {
-   this (text,null,sel,intl);
+   this(text,null,sel,intl);
 }
 
 

@@ -61,43 +61,6 @@
 ***************************************************************************
 */
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/swing/SwingRangeScrollBar.java,v 1.9 2018/08/02 15:10:54 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SwingRangeScrollBar.java,v $
- * Revision 1.9  2018/08/02 15:10:54  spr
- * Fix imports.  Prepare for java 10.
- *
- * Revision 1.8  2015/11/20 15:09:26  spr
- * Reformatting.
- *
- * Revision 1.7  2012-10-25 01:27:17  spr
- * Code clean up.	Add color lookup by name.
- *
- * Revision 1.6  2011-05-27 19:32:51  spr
- * Change copyrights.
- *
- * Revision 1.5  2011-03-19 20:32:16  spr
- * Clean up code.
- *
- * Revision 1.4  2010-02-12 00:40:02  spr
- * Fix file-based options.  Fix spacing.
- *
- * Revision 1.3  2009-10-07 22:38:17  spr
- * Code cleanup; fix problem with null args to choices.
- *
- * Revision 1.2  2009-10-02 00:18:30  spr
- * Import clean up.
- *
- * Revision 1.1  2009-09-17 02:00:45  spr
- * Add autocomplete, new grid options, fix up lists, add range scroll bar.
- *
- *
- ********************************************************************************/
-
-
 
 package edu.brown.cs.ivy.swing;
 
@@ -131,10 +94,10 @@ public class SwingRangeScrollBar extends JPanel implements Adjustable {
 /*										*/
 /********************************************************************************/
 
-private final static int RIGHT_THUMB = 1;
-private final static int LEFT_THUMB  = -1;
+private static final int RIGHT_THUMB = 1;
+private static final int LEFT_THUMB  = -1;
 
-private final static int BASIC_THUMB_WIDTH = 5;
+private static final int BASIC_THUMB_WIDTH = 5;
 
 
 /********************************************************************************/
@@ -392,7 +355,7 @@ public void setRightBoxValue(int v)
 }
 
 
-public void setValues( int lv, int rv, int minimum, int maximum)
+public void setValues(int lv, int rv, int minimum, int maximum)
 {
    actual_range_min = minimum;
    actual_range_max = maximum;
@@ -435,13 +398,14 @@ public void update(Graphics g)
 
 @Override public void repaint()
 {
-   left_value_changed = right_value_changed = true;
+   left_value_changed = true;
+   right_value_changed = true;
    super.repaint();
 }
 
 
 
-@Override public void paint (Graphics g)
+@Override public void paint(Graphics g)
 {
    super.paint(g);
 
@@ -469,10 +433,13 @@ public void update(Graphics g)
 private void adjustPosition()
 {
    if (right_value_changed)
-      right_position = (int)(((double)(right_value - actual_range_min)/actual_range)*thumb_range) + thumb_range_min;
+      right_position = (int) (((double) (right_value - actual_range_min)/
+            actual_range)*thumb_range) + thumb_range_min;
    if (left_value_changed)
-      left_position = (int)(((double)(left_value - actual_range_min)/actual_range)*thumb_range) + thumb_range_min;
-   right_value_changed = left_value_changed = false;
+      left_position = (int) (((double) (left_value - actual_range_min)/
+            actual_range)*thumb_range) + thumb_range_min;
+   right_value_changed = false; 
+   left_value_changed = false;
    if (bar_orientation == HORIZONTAL) {
       if (right_position > thumb_range_max)
 	 right_position = thumb_range_max;
@@ -491,8 +458,10 @@ private void adjustPosition()
 
 private void adjustBoxPosition()
 {
-   right_box_position = (int) (((double) (right_box_value - actual_range_min)/actual_range)*thumb_range) + thumb_range_min;
-   left_box_position = (int) (((double) (left_box_value - actual_range_min)/actual_range)*thumb_range) + thumb_range_min;
+   right_box_position = (int) (((double) (right_box_value - actual_range_min)/
+         actual_range)*thumb_range) + thumb_range_min;
+   left_box_position = (int) (((double) (left_box_value - actual_range_min)/
+         actual_range)*thumb_range) + thumb_range_min;
 
    if (bar_orientation == HORIZONTAL) {
       if (right_box_position > thumb_range_max)
@@ -516,7 +485,8 @@ private void adjustValue()
    int pLeftV = left_value;
    // The next two variables are in case of a change of value without moving
    // the thumbs.
-   boolean rightChange = right_value_changed, leftChange = left_value_changed;
+   boolean rightChange = right_value_changed;
+   boolean leftChange = left_value_changed;
 
    //AGAIN the following is needed for doing changes if value changes without
    // movement of thumbs (e.g. changing value from inside the aplication)
@@ -524,14 +494,17 @@ private void adjustValue()
    if (leftChange) last_thumb_changed = LEFT_THUMB;
 
    if (right_moved) {
-      right_value = (int)Math.round(((double)(right_position - thumb_range_min)/thumb_range)*actual_range) + actual_range_min;
+      right_value = (int) Math.round(((double) (right_position - thumb_range_min)/thumb_range)*
+            actual_range) + actual_range_min;
       right_value_changed = true;
     }
    if (left_moved) {
-      left_value =(int)Math.round(((double)(left_position - thumb_range_min)/thumb_range)*actual_range) +actual_range_min;
+      left_value =(int) Math.round(((double) (left_position - thumb_range_min)/thumb_range)*
+            actual_range) +actual_range_min;
       left_value_changed = true;
     }
-   right_moved = left_moved = false;
+   right_moved = false;
+   left_moved = false;
    /* Since sometimes when the range is large and you pull the two thumbs
       together even a difference of one will yield the same position. But
       since we always want to keep at least a difference of one between
@@ -540,10 +513,15 @@ private void adjustValue()
     adjustPosition();
 
     if (adj_listener != null) {
-       if ((pRightV != right_value) || rightChange)
-	  adj_listener.adjustmentValueChanged( new AdjustmentEvent( this, AdjustmentEvent.ADJUSTMENT_FIRST, AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED, right_value));
-       if ((pLeftV!=left_value) || leftChange)
-	  adj_listener.adjustmentValueChanged( new AdjustmentEvent( this, AdjustmentEvent.ADJUSTMENT_FIRST, AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED, left_value));
+       if ((pRightV != right_value) || rightChange) {
+	  adj_listener.adjustmentValueChanged(
+                new AdjustmentEvent(this, AdjustmentEvent.ADJUSTMENT_FIRST,
+                      AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED, right_value));
+        }
+       if ((pLeftV!=left_value) || leftChange) {
+	  adj_listener.adjustmentValueChanged(new AdjustmentEvent(this, AdjustmentEvent.ADJUSTMENT_FIRST,
+                AdjustmentEvent.ADJUSTMENT_VALUE_CHANGED, left_value));
+        }
      }
 }
 
@@ -560,8 +538,11 @@ private void blockIncrementRight()
    last_thumb_changed = RIGHT_THUMB;
    if ((right_value+block_increment)<=actual_range_max) {
       right_value += block_increment;
-      if (adj_listener != null)
-	 adj_listener.adjustmentValueChanged( new AdjustmentEvent( this, AdjustmentEvent.ADJUSTMENT_FIRST, AdjustmentEvent.BLOCK_INCREMENT, right_value));
+      if (adj_listener != null) {
+	 adj_listener.adjustmentValueChanged(
+               new AdjustmentEvent(this, AdjustmentEvent.ADJUSTMENT_FIRST,
+                     AdjustmentEvent.BLOCK_INCREMENT, right_value));
+       }
     }
    else {
       right_value = actual_range_max;
@@ -577,10 +558,14 @@ private void blockIncrementLeft()
    if ((left_value-block_increment)>=actual_range_min) {
       left_value-=block_increment;
     }
-   else
+   else {
       left_value = actual_range_min;
-   if (adj_listener != null)
-      adj_listener.adjustmentValueChanged( new AdjustmentEvent( this, AdjustmentEvent.ADJUSTMENT_FIRST, AdjustmentEvent.BLOCK_INCREMENT, left_value));
+    }
+   if (adj_listener != null) {
+      adj_listener.adjustmentValueChanged(
+            new AdjustmentEvent(this, AdjustmentEvent.ADJUSTMENT_FIRST, 
+                  AdjustmentEvent.BLOCK_INCREMENT, left_value));
+    }
    left_value_changed = true;
    refresh();
 }
@@ -597,7 +582,8 @@ private void blockIncrementLeft()
 
 private void dragBar(int initialPos,int drag)
 {
-   int oldValueRight, oldValueLeft;
+   int oldValueRight = 0;
+   int oldValueLeft = 0;
    oldValueRight = right_value;
    oldValueLeft = left_value;
    if (bar_orientation == HORIZONTAL) {
@@ -605,11 +591,13 @@ private void dragBar(int initialPos,int drag)
       else if (initialPos < thumb_range_min) initialPos = thumb_range_min;
       if (drag > initialPos) {
 	 int dragAmount = drag - initialPos;
-	 if (right_position >= thumb_range_max)
+	 if (right_position >= thumb_range_max) {
 	    restricted_drag = true;
+          }
 	 if (!restricted_drag) {
-	    if ( (right_position + dragAmount)>=thumb_range_max)
+	    if ((right_position + dragAmount)>=thumb_range_max) {
 	       dragAmount = thumb_range_max - right_position;
+             }
 	    dragRightThumb(right_position + dragAmount);
 	    if (right_value != oldValueRight) {
 	       int difference = right_value - oldValueRight;
@@ -624,8 +612,9 @@ private void dragBar(int initialPos,int drag)
 	int dragAmount = initialPos - drag;
 	if (left_position <= thumb_range_min) restricted_drag = true;
 	if (!restricted_drag) {
-	   if ( (left_position - dragAmount)<=thumb_range_min)
+	   if ((left_position - dragAmount)<=thumb_range_min) {
 	      dragAmount = left_position - thumb_range_min;
+            }
 	   dragLeftThumb(left_position - dragAmount);
 	   if (left_value != oldValueLeft) {
 	      int difference = oldValueLeft - left_value;
@@ -644,8 +633,9 @@ private void dragBar(int initialPos,int drag)
 	 int dragAmount = drag - initialPos;
 	 if (left_position >= thumb_range_min) restricted_drag = true;
 	 if (!restricted_drag) {
-	    if ( (left_position + dragAmount)>=thumb_range_min)
+	    if ((left_position + dragAmount)>=thumb_range_min) {
 	       dragAmount = thumb_range_min - left_position;
+             }
 	    dragLeftThumb(left_position + dragAmount);
 	    if (left_value != oldValueLeft) {
 	       int difference = oldValueLeft - left_value;
@@ -660,8 +650,9 @@ private void dragBar(int initialPos,int drag)
 	 int dragAmount = initialPos - drag;
 	 if (right_position <= thumb_range_max) restricted_drag = true;
 	 if (!restricted_drag) {
-	    if ( (right_position - dragAmount)<=thumb_range_max)
+	    if ((right_position - dragAmount)<=thumb_range_max) {
 	       dragAmount = right_position - thumb_range_max;
+             }
 	    dragRightThumb(right_position - dragAmount);
 	    if (right_value != oldValueRight) {
 	       int difference = right_value - oldValueRight;
@@ -675,8 +666,11 @@ private void dragBar(int initialPos,int drag)
     }
    restricted_drag = false;
 
-   if (adj_listener != null)
-      adj_listener.adjustmentValueChanged( new AdjustmentEvent( this, AdjustmentEvent.ADJUSTMENT_FIRST, AdjustmentEvent.TRACK, right_value));
+   if (adj_listener != null) {
+      adj_listener.adjustmentValueChanged(
+            new AdjustmentEvent(this, AdjustmentEvent.ADJUSTMENT_FIRST,
+                  AdjustmentEvent.TRACK, right_value));
+    }
 }
 
 
@@ -686,12 +680,12 @@ private void dragLeftThumb(int drag)
    last_thumb_changed = LEFT_THUMB;
    int correctionToDrag = drag;
    if (bar_orientation == HORIZONTAL) {
-      if ( (drag>=thumb_range_min) && (correctionToDrag< right_position) ) left_position = drag;
-      else if ( correctionToDrag>=right_position) left_position = right_position;
+      if ((drag>=thumb_range_min) && (correctionToDrag< right_position)) left_position = drag;
+      else if (correctionToDrag>=right_position) left_position = right_position;
       else left_position = thumb_range_min;
     }
    else {
-      if ( (drag <= thumb_range_min) && (drag > right_position) ) left_position = drag;
+      if ((drag <= thumb_range_min) && (drag > right_position)) left_position = drag;
       else if (drag <= right_position) left_position = right_position;
       else left_position = thumb_range_min;
     }
@@ -727,7 +721,8 @@ private void dragRightThumb(int drag)
 
 private void drawHorizontalArrows(Graphics g)
 {
-   int xpoints[] = new int[3], ypoints[] = new int[3];
+   int [] xpoints = new int[3];
+   int [] ypoints = new int[3];
 
    // Drawing Background
    g.setColor(track_color);
@@ -735,15 +730,16 @@ private void drawHorizontalArrows(Graphics g)
 
    // Left Arrow Decrement
    // Set up the points
-   xpoints[0] = xpoints[1] = m_arrow_length;
+   xpoints[0] = m_arrow_length;
+   xpoints[1] = xpoints[0];
    xpoints[2] = 0;
    ypoints[0] = 0;
    ypoints[1] = bar_height;
-   ypoints[2] = bar_height/2 ;
+   ypoints[2] = bar_height/2;
    // Drawing it
    g.setColor(thumb_color);
    g.fillPolygon(xpoints, ypoints, 3);
-   mouse_listener.setLeftDArrow( new Polygon(xpoints, ypoints, 3) );
+   mouse_listener.setLeftDArrow(new Polygon(xpoints, ypoints, 3));
 
    // Giving the arrow a 3D look
    g.setColor(thumb_highlight_color);
@@ -760,15 +756,16 @@ private void drawHorizontalArrows(Graphics g)
 
    //Left Arrow Increment
    //Set up the points
-   xpoints[0] = xpoints[1] = m_arrow_length +1;
+   xpoints[0] = m_arrow_length +1;
+   xpoints[1] = xpoints[0];
    xpoints[2] = 2*m_arrow_length + 1;
    ypoints[0] = 0;
    ypoints[1] = bar_height;
-   ypoints[2] = bar_height/2 ;
+   ypoints[2] = bar_height/2;
    // Drawing it
    g.setColor(thumb_color);
    g.fillPolygon(xpoints, ypoints, 3);
-   mouse_listener.setLeftIArrow( new Polygon(xpoints, ypoints, 3) );
+   mouse_listener.setLeftIArrow(new Polygon(xpoints, ypoints, 3));
    // Giving the arrow a 3D look
    g.setColor(thumb_highlight_color);
    //Top && Side
@@ -784,15 +781,16 @@ private void drawHorizontalArrows(Graphics g)
 
    //RIGHT ARROW Decrement
    // Setting up points
-   xpoints[0] = xpoints[1] = bar_width - m_arrow_length -1;
+   xpoints[0] = bar_width - m_arrow_length -1;
+   xpoints[1] = xpoints[0];
    xpoints[2] = bar_width - 2*m_arrow_length -1;
    ypoints[0] = 0;
    ypoints[1] = bar_height;
-   ypoints[2] = bar_height/2 ;
+   ypoints[2] = bar_height/2;
    // Drawing the Arrow
    g.setColor(thumb_color);
    g.fillPolygon(xpoints, ypoints, 3);
-   mouse_listener.setRightDArrow( new Polygon(xpoints, ypoints, 3) );
+   mouse_listener.setRightDArrow(new Polygon(xpoints, ypoints, 3));
    // Giving the arrow a 3D look
    g.setColor(thumb_highlight_color);
    //Top
@@ -808,15 +806,16 @@ private void drawHorizontalArrows(Graphics g)
 
    //RIGHT ARROW Increment
    // Setting up points
-   xpoints[0] = xpoints[1] = bar_width - m_arrow_length;
+   xpoints[0] = bar_width - m_arrow_length;
+   xpoints[1] = xpoints[0];
    xpoints[2] = bar_width;
    ypoints[0] = 0;
    ypoints[1] = bar_height;
-   ypoints[2] = bar_height/2 ;
+   ypoints[2] = bar_height/2;
    // Drawing the Arrow
    g.setColor(thumb_color);
    g.fillPolygon(xpoints, ypoints, 3);
-   mouse_listener.setRightIArrow( new Polygon(xpoints, ypoints, 3) );
+   mouse_listener.setRightIArrow(new Polygon(xpoints, ypoints, 3));
 
    // Giving the arrow a 3D look
    g.setColor(thumb_highlight_color);
@@ -836,12 +835,12 @@ private void drawHorizontalArrows(Graphics g)
 private void drawVerticalArrows(Graphics g)
 {
    int height = this.bar_height;
-   int xpoints[] = new int[3];
-   int ypoints[] = new int[3];
+   int [] xpoints = new int[3];
+   int [] ypoints = new int[3];
 
    //Drawing background
    g.setColor(track_color);
-   g.fillRect( 0,0,bar_width,bar_height);
+   g.fillRect(0,0,bar_width,bar_height);
 
    // Bottom arrow decrement
    // set up points
@@ -849,12 +848,13 @@ private void drawVerticalArrows(Graphics g)
    xpoints[1] = 0;
    xpoints[2] = bar_width - 1;
    ypoints[0] = height;
-   ypoints[1] = ypoints[2] = height - m_arrow_length;
+   ypoints[1] = height - m_arrow_length;
+   ypoints[2] = height - m_arrow_length;
    // draw arrow
    g.setColor(thumb_color);
    g.fillPolygon(xpoints, ypoints, 3);
    // register with the mouse listener
-   mouse_listener.setLeftDArrow( new Polygon(xpoints, ypoints, 3) );
+   mouse_listener.setLeftDArrow(new Polygon(xpoints, ypoints, 3));
    //GIVE ARROW 3D LOOK
    g.setColor(thumb_highlight_color);
    g.drawLine(xpoints[1], ypoints[1], xpoints[2]-1, ypoints[2]);
@@ -866,11 +866,12 @@ private void drawVerticalArrows(Graphics g)
    xpoints[0] = xpoints[1];
    xpoints[1] = xpoints[2];
    xpoints[2] = bar_width/2 -1;
-   ypoints[0] = ypoints[1]-=1;
+   ypoints[1] -= 1;
+   ypoints[0] = ypoints[1];
    ypoints[2] = ypoints[0] - m_arrow_length;
    g.setColor(thumb_color);
    g.fillPolygon(xpoints, ypoints, 3);
-   mouse_listener.setLeftIArrow( new Polygon(xpoints, ypoints, 3) );
+   mouse_listener.setLeftIArrow(new Polygon(xpoints, ypoints, 3));
    g.setColor(thumb_highlight_color);
    g.drawLine(xpoints[0], ypoints[0], xpoints[2], ypoints[2]);
    g.setColor(thumb_shadow_color);
@@ -882,25 +883,27 @@ private void drawVerticalArrows(Graphics g)
    xpoints[1] = 0;
    xpoints[2] = bar_width - 1;
    ypoints[0] = 0;
-   ypoints[1] = ypoints[2] = m_arrow_length;
+   ypoints[1] = m_arrow_length;
+   ypoints[2] = m_arrow_length;
    g.setColor(thumb_color);
    g.fillPolygon(xpoints, ypoints, 3);
-   mouse_listener.setRightIArrow( new Polygon(xpoints, ypoints, 3) );
+   mouse_listener.setRightIArrow(new Polygon(xpoints, ypoints, 3));
    g.setColor(thumb_highlight_color);
-   g.drawLine( xpoints[0], ypoints[0], xpoints[1], ypoints[1] );
+   g.drawLine(xpoints[0], ypoints[0], xpoints[1], ypoints[1]);
    g.setColor(thumb_shadow_color);
-   g.drawLine( xpoints[0] +1, ypoints[0] +1, xpoints[2], ypoints[2]);
-   g.drawLine( xpoints[1] +1, ypoints[1], xpoints[2], ypoints[2]);
+   g.drawLine(xpoints[0] +1, ypoints[0] +1, xpoints[2], ypoints[2]);
+   g.drawLine(xpoints[1] +1, ypoints[1], xpoints[2], ypoints[2]);
 
    // Upper arrow decrement
    xpoints[0] = xpoints[1];
    xpoints[1] = xpoints[2];
    xpoints[2] = bar_width/2 - 1;
-   ypoints[0] = ypoints[1]+=1;
+   ypoints[1] += 1;
+   ypoints[0] = ypoints[1];
    ypoints[2] = ypoints[2] +1 + m_arrow_length;
    g.setColor(thumb_color);
    g.fillPolygon(xpoints, ypoints, 3);
-   mouse_listener.setRightDArrow( new Polygon(xpoints, ypoints, 3) );
+   mouse_listener.setRightDArrow(new Polygon(xpoints, ypoints, 3));
    g.setColor(thumb_highlight_color);
    g.drawLine(xpoints[0], ypoints[0], xpoints[1]-1, ypoints[1]);
    g.setColor(thumb_shadow_color);
@@ -915,11 +918,11 @@ private void estimateArrowLength()
    int od;
 
    if (bar_orientation == HORIZONTAL) {
-      m_arrow_length = (int)Math.round(0.075 * bar_width);
+      m_arrow_length = (int) Math.round(0.075 * bar_width);
       od = bar_height;
     }
    else {
-      m_arrow_length = (int)Math.round(0.075 * bar_height);
+      m_arrow_length = (int) Math.round(0.075 * bar_height);
       od = bar_width;
     }
 
@@ -944,10 +947,12 @@ private void drawHorizontalThumbs(Graphics g)
    g.setColor(track_color);
 
    // Instead of clearing the whole range just clean outide the thumbs
-   g.fillRect(2*m_arrow_length+1, 0, left_position -thumb_width - 2*m_arrow_length-1, bar_height);
+   g.fillRect(2*m_arrow_length+1, 0,
+         left_position - thumb_width - 2*m_arrow_length-1, bar_height);
    // g.fillRect(2*m_arrow_length+1, 0, width - 4*m_arrow_length -1, bar_height);
 
-   g.fillRect(right_position + thumb_width, 0, bar_width - 2*m_arrow_length -1-right_position - thumb_width, bar_height);
+   g.fillRect(right_position + thumb_width, 0, 
+         bar_width - 2*m_arrow_length -1-right_position - thumb_width, bar_height);
    g.drawLine(left_position, 1, right_position, 1);
    g.drawLine(left_position, bar_height, right_position, bar_height);
    g.setColor(thumb_color);
@@ -955,25 +960,25 @@ private void drawHorizontalThumbs(Graphics g)
    if (left_position == right_position) {
       //Left Thumb
       g.fill3DRect(left_position-thumb_width, 1, thumb_width, bar_height/2, true);
-      mouse_listener.setLeftThumb( new Rectangle(left_position-thumb_width, 1, thumb_width, (bar_height-1)/2) );
+      mouse_listener.setLeftThumb(new Rectangle(left_position-thumb_width, 1, thumb_width, (bar_height-1)/2));
 
       //Right thumb
       g.fill3DRect(right_position, 1, thumb_width, bar_height/2, true);
-      mouse_listener.setRightThumb( new Rectangle( right_position, 1, thumb_width, (bar_height-1)/2));
+      mouse_listener.setRightThumb(new Rectangle(right_position, 1, thumb_width, (bar_height-1)/2));
 
       // Tie
       g.fill3DRect(left_position - thumb_width, bar_height/2+1, 2*thumb_width, bar_height/2, true);
-      mouse_listener.setMidBlock( new Rectangle(left_position - thumb_width, bar_height/2, 2*thumb_width, bar_height/2) );
+      mouse_listener.setMidBlock(new Rectangle(left_position - thumb_width, bar_height/2, 2*thumb_width, bar_height/2));
     }
    else {
       // Left Thumb
       g.fill3DRect(left_position-thumb_width, 1, thumb_width, bar_height-1, true);
       //g.fill3DRect(leftPosition, 1, thumbWidth, height, true);
-      mouse_listener.setLeftThumb( new Rectangle(left_position-thumb_width, 1, thumb_width, bar_height-1) );
+      mouse_listener.setLeftThumb(new Rectangle(left_position-thumb_width, 1, thumb_width, bar_height-1));
 
       // Right Thumb
       g.fill3DRect(right_position,1, thumb_width, bar_height-1, true);
-      mouse_listener.setRightThumb( new Rectangle(right_position, 1, thumb_width, bar_height-1) );
+      mouse_listener.setRightThumb(new Rectangle(right_position, 1, thumb_width, bar_height-1));
 
       // Block in between
       // Modifications added by Laurent in order to display the bounding boxes
@@ -983,17 +988,18 @@ private void drawHorizontalThumbs(Graphics g)
       g.setColor(thumb_color);
 
       // Setting the Block for the Block Increments
-      mouse_listener.setLeftBlock( new Rectangle(thumb_range_min, 0, (left_position - thumb_range_min), bar_height) );
+      mouse_listener.setLeftBlock(new Rectangle(thumb_range_min, 0, (left_position - thumb_range_min), bar_height));
       int pos = right_position + thumb_width + 1;
-      mouse_listener.setRightBlock( new Rectangle( pos, 0, (thumb_range_max - pos), bar_height));
+      mouse_listener.setRightBlock(new Rectangle(pos, 0, (thumb_range_max - pos), bar_height));
 
       // Setting the Block between the Two Thumbs
-      mouse_listener.setMidBlock( new Rectangle( left_position + thumb_width, 0, (right_position - left_position - thumb_width), bar_height) );
+      mouse_listener.setMidBlock(new Rectangle(left_position + thumb_width, 0, 
+            (right_position - left_position - thumb_width), bar_height));
     }
 }
 
 
-private void drawVerticalThumbs(Graphics g )
+private void drawVerticalThumbs(Graphics g)
 {
    g.setColor(track_color);
 
@@ -1010,23 +1016,23 @@ private void drawVerticalThumbs(Graphics g )
    if (left_position == right_position) {
       //Bottom Thumb
       g.fill3DRect(0, left_position, (bar_width)/2, thumb_width, true);
-      mouse_listener.setLeftThumb( new Rectangle(0, left_position, (bar_width-1)/2,thumb_width));
+      mouse_listener.setLeftThumb(new Rectangle(0, left_position, (bar_width-1)/2,thumb_width));
       // Upper Thumb
       g.fill3DRect(0, right_position-thumb_width, (bar_width)/2, thumb_width, true);
-      mouse_listener.setRightThumb( new Rectangle(0, right_position-thumb_width, (bar_width-1)/2, thumb_width));
+      mouse_listener.setRightThumb(new Rectangle(0, right_position-thumb_width, (bar_width-1)/2, thumb_width));
 
       // Tie
       g.fill3DRect(bar_width/2, right_position-thumb_width, bar_width/2, 2*thumb_width, true);
-      mouse_listener.setMidBlock( new Rectangle(bar_width/2, right_position-thumb_width, bar_width/2, 2*thumb_width) );
+      mouse_listener.setMidBlock(new Rectangle(bar_width/2, right_position-thumb_width, bar_width/2, 2*thumb_width));
     }
    else {
       //Bottom Thumb
       g.fill3DRect(0, left_position, bar_width, thumb_width, true);
-      mouse_listener.setLeftThumb( new Rectangle(0, left_position, bar_width,thumb_width));
+      mouse_listener.setLeftThumb(new Rectangle(0, left_position, bar_width,thumb_width));
 
       // Upper Thumb
       g.fill3DRect(0, right_position-thumb_width, bar_width, thumb_width, true);
-      mouse_listener.setRightThumb( new Rectangle(0, right_position-thumb_width, bar_width, thumb_width));
+      mouse_listener.setRightThumb(new Rectangle(0, right_position-thumb_width, bar_width, thumb_width));
 
       // Block in between
       // Modifications added by Laurent in order to display the bounding boxes
@@ -1036,12 +1042,15 @@ private void drawVerticalThumbs(Graphics g )
 
       // Setting the blocks for block increments and the mid block for dragging
       // Setting the space between the bottom arrow and the bottom thumb.
-      mouse_listener.setLeftBlock( new Rectangle(0, left_position+ thumb_width+1, bar_width, left_position - thumb_range_min) );
+      mouse_listener.setLeftBlock(new Rectangle(0, left_position+ thumb_width+1, bar_width,
+            left_position - thumb_range_min));
       // Setting the space between the top arrows and the top thumb
-      mouse_listener.setRightBlock( new Rectangle( 0, thumb_range_max-thumb_width, bar_width, thumb_range_max - right_position) );
+      mouse_listener.setRightBlock(new Rectangle(0, thumb_range_max-thumb_width, bar_width,
+           thumb_range_max - right_position));
 
       // Setting the Block between the Two Thumbs
-      mouse_listener.setMidBlock( new Rectangle( 1, right_position + 1, bar_width, left_position - right_position - 1));
+      mouse_listener.setMidBlock(new Rectangle(1, right_position + 1, bar_width, 
+            left_position - right_position - 1));
     }
 }
 
@@ -1055,24 +1064,26 @@ private void drawVerticalThumbs(Graphics g )
 
 private void generalSetup()
 {
-   thumb_range_min = thumb_range_max = thumb_range = 0;
+   thumb_range_min = 0;
+   thumb_range_max = 0;
+   thumb_range = 0;
    unit_increment = 1;
    block_increment = 10;
    thumb_width = BASIC_THUMB_WIDTH;
 
    motion_listener = new RangeSliderMotionAdapter();
    mouse_listener = new RangeSliderMouseAdapter();
-   addMouseListener( mouse_listener );
-   addMouseMotionListener( motion_listener);
+   addMouseListener(mouse_listener);
+   addMouseMotionListener(motion_listener);
 }
 
 
 
-private void graphicsInit(Dimension new_size)
+private void graphicsInit(Dimension newsize)
 {
-   if ((new_size.width!= bar_width) ||( new_size.height!=bar_height)){
-      bar_height = new_size.height;
-      bar_width  = new_size.width;
+   if ((newsize.width!= bar_width) || (newsize.height!=bar_height)) {
+      bar_height = newsize.height;
+      bar_width  = newsize.width;
 
       estimateArrowLength();
 
@@ -1107,7 +1118,7 @@ private void refresh() {
 }
 
 
-private void refresh( Graphics g )
+private void refresh(Graphics g)
 {
    if (g!= null) {
       if (left_moved || right_moved)
@@ -1134,11 +1145,17 @@ private void unitIncrementRight()
    last_thumb_changed = RIGHT_THUMB;
    if ((right_value+unit_increment)<=actual_range_max) {
       right_value += unit_increment;
-      if (adj_listener != null)
-	 adj_listener.adjustmentValueChanged( new AdjustmentEvent( this, AdjustmentEvent.ADJUSTMENT_FIRST, AdjustmentEvent.UNIT_INCREMENT, right_value));
+      if (adj_listener != null) {
+	 adj_listener.adjustmentValueChanged(
+               new AdjustmentEvent(this, 
+                     AdjustmentEvent.ADJUSTMENT_FIRST, 
+                     AdjustmentEvent.UNIT_INCREMENT,
+                     right_value));
+       }
     }
-   else
+   else {
       right_value = actual_range_max;
+    }
    right_value_changed = true;
    refresh();
 }
@@ -1149,8 +1166,11 @@ private void unitDecrementRight()
    last_thumb_changed = RIGHT_THUMB;
    if ((right_value-unit_increment)>=left_value) {
       right_value -= unit_increment;
-      if (adj_listener != null)
-	 adj_listener.adjustmentValueChanged( new AdjustmentEvent( this, AdjustmentEvent.ADJUSTMENT_FIRST, AdjustmentEvent.UNIT_DECREMENT, right_value));
+      if (adj_listener != null) {
+	 adj_listener.adjustmentValueChanged(
+               new AdjustmentEvent(this, AdjustmentEvent.ADJUSTMENT_FIRST,
+                     AdjustmentEvent.UNIT_DECREMENT, right_value));
+       }
     }
    else right_value = left_value;
 
@@ -1164,11 +1184,17 @@ private void unitIncrementLeft()
    last_thumb_changed = LEFT_THUMB;
    if ((left_value-unit_increment)>=actual_range_min) {
       left_value-=unit_increment;
-      if (adj_listener != null)
-	 adj_listener.adjustmentValueChanged( new AdjustmentEvent( this, AdjustmentEvent.ADJUSTMENT_FIRST, AdjustmentEvent.UNIT_INCREMENT, left_value));
+      if (adj_listener != null) {
+	 adj_listener.adjustmentValueChanged(
+               new AdjustmentEvent(this,
+                     AdjustmentEvent.ADJUSTMENT_FIRST,
+                     AdjustmentEvent.UNIT_INCREMENT,
+                     left_value));
+       }
     }
-   else
+   else {
       left_value = actual_range_min;
+    }
    left_value_changed = true;
    refresh();
 }
@@ -1179,11 +1205,15 @@ private void unitDecrementLeft()
    last_thumb_changed = LEFT_THUMB;
    if ((left_value+unit_increment)<=right_value) {
       left_value+=unit_increment;
-      if (adj_listener != null)
-	 adj_listener.adjustmentValueChanged( new AdjustmentEvent( this, AdjustmentEvent.ADJUSTMENT_FIRST, AdjustmentEvent.UNIT_DECREMENT, left_value));
+      if (adj_listener != null) {
+	 adj_listener.adjustmentValueChanged(
+               new AdjustmentEvent(this, AdjustmentEvent.ADJUSTMENT_FIRST,
+                     AdjustmentEvent.UNIT_DECREMENT, left_value));
+       }
     }
-   else
+   else {
       left_value = right_value;
+    }
    left_value_changed = true;
    refresh();
 }
@@ -1198,82 +1228,89 @@ private void unitDecrementLeft()
 
 private class RangeSliderMouseAdapter extends MouseAdapter {
 
-   private Polygon leftIArrow, rightIArrow,leftDArrow, rightDArrow;
-   private Rectangle leftThumb, rightThumb, leftBlock, rightBlock, midBlock;
+   private Polygon left_i_arrow;
+   private Polygon right_i_arrow;
+   private Polygon left_d_arrow; 
+   private Polygon right_d_arrow;
+   private Rectangle left_thumb;
+   private Rectangle right_thumb;
+   private Rectangle left_block;
+   private Rectangle right_block;
+   private Rectangle mid_block;
 
    RangeSliderMouseAdapter() {
       super();
     }
 
-   void setLeftIArrow( Polygon p) {
-      leftIArrow = p;
+   void setLeftIArrow(Polygon p) {
+      left_i_arrow = p;
     }
 
-   void setLeftDArrow( Polygon p) {
-      leftDArrow = p;
+   void setLeftDArrow(Polygon p) {
+      left_d_arrow = p;
     }
 
-   void setRightIArrow( Polygon p) {
-      rightIArrow = p;
+   void setRightIArrow(Polygon p) {
+      right_i_arrow = p;
     }
 
-   void setRightDArrow( Polygon p) {
-      rightDArrow = p;
+   void setRightDArrow(Polygon p) {
+      right_d_arrow = p;
     }
 
    void setLeftThumb(Rectangle r) {
-      leftThumb = r;
+      left_thumb = r;
     }
 
    void setRightThumb(Rectangle r) {
-      rightThumb = r;
+      right_thumb = r;
     }
 
-   void setLeftBlock( Rectangle r) {
-      leftBlock = r;
+   void setLeftBlock(Rectangle r) {
+      left_block = r;
     }
 
-   void setRightBlock( Rectangle r) {
-      rightBlock = r;
+   void setRightBlock(Rectangle r) {
+      right_block = r;
     }
 
-   void setMidBlock( Rectangle r) {
-      midBlock = r;
+   void setMidBlock(Rectangle r) {
+      mid_block = r;
     }
 
    @Override public void mouseClicked(MouseEvent e) {
       Point clickedAt = e.getPoint();
-      if (leftDArrow.contains(clickedAt)) unitIncrementLeft();
-      else if (rightIArrow.contains(clickedAt)) unitIncrementRight();
-      else if (leftIArrow.contains(clickedAt)) unitDecrementLeft();
-      else if (rightDArrow.contains(clickedAt)) unitDecrementRight();
-      else if (leftBlock.contains(clickedAt)) blockIncrementLeft();
-      else if (rightBlock.contains(clickedAt)) blockIncrementRight();
+      if (left_d_arrow.contains(clickedAt)) unitIncrementLeft();
+      else if (right_i_arrow.contains(clickedAt)) unitIncrementRight();
+      else if (left_i_arrow.contains(clickedAt)) unitDecrementLeft();
+      else if (right_d_arrow.contains(clickedAt)) unitDecrementRight();
+      else if (left_block.contains(clickedAt)) blockIncrementLeft();
+      else if (right_block.contains(clickedAt)) blockIncrementRight();
     }
 
    @Override public void mousePressed(MouseEvent e) {
       Point pressedAt = e.getPoint();
 
       if (pressedAt == null) return;
-      if (leftThumb == null) return;
+      if (left_thumb == null) return;
 
-      if (leftThumb.contains(pressedAt)) motion_listener.setLeftThumbDragMode(true);
-      else if (rightThumb.contains(pressedAt)) motion_listener.setRightThumbDragMode(true);
-      else if (midBlock.contains(pressedAt)) {
+      if (left_thumb.contains(pressedAt)) motion_listener.setLeftThumbDragMode(true);
+      else if (right_thumb.contains(pressedAt)) motion_listener.setRightThumbDragMode(true);
+      else if (mid_block.contains(pressedAt)) {
 	 if (bar_orientation == HORIZONTAL)
-	    motion_listener.setMidDragMode( true, e.getX() );
+	    motion_listener.setMidDragMode(true, e.getX());
 	 else
-	    motion_listener.setMidDragMode( true, e.getY() );
+	    motion_listener.setMidDragMode(true, e.getY());
        }
     }
 
    @Override public void mouseReleased(MouseEvent e) {
-      motion_listener.setLeftThumbDragMode( false );
-      motion_listener.setRightThumbDragMode( false );
-      if ( bar_orientation == HORIZONTAL )
-	 motion_listener.setMidDragMode( false, e.getX());
+      motion_listener.setLeftThumbDragMode(false);
+      motion_listener.setRightThumbDragMode(false);
+      if (bar_orientation == HORIZONTAL) 
+	 motion_listener.setMidDragMode(false, e.getX());
       else
-	 motion_listener.setMidDragMode( false, e.getY());
+	 motion_listener.setMidDragMode(false, e.getY());
     }
 
 }	// end of innerclass RangeSliderMouseAdapter
@@ -1289,44 +1326,46 @@ private class RangeSliderMouseAdapter extends MouseAdapter {
 
 private class RangeSliderMotionAdapter extends MouseMotionAdapter {
 
-   private boolean leftThumbDragMode, rightThumbDragMode, midDragMode;
-   private int initialPos;
+   private boolean left_thumb_drag_mode;
+   private boolean right_thumb_drag_mode;
+   private boolean mid_drag_mode;
+   private int initial_pos;
 
    RangeSliderMotionAdapter() {
       super();
     }
 
-   void setLeftThumbDragMode( boolean mode) {
-      leftThumbDragMode = mode;
+   void setLeftThumbDragMode(boolean mode) {
+      left_thumb_drag_mode = mode;
     }
 
-   void setRightThumbDragMode( boolean mode) {
-      rightThumbDragMode = mode;
+   void setRightThumbDragMode(boolean mode) {
+      right_thumb_drag_mode = mode;
     }
 
-   void setMidDragMode( boolean mode, int pos) {
-      midDragMode = mode;
-      setInitialPos( pos);
+   void setMidDragMode(boolean mode, int pos) {
+      mid_drag_mode = mode;
+      setInitialPos(pos);
     }
 
-   void setInitialPos( int p ) {
-      initialPos = p;
+   void setInitialPos(int p) {
+      initial_pos = p;
     }
 
    @Override public void mouseDragged(MouseEvent e) {
-      if (leftThumbDragMode) {
-         if (bar_orientation == HORIZONTAL) dragLeftThumb( e.getX() );
-         else dragLeftThumb( e.getY());
+      if (left_thumb_drag_mode) {
+         if (bar_orientation == HORIZONTAL) dragLeftThumb(e.getX());
+         else dragLeftThumb(e.getY());
        }
-      else if (rightThumbDragMode) {
-         if (bar_orientation == HORIZONTAL) dragRightThumb( e.getX() );
-         else dragRightThumb( e.getY() );
+      else if (right_thumb_drag_mode) {
+         if (bar_orientation == HORIZONTAL) dragRightThumb(e.getX());
+         else dragRightThumb(e.getY());
        }
-      else if (midDragMode) {
+      else if (mid_drag_mode) {
          int drag;
          if (bar_orientation == HORIZONTAL) drag = e.getX();
          else drag = e.getY();
-         dragBar(initialPos, drag);
+         dragBar(initial_pos, drag);
        }
     }
 

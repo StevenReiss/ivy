@@ -636,7 +636,7 @@ private class AsmClass {
        }
       if (rslt.isEmpty() && (access_info & Opcodes.ACC_INTERFACE) != 0) {
 	 AsmClass jlo = findKnownType(typer,"java.lang.Object");
-	 List<AsmMethod> rl = jlo.findMethods(typer,id,argtyp,ctyp)   ;
+	 List<AsmMethod> rl = jlo.findMethods(typer,id,argtyp,ctyp);
 	 if (rl != null) rslt.addAll(rl);
        }
 

@@ -31,24 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/JflowSource.java,v 1.3 2007-05-04 01:59:52 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: JflowSource.java,v $
- * Revision 1.3  2007-05-04 01:59:52  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.2  2006/07/10 14:52:16  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:30  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow;
 

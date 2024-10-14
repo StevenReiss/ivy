@@ -38,107 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalEditor.java,v 1.30 2018/08/02 15:10:36 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalEditor.java,v $
- * Revision 1.30  2018/08/02 15:10:36  spr
- * Fix imports.
- *
- * Revision 1.29  2017/08/04 12:42:55  spr
- * Clean up
- *
- * Revision 1.28  2017/04/30 02:54:57  spr
- * Clean up code.
- *
- * Revision 1.27  2017/03/14 14:01:23  spr
- * Expose findArc; formatting
- *
- * Revision 1.26  2015/11/20 15:09:23  spr
- * Reformatting.
- *
- * Revision 1.25  2011-09-12 20:50:27  spr
- * Code cleanup.
- *
- * Revision 1.24  2011-05-27 19:32:48  spr
- * Change copyrights.
- *
- * Revision 1.23  2010-12-08 22:50:39  spr
- * Fix up dipslay and add new layouts
- *
- * Revision 1.22  2010-12-03 21:57:39  spr
- * Fix up sizing.
- *
- * Revision 1.21  2010-12-02 23:46:49  spr
- * Petal bug fixes
- *
- * Revision 1.20  2010-11-20 00:28:39  spr
- * Color arcs; add new features to Petal editor.
- *
- * Revision 1.19  2010-11-18 23:09:02  spr
- * Updates to petal to work with bubbles.
- *
- * Revision 1.18  2010-07-28 01:21:20  spr
- * Bug fixes in petal.
- *
- * Revision 1.17  2010-07-01 21:57:08  spr
- * Don't create extra Point object.
- *
- * Revision 1.16  2007-08-10 02:11:21  spr
- * Cleanups from eclipse.
- *
- * Revision 1.15  2006-12-01 03:22:54  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.14  2006/07/10 14:52:24  spr
- * Code cleanup.
- *
- * Revision 1.13  2006/04/21 23:10:57  spr
- * Update printing.
- *
- * Revision 1.12  2005/10/31 19:20:41  spr
- * Add error check for printing.
- *
- * Revision 1.11  2005/06/28 17:21:05  spr
- * Minor bug fixes
- *
- * Revision 1.10  2005/06/07 02:18:22  spr
- * Update for java 5.0
- *
- * Revision 1.9  2005/05/07 22:25:43  spr
- * Updates for java 5.0
- *
- * Revision 1.8  2005/04/28 21:48:40  spr
- * Fix up petal to support pebble.
- *
- * Revision 1.7  2004/06/04 21:02:48  spr
- * Add and correct printing.
- *
- * Revision 1.6  2004/06/02 01:19:34  spr
- * Update print to use resolution to size image.
- *
- * Revision 1.5  2004/05/28 20:57:31  spr
- * Add printing and minor fixes to level layout.
- *
- * Revision 1.4  2004/05/22 02:37:59  spr
- * Fix bugs in the editor where update is called before things are initialized;
- * minor fixups to level layout (more needed).
- *
- * Revision 1.3  2004/05/20 16:03:37  spr
- * Bug fixes for Petal related to CHIA; add oval helper.
- *
- * Revision 1.2  2004/05/05 02:28:08  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/07/16 19:44:58  spr
- * Move petal from bloom to ivy.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.petal;
 
 
@@ -591,7 +490,7 @@ private PetalNode findNodeHelper(Point p, MouseEvent evt)
 	 p1 = getComponentPoint(nodes[i],p);
 	 if (c.contains(p1.x,p1.y)) {
 	    int pos = getPosition(c);
-	    if ( topPosition == -2 || pos < topPosition ) {
+	    if (topPosition == -2 || pos < topPosition) {
 	       topPosition = pos;
 	       topIndex = i;
 	     }
@@ -604,7 +503,7 @@ private PetalNode findNodeHelper(Point p, MouseEvent evt)
    if (topNode == null) return topNode;
    PetalNode nextNode;
    PetalNode tempNode;
-   if (evt != null && evt.getClickCount() == 2 ) {
+   if (evt != null && evt.getClickCount() == 2) {
       nextNode = nodes[0];
       nodes[0] = topNode;
       for (int k = 1; k <= topIndex; ++k) {
@@ -655,7 +554,7 @@ private Point scalePoint(Point p)
 {
    if (scale_by == 1.0 || p == null) return p;
 
-   Point p1 = new Point((int)(p.x/scale_by),(int)(p.y/scale_by));
+   Point p1 = new Point((int) (p.x/scale_by),(int) (p.y/scale_by));
 
    return p1;
 }
@@ -665,7 +564,7 @@ private Dimension scaleDimension(Dimension d)
 {
    if (scale_by == 1.0 || d == null) return d;
 
-   Dimension d1 = new Dimension(((int)(d.width*scale_by)),((int)(d.height*scale_by)));
+   Dimension d1 = new Dimension(((int) (d.width*scale_by)),((int) (d.height*scale_by)));
 
    return d1;
 }
@@ -728,21 +627,20 @@ private void handleClear()
 public synchronized void assignNextPosition(Component c)
 {
   Dimension sz = getSize();
-
+  
   if (c == null) return;
   if (next_position == null) {
-    next_position = new Point(PETAL_LEFT_POSITION,PETAL_TOP_POSITION);
-    position_center = false;
-  }
-  else
-    {
-      PetalNode [] nodes = graph_model.getNodes();
-      if (nodes.length == 1) {
+     next_position = new Point(PETAL_LEFT_POSITION,PETAL_TOP_POSITION);
+     position_center = false;
+   }
+  else {
+     PetalNode [] nodes = graph_model.getNodes();
+     if (nodes.length == 1) {
 	next_position = new Point(PETAL_LEFT_POSITION,PETAL_TOP_POSITION);
 	x_offset = 0;
 	y_offset = 0;
       }
-    }
+   }
 
   Dimension csz = c.getSize();
 
@@ -821,7 +719,7 @@ synchronized void handleMove(MouseEvent evt)
 
 
 
-synchronized private void setPetalCursor(Cursor c)
+private synchronized void setPetalCursor(Cursor c)
 {
    if (c == cur_cursor) return;
    cur_cursor = c;
@@ -877,7 +775,7 @@ synchronized void handleClick(MouseEvent evt)
 /*										*/
 /********************************************************************************/
 
-synchronized private int handleDrag(MouseEvent evt,Point down,Point last,int ctr,boolean release)
+private synchronized int handleDrag(MouseEvent evt,Point down,Point last,int ctr,boolean release)
 {
    Rectangle r = new Rectangle(evt.getX(),evt.getY(),1,1);
    scrollRectToVisible(r);
@@ -1151,7 +1049,7 @@ private void zoom(int amt)
 
 
 
-private class Wheeler implements MouseWheelListener {
+private final class Wheeler implements MouseWheelListener {
    
    
    @Override public void mouseWheelMoved(MouseWheelEvent e) {
@@ -1249,8 +1147,8 @@ private synchronized void setSizes()
 {
    if (editor_size != null) {
       if (scale_by == 1) return editor_size;
-      return new Dimension((int)(editor_size.width * scale_by),
-			      (int)(editor_size.height * scale_by));
+      return new Dimension((int) (editor_size.width * scale_by),
+			      (int) (editor_size.height * scale_by));
     }
 
    return new Dimension(10,10);
@@ -1424,7 +1322,7 @@ private class Mouser extends MouseInputAdapter {
 @Override public boolean isFocusable()			{ return true; }
 
 
-private class Keyer extends KeyAdapter {
+private final class Keyer extends KeyAdapter {
 
    @Override public void keyPressed(KeyEvent e) {
       switch (e.getKeyCode()) {
@@ -1485,7 +1383,7 @@ private class Keyer extends KeyAdapter {
 /*										*/
 /********************************************************************************/
 
-private class TabFrame extends JPanel {
+private final class TabFrame extends JPanel {
 
    private static final long	   serialVersionUID = 1;
 
@@ -2600,7 +2498,7 @@ private void handlePrint(String file)
    int res = 72;
    Dimension d0 = new Dimension(d);
 
-   int margin = (int)(res * 0.5);
+   int margin = (int) (res * 0.5);
    d.width -= 2*margin;
    d.height -= 2*margin;
 

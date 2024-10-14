@@ -38,43 +38,6 @@
  ********************************************************************************/
 
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/petal/PetalTest.java,v 1.9 2019/09/12 12:48:29 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PetalTest.java,v $
- * Revision 1.9  2019/09/12 12:48:29  spr
- * Code cleanup.
- *
- * Revision 1.8  2018/08/02 15:10:37  spr
- * Fix imports.
- *
- * Revision 1.7  2015/11/20 15:09:24  spr
- * Reformatting.
- *
- * Revision 1.6  2011-05-27 19:32:49  spr
- * Change copyrights.
- *
- * Revision 1.5  2006-12-01 03:22:54  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.4  2005/05/07 22:25:43  spr
- * Updates for java 5.0
- *
- * Revision 1.3  2004/05/20 16:03:37  spr
- * Bug fixes for Petal related to CHIA; add oval helper.
- *
- * Revision 1.2  2004/05/05 02:28:09  spr
- * Update import lists using eclipse.
- *
- * Revision 1.1  2003/07/16 19:44:59  spr
- * Move petal from bloom to ivy.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.petal;
 
 import edu.brown.cs.ivy.swing.SwingMenuBar;
@@ -94,7 +57,7 @@ import java.awt.event.ActionListener;
 
 
 
-public class PetalTest extends JFrame implements PetalConstants
+public final class PetalTest extends JFrame implements PetalConstants
 {
 
 /********************************************************************************/
@@ -121,8 +84,8 @@ public static void main(String [] args)
 /*										*/
 /********************************************************************************/
 
-public PetalEditor	 petal_editor;
-public transient PetalModelDefault petal_model;
+private PetalEditor	 petal_editor;
+private transient PetalModelDefault petal_model;
 
 private static final long serialVersionUID = 1;
 

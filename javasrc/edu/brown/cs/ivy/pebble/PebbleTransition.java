@@ -31,54 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/pebble/PebbleTransition.java,v 1.13 2018/08/02 15:10:34 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: PebbleTransition.java,v $
- * Revision 1.13  2018/08/02 15:10:34  spr
- * Fix imports.
- *
- * Revision 1.12  2015/11/20 15:09:22  spr
- * Reformatting.
- *
- * Revision 1.11  2013/09/24 01:07:50  spr
- * data format
- *
- * Revision 1.10  2013-06-03 13:03:32  spr
- * Minor fixes
- *
- * Revision 1.9  2007-05-04 02:00:28  spr
- * Fix bugs related to polling.
- *
- * Revision 1.8  2006/07/23 02:25:14  spr
- * Add support for action editing and creation.
- *
- * Revision 1.7  2006/07/10 14:52:23  spr
- * Code cleanup.
- *
- * Revision 1.6  2006/02/21 17:06:42  spr
- * Changes to Pebble to support external data models.
- *
- * Revision 1.5  2005/07/08 20:57:07  spr
- * Charles' upgrade to Pebble UI.
- *
- * Revision 1.4  2005/06/07 02:18:21  spr
- * Update for java 5.0
- *
- * Revision 1.3  2005/05/07 22:25:41  spr
- * Updates for java 5.0
- *
- * Revision 1.2  2005/04/29 18:15:26  spr
- * Add normalization and class type; fix minor problems.
- *
- * Revision 1.1  2005/04/28 21:48:16  spr
- * Initial release of the pebble automata editor.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.pebble;
 
@@ -135,7 +87,7 @@ private transient Collection<Action> arc_actions;
 
 private static final long serialVersionUID = 1;
 
-private static float [] DASHES = { 10.0f, 5.0f };
+private static final float [] DASHES = { 10.0f, 5.0f };
 
 
 
@@ -391,7 +343,7 @@ private class ArcLabel extends PetalNodeDefault {
       setComponent(lbl);
     }
 
-   @Override public String getToolTip(Point _at) {
+   @Override public String getToolTip(Point at) {
       JLabel jl = (JLabel) getComponent();
       return jl.getText();
     }
