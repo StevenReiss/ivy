@@ -126,9 +126,9 @@ public static final int	NONE_OPTION	= -1;
 
 
 /**
-     * Constructs a new debug graphics context that supports slowed
-     * down drawing.
-     */
+ * Constructs a new debug graphics context that supports slowed
+ * down drawing.
+ */
 public SwingDebugGraphics()
 {
    super();
@@ -138,11 +138,11 @@ public SwingDebugGraphics()
 }
 
 /**
-     * Constructs a debug graphics context from an existing graphics
-     * context that supports slowed down drawing.
-     *
-     * @param graphics	the Graphics context to slow down
-     */
+ * Constructs a debug graphics context from an existing graphics
+ * context that supports slowed down drawing.
+ *
+ * @param graphics	the Graphics context to slow down
+ */
 public SwingDebugGraphics(Graphics2D graphics)
 {
    this();
@@ -150,36 +150,36 @@ public SwingDebugGraphics(Graphics2D graphics)
 }
 
 /**
-     * Overrides <code>Graphics.create</code> to return a DebugGraphics object.
-     */
+ * Overrides <code>Graphics.create</code> to return a DebugGraphics object.
+ */
 @Override
 public Graphics create()
 {
    SwingDebugGraphics debugGraphics;
-
+   
    debugGraphics = new SwingDebugGraphics();
    debugGraphics.graphics_2d = (Graphics2D) graphics_2d.create();
    debugGraphics.debug_options = debug_options;
    debugGraphics.image_buffer = image_buffer;
-
+   
    return debugGraphics;
 }
 
 /**
-     * Overrides <code>Graphics.create</code> to return a DebugGraphics object.
-     */
+ * Overrides <code>Graphics.create</code> to return a DebugGraphics object.
+ */
 @Override
 public Graphics create(int x,int y,int width,int height)
 {
    SwingDebugGraphics debugGraphics;
-
+   
    debugGraphics = new SwingDebugGraphics();
    debugGraphics.graphics_2d = (Graphics2D) graphics_2d.create(x, y, width, height);
    debugGraphics.debug_options = debug_options;
    debugGraphics.image_buffer = image_buffer;
    debugGraphics.x_offset = x_offset + x;
    debugGraphics.y_offset = y_offset + y;
-
+   
    return debugGraphics;
 }
 
@@ -189,84 +189,84 @@ public Graphics create(int x,int y,int width,int height)
 //------------------------------------------------
 
 /**
-     * Sets the Color used to flash drawing operations.
-     */
+ * Sets the Color used to flash drawing operations.
+ */
 public static void setFlashColor(Color flashColor)
 {
    info().flash_color = flashColor;
 }
 
 /**
-     * Returns the Color used to flash drawing operations.
-     * @see #setFlashColor
-     */
+ * Returns the Color used to flash drawing operations.
+ * @see #setFlashColor
+ */
 public static Color flashColor()
 {
    return info().flash_color;
 }
 
 /**
-     * Sets the time delay of drawing operation flashing.
-     */
+ * Sets the time delay of drawing operation flashing.
+ */
 public static void setFlashTime(int flashTime)
 {
    info().flash_time = flashTime;
 }
 
 /**
-     * Returns the time delay of drawing operation flashing.
-     * @see #setFlashTime
-     */
+ * Returns the time delay of drawing operation flashing.
+ * @see #setFlashTime
+ */
 public static int flashTime()
 {
    return info().flash_time;
 }
 
 /**
-     * Sets the number of times that drawing operations will flash.
-     */
+ * Sets the number of times that drawing operations will flash.
+ */
 public static void setFlashCount(int flashCount)
 {
    info().flash_count = flashCount;
 }
 
 /** Returns the number of times that drawing operations will flash.
-      * @see #setFlashCount
-      */
+ * @see #setFlashCount
+ */
 public static int flashCount()
 {
    return info().flash_count;
 }
 
 /** Sets the stream to which the DebugGraphics logs drawing operations.
-      */
+ */
 public static void setLogStream(java.io.PrintStream stream)
 {
    info().debug_stream = stream;
 }
 
 /** Returns the stream to which the DebugGraphics logs drawing operations.
-      * @see #setLogStream
-      */
+ * @see #setLogStream
+ */
 public static java.io.PrintStream logStream()
 {
    return info().debug_stream;
 }
 
 /** Sets the Font used for text drawing operations.
-      */
+ */
 @Override
 public void setFont(Font aFont)
 {
    if (debugLog()) {
       info().log(toShortString() + " Setting font: " + aFont);
-   }
+    }
    graphics_2d.setFont(aFont);
 }
 
 /** Returns the Font used for text drawing operations.
-      * @see #setFont
-      */
+ * @see #setFont
+ */
 @Override
 public Font getFont()
 {
@@ -274,19 +274,19 @@ public Font getFont()
 }
 
 /** Sets the color to be used for drawing and filling lines and shapes.
-      */
+ */
 @Override
 public void setColor(Color aColor)
 {
    if (debugLog()) {
       info().log(toShortString() + " Setting color: " + aColor);
-   }
+    }
    graphics_2d.setColor(aColor);
 }
 
 /** Returns the Color used for text drawing operations.
-      * @see #setColor
-      */
+ * @see #setColor
+ */
 @Override
 public Color getColor()
 {
@@ -299,8 +299,8 @@ public Color getColor()
 //------------------------------------------------
 
 /**
-     * Overrides <code>Graphics.getFontMetrics</code>.
-     */
+ * Overrides <code>Graphics.getFontMetrics</code>.
+ */
 @Override
 public FontMetrics getFontMetrics()
 {
@@ -308,8 +308,8 @@ public FontMetrics getFontMetrics()
 }
 
 /**
-     * Overrides <code>Graphics.getFontMetrics</code>.
-     */
+ * Overrides <code>Graphics.getFontMetrics</code>.
+ */
 @Override
 public FontMetrics getFontMetrics(Font f)
 {
@@ -317,46 +317,46 @@ public FontMetrics getFontMetrics(Font f)
 }
 
 /**
-     * Overrides <code>Graphics.translate</code>.
-     */
+ * Overrides <code>Graphics.translate</code>.
+ */
 @Override
 public void translate(int x,int y)
 {
    if (debugLog()) {
       info().log(toShortString() + " Translating by: " + new Point(x,y));
-   }
+    }
    x_offset += x;
    y_offset += y;
    graphics_2d.translate(x, y);
 }
 
 /**
-     * Overrides <code>Graphics.setPaintMode</code>.
-     */
+ * Overrides <code>Graphics.setPaintMode</code>.
+ */
 @Override
 public void setPaintMode()
 {
    if (debugLog()) {
       info().log(toShortString() + " Setting paint mode");
-   }
+    }
    graphics_2d.setPaintMode();
 }
 
 /**
-     * Overrides <code>Graphics.setXORMode</code>.
-     */
+ * Overrides <code>Graphics.setXORMode</code>.
+ */
 @Override
 public void setXORMode(Color aColor)
 {
    if (debugLog()) {
       info().log(toShortString() + " Setting XOR mode: " + aColor);
-   }
+    }
    graphics_2d.setXORMode(aColor);
 }
 
 /**
-     * Overrides <code>Graphics.getClipBounds</code>.
-     */
+ * Overrides <code>Graphics.getClipBounds</code>.
+ */
 @Override
 public Rectangle getClipBounds()
 {
@@ -364,8 +364,8 @@ public Rectangle getClipBounds()
 }
 
 /**
-     * Overrides <code>Graphics.clipRect</code>.
-     */
+ * Overrides <code>Graphics.clipRect</code>.
+ */
 @Override
 public void clipRect(int x,int y,int width,int height)
 {
@@ -374,24 +374,24 @@ public void clipRect(int x,int y,int width,int height)
       info().log(toShortString() + " Setting clipRect: " + 
             (new Rectangle(x,y,width,height)) +
             " New clipRect: " + graphics_2d.getClip());
-   }
+    }
 }
 
 /**
-     * Overrides <code>Graphics.setClip</code>.
-     */
+ * Overrides <code>Graphics.setClip</code>.
+ */
 @Override
 public void setClip(int x,int y,int width,int height)
 {
    graphics_2d.setClip(x, y, width, height);
    if (debugLog()) {
       info().log(toShortString() + " Setting new clipRect: " + graphics_2d.getClip());
-   }
+    }
 }
 
 /**
-     * Overrides <code>Graphics.getClip</code>.
-     */
+ * Overrides <code>Graphics.getClip</code>.
+ */
 @Override
 public Shape getClip()
 {
@@ -399,554 +399,554 @@ public Shape getClip()
 }
 
 /**
-     * Overrides <code>Graphics.setClip</code>.
-     */
+ * Overrides <code>Graphics.setClip</code>.
+ */
 @Override
 public void setClip(Shape clip)
 {
    graphics_2d.setClip(clip);
    if (debugLog()) {
       info().log(toShortString() + " Setting new clipRect: " + graphics_2d.getClip());
-   }
+    }
 }
 
 /**
-     * Overrides <code>Graphics.drawRect</code>.
-     */
+ * Overrides <code>Graphics.drawRect</code>.
+ */
 @Override
 public void drawRect(int x,int y,int width,int height)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Drawing rect: " + new Rectangle(x,y,width,height));
-   }
-
+    }
+   
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawRect(x, y, width, height);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.drawRect(x, y, width, height);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.drawRect(x, y, width, height);
 }
 
 /**
-     * Overrides <code>Graphics.fillRect</code>.
-     */
+ * Overrides <code>Graphics.fillRect</code>.
+ */
 @Override
 public void fillRect(int x,int y,int width,int height)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Filling rect: " + new Rectangle(x,y,width,height));
-   }
-
+    }
+   
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.fillRect(x, y, width, height);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.fillRect(x, y, width, height);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.fillRect(x, y, width, height);
 }
 
 /**
-     * Overrides <code>Graphics.clearRect</code>.
-     */
+ * Overrides <code>Graphics.clearRect</code>.
+ */
 @Override
 public void clearRect(int x,int y,int width,int height)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Clearing rect: " + new Rectangle(x,y,width,height));
-   }
-
+    }
+   
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.clearRect(x, y, width, height);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.clearRect(x, y, width, height);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.clearRect(x, y, width, height);
 }
 
 /**
-     * Overrides <code>Graphics.drawRoundRect</code>.
-     */
+ * Overrides <code>Graphics.drawRoundRect</code>.
+ */
 @Override
 public void drawRoundRect(int x,int y,int width,int height,int arcWidth,int arcHeight)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Drawing round rect: " + 
             new Rectangle(x,y,width,height) +
             " arcWidth: " + arcWidth + " archHeight: " + arcHeight);
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
 }
 
 /**
-     * Overrides <code>Graphics.fillRoundRect</code>.
-     */
+ * Overrides <code>Graphics.fillRoundRect</code>.
+ */
 @Override
 public void fillRoundRect(int x,int y,int width,int height,int arcWidth,int arcHeight)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Filling round rect: " + 
-               new Rectangle(x,y,width,height) +
-               " arcWidth: " + arcWidth + " archHeight: " + arcHeight);
-   }
+            new Rectangle(x,y,width,height) +
+            " arcWidth: " + arcWidth + " archHeight: " + arcHeight);
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
 }
 
 /**
-     * Overrides <code>Graphics.drawLine</code>.
-     */
+ * Overrides <code>Graphics.drawLine</code>.
+ */
 @Override
 public void drawLine(int x1,int y1,int x2,int y2)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Drawing line: from " + 
             pointToString(x1, y1) + " to " +
             pointToString(x2, y2));
-   }
-
+    }
+   
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawLine(x1, y1, x2, y2);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.drawLine(x1, y1, x2, y2);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.drawLine(x1, y1, x2, y2);
 }
 
 /**
-     * Overrides <code>Graphics.draw3DRect</code>.
-     */
+ * Overrides <code>Graphics.draw3DRect</code>.
+ */
 @Override
 public void draw3DRect(int x,int y,int width,int height,boolean raised)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Drawing 3D rect: " +
             new Rectangle(x,y,width,height) +
             " Raised bezel: " + raised);
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.draw3DRect(x, y, width, height, raised);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.draw3DRect(x, y, width, height, raised);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.draw3DRect(x, y, width, height, raised);
 }
 
 /**
-     * Overrides <code>Graphics.fill3DRect</code>.
-     */
+ * Overrides <code>Graphics.fill3DRect</code>.
+ */
 @Override
 public void fill3DRect(int x,int y,int width,int height,boolean raised)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Filling 3D rect: " + 
             new Rectangle(x,y,width,height) +
             " Raised bezel: " + raised);
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.fill3DRect(x, y, width, height, raised);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.fill3DRect(x, y, width, height, raised);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.fill3DRect(x, y, width, height, raised);
 }
 
 /**
-     * Overrides <code>Graphics.drawOval</code>.
-     */
+ * Overrides <code>Graphics.drawOval</code>.
+ */
 @Override
 public void drawOval(int x,int y,int width,int height)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Drawing oval: " + new Rectangle(x,y,width,height));
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawOval(x, y, width, height);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.drawOval(x, y, width, height);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.drawOval(x, y, width, height);
 }
 
 /**
-     * Overrides <code>Graphics.fillOval</code>.
-     */
+ * Overrides <code>Graphics.fillOval</code>.
+ */
 @Override
 public void fillOval(int x,int y,int width,int height)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Filling oval: " + new Rectangle(x,y,width,height));
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.fillOval(x, y, width, height);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.fillOval(x, y, width, height);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.fillOval(x, y, width, height);
 }
 
 /**
-     * Overrides <code>Graphics.drawArc</code>.
-     */
+ * Overrides <code>Graphics.drawArc</code>.
+ */
 @Override
 public void drawArc(int x,int y,int width,int height,int startAngle,int arcAngle)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Drawing arc: " +
             new Rectangle(x,y,width,height) +
             " startAngle: " + startAngle + " arcAngle: " + arcAngle);
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawArc(x, y, width, height, startAngle, arcAngle);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.drawArc(x, y, width, height, startAngle, arcAngle);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.drawArc(x, y, width, height, startAngle, arcAngle);
 }
 
 /**
-     * Overrides <code>Graphics.fillArc</code>.
-     */
+ * Overrides <code>Graphics.fillArc</code>.
+ */
 @Override
 public void fillArc(int x,int y,int width,int height,int startAngle,int arcAngle)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Filling arc: " + 
             new Rectangle(x,y,width,height) +
             " startAngle: " + startAngle + " arcAngle: " + arcAngle);
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.fillArc(x, y, width, height, startAngle, arcAngle);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.fillArc(x, y, width, height, startAngle, arcAngle);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.fillArc(x, y, width, height, startAngle, arcAngle);
 }
 
 /**
-     * Overrides <code>Graphics.drawPolyline</code>.
-     */
+ * Overrides <code>Graphics.drawPolyline</code>.
+ */
 @Override
 public void drawPolyline(int [] xPoints,int [] yPoints,int nPoints)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Drawing polyline: " + " nPoints: " + 
             nPoints + " X's: " +
             Arrays.toString(xPoints) + " Y's: " + Arrays.toString(yPoints));
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawPolyline(xPoints, yPoints, nPoints);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.drawPolyline(xPoints, yPoints, nPoints);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.drawPolyline(xPoints, yPoints, nPoints);
 }
 
 /**
-     * Overrides <code>Graphics.drawPolygon</code>.
-     */
+ * Overrides <code>Graphics.drawPolygon</code>.
+ */
 @Override
 public void drawPolygon(int [] xPoints,int [] yPoints,int nPoints)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Drawing polygon: " + " nPoints: " + 
             nPoints + " X's: " +
             Arrays.toString(xPoints) + " Y's: " + Arrays.toString(yPoints));
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawPolygon(xPoints, yPoints, nPoints);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.drawPolygon(xPoints, yPoints, nPoints);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.drawPolygon(xPoints, yPoints, nPoints);
 }
 
 /**
-     * Overrides <code>Graphics.fillPolygon</code>.
-     */
+ * Overrides <code>Graphics.fillPolygon</code>.
+ */
 @Override
 public void fillPolygon(int [] xPoints,int [] yPoints,int nPoints)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Filling polygon: " +
             " nPoints: " + nPoints + " X's: " +
             Arrays.toString(xPoints) + " Y'`: " + Arrays.toString(yPoints));
-   }
+    }
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.fillPolygon(xPoints, yPoints, nPoints);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.fillPolygon(xPoints, yPoints, nPoints);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.fillPolygon(xPoints, yPoints, nPoints);
 }
 
 /**
-     * Overrides <code>Graphics.drawString</code>.
-     */
+ * Overrides <code>Graphics.drawString</code>.
+ */
 @Override
 public void drawString(String aString,int x,int y)
 {
@@ -981,8 +981,8 @@ public void drawString(String aString,int x,int y)
 }
 
 /**
-     * Overrides <code>Graphics.drawString</code>.
-     */
+ * Overrides <code>Graphics.drawString</code>.
+ */
 @Override
 public void drawString(AttributedCharacterIterator iterator,int x,int y)
 {
@@ -1017,8 +1017,8 @@ public void drawString(AttributedCharacterIterator iterator,int x,int y)
 }
 
 /**
-     * Overrides <code>Graphics.drawBytes</code>.
-     */
+ * Overrides <code>Graphics.drawBytes</code>.
+ */
 @Override
 public void drawBytes(byte [] data,int offset,int length,int x,int y)
 {
@@ -1052,68 +1052,68 @@ public void drawBytes(byte [] data,int offset,int length,int x,int y)
 }
 
 /**
-     * Overrides <code>Graphics.drawChars</code>.
-     */
+ * Overrides <code>Graphics.drawChars</code>.
+ */
 @Override
 public void drawChars(char [] data,int offset,int length,int x,int y)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info().log(toShortString() + " Drawing chars at " + new Point(x,y));
-   }
-
+    }
+   
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawChars(data, offset, length, x, y);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       Color oldColor = getColor();
       int count = (info.flash_count * 2) - 1;
-
+      
       for (int i = 0; i < count; i++) {
 	 graphics_2d.setColor((i % 2) == 0 ? info.flash_color : oldColor);
 	 graphics_2d.drawChars(data, offset, length, x, y);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
+       }
       graphics_2d.setColor(oldColor);
-   }
+    }
    graphics_2d.drawChars(data, offset, length, x, y);
 }
 
 /**
-     * Overrides <code>Graphics.drawImage</code>.
-     */
+ * Overrides <code>Graphics.drawImage</code>.
+ */
 @Override
 public boolean drawImage(Image img,int x,int y,ImageObserver observer)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info.log(toShortString() + " Drawing image: " + img + " at: " + new Point(x,y));
-   }
-
+    }
+   
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawImage(img, x, y, observer);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       int count = (info.flash_count * 2) - 1;
       ImageProducer oldProducer = img.getSource();
       ImageProducer newProducer = new FilteredImageSource(oldProducer,
-	       new DebugGraphicsFilter(info.flash_color));
+            new DebugGraphicsFilter(info.flash_color));
       Image newImage = Toolkit.getDefaultToolkit().createImage(newProducer);
       DebugGraphicsObserver imageObserver = new DebugGraphicsObserver();
-
+      
       Image imageToDraw;
       for (int i = 0; i < count; i++) {
 	 imageToDraw = (i % 2) == 0 ? newImage : img;
@@ -1121,17 +1121,17 @@ public boolean drawImage(Image img,int x,int y,ImageObserver observer)
 	 graphics_2d.drawImage(imageToDraw, x, y, imageObserver);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
-   }
+       }
+    }
    return graphics_2d.drawImage(img, x, y, observer);
 }
 
 /**
-     * Overrides <code>Graphics.drawImage</code>.
-     */
+ * Overrides <code>Graphics.drawImage</code>.
+ */
 @Override
 public boolean drawImage(Image img,int x,int y,int width,int height,
-	 ImageObserver observer)
+      ImageObserver observer)
 {
    DebugInfo info = info();
    
@@ -1169,8 +1169,8 @@ public boolean drawImage(Image img,int x,int y,int width,int height,
 }
 
 /**
-     * Overrides <code>Graphics.drawImage</code>.
-     */
+ * Overrides <code>Graphics.drawImage</code>.
+ */
 @Override
 public boolean drawImage(Image img,int x,int y,Color bgcolor,ImageObserver observer)
 {
@@ -1210,35 +1210,35 @@ public boolean drawImage(Image img,int x,int y,Color bgcolor,ImageObserver obser
 }
 
 /**
-     * Overrides <code>Graphics.drawImage</code>.
-     */
+ * Overrides <code>Graphics.drawImage</code>.
+ */
 @Override
 public boolean drawImage(Image img,int x,int y,int width,int height,Color bgcolor,
-	 ImageObserver observer)
+      ImageObserver observer)
 {
    DebugInfo info = info();
-
+   
    if (debugLog()) {
       info.log(toShortString() + " Drawing image: " + img + " at: " +
             new Rectangle(x,y,width,height) + ", bgcolor: " + bgcolor);
-   }
-
+    }
+   
    if (isDrawingBuffer()) {
       if (debugBuffered()) {
 	 Graphics debugGraphics = debugGraphics();
-
+         
 	 debugGraphics.drawImage(img, x, y, width, height, bgcolor, observer);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       int count = (info.flash_count * 2) - 1;
       ImageProducer oldProducer = img.getSource();
       ImageProducer newProducer = new FilteredImageSource(oldProducer,
-	       new DebugGraphicsFilter(info.flash_color));
+            new DebugGraphicsFilter(info.flash_color));
       Image newImage = Toolkit.getDefaultToolkit().createImage(newProducer);
       DebugGraphicsObserver imageObserver = new DebugGraphicsObserver();
-
+      
       Image imageToDraw;
       for (int i = 0; i < count; i++) {
 	 imageToDraw = (i % 2) == 0 ? newImage : img;
@@ -1246,14 +1246,14 @@ public boolean drawImage(Image img,int x,int y,int width,int height,Color bgcolo
 	 graphics_2d.drawImage(imageToDraw, x, y, width, height, bgcolor, imageObserver);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
-   }
+       }
+    }
    return graphics_2d.drawImage(img, x, y, width, height, bgcolor, observer);
 }
 
 /**
-     * Overrides <code>Graphics.drawImage</code>.
-     */
+ * Overrides <code>Graphics.drawImage</code>.
+ */
 @Override
 public boolean drawImage(Image img,int dx1,int dy1,int dx2,int dy2,int sx1,int sy1,
       int sx2,int sy2,ImageObserver observer)
@@ -1272,17 +1272,17 @@ public boolean drawImage(Image img,int dx1,int dy1,int dx2,int dy2,int sx1,int s
          
 	 debugGraphics.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer);
 	 debugGraphics.dispose();
-      }
-   }
+       }
+    }
    else if (debugFlash()) {
       int i = 0;
       int count = (info.flash_count * 2) - 1;
       ImageProducer oldProducer = img.getSource();
       ImageProducer newProducer = new FilteredImageSource(oldProducer,
-	       new DebugGraphicsFilter(info.flash_color));
+            new DebugGraphicsFilter(info.flash_color));
       Image newImage = Toolkit.getDefaultToolkit().createImage(newProducer);
       DebugGraphicsObserver imageObserver = new DebugGraphicsObserver();
-
+      
       Image imageToDraw;
       for (i = 0; i < count; i++) {
 	 imageToDraw = (i % 2) == 0 ? newImage : img;
@@ -1292,14 +1292,14 @@ public boolean drawImage(Image img,int dx1,int dy1,int dx2,int dy2,int sx1,int s
                imageObserver);
 	 Toolkit.getDefaultToolkit().sync();
 	 sleep(info.flash_time);
-      }
-   }
+       }
+    }
    return graphics_2d.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, observer);
 }
 
 /**
-     * Overrides <code>Graphics.drawImage</code>.
-     */
+ * Overrides <code>Graphics.drawImage</code>.
+ */
 @Override
 public boolean drawImage(Image img,int dx1,int dy1,int dx2,int dy2,int sx1,int sy1,
       int sx2,int sy2,Color bgcolor,ImageObserver observer)
@@ -1351,15 +1351,15 @@ static void loadImage(Image img)
 
 
 /**
-     * Overrides <code>Graphics.copyArea</code>.
-     */
+ * Overrides <code>Graphics.copyArea</code>.
+ */
 @Override
 public void copyArea(int x,int y,int width,int height,int destX,int destY)
 {
    if (debugLog()) {
       info().log(toShortString() + " Copying area from: " +
             new Rectangle(x,y,width,height) + " to: " + new Point(destX,destY));
-   }
+    }
    graphics_2d.copyArea(x, y, width, height, destX, destY);
 }
 
@@ -1367,14 +1367,14 @@ final void sleep(int mSecs)
 {
    try {
       Thread.sleep(mSecs);
-   }
+    }
    catch (Exception e) {
-   }
+    }
 }
 
 /**
-     * Overrides <code>Graphics.dispose</code>.
-     */
+ * Overrides <code>Graphics.dispose</code>.
+ */
 @Override
 public void dispose()
 {
@@ -1384,10 +1384,10 @@ public void dispose()
 
 // ALERT!
 /**
-     * Returns the drawingBuffer value.
-     *
-     * @return true if this object is drawing from a Buffer
-     */
+ * Returns the drawingBuffer value.
+ *
+ * @return true if this object is drawing from a Buffer
+ */
 public boolean isDrawingBuffer()
 {
    return image_buffer != null;
@@ -1396,7 +1396,7 @@ public boolean isDrawingBuffer()
 String toShortString()
 {
    StringBuffer buffer = new StringBuffer("Graphics" + (isDrawingBuffer() ? "<B>" : "") +
-	    "(" + graphics_ID + "-" + debug_options + ")");
+         "(" + graphics_ID + "-" + debug_options + ")");
    return buffer.toString();
 }
 
@@ -1407,13 +1407,13 @@ String pointToString(int x,int y)
 }
 
 /** Enables/disables diagnostic information about every graphics
-      * operation. The value of <b>options</b> indicates how this information
-      * should be displayed. LOG_OPTION causes a text message to be printed.
-      * FLASH_OPTION causes the drawing to flash several times. BUFFERED_OPTION
-      * creates a new Frame that shows each operation on an
-      * offscreen buffer. The value of <b>options</b> is bitwise OR'd into
-      * the current value. To disable debugging use NONE_OPTION.
-      */
+ * operation. The value of <b>options</b> indicates how this information
+ * should be displayed. LOG_OPTION causes a text message to be printed.
+ * FLASH_OPTION causes the drawing to flash several times. BUFFERED_OPTION
+ * creates a new Frame that shows each operation on an
+ * offscreen buffer. The value of <b>options</b> is bitwise OR'd into
+ * the current value. To disable debugging use NONE_OPTION.
+ */
 public void setDebugOptions(int options)
 {
    if (options != 0) {
@@ -1435,58 +1435,58 @@ public void setDebugOptions(int options)
 }
 
 /** Returns the current debugging options for this DebugGraphics.
-      * @see #setDebugOptions
-      */
+ * @see #setDebugOptions
+ */
 public int getDebugOptions()
 {
    return debug_options;
 }
 
 /** Static wrapper method for DebugInfo.setDebugOptions(). Stores
-      * options on a per component basis.
-      */
+ * options on a per component basis.
+ */
 static void setDebugOptions(JComponent component,int options)
 {
    info().setDebugOptions(component, options);
 }
 
 /** Static wrapper method for DebugInfo.getDebugOptions().
-      */
+ */
 static int getDebugOptions(JComponent component)
 {
    DebugInfo dgi = info();
    if (dgi == null) {
       return 0;
-   }
+    }
    return dgi.getDebugOptions(component);
 }
 
 /** Returns non-zero if <b>component</b> should display with DebugGraphics,
-      * zero otherwise. Walks the JComponent's parent tree to determine if
-      * any debugging options have been set.
-      */
+ * zero otherwise. Walks the JComponent's parent tree to determine if
+ * any debugging options have been set.
+ */
 static int shouldComponentDebug(JComponent component)
 {
    DebugInfo info = info();
    if (info == null) {
       return 0;
-   }
+    }
    else {
       Container container = component;
       int debugOptions = 0;
-
+      
       while (container != null && (container instanceof JComponent)) {
 	 debugOptions |= info.getDebugOptions((JComponent) container);
 	 container = container.getParent();
-      }
-
+       }
+      
       return debugOptions;
-   }
+    }
 }
 
 /** Returns the number of JComponents that have debugging options turned
-      * on.
-      */
+ * on.
+ */
 static int debugComponentCount()
 {
    return 1;
@@ -1509,17 +1509,17 @@ boolean debugBuffered()
 }
 
 /** Returns a DebugGraphics for use in buffering window.
-      */
+ */
 private Graphics debugGraphics()
 {
    SwingDebugGraphics debugGraphics;
    DebugInfo info = info();
    JFrame debugFrame;
-
+   
    if (info.debug_frame == null) {
       info.debug_frame = new JFrame();
       info.debug_frame.setSize(500, 500);
-   }
+    }
    debugFrame = info.debug_frame;
    debugFrame.setVisible(true);
    debugGraphics = new SwingDebugGraphics((Graphics2D) debugFrame.getGraphics());
@@ -1529,12 +1529,12 @@ private Graphics debugGraphics()
    debugGraphics.setClip(getClipBounds());
    if (debugFlash()) {
       debugGraphics.setDebugOptions(FLASH_OPTION);
-   }
+    }
    return debugGraphics;
 }
 
 /** Returns DebugInfo, or creates one if none exists.
-      */
+ */
 private static DebugInfo debug_graphics_info = new DebugInfo();
 
 static DebugInfo info()
@@ -1554,7 +1554,7 @@ public void addRenderingHints(Map<?, ?> hints)
 {
    if (debugLog()) {
       info().log(toShortString() + " addRenderingHints " + hints);
-   }
+    }
    graphics_2d.addRenderingHints(hints);
 }
 
@@ -1564,7 +1564,7 @@ public void clip(Shape s)
 {
    if (debugLog()) {
       info().log(toShortString() + " clip shape " + s);
-   }
+    }
    graphics_2d.clip(s);
 }
 
@@ -1574,7 +1574,7 @@ public void draw(Shape s)
 {
    if (debugLog()) {
       info().log(toShortString() + " draw shape " + s);
-   }
+    }
    graphics_2d.draw(s);
 }
 
@@ -1584,7 +1584,7 @@ public void drawGlyphVector(GlyphVector g,float x,float y)
 {
    if (debugLog()) {
       info().log(toShortString() + " drawGlyphVector " + g + " " + x + " " + y);
-   }
+    }
    graphics_2d.drawGlyphVector(g, x, y);
 }
 
@@ -1594,7 +1594,7 @@ public void drawImage(BufferedImage img,BufferedImageOp op,int x,int y)
 {
    if (debugLog()) {
       info().log(toShortString() + " drawImage " + img + " " + op + " " + x + " " + y);
-   }
+    }
    graphics_2d.drawImage(img, op, x, y);
 }
 
@@ -1604,7 +1604,7 @@ public boolean drawImage(Image img,AffineTransform t,ImageObserver obs)
 {
    if (debugLog()) {
       info().log(toShortString() + " drawImage " + img + " " + t + " " + obs);
-   }
+    }
    return graphics_2d.drawImage(img, t, obs);
 }
 
@@ -1614,7 +1614,7 @@ public void drawRenderableImage(RenderableImage img,AffineTransform t)
 {
    if (debugLog()) {
       info().log(toShortString() + " drawRenderableImage " + t);
-   }
+    }
    graphics_2d.drawRenderableImage(img, t);
 }
 
@@ -1624,7 +1624,7 @@ public void drawRenderedImage(RenderedImage img,AffineTransform t)
 {
    if (debugLog()) {
       info().log(toShortString() + " drawRenderedImage " + t);
-   }
+    }
    graphics_2d.drawRenderedImage(img, t);
 }
 
@@ -1634,7 +1634,7 @@ public void drawString(AttributedCharacterIterator it,float x,float y)
 {
    if (debugLog()) {
       info().log(toShortString() + " drawString " + x + " " + y);
-   }
+    }
    graphics_2d.drawString(it, x, y);
 }
 
@@ -1644,7 +1644,7 @@ public void drawString(String s,float x,float y)
 {
    if (debugLog()) {
       info().log(toShortString() + " drawString " + x + " " + y + " : " + s);
-   }
+    }
    graphics_2d.drawString(s, x, y);
 }
 
@@ -1654,7 +1654,7 @@ public void fill(Shape s)
 {
    if (debugLog()) {
       info().log(toShortString() + " fill " + s);
-   }
+    }
    graphics_2d.fill(s);
 }
 
@@ -1725,7 +1725,7 @@ public void rotate(double t)
 {
    if (debugLog()) {
       info().log(toShortString() + " rotate " + t);
-   }
+    }
    graphics_2d.rotate(t);
 }
 
@@ -1735,7 +1735,7 @@ public void rotate(double t,double x,double y)
 {
    if (debugLog()) {
       info().log(toShortString() + " rotate " + t + " " + x + " " + y);
-   }
+    }
    graphics_2d.rotate(t, x, y);
 }
 
@@ -1745,7 +1745,7 @@ public void scale(double x,double y)
 {
    if (debugLog()) {
       info().log(toShortString() + " scale " + x + " " + y);
-   }
+    }
    graphics_2d.scale(x, y);
 }
 
@@ -1755,7 +1755,7 @@ public void setBackground(Color c)
 {
    if (debugLog()) {
       info().log(toShortString() + " setBackground " + c);
-   }
+    }
    graphics_2d.setBackground(c);
 }
 
@@ -1765,7 +1765,7 @@ public void setComposite(Composite c)
 {
    if (debugLog()) {
       info().log(toShortString() + " setComposite " + c);
-   }
+    }
    graphics_2d.setComposite(c);
 }
 
@@ -1775,7 +1775,7 @@ public void setPaint(Paint p)
 {
    if (debugLog()) {
       info().log(toShortString() + " setPaint " + p);
-   }
+    }
    graphics_2d.setPaint(p);
 }
 
@@ -1785,7 +1785,7 @@ public void setRenderingHint(RenderingHints.Key k,Object v)
 {
    if (debugLog()) {
       info().log(toShortString() + " setRenderingHint " + k + " " + v);
-   }
+    }
    graphics_2d.setRenderingHint(k, v);
 }
 
@@ -1795,7 +1795,7 @@ public void setRenderingHints(Map<?, ?> h)
 {
    if (debugLog()) {
       info().log(toShortString() + " setRenderingHints " + h);
-   }
+    }
    graphics_2d.setRenderingHints(h);
 }
 
@@ -1805,7 +1805,7 @@ public void setStroke(Stroke s)
 {
    if (debugLog()) {
       info().log(toShortString() + " setStroke " + s);
-   }
+    }
    graphics_2d.setStroke(s);
 }
 
@@ -1815,7 +1815,7 @@ public void setTransform(AffineTransform t)
 {
    if (debugLog()) {
       info().log(toShortString() + " setTransform " + t);
-   }
+    }
    graphics_2d.setTransform(t);
 }
 
@@ -1825,7 +1825,7 @@ public void shear(double x,double y)
 {
    if (debugLog()) {
       info().log(toShortString() + " shear " + x + " " + y);
-   }
+    }
    graphics_2d.shear(x, y);
 }
 
@@ -1835,7 +1835,7 @@ public void transform(AffineTransform t)
 {
    if (debugLog()) {
       info().log(toShortString() + " transform " + t);
-   }
+    }
    graphics_2d.transform(t);
 }
 
@@ -1845,7 +1845,7 @@ public void translate(double x,double y)
 {
    if (debugLog()) {
       info().log(toShortString() + " translate " + x + " " + y);
-   }
+    }
    graphics_2d.translate(x, y);
 }
 
@@ -1904,7 +1904,7 @@ private static final class DebugInfo {
 /********************************************************************************/
 
 private static final class DebugGraphicsFilter extends RGBImageFilter {
-
+   
    private Color color_filter;
    
    DebugGraphicsFilter(Color c) {

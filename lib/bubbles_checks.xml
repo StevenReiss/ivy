@@ -193,8 +193,8 @@
     </module>
     <module name="LeftCurly">
       <property name="tokens" value="LITERAL_CASE" />
-      <property name="tokens" value="LITERAL_CATCH, LITERAL_DEFAULT, LITERAL_DO" />
-      <property name="tokens" value="LITERAL_ELSE, LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF" />
+      <property name="tokens" value="LITERAL_DEFAULT, LITERAL_DO, LITERAL_CATCH" />
+      <property name="tokens" value="LITERAL_ELSE, LITERAL_FOR, LITERAL_IF" />
       <property name="tokens" value="LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY" />
       <property name="tokens" value="LITERAL_WHILE" />
     </module>
