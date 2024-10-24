@@ -916,7 +916,7 @@ private final class MultiMatchEditor extends JPanel implements ActionListener {
    private String panel_name;
    protected PebbleEvent for_event;
    private JButton add_button;
-   private JButton remove_button;
+   private JButton match_remove_button;
    private static final long serialVersionUID = 1;
    
    /*
@@ -929,11 +929,11 @@ private final class MultiMatchEditor extends JPanel implements ActionListener {
       top_panel.setLayout(new BoxLayout(top_panel, BoxLayout.LINE_AXIS));
       top_panel.add(name_label);
       add_button = new JButton("Add Item");
-      remove_button = new JButton("Remove Item");
+      match_remove_button = new JButton("Remove Item");
       add_button.addActionListener(this);
-      remove_button.addActionListener(this);
+      match_remove_button.addActionListener(this);
       top_panel.add(add_button);
-      top_panel.add(remove_button);
+      top_panel.add(match_remove_button);
     }
    
    public void init(String name, PebbleEvent pe, String label) {
@@ -993,7 +993,7 @@ private final class MultiMatchEditor extends JPanel implements ActionListener {
       if (ae.getSource() == add_button) {
          setCount(match_set.size() + 1);
        } 
-      else if (ae.getSource() == remove_button) {
+      else if (ae.getSource() == match_remove_button) {
          setCount(match_set.size() - 1);
        }
       //setCount(Integer.parseInt(count.getText()));
