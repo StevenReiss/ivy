@@ -37,7 +37,7 @@ package edu.brown.cs.ivy.jannot.tree;
 
 import org.eclipse.jdt.core.dom.Expression;
 
-abstract public class JannotTreeJCFunctionalExpression extends JannotTreeJCPolyExpression
+public abstract class JannotTreeJCFunctionalExpression extends JannotTreeJCPolyExpression
 {
 
 

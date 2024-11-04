@@ -202,14 +202,17 @@ boolean startServer()
 		}
 	     }
             if (!fnd) {
-               IvyLog.logE("LEASH","Path element " + fnm + " not found in " + cp);
                File f1 = IvyFile.expandFile("$(IVY)/lib/" + fnm);
                if (f1.exists()) {
                   cpbuf.append(f1.getPath());
                   cpbuf.append(File.pathSeparator);
+                  fnd = true;
                 }         
              }
-	  }
+            if (!fnd) {
+               IvyLog.logE("LEASH","Path element " + fnm + " not found in " + cp);
+             }
+          }
        }
 
       StringBuffer cmd = new StringBuffer();

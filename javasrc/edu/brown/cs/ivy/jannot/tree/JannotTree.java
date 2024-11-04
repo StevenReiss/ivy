@@ -102,7 +102,7 @@ import com.sun.source.tree.TreeVisitor;
 import edu.brown.cs.ivy.jannot.JannotName;
 
 
-public abstract class JannotTree implements Tree,
+public abstract class JannotTree implements Tree, 
 	JannotTreeConstants
 {
 

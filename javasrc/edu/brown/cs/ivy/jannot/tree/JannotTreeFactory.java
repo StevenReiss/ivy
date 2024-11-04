@@ -41,10 +41,12 @@ import org.eclipse.jdt.core.dom.AST;
 
 import edu.brown.cs.ivy.jannot.JannotName;
 
-public class JannotTreeFactory implements JannotTreeConstants
+
+//CHECKSTYLE:OFF
+public class JannotTreeFactory implements JannotTreeConstants 
 {
 
-
+ 
 /********************************************************************************/
 /*                                                                              */
 /*      Private Storage                                                         */
@@ -347,7 +349,7 @@ public JannotTreeJCAssignOp Assignop(JannotTreeTag opcode, JannotTree lhs, Janno
 
 
 
-public JannotTreeJCUnary Unary(JannotTreeTag opcode, JannotTreeJCExpression arg)
+public JannotTreeJCUnary Unary(JannotTreeTag opcode, JannotTreeJCExpression arg) 
 {
    return null;
 }
