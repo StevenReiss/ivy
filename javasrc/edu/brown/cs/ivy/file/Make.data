@@ -23,6 +23,7 @@ SFILES= \
 	IvyFileLocker.java \
 	IvyImplBuilder.java \
 	IvyMakeDeps.java \
+	IvyPathPattern.java \
 	IvyStringDiff.java \
 	IvyWordStemmer.java \
 	IvyWordPluralFilter.java \
