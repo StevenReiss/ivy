@@ -279,7 +279,7 @@ public static List<File> computeBasePath(String javahome)
 
 private static void addToBasePath(File dir,List<File> rslt)  
 {
-   if (!dir.exists()) { }
+   if (!dir.exists()) ; 
    else if (dir.isDirectory()) {
       File [] cnts = dir.listFiles();
       for (int i = 0; i < cnts.length; ++i) addToBasePath(cnts[i],rslt);

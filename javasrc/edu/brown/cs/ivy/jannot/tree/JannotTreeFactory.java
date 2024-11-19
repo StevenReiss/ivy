@@ -182,7 +182,8 @@ public JannotTreeJCForLoop ForLoop(List<JannotTreeJCStatement> init,
 
 
 
-public JannotTreeJCEnhancedForLoop ForeachLoop(JannotTreeJCVariableDecl var, JannotTreeJCExpression expr, JannotTreeJCStatement body)
+public JannotTreeJCEnhancedForLoop ForeachLoop(JannotTreeJCVariableDecl var,
+      JannotTreeJCExpression expr, JannotTreeJCStatement body)
 {
    return null;
 }
