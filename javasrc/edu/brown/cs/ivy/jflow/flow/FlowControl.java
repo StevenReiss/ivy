@@ -31,72 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowControl.java,v 1.19 2018/12/17 14:08:35 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: FlowControl.java,v $
- * Revision 1.19  2018/12/17 14:08:35  spr
- * Minor bug fixes.
- *
- * Revision 1.18  2018/08/02 15:10:17  spr
- * Fix imports.
- *
- * Revision 1.17  2018/05/25 17:56:39  spr
- * Formatting.
- *
- * Revision 1.16  2017/12/20 20:36:49  spr
- * Formatting
- *
- * Revision 1.15  2015/11/20 15:09:13  spr
- * Reformatting.
- *
- * Revision 1.14  2011-05-19 23:33:54  spr
- * Formatting.
- *
- * Revision 1.13  2011-05-11 01:10:46  spr
- * Prototype entries had bad names.  Code cleansing.
- *
- * Revision 1.12  2011-04-13 21:03:14  spr
- * Fix bugs in flow analysis.
- *
- * Revision 1.11  2008-11-12 13:45:39  spr
- * Eclipse fixups.
- *
- * Revision 1.10  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.9  2007-05-04 01:59:58  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.8  2007-02-27 18:53:29  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.7  2007-01-03 03:24:18  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.6  2006-12-01 03:22:46  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.5  2006-08-03 12:34:51  spr
- * Ensure fields of unprocessed classes handled correctly.
- *
- * Revision 1.4  2006/07/23 02:25:02  spr
- * Minor bug fixes and speed ups.
- *
- * Revision 1.3  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:23  spr
- * Efficiency improvements; inlining options.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 
@@ -1044,7 +978,9 @@ void handleThrow(FlowQueue wq,int ino,ValueBase vi,StateBase st0)
 	     }
 	  }
 	 if (st2 == null) {
-	    System.err.println("JFLOW: null state found for " + cm.getMethodName() + " " + cm.getMethodSignature() + " " + ino + " " + ins0 + " " + ins0.byteIndex);
+	    System.err.println("JFLOW: null state found for " + cm.getMethodName() + " " + 
+                  cm.getMethodSignature() + " " + ino + " " + ins0 + " " + 
+                  ins0.byteIndex);
 	    continue;
 	  }
 	 st1.resetStack(st2);
@@ -1206,6 +1142,7 @@ ValueBase handleSpecialCases(BT_Method bm,List<ValueBase> nargs,
     }
 
    if (jflow_master.getUseReflection(bm,caller,ino)) {
+      // might want to do something here
     }
 
    return null;

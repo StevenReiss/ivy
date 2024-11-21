@@ -31,27 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ValueBad.java,v 1.4 2015/11/20 15:09:14 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ValueBad.java,v $
- * Revision 1.4  2015/11/20 15:09:14  spr
- * Reformatting.
- *
- * Revision 1.3  2010-02-12 00:34:14  spr
- * Add some fixups for eclipse.
- *
- * Revision 1.2  2006/07/10 14:52:18  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:35  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 

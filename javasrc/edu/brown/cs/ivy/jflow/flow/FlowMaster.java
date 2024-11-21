@@ -31,66 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowMaster.java,v 1.17 2018/08/02 15:10:17 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: FlowMaster.java,v $
- * Revision 1.17  2018/08/02 15:10:17  spr
- * Fix imports.
- *
- * Revision 1.16  2015/11/20 15:09:14  spr
- * Reformatting.
- *
- * Revision 1.15  2015/03/31 02:19:18  spr
- * Formatting cleanup
- *
- * Revision 1.14  2013/09/24 01:06:56  spr
- * Minor fix
- *
- * Revision 1.13  2012-08-29 01:40:51  spr
- * Code cleanup for new compiler.
- *
- * Revision 1.12  2011-04-16 01:02:50  spr
- * Fixes to jflow for casting.
- *
- * Revision 1.11  2008-03-14 12:26:14  spr
- * Code cleanup.
- *
- * Revision 1.10  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.9  2007-05-04 01:59:58  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.8  2007-02-27 18:53:29  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.7  2007-01-03 14:04:59  spr
- * Fix imports
- *
- * Revision 1.6  2007-01-03 03:24:18  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.5  2006-11-09 00:33:11  spr
- * Use common base path computation.
- *
- * Revision 1.4  2006-08-03 12:34:51  spr
- * Ensure fields of unprocessed classes handled correctly.
- *
- * Revision 1.3  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:23  spr
- * Efficiency improvements; inlining options.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 
@@ -127,8 +67,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-
 
 
 public class FlowMaster implements JflowMaster, BT_Opcodes

@@ -31,27 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelMinimizer.java,v 1.4 2018/08/02 15:10:19 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ModelMinimizer.java,v $
- * Revision 1.4  2018/08/02 15:10:19  spr
- * Fix imports.
- *
- * Revision 1.3  2015/11/20 15:09:15  spr
- * Reformatting.
- *
- * Revision 1.2  2009-09-17 01:57:28  spr
- * Code cleanup for eclipse.
- *
- * Revision 1.1  2007-08-10 23:47:19  spr
- * Move minimization code to its own class.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.model;
 

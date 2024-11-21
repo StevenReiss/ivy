@@ -31,27 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/SourceModel.java,v 1.4 2015/11/20 15:09:14 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SourceModel.java,v $
- * Revision 1.4  2015/11/20 15:09:14  spr
- * Reformatting.
- *
- * Revision 1.3  2007-02-28 16:55:21  spr
- * Output line information for sources.
- *
- * Revision 1.2  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 

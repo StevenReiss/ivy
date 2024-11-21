@@ -31,36 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowQueue.java,v 1.7 2018/08/02 15:10:17 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: FlowQueue.java,v $
- * Revision 1.7  2018/08/02 15:10:17  spr
- * Fix imports.
- *
- * Revision 1.6  2017/10/24 12:46:27  spr
- * Clean up.
- *
- * Revision 1.5  2007-02-27 18:53:29  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.4  2007-01-03 14:04:59  spr
- * Fix imports
- *
- * Revision 1.3  2007-01-03 03:24:18  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.2  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 

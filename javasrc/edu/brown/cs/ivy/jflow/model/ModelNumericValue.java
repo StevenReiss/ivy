@@ -31,31 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelNumericValue.java,v 1.5 2018/08/02 15:10:19 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ModelNumericValue.java,v $
- * Revision 1.5  2018/08/02 15:10:19  spr
- * Fix imports.
- *
- * Revision 1.4  2015/11/20 15:09:15  spr
- * Reformatting.
- *
- * Revision 1.3  2010-02-12 00:34:20  spr
- * Add some fixups for eclipse.
- *
- * Revision 1.2  2006/07/10 14:52:19  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:37  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
-
 package edu.brown.cs.ivy.jflow.model;
 
 import com.ibm.jikesbt.BT_Class;
