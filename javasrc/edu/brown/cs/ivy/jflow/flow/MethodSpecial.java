@@ -59,7 +59,7 @@ import java.util.Vector;
 
 
 
-class MethodSpecial implements JflowConstants
+final class MethodSpecial implements JflowConstants
 {
 
 
@@ -216,7 +216,7 @@ private MethodSpecial(FlowMaster jm,CinderManager cm,Node xml)
 
 
 
-private MethodSpecial(FlowMaster jm,CinderManager _cm,BT_Method bm)
+private MethodSpecial(FlowMaster jm,CinderManager cm,BT_Method bm)
 {
    jflow_master = jm;
    method_name = bm.fullName();

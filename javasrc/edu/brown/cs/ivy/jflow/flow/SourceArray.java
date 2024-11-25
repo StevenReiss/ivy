@@ -226,7 +226,7 @@ void setArrayContents(ValueBase cv)
 /*										*/
 /********************************************************************************/
 
-@Override public void outputXml(IvyXmlWriter _xw,String _id)	{ }
+@Override public void outputXml(IvyXmlWriter xw,String id)	{ }
 
 
 @Override public String toString()

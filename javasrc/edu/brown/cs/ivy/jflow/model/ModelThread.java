@@ -31,33 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelThread.java,v 1.6 2018/08/02 15:10:20 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ModelThread.java,v $
- * Revision 1.6  2018/08/02 15:10:20  spr
- * Fix imports.
- *
- * Revision 1.5  2015/11/20 15:09:16  spr
- * Reformatting.
- *
- * Revision 1.4  2007-08-10 02:10:45  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.3  2006-12-01 03:22:49  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.2  2006/07/10 14:52:19  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:37  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.model;
 
@@ -216,7 +189,9 @@ ModelThreadState createThreadModel(JflowMethod fm)
 private void workOn(ModelThreadState st,ThreadState mdl,LinkedList<WorkItem> workq,
 		       Map<ThreadState,ModelThreadState> done)
 {
-   if (model_master.doDebug()) System.err.println("Thread work on " + st.getName() + " @ " + mdl.getModelNode().getName());
+   if (model_master.doDebug()) {
+      System.err.println("Thread work on " + st.getName() + " @ " + mdl.getModelNode().getName());
+    }
 
    ModelThreadState nst = done.get(mdl);
    if (nst != null) {

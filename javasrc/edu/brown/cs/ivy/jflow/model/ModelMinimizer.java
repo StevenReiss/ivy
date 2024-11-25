@@ -177,7 +177,9 @@ void minimize(JflowModel.Node s)
 	       it1.remove();
 	     }
 	    else {
-	       if (model_master.doDebug()) System.err.println("Minimize: merge state " + s1.getName() + " into " + s0.getName());
+	       if (model_master.doDebug()) {
+                  System.err.println("Minimize: merge state " + s1.getName() + " into " + s0.getName());
+                }
 	     }
 	  }
 	 if (nl != null) {
@@ -219,8 +221,10 @@ void minimize(JflowModel.Node s)
 
 
 
-private LinkedList<JflowModel.Node> getStateList(JflowModel.Node s,Set<JflowModel.Node> done,LinkedList<JflowModel.Node> l,
-				   Map<JflowModel.Node,JflowModel.Node> statemap,JflowModel.Node s0)
+private LinkedList<JflowModel.Node> getStateList(JflowModel.Node s,
+      Set<JflowModel.Node> done,
+      LinkedList<JflowModel.Node> l,
+      Map<JflowModel.Node,JflowModel.Node> statemap,JflowModel.Node s0)
 {
    if (done.contains(s)) return l;
    done.add(s);
@@ -255,9 +259,10 @@ private interface Matcher {
 
 
 
-private static class FullMatcher implements Matcher {
+private static final class FullMatcher implements Matcher {
 
-   @Override public boolean matchStates(JflowModel.Node s1,JflowModel.Node s2,Map<JflowModel.Node,JflowModel.Node> statemap) {
+   @Override public boolean matchStates(JflowModel.Node s1,
+         JflowModel.Node s2,Map<JflowModel.Node,JflowModel.Node> statemap) {
       if (!s1.isCompatibleWith(s2)) return false;
 
       Set<JflowModel.Node> t1 = new HashSet<JflowModel.Node>();
@@ -279,9 +284,10 @@ private static class FullMatcher implements Matcher {
 
 
 
-private static class MinMatcher implements Matcher {
+private static final class MinMatcher implements Matcher {
 
-   @Override public boolean matchStates(JflowModel.Node s1,JflowModel.Node s2,Map<JflowModel.Node,JflowModel.Node> _statemap) {
+   @Override public boolean matchStates(JflowModel.Node s1,
+         JflowModel.Node s2,Map<JflowModel.Node,JflowModel.Node> statemap) {
       return s1.isCompatibleWith(s2);
     }
 
@@ -289,9 +295,10 @@ private static class MinMatcher implements Matcher {
 
 
 
-private static class SubMatcher implements Matcher {
+private static final class SubMatcher implements Matcher {
 
-   @Override public boolean matchStates(JflowModel.Node s1,JflowModel.Node s2,Map<JflowModel.Node,JflowModel.Node> statemap) {
+   @Override public boolean matchStates(JflowModel.Node s1,
+         JflowModel.Node s2,Map<JflowModel.Node,JflowModel.Node> statemap) {
       if (!s1.isCompatibleWith(s2)) return false;
 
       Set<JflowModel.Node> t1 = new HashSet<JflowModel.Node>();

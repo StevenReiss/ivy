@@ -31,45 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowField.java,v 1.10 2018/08/02 15:10:17 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: FlowField.java,v $
- * Revision 1.10  2018/08/02 15:10:17  spr
- * Fix imports.
- *
- * Revision 1.9  2018/02/21 16:18:43  spr
- * Change by mistake and undo.
- *
- * Revision 1.8  2011-04-13 21:03:14  spr
- * Fix bugs in flow analysis.
- *
- * Revision 1.7  2009-06-04 18:50:27  spr
- * Handle special cased methods correctly.
- *
- * Revision 1.6  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.5  2007-05-04 01:59:58  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.4  2007-02-27 18:53:29  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.3  2006-08-03 12:34:51  spr
- * Ensure fields of unprocessed classes handled correctly.
- *
- * Revision 1.2  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 
@@ -276,7 +237,6 @@ void handleFieldChanged(BT_Field fld)
 
 
 
-
 /********************************************************************************/
 /*										*/
 /*	Handle end of initialization						*/
@@ -390,7 +350,7 @@ void handleEndSync(StateBase st,MethodBase bm)
 /*										*/
 /********************************************************************************/
 
-ValueBase getArrayLength(ValueBase _base)
+ValueBase getArrayLength(ValueBase base)
 {
    ValueBase lv = jflow_master.anyValue(BT_Class.getInt());
 

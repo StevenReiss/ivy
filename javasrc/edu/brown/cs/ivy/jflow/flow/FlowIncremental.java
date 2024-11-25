@@ -31,30 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowIncremental.java,v 1.5 2018/08/02 15:10:17 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: FlowIncremental.java,v $
- * Revision 1.5  2018/08/02 15:10:17  spr
- * Fix imports.
- *
- * Revision 1.4  2014/06/12 01:06:28  spr
- * Minor updates
- *
- * Revision 1.3  2013/09/24 01:06:56  spr
- * Minor fix
- *
- * Revision 1.2  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.1  2007-02-27 22:58:20  spr
- * Add incremental computation code.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 
@@ -398,8 +374,8 @@ private static class MemberDigest {
     }
 
    private void addToDigest(short fgs) {
-      message_digest.update((byte)((fgs>>8)&0xff));
-      message_digest.update((byte)(fgs&0xff));
+      message_digest.update((byte) ((fgs>>8)&0xff));
+      message_digest.update((byte) (fgs&0xff));
     }
 
    private void addToDigest(BT_CodeAttribute cod) {

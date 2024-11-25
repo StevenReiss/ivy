@@ -91,7 +91,7 @@ StateCtor startCtor(BT_Class bc)
 
 
 
-StateCtor finishCtor(BT_Class _bc)
+StateCtor finishCtor(BT_Class bc)
 {
    // Having extra items in the list doesn't hurt (never checked
    // once the constructor has actually returned).

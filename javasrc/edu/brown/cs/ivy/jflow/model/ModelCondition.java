@@ -31,24 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelCondition.java,v 1.3 2015/11/20 15:09:15 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ModelCondition.java,v $
- * Revision 1.3  2015/11/20 15:09:15  spr
- * Reformatting.
- *
- * Revision 1.2  2010-02-12 00:34:20  spr
- * Add some fixups for eclipse.
- *
- * Revision 1.1  2006/06/21 02:18:37  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.model;
 

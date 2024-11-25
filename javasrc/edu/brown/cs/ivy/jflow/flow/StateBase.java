@@ -31,39 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/StateBase.java,v 1.8 2018/08/02 15:10:18 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: StateBase.java,v $
- * Revision 1.8  2018/08/02 15:10:18  spr
- * Fix imports.
- *
- * Revision 1.7  2017/10/24 12:46:27  spr
- * Clean up.
- *
- * Revision 1.6  2007-02-27 18:53:29  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.5  2007-01-03 14:04:59  spr
- * Fix imports
- *
- * Revision 1.4  2007-01-03 03:24:18  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.3  2006-08-30 00:43:51  spr
- * Fix bugs with mutable sources.
- *
- * Revision 1.2  2006/07/10 14:52:18  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 

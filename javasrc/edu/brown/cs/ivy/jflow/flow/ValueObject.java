@@ -31,39 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ValueObject.java,v 1.8 2018/08/02 15:10:18 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ValueObject.java,v $
- * Revision 1.8  2018/08/02 15:10:18  spr
- * Fix imports.
- *
- * Revision 1.7  2015/11/20 15:09:15  spr
- * Reformatting.
- *
- * Revision 1.6  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.5  2007-05-04 01:59:58  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.4  2007-02-27 18:53:29  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.3  2006-12-01 03:22:47  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.2  2006/07/10 14:52:18  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:35  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 
@@ -98,7 +65,7 @@ private Map<BT_Class,ValueBase> remove_map;
 private ValueBase	nonnull_value;
 private ValueBase	testnull_value;
 
-static private Map<BT_Class,Map<BT_Class,BT_Class>> parent_map = new HashMap<>();
+private static Map<BT_Class,Map<BT_Class,BT_Class>> parent_map = new HashMap<>();
 
 
 
@@ -579,11 +546,11 @@ private static BT_Class computeCommonParent(BT_Class c1,BT_Class c2)
    if (c1.isDerivedFrom(c2)) return c2;
    else if (c2.isDerivedFrom(c1)) return c1;
 
-   for (BT_Class c0 = c1.getSuperClass() ; c0 != null; c0 = c0.getSuperClass()) {
+   for (BT_Class c0 = c1.getSuperClass(); c0 != null; c0 = c0.getSuperClass()) {
       if (c0 == c2 || c0.isAncestorOf(c2)) return c0;
     }
 
-   for (BT_Class c0 = c2.getSuperClass() ; c0 != null; c0 = c0.getSuperClass()) {
+   for (BT_Class c0 = c2.getSuperClass(); c0 != null; c0 = c0.getSuperClass()) {
       if (c0 == c1 || c0.isAncestorOf(c1)) return c0;
     }
 
@@ -613,7 +580,7 @@ private static BT_Class findCommonInterface(BT_Class i1,BT_Class i2)
 
 
 
-private static BT_Class findCommonClassInterface(BT_Class c1,BT_Class _c2)
+private static BT_Class findCommonClassInterface(BT_Class c1,BT_Class c2)
 {
    return c1;
 }

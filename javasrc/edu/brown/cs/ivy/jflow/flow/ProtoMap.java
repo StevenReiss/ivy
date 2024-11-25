@@ -31,54 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ProtoMap.java,v 1.13 2018/08/02 15:10:18 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ProtoMap.java,v $
- * Revision 1.13  2018/08/02 15:10:18  spr
- * Fix imports.
- *
- * Revision 1.12  2015/11/20 15:09:14  spr
- * Reformatting.
- *
- * Revision 1.11  2011-05-11 01:10:46  spr
- * Prototype entries had bad names.  Code cleansing.
- *
- * Revision 1.10  2011-04-13 21:03:14  spr
- * Fix bugs in flow analysis.
- *
- * Revision 1.9  2010-02-12 00:34:14  spr
- * Add some fixups for eclipse.
- *
- * Revision 1.8  2009-09-17 01:57:20  spr
- * Fix a few minor bugs (poll, interfaces); code cleanup for Eclipse.
- *
- * Revision 1.7  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.6  2007-05-04 01:59:58  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.5  2007-01-03 14:04:59  spr
- * Fix imports
- *
- * Revision 1.4  2007-01-03 03:24:18  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.3  2006-12-01 03:22:47  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.2  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 
@@ -155,6 +107,7 @@ public ProtoMap(FlowMaster jm,BT_Class bc)
 
 
 
+// CHECKSTYLE:OFF
 /********************************************************************************/
 /*										*/
 /*	Map methods								*/

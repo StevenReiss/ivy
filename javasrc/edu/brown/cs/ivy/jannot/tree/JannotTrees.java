@@ -60,7 +60,7 @@ import com.sun.source.util.TreePath;
 import edu.brown.cs.ivy.jannot.JannotElement;
 import edu.brown.cs.ivy.jannot.JannotProcessingEnvironment;
 
-public class JannotTrees extends com.sun.source.util.Trees implements JannotTreeConstants
+public final class JannotTrees extends com.sun.source.util.Trees implements JannotTreeConstants
 {
 
 

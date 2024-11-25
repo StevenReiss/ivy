@@ -31,44 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/MethodFactory.java,v 1.10 2018/08/02 15:10:17 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: MethodFactory.java,v $
- * Revision 1.10  2018/08/02 15:10:17  spr
- * Fix imports.
- *
- * Revision 1.9  2017/02/15 02:09:13  spr
- * Formatting
- *
- * Revision 1.8  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.7  2007-05-04 01:59:58  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.6  2007-02-27 18:53:29  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.5  2007-01-03 14:04:59  spr
- * Fix imports
- *
- * Revision 1.4  2006-12-01 03:22:46  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.3  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:23  spr
- * Efficiency improvements; inlining options.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
 
 package edu.brown.cs.ivy.jflow.flow;
 
@@ -104,7 +66,7 @@ private Map<BT_Method,Map<Object,MethodBase>> method_map;
 private Map<BT_Method,MethodBase> proto_map;
 
 
-private final static Object DEFAULT_OBJECT = new Object();
+private static final Object DEFAULT_OBJECT = new Object();
 
 
 

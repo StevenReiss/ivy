@@ -31,39 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelBuilder.java,v 1.8 2018/08/02 15:10:19 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ModelBuilder.java,v $
- * Revision 1.8  2018/08/02 15:10:19  spr
- * Fix imports.
- *
- * Revision 1.7  2018/02/21 16:18:50  spr
- * Formatting
- *
- * Revision 1.6  2007-08-10 02:10:45  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.5  2007-05-04 02:00:03  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.4  2006-12-01 03:22:49  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.3  2006/07/10 14:52:19  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:36  spr
- * Fixup reporting values for calls.
- *
- * Revision 1.1  2006/06/21 02:18:37  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.model;
 
@@ -490,7 +457,9 @@ private ValueState maintainValues(BT_Ins ins,ValueState vals)
    BT_NewArrayIns nains;
    BT_ANewArrayIns anains;
    BT_Class cls;
-   ModelValue s0,s1,s2;
+   ModelValue s0;
+   ModelValue s1;
+   ModelValue s2;
 
    branch_result = TestBranch.ANY;
    event_values = null;
@@ -977,7 +946,9 @@ private ModelState handleWait(int ino,BT_Method bm,ModelState st0)
 	 if (cv == null) return st1;
 	 ModelWaitType wt = (nm.equals("notifyAll") ? ModelWaitType.NOTIFY_ALL : ModelWaitType.NOTIFY);
 	 st1 = ModelState.createWaitState(for_method,getLine(ino),cv,wt);
-	 if (model_master.doDebug()) System.err.println("Transition (Notify) " + st0.getName() + " -> " + st1.getName());
+	 if (model_master.doDebug()) {
+            System.err.println("Transition (Notify) " + st0.getName() + " -> " + st1.getName());
+          }
 	 st0.addTransition(st1);
        }
     }
@@ -1072,7 +1043,8 @@ private void handleThrow(int ino,ModelState st,BT_ClassVector clss,Stack<Integer
 
    if (!fnd && st != exit_node) {
       st.addTransition(exit_node);
-      if (model_master.doDebug()) System.err.println("Transition (Throw) " + st.getName() + " -> " + exit_node.getName());
+      if (model_master.doDebug()) System.err.println("Transition (Throw) " +
+            st.getName() + " -> " + exit_node.getName());
     }
 }
 
@@ -1102,7 +1074,8 @@ private ModelState handleIf(int ino,BT_Ins ins,ModelState cst,Stack<Integer> jsr
     }
 
    if (fld != null) {
-      ConditionType c1,c2;
+      ConditionType c1;
+      ConditionType c2;
       switch (ins.opcode) {
 	 case opc_ifeq :
 	    c1 = ConditionType.EQ;
@@ -1166,7 +1139,7 @@ private ModelState handleIf(int ino,BT_Ins ins,ModelState cst,Stack<Integer> jsr
 
 
 
-private ModelState handlePut(int ino,BT_Ins ins,ModelState cst,Stack<Integer> _j,ValueState _v,ModelValue fvl)
+private ModelState handlePut(int ino,BT_Ins ins,ModelState cst,Stack<Integer> j,ValueState v,ModelValue fvl)
 {
    BT_FieldRefIns frins = (BT_FieldRefIns) ins;
 

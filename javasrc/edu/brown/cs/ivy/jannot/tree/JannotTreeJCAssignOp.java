@@ -2,7 +2,8 @@
 /*                                                                              */
 /*              JannotTreeJCAssignOp.java                                       */
 /*                                                                              */
-/*      Compilation tree for assignments other that =                           */                                                           /*                                                                              */
+/*      Compilation tree for assignments other that =                           */
+/*                                                                              */
 /********************************************************************************/
 /*      Copyright 2013 Brown University -- Steven P. Reiss                    */
 /*********************************************************************************

@@ -66,7 +66,7 @@ ValueBad(FlowMaster jm)
 /*										*/
 /********************************************************************************/
 
-@Override public ValueBase mergeValue(ValueBase _cv)	{ return this; }
+@Override public ValueBase mergeValue(ValueBase cv)	        { return this; }
 
 @Override public boolean isBad()				{ return true; }
 

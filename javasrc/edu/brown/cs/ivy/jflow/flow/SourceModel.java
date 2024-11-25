@@ -112,7 +112,7 @@ SourceModel(FlowMaster jm,JflowModelSource src,MethodBase cm,int ino)
    xw.end();
 }
 
-void outputLocalXml(IvyXmlWriter _xw)	     { }
+void outputLocalXml(IvyXmlWriter xw)	        { }
 
 
 

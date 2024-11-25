@@ -31,39 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/LocalType.java,v 1.8 2018/08/02 15:10:17 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: LocalType.java,v $
- * Revision 1.8  2018/08/02 15:10:17  spr
- * Fix imports.
- *
- * Revision 1.7  2018/05/25 17:56:39  spr
- * Formatting.
- *
- * Revision 1.6  2010-02-12 00:34:14  spr
- * Add some fixups for eclipse.
- *
- * Revision 1.5  2009-10-02 00:18:26  spr
- * Import clean up.
- *
- * Revision 1.4  2009-09-17 01:57:20  spr
- * Fix a few minor bugs (poll, interfaces); code cleanup for Eclipse.
- *
- * Revision 1.3  2008-11-12 13:45:39  spr
- * Eclipse fixups.
- *
- * Revision 1.2  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.1  2007-05-10 01:48:12  spr
- * Start adding support for local (micro) typing.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 

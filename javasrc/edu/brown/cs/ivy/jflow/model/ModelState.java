@@ -217,8 +217,8 @@ void clearCall()				{ }
 @Override public boolean isCallOnce()			{ return false; }
 
 @Override public ModelWaitType getWaitType()		{ return ModelWaitType.NONE; }
-@Override public Collection<JflowSource> getWaitSet()			 { return null; }
-public void setWaitSet(ModelSourceSet _cs)		{ }
+@Override public Collection<JflowSource> getWaitSet()	{ return null; }
+public void setWaitSet(ModelSourceSet cs)		{ }
 
 @Override public JflowModel.Field getCondition()		{ return null; }
 @Override public JflowModel.Field getFieldSet()		{ return null; }
@@ -228,11 +228,11 @@ public void setWaitSet(ModelSourceSet _cs)		{ }
 @Override public boolean isSimple()			{ return false; }
 @Override public boolean isExit() 			{ return false; }
 
-boolean isReturn()				{ return false; }
+boolean isReturn()				        { return false; }
 
-ModelState mergeReturn(ModelState _ms)		{ return this; }
-void setUseReturn(boolean _fg)			{ }
-@Override public boolean getUseReturn()			{ return false; }
+ModelState mergeReturn(ModelState ms)		        { return this; }
+void setUseReturn(boolean fg)			        { }
+@Override public boolean getUseReturn()		{ return false; }
 
 Set<JflowModel.Node> getTransitionSet() 	{ return out_nodes; }
 
@@ -451,7 +451,7 @@ void outputXml(IvyXmlWriter xw,ModelGenerator ceg)
 
 
 
-protected void outputLocalXml(IvyXmlWriter _xw,ModelGenerator _ceg)	{ }
+protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator ceg)	{ }
 
 
 
@@ -521,7 +521,7 @@ private static class SimpleState extends ModelState {
       super(in,lno);
     }
 
-   @Override protected boolean localCompatibleWith(JflowModel.Node _ms) {
+   @Override protected boolean localCompatibleWith(JflowModel.Node ms) {
       return true;
     }
 
@@ -544,7 +544,7 @@ private static class CallState extends ModelState {
    private boolean return_used;
    private boolean is_callonce;
 
-   CallState(JflowMethod in,int lno,JflowMethod call,boolean async,boolean once,BT_Ins _ins) {
+   CallState(JflowMethod in,int lno,JflowMethod call,boolean async,boolean once,BT_Ins ins) {
       super(in,lno);
       call_method = call;
       is_async = async;
@@ -611,7 +611,7 @@ private static class EventState extends ModelState {
       return state_event == es.state_event;
     }
 
-   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator _mg) {
+   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator mg) {
       if (state_event != null) {
 	 xw.field("HASEVENT",true);
 	 state_event.outputXml(xw);
@@ -658,7 +658,7 @@ private static class WaitState extends ModelState {
       return wait_set == ws.wait_set && wait_type == ws.wait_type;
     }
 
-   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator _mg) {
+   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator mg) {
       if (wait_set != null) {
 	 xw.begin("WAIT");
 	 xw.field("TYPE",wait_type.toString());
@@ -701,7 +701,7 @@ private static class CondState extends ModelState {
    @Override public boolean isSimple()		{ return event_condition == null; }
    @Override void clearCall()			{ event_condition = null; }
 
-   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator _mg) {
+   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator mg) {
       if (event_condition != null) {
 	 xw.field("CONDITION",event_condition.getConditionType().toString());
 	 event_condition.getFieldSource().outputXml(xw,null);
@@ -722,7 +722,7 @@ private static class CondState extends ModelState {
 private static class ExitState extends ModelState {
 
    ExitState(JflowMethod in,int lno) {
-      super (in,lno);
+      super(in,lno);
     }
 
    @Override public boolean isExit()		{ return true; }
@@ -731,7 +731,7 @@ private static class ExitState extends ModelState {
       return true;
     }
 
-   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator _mg) {
+   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator mg) {
       xw.field("EXIT",true);
     }
 
@@ -766,7 +766,7 @@ private static class FieldState extends ModelState {
    @Override public boolean isSimple()		{ return field_condition == null; }
    @Override void clearCall()			{ field_condition = null; }
 
-   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator _mg) {
+   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator mg) {
       if (field_condition != null) {
 	 if (field_condition.getFieldValue() == null) xw.field("FIELDSET","null");
 	 else xw.field("FIELDSET",field_condition.getFieldValue().toString());
@@ -824,7 +824,7 @@ private static class ReturnState extends ModelState {
       return ns;
     }
 
-   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator _mg) {
+   @Override protected void outputLocalXml(IvyXmlWriter xw,ModelGenerator mg) {
       if (return_value != null) {
 	 xw.field("PROGRAMRETURN",return_value.getProgramValue().toString());
        }

@@ -31,27 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/FlowCallSite.java,v 1.4 2017/12/20 20:36:48 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: FlowCallSite.java,v $
- * Revision 1.4  2017/12/20 20:36:48  spr
- * Formatting
- *
- * Revision 1.3  2007-05-04 01:59:58  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.2  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 

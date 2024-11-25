@@ -159,7 +159,7 @@ private Iterator<SourceBase> getSourceIterator()
 
 private static class SourceSetIterable implements Iterable<SourceBase> {
 
-   SourceSet for_set;
+   private SourceSet for_set;
 
    SourceSetIterable(SourceSet ss) {
       for_set = ss;
@@ -286,7 +286,7 @@ private SourceSet handleTypeRestricts(BT_Class dt,boolean pfg,boolean comp)
       if (!fg) {
 	 if (bs == null) bs = (BitSet) set_contents.clone();
 	 bs.clear(cs.getId());
-	 if (!pfg || dt.isDescendentOf(enum_class) ) {
+	 if (!pfg || dt.isDescendentOf(enum_class)) {
 	    List<SourceBase> bl = jflow_master.getLocalSources(dt);
 	    // TODO: want to revisit this instruction if new sources are added
 	    if (bl.isEmpty()) {

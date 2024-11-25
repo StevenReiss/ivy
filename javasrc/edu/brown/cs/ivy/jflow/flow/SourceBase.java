@@ -31,42 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/SourceBase.java,v 1.9 2018/08/02 15:10:18 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SourceBase.java,v $
- * Revision 1.9  2018/08/02 15:10:18  spr
- * Fix imports.
- *
- * Revision 1.8  2015/11/20 15:09:14  spr
- * Reformatting.
- *
- * Revision 1.7  2015/02/14 18:46:05  spr
- * Synchronize id counter.
- *
- * Revision 1.6  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.5  2007-05-04 01:59:58  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.4  2007-02-27 18:53:29  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.3  2007-01-03 03:24:18  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.2  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 
@@ -155,29 +119,29 @@ public static SourceBase getSource(int id)
 
 public boolean isNative()					{ return false; }
 
-public SourceBase mutateTo(BT_Class _type)			{ return null; }
+public SourceBase mutateTo(BT_Class type)			{ return null; }
 
-ValueBase getArrayValues(ValueBase _idx)			{ return null; }
+ValueBase getArrayValues(ValueBase idx)			{ return null; }
 
-@Override public BT_Field getFieldSource()				{ return null; }
+@Override public BT_Field getFieldSource()			{ return null; }
 
-void setArrayContents(ValueBase _cv)				{ }
-void setFieldContents(ValueBase _cv,BT_Field _fld)		{ }
+void setArrayContents(ValueBase cv)				{ }
+void setFieldContents(ValueBase cv,BT_Field fld)		{ }
 
-boolean addToArrayContents(ValueBase _cv,ValueBase _i)		{ return false; }
-boolean addToFieldContents(ValueBase _cv,BT_Field _fld) 	{ return false; }
+boolean addToArrayContents(ValueBase cv,ValueBase i)		{ return false; }
+boolean addToFieldContents(ValueBase cv,BT_Field fld) 	        { return false; }
 boolean markArrayAccess(AccessSafety as)			{ return false; }
 
-ValueBase getFieldValue(BT_Field _fld)				{ return null; }
+ValueBase getFieldValue(BT_Field fld)				{ return null; }
 
 boolean isArray()						{ return false; }
 ValueBase getArrayLength()					{ return null; }
 
-@Override public JflowModelSource getModelSource()			{ return null; }
-@Override public boolean isModel()		{ return getModelSource() != null; }
+@Override public JflowModelSource getModelSource()		{ return null; }
+@Override public boolean isModel()		                { return getModelSource() != null; }
 
 public boolean isPrototype()					{ return false; }
-public ValueBase handlePrototypeCall(BT_Method _bm,List<?> _args)	{ return null; }
+public ValueBase handlePrototypeCall(BT_Method bm,List<?> args) { return null; }
 public ProtoBase getPrototype() 				{ return null; }
 
 public String getStringValue()					{ return null; }

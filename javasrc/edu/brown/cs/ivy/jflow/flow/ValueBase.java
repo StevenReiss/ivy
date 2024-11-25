@@ -87,21 +87,21 @@ protected ValueBase(FlowMaster jm,BT_Class dt)
 /*										*/
 /********************************************************************************/
 
-public ValueBase restrictByClass(BT_Class _cls,boolean _pfg)	{ return this; }
-public ValueBase removeByClass(BT_Class _cls)			{ return this; }
+public ValueBase restrictByClass(BT_Class cls,boolean pfg)	{ return this; }
+public ValueBase removeByClass(BT_Class cls)			{ return this; }
 
-abstract public ValueBase mergeValue(ValueBase cv);
-@Override public boolean	 isCategory2()					{ return false; }
-@Override public boolean	 canBeNull()					{ return false; }
-@Override public boolean	 mustBeNull()					{ return false; }
-@Override public boolean	nullExplicitlySet()				{ return false; }
-@Override public short	 getFlags()					{ return 0; }
-public TestBranch branchTest(ValueBase _rhs,int _op)		{ return TestBranch.ANY; }
+public abstract ValueBase mergeValue(ValueBase cv);
+@Override public boolean	 isCategory2()			{ return false; }
+@Override public boolean	 canBeNull()			{ return false; }
+@Override public boolean	 mustBeNull()			{ return false; }
+@Override public boolean	nullExplicitlySet()		{ return false; }
+@Override public short	 getFlags()				{ return 0; }
+public TestBranch branchTest(ValueBase rhs,int op)		{ return TestBranch.ANY; }
 public SourceSet getSourceSet() 				{ return source_set; }
 
 public ValueBase forceNonNull() 				{ return this; }
 public ValueBase allowNull()					{ return this; }
-public ValueBase makeSubclass(BT_Class _c)			{ return this; }
+public ValueBase makeSubclass(BT_Class c)			{ return this; }
 public ValueBase setTestNull()					{ return this; }
 
 public ValueBase setLocalType(LocalType lt)			{ return this; }
@@ -112,9 +112,9 @@ public ValueBase getSourcedValue(SourceBase cs)
    if (cs == null || source_set.contains(cs)) return this;
    return newSourcedValue(cs);
 }
-public ValueBase newSourcedValue(SourceBase _cs)		{ return this; }
+public ValueBase newSourcedValue(SourceBase cs)		{ return this; }
 
-public ValueBase performOperation(BT_Class t,ValueBase _v,int _o)
+public ValueBase performOperation(BT_Class t,ValueBase v,int o)
 {
    return jflow_master.anyValue(t);
 }

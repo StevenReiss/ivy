@@ -44,7 +44,7 @@ import java.util.Map;
 
 
 
-class SourceField extends SourceBase
+final class SourceField extends SourceBase
 {
 
 
@@ -59,7 +59,7 @@ private ValueBase for_object;
 
 private static Map<BT_Field,Map<Object,SourceField>> field_sources = new HashMap<BT_Field,Map<Object,SourceField>>();
 
-private final static Object STATIC_FIELD = new Object();
+private static final Object STATIC_FIELD = new Object();
 
 
 

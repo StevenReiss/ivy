@@ -36,8 +36,6 @@ package edu.brown.cs.ivy.jflow.model;
 import com.ibm.jikesbt.BT_Class;
 
 
-
-
 class ModelNumericValue extends ModelValue
 {
 
@@ -309,7 +307,10 @@ boolean matchAny()
 	 mnv = -1;
 	 mxv = 1;
 	 if (valok) {
-	    if (d0 == d1) mnv = mxv = 0;
+	    if (d0 == d1) {
+               mnv = 0;
+               mxv = 0;
+             }
 	    else if (rngok && max_fvalue < rhs.min_fvalue) mxv = -1;
 	    else if (rngok && min_fvalue > rhs.max_fvalue) mnv = 1;
 	    valok = false;

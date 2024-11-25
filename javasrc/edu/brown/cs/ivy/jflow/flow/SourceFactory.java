@@ -31,42 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/SourceFactory.java,v 1.9 2018/08/02 15:10:18 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: SourceFactory.java,v $
- * Revision 1.9  2018/08/02 15:10:18  spr
- * Fix imports.
- *
- * Revision 1.8  2015/11/20 15:09:14  spr
- * Reformatting.
- *
- * Revision 1.7  2011-05-11 01:10:46  spr
- * Prototype entries had bad names.  Code cleansing.
- *
- * Revision 1.6  2011-04-16 01:02:50  spr
- * Fixes to jflow for casting.
- *
- * Revision 1.5  2007-02-27 18:53:29  spr
- * Add check direct option.  Get a better null/non-null approximation.
- *
- * Revision 1.4  2007-01-03 14:04:59  spr
- * Fix imports
- *
- * Revision 1.3  2007-01-03 03:24:18  spr
- * Modifications to handle incremental update.
- *
- * Revision 1.2  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 

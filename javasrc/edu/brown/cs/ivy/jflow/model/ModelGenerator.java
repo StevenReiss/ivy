@@ -31,35 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelGenerator.java,v 1.7 2018/08/02 15:10:19 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ModelGenerator.java,v $
- * Revision 1.7  2018/08/02 15:10:19  spr
- * Fix imports.
- *
- * Revision 1.6  2015/11/20 15:09:15  spr
- * Reformatting.
- *
- * Revision 1.5  2009-09-17 01:57:28  spr
- * Code cleanup for eclipse.
- *
- * Revision 1.4  2007-08-10 02:10:45  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.3  2006-08-03 12:35:31  spr
- * Remove excess lines.
- *
- * Revision 1.2  2006/07/10 14:52:19  spr * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:37  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.model;
 
@@ -283,12 +254,17 @@ boolean generateAutomata()
 	    mchng = true;
 	  }
 
-	 if (model_master.doDebug()) System.err.println("Consider method " + bm.getMethodName() + " " + bm.getMethodSignature() + " " + ctr + " " + states.size() + " " + mchng);
+	 if (model_master.doDebug()) {
+            System.err.println("Consider method " + bm.getMethodName() + " " + 
+                  bm.getMethodSignature() + " " + ctr + " " + states.size() + " " + mchng);
+          }
 
 	 if (mchng) {
 	    for (Iterator<?> it1 = cs.getUsers(); it1.hasNext(); ) {
 	       JflowMethod cm = (JflowMethod) it1.next();
-	       if (model_master.doDebug()) System.err.println("\tQueue " + cm.getMethodName() + " " + cm.getMethodSignature());
+	       if (model_master.doDebug()) {
+                  System.err.println("\tQueue " + cm.getMethodName() + " " + cm.getMethodSignature());
+                }
 	       workq.add(cm);
 	     }
 	  }
@@ -302,7 +278,9 @@ boolean generateAutomata()
 	    chng = true;
 	    for (Iterator<JflowMethod> it1 = cs.getUsers(); it1.hasNext(); ) {
 	       JflowMethod cm = it1.next();
-	       if (model_master.doDebug()) System.err.println("\tQueue " + cm.getMethodName() + " " + cm.getMethodSignature());
+	       if (model_master.doDebug()) {
+                  System.err.println("\tQueue " + cm.getMethodName() + " " + cm.getMethodSignature());
+                }
 	       workq.add(cm);
 	     }
 	  }

@@ -221,7 +221,7 @@ FlowControl(FlowMaster cm)
 
 
 
-@Override public int patchMethodEntry(int _nargs,BT_Method bm,BT_InsVector _iv,int _idx)
+@Override public int patchMethodEntry(int nargs,BT_Method bm,BT_InsVector iv,int idx)
 {
    if (!bm.isSynchronized()) return 0;
 
@@ -343,7 +343,9 @@ private void processInstruction(int ino,FlowQueue wq)
 
    st1 = st1.cloneState();
 
-   ValueBase s0,s1,s2;
+   ValueBase s0;
+   ValueBase s1;
+   ValueBase s2;
    int i0;
    boolean oref;
    SourceBase src;
@@ -1326,8 +1328,8 @@ private boolean checkStartMethod(BT_Class bc,BT_Method bm)
 
    if (istest) {
       if (bm.isConstructor() ||
-	     (bm.getName().startsWith("test") && bm.isPublic()
-		 && bm.getSignature().returnType == BT_Class.getVoid())) {
+	     (bm.getName().startsWith("test") && bm.isPublic() &&
+		 bm.getSignature().returnType == BT_Class.getVoid())) {
 	 start_methods.add(bm);
 	 return true;
        }
@@ -1512,7 +1514,7 @@ private FlowQueue setupNextFlowQueue()
    if (FlowMaster.doDebug()) {
       System.err.println("\nInitialize workqueue for " + cm.getMethodName() + " " +
 			    cm.getMethodSignature() + " [" + cm.hashCode() + "] " +
-			    (inset == null ? (-1) : inset.size()) );
+			    (inset == null ? (-1) : inset.size()));
       if (wq == null) {
 	 for (Iterator<BT_Class> it = cm.getStartState().getInitializations(); it.hasNext(); ) {
 	    BT_Class btc = it.next();
@@ -1624,7 +1626,7 @@ private boolean getInitializerDone(BT_Class bc)
 
 
 
-private boolean checkInit(StateBase st,MethodBase cm,BT_Ins _ins,int ino)
+private boolean checkInit(StateBase st,MethodBase cm,BT_Ins ins,int ino)
 {
    BT_Class bc = cm.getMethodClass();
 

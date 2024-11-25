@@ -556,7 +556,7 @@ private void processSpecialFiles()
 
 
 
-InlineType inlineMethod(BT_Method bm,List<ValueBase> _args)
+InlineType inlineMethod(BT_Method bm,List<ValueBase> args)
 {
    if (!do_inlining) return InlineType.DEFAULT;
 
@@ -1064,7 +1064,7 @@ private static String [] library_prefix = new String [] {
 };
 
 
-private static class DefaultProjectFilter implements JflowMaster.ProjectFilter {
+private static final class DefaultProjectFilter implements JflowMaster.ProjectFilter {
 
    @Override public boolean isProjectClass(String cls) {
       for (int i = 0; i < library_prefix.length; ++i) {

@@ -315,25 +315,25 @@ public enum JannotTreeTag
 	 */
    LETEXPR;			    // ala scheme
 
-private final JannotTreeTag noAssignTag;
+private final JannotTreeTag no_assign_tag;
 
-private static final int numberOfOperators = MOD.ordinal() - POS.ordinal() + 1;
+private static final int NUMBER_OF_OPERATORS = MOD.ordinal() - POS.ordinal() + 1;
 
-private JannotTreeTag(JannotTreeTag nat) {
-   this.noAssignTag = nat;
+JannotTreeTag(JannotTreeTag nat) {
+   this.no_assign_tag = nat;
 }
 
-private JannotTreeTag() {
+JannotTreeTag() {
    this(null);
 }
 
 public static int getNumberOfOperators() {
-   return numberOfOperators;
+   return NUMBER_OF_OPERATORS;
 }
 
 public JannotTreeTag noAssignOp() {
-   if (noAssignTag != null)
-      return noAssignTag;
+   if (no_assign_tag != null)
+      return no_assign_tag;
    throw new AssertionError("noAssignOp() method is not available for non assignment tags");
 }
 
@@ -346,7 +346,7 @@ public boolean isIncOrDecUnaryOp() {
 }
 
 public boolean isAssignop() {
-   return noAssignTag != null;
+   return no_assign_tag != null;
 }
 
 public int operatorIndex() {

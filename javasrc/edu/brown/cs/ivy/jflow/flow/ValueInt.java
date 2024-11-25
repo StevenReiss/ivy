@@ -31,33 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ValueInt.java,v 1.6 2018/08/02 15:10:18 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ValueInt.java,v $
- * Revision 1.6  2018/08/02 15:10:18  spr
- * Fix imports.
- *
- * Revision 1.5  2015/11/20 15:09:14  spr
- * Reformatting.
- *
- * Revision 1.4  2011-05-11 01:10:46  spr
- * Prototype entries had bad names.  Code cleansing.
- *
- * Revision 1.3  2007-05-10 01:48:12  spr
- * Start adding support for local (micro) typing.
- *
- * Revision 1.2  2006/07/10 14:52:18  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:35  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 

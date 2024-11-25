@@ -31,27 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelMethod.java,v 1.4 2015/11/20 15:09:15 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ModelMethod.java,v $
- * Revision 1.4  2015/11/20 15:09:15  spr
- * Reformatting.
- *
- * Revision 1.3  2007-05-04 02:00:03  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.2  2006/07/10 14:52:19  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:37  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.model;
 

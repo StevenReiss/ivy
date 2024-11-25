@@ -31,36 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelObjectValue.java,v 1.7 2018/08/02 15:10:20 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ModelObjectValue.java,v $
- * Revision 1.7  2018/08/02 15:10:20  spr
- * Fix imports.
- *
- * Revision 1.6  2015/11/20 15:09:15  spr
- * Reformatting.
- *
- * Revision 1.5  2007-08-10 02:10:45  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.4  2007-05-04 02:00:03  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.3  2006/07/10 14:52:19  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:36  spr
- * Fixup reporting values for calls.
- *
- * Revision 1.1  2006/06/21 02:18:37  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.model;
 
@@ -93,7 +63,7 @@ private Set<String>	string_set;
 
 
 
-static private Map<BT_Class,Map<BT_Class,BT_Class>> parent_map;
+private static Map<BT_Class,Map<BT_Class,BT_Class>> parent_map;
 
 static {
    parent_map = new HashMap<BT_Class,Map<BT_Class,BT_Class>>();
@@ -270,11 +240,11 @@ private static BT_Class computeCommonParent(BT_Class c1,BT_Class c2)
    if (c1.isDerivedFrom(c2)) return c2;
    else if (c2.isDerivedFrom(c1)) return c1;
 
-   for (BT_Class c0 = c1.getSuperClass() ; c0 != null; c0 = c0.getSuperClass()) {
+   for (BT_Class c0 = c1.getSuperClass(); c0 != null; c0 = c0.getSuperClass()) {
       if (c0 == c2 || c0.isAncestorOf(c2)) return c0;
     }
 
-   for (BT_Class c0 = c2.getSuperClass() ; c0 != null; c0 = c0.getSuperClass()) {
+   for (BT_Class c0 = c2.getSuperClass(); c0 != null; c0 = c0.getSuperClass()) {
       if (c0 == c1 || c0.isAncestorOf(c1)) return c0;
     }
 
@@ -304,7 +274,7 @@ private static BT_Class findCommonInterface(BT_Class i1,BT_Class i2)
 
 
 
-private static BT_Class findCommonClassInterface(BT_Class c1,BT_Class _c2)
+private static BT_Class findCommonClassInterface(BT_Class c1,BT_Class c2)
 {
    return c1;
 }
@@ -395,179 +365,4 @@ private static BT_Class findCommonArray(BT_Class c1,BT_Class c2)
 
 
 /* end of ModelObjectValue.java */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

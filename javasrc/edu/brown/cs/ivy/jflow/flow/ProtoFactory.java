@@ -31,39 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/flow/ProtoFactory.java,v 1.8 2018/08/02 15:10:17 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ProtoFactory.java,v $
- * Revision 1.8  2018/08/02 15:10:17  spr
- * Fix imports.
- *
- * Revision 1.7  2017/12/20 20:36:49  spr
- * Formatting
- *
- * Revision 1.6  2008-11-12 13:45:39  spr
- * Eclipse fixups.
- *
- * Revision 1.5  2007-08-10 02:10:39  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.4  2007-05-04 01:59:58  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.3  2006-12-01 03:22:47  spr
- * Clean up eclipse warnings.
- *
- * Revision 1.2  2006/07/10 14:52:17  spr
- * Code cleanup.
- *
- * Revision 1.1  2006/06/21 02:18:34  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.flow;
 
@@ -97,7 +64,7 @@ public class ProtoFactory implements JflowConstants
 private FlowMaster jflow_master;
 private Map<BT_Class,Class<?>> class_map;
 
-private static Class<?> [] cnst_params = new Class<?> [] { FlowMaster.class, BT_Class.class };
+private static Class<?>[] cnst_params = new Class<?>[] { FlowMaster.class, BT_Class.class };
 
 
 /********************************************************************************/

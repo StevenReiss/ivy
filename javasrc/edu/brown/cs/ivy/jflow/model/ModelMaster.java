@@ -31,39 +31,6 @@
  *										 *
  ********************************************************************************/
 
-/* RCS: $Header: /pro/spr_cvs/pro/ivy/javasrc/edu/brown/cs/ivy/jflow/model/ModelMaster.java,v 1.8 2018/08/02 15:10:19 spr Exp $ */
-
-
-/*********************************************************************************
- *
- * $Log: ModelMaster.java,v $
- * Revision 1.8  2018/08/02 15:10:19  spr
- * Fix imports.
- *
- * Revision 1.7  2015/11/20 15:09:15  spr
- * Reformatting.
- *
- * Revision 1.6  2012-08-29 01:40:53  spr
- * Code cleanup for new compiler.
- *
- * Revision 1.5  2007-08-10 02:10:45  spr
- * Cleanups from eclipse; fixups for paca.
- *
- * Revision 1.4  2007-05-04 02:00:03  spr
- * Update jflow with generic value/source flags.
- *
- * Revision 1.3  2006/07/10 14:52:19  spr
- * Code cleanup.
- *
- * Revision 1.2  2006/07/03 18:15:36  spr
- * Fixup reporting values for calls.
- *
- * Revision 1.1  2006/06/21 02:18:37  spr
- * Initial refactoring of flow analysis from clime/chet to ivy.
- *
- *
- ********************************************************************************/
-
 
 package edu.brown.cs.ivy.jflow.model;
 
