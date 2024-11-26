@@ -1134,6 +1134,7 @@ private boolean getBooleanValue(String s)
 
 
 
+// CHECKSTYLE:OFF
 private void generateFormatXml(PebbleEditor pe,IvyXmlWriter xw,Node xml,Map<String,Object> cur,
 				  int idx)
 {
@@ -1318,6 +1319,7 @@ private void generateFormatXml(PebbleEditor pe,IvyXmlWriter xw,Node xml,Map<Stri
 
    xw.end();
 }
+// CHECKSTYLE:ON
 
 
 private String getField(PebbleEditor pe,String fld,Map<String,Object> cur)

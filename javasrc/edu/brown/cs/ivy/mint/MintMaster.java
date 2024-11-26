@@ -414,19 +414,7 @@ private static boolean getMasterSocket()
 	  }
 
 	 if (i == 0) {
-	    try {
-	       File f = new File(MINT_MASTER_CMD);
-	       if (f.exists()) {
-		  new IvyExec("'" + MINT_MASTER_CMD + "'");
-		}
-	       else {
-		  IvyExec.ivyJava("edu.brown.cs.ivy.mint.MintServerMaster","-Xmx64m",null);
-		}
-	     }
-	    catch (IOException e) {
-	       MintLogger.log("I/O error: " + e.getMessage());
-	       break;
-	     }
+            if (!startMintMaster()) break;
 	  }
 
 	 try {
@@ -443,6 +431,27 @@ private static boolean getMasterSocket()
 
    if (master_socket == null) return false;
 
+   return true;
+}
+
+
+
+private static boolean startMintMaster()
+{
+   try {
+      File f = new File(MINT_MASTER_CMD);
+      if (f.exists()) {
+         new IvyExec("'" + MINT_MASTER_CMD + "'");
+       }
+      else {
+         IvyExec.ivyJava("edu.brown.cs.ivy.mint.MintServerMaster","-Xmx64m",null);
+       }
+    }
+   catch (IOException e) {
+      MintLogger.log("I/O error: " + e.getMessage());
+      return false;
+    }
+   
    return true;
 }
 

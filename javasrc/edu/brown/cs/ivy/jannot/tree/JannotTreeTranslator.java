@@ -49,7 +49,7 @@ public class JannotTreeTranslator extends JannotTreeVisitor
 /*                                                                              */
 /********************************************************************************/
 
-protected JannotTree    result;
+protected JannotTree    result_tree;
 
 
 
@@ -75,8 +75,8 @@ public <T extends JannotTree> T translate(T tree)
 {
    if (tree == null) return null;
    tree.accept(this);
-   JannotTree rslt = this.result;
-   result = null;
+   JannotTree rslt = this.result_tree;
+   result_tree = null;
    return (T) rslt;
 }
 
@@ -127,7 +127,7 @@ public List<JannotTreeJCAnnotation> translateAnnotations(List<JannotTreeJCAnnota
 
 public void visitTree(JannotTree t)
 {
-   result = t.translate(this);
+   result_tree = t.translate(this);
 }
 
 

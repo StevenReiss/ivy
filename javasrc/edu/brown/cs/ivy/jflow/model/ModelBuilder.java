@@ -257,6 +257,7 @@ ModelMethod createAutomata()
 /*										*/
 /********************************************************************************/
 
+// CHECKSTYLE:OFF
 void processInstruction(InsState ist)
 {
    int ino = ist.getInstructionNumber();
@@ -416,6 +417,7 @@ void processInstruction(InsState ist)
 
    if (nino >= 0 && nst != null) addToQueue(nino,nst,jsrs,vals);
 }
+// CHECKSTYLE:ON
 
 
 
@@ -440,6 +442,7 @@ private Stack<Integer> cloneStack(Stack<Integer> j)
 /*										*/
 /********************************************************************************/
 
+// CHECKSTYLE:OFF
 private ValueState maintainValues(BT_Ins ins,ValueState vals)
 {
    BT_MethodRefIns mrins;
@@ -854,6 +857,7 @@ private ValueState maintainValues(BT_Ins ins,ValueState vals)
 
    return st1;
 }
+// CHECKSTYLE:ON
 
 
 

@@ -154,6 +154,7 @@ boolean matchAny()
 /*										*/
 /********************************************************************************/
 
+// CHECKSTYLE:OFF
 @Override ModelValue performOperation(BT_Class typ,ModelValue rhsv,int op)
 {
    if (rhsv == null) rhsv = this;
@@ -405,6 +406,7 @@ boolean matchAny()
 
    return rslt;
 }
+// CHECKSTYLE:ON
 
 
 

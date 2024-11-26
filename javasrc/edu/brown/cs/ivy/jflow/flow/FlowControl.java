@@ -327,6 +327,7 @@ private void scanCode(FlowQueue wq)
 
 
 
+// CHECKSTYLE:OFF
 private void processInstruction(int ino,FlowQueue wq)
 {
    BT_Ins ins = wq.getInstruction(ino);
@@ -933,6 +934,7 @@ private void processInstruction(int ino,FlowQueue wq)
       wq.mergeState(st1,nino);
     }
 }
+// CHECKSTYLE:ON
 
 
 

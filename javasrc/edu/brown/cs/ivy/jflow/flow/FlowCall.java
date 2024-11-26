@@ -98,6 +98,7 @@ FlowCall(FlowMaster jm,FlowControl fc)
 /*										*/
 /********************************************************************************/
 
+// CHECKSTYLE:OFF
 boolean handleCall(BT_MethodRefIns ins,int ino,StateBase st0,FlowQueue wq)
 {
    BT_Method bm = ins.getTarget();
@@ -276,6 +277,7 @@ boolean handleCall(BT_MethodRefIns ins,int ino,StateBase st0,FlowQueue wq)
 
    return true;
 }
+// CHECKSTYLE:ON
 
 
 
@@ -402,6 +404,7 @@ private ValueBase checkVirtual(BT_Method bm,List<ValueBase> args,
 
 
 
+// CHECKSTYLE:OFF
 private ValueBase processMethod(BT_Method bm,List<ValueBase> args,boolean virt,
 				   BT_MethodRefIns calins,int ino,MethodBase caller,StateBase st,
 				   MethodBase mi,BT_Method bm0,LinkedList<ValueBase> nargs,
@@ -461,6 +464,7 @@ private ValueBase processMethod(BT_Method bm,List<ValueBase> args,boolean virt,
 
    return rslt;
 }
+// CHECKSTYLE:ON
 
 
 

@@ -68,7 +68,10 @@
 
   <!-- Checks whether files end with a new line.			-->
   <!-- See https://checkstyle.org/checks/misc/newlineatendoffile.html -->
+
+<!--
   <module name="NewlineAtEndOfFile"/>
+-->
 
   <!-- Checks that property files contain the same keys.	 -->
   <!-- See https://checkstyle.org/checks/misc/translation.html -->

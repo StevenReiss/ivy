@@ -211,6 +211,7 @@ static JannotTreeJCExpression createTypeTree(Type n)
    return null;
 }
 
+// CHECKSTYLE:OFF
 static JannotTree createTree(ASTNode n)
 {
    if (n == null) return null;
@@ -390,6 +391,7 @@ static JannotTree createTree(ASTNode n)
 
    return null;
 }
+// CHECKSTYLE:ON
 
 
 

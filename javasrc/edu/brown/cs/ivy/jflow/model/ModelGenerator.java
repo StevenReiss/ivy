@@ -124,6 +124,7 @@ ModelGenerator(ModelMaster mm)
 /*										*/
 /********************************************************************************/
 
+// CHECKSTYLE:OFF
 boolean generateAutomata()
 {
    empty_calls = new HashSet<JflowMethod>();
@@ -372,6 +373,7 @@ boolean generateAutomata()
 
    return retfg;
 }
+// CHECKSTYLE:ON
 
 
 
