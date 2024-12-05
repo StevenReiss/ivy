@@ -84,3 +84,4 @@ lib/useneweclipse.csh
 pom.xml
 .nfs*
 .DS_Store
+java/words
