@@ -1,4 +1,4 @@
-orjects to ignore
+# Files to ignore
 
 *.class
 bBUFFERS
@@ -85,3 +85,4 @@ pom.xml
 .nfs*
 .DS_Store
 java/words
+.vscode
