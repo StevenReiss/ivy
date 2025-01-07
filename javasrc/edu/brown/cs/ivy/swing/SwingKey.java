@@ -382,6 +382,12 @@ public static void registerKeyAction(String when,JComponent jc,String nm,
       Action a,String... key) 
 {
    SwingKey sk = new SwingKey(when,nm,a,key);
+   
+   String nm1 = (String) a.getValue(Action.NAME);
+   if (nm1 == null && nm != null) {
+      a.putValue(Action.NAME,nm);
+    }
+   
    sk.registerKeyAction(jc);
 }
 

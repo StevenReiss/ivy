@@ -104,6 +104,10 @@ public JannotTree getQualId()
    return null;
 }
 
+public boolean isModule()
+{
+   return false;
+}
 
 public boolean getStaticImport()
 {
