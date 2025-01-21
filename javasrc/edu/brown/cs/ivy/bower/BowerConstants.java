@@ -36,18 +36,35 @@
 
 package edu.brown.cs.ivy.bower;
 
+import java.util.function.BiFunction;
+
 import com.sun.net.httpserver.HttpExchange;
+
+import edu.brown.cs.ivy.bower.BowerRouter.IHandler;
 
 public interface BowerConstants
 {
 
 /**
+ *      Interface for managine load/store of sessions
+ **/
+
+interface BowerSessionStore {
+   
+   void saveSession(BowerSession  bs);
+   BowerSession loadSession(String id);
+   void removeSession(String id);
+   
+}
+
+
+/**
  *      Functional event handler with Session and input data
  **/
 
-interface BowerSessionHandler {
+interface BowerSessionHandler extends BiFunction<HttpExchange,BowerSession,String> {
    
-   String handle(BowerSession cs, HttpExchange e);
+   String apply(HttpExchange e,BowerSession bs);
    
 }       // end of inner class BowerSessionHandler
 
@@ -56,7 +73,7 @@ interface BowerSessionHandler {
  *      Functional event handler without session data
  **/ 
 
-interface BowerHandler {
+interface BowerHandler extends IHandler<HttpExchange,String> {
    
    String handle(HttpExchange e);
    

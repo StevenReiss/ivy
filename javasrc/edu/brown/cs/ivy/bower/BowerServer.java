@@ -87,6 +87,7 @@ private String          keystore_password;
 private BowerRouter     http_router;
 private HttpContext     router_context;
 private Executor        task_executor;
+private BowerSessionStore session_store;
 
 private static String   session_parameter = "BOWERSESSION";
 private static String   session_cookie = "Bower.Session";
@@ -108,6 +109,7 @@ public BowerServer(int port)
    http_router = null;
    router_context = null;
    task_executor = null;
+   session_store = null;
 }
 
 
@@ -134,7 +136,7 @@ public void setPort(int port)
 public BowerRouter getRouter()
 {
    if (http_router == null) {
-      setRouter(new BowerRouter());
+      setRouter(new BowerRouter(session_store));
     }
    return http_router;
 }
@@ -175,6 +177,11 @@ public static void setSessionParameter(String nm)
     }
 }
 
+public void setSessionStore(BowerSessionStore bss)
+{
+   session_store = bss;
+}
+
 static String getSessionParameter()
 {
    return session_parameter;
@@ -209,6 +216,11 @@ public boolean start()
       if (!setup()) return false;
     }
    http_server.start();
+   
+   String what = "HTTPS";
+   if (keystore_password == null) what = "HTTP";
+   IvyLog.logD("BOWER",what + " server setup on port " + port_number);
+   
    return true;
 }
 
@@ -307,7 +319,7 @@ static void sendResponse(HttpExchange exchange, String response,int rcode)
 }
 
 
-static String jsonResponse(JSONObject jo)
+public static String jsonResponse(JSONObject jo)
 {
    if (jo.optString("STATUS",null) == null) {
       jo.put("STATUS","OK");
@@ -317,7 +329,7 @@ static String jsonResponse(JSONObject jo)
 }
 
 
-static String jsonResponse(BowerSession cs,JSONObject jo)
+public static String jsonResponse(BowerSession cs,JSONObject jo)
 {
    if (jo.optString("STATUS",null) == null) {
       jo.put("STATUS","OK");
@@ -330,7 +342,7 @@ static String jsonResponse(BowerSession cs,JSONObject jo)
 }
 
 
-static String jsonResponse(BowerSession cs, Object... val)
+public static String jsonResponse(BowerSession cs, Object... val)
 {
    Map<String,Object> map = new HashMap<>();
    if (cs != null) map.put(session_parameter, cs.getSessionId());

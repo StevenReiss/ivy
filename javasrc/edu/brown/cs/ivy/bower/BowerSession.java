@@ -76,6 +76,17 @@ BowerSession()
 }
 
 
+public BowerSession(String sid,Date used)
+{
+   last_used = used;
+   expires_at = 0;
+   value_map = new HashMap<>();
+   expire_delta = EXPIRE_DELTA;
+   session_uid = sid;
+}
+
+
+
 /********************************************************************************/
 /*                                                                              */
 /*      Access methods                                                          */

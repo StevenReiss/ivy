@@ -56,8 +56,7 @@ class BowerSessionManager implements BowerConstants
 /********************************************************************************/
 
 private Map<String,BowerSession> session_set;
-
-
+private BowerSessionStore session_store;
 
 
 
@@ -67,9 +66,10 @@ private Map<String,BowerSession> session_set;
 /*                                                                              */
 /********************************************************************************/
 
-BowerSessionManager()
+BowerSessionManager(BowerSessionStore bss)
 {
    session_set = new HashMap<>();
+   session_store = bss;
 }
 
 
@@ -112,7 +112,9 @@ String setupSession(HttpExchange e)
    if (cs != null && !cs.isValid()) cs = null;
    if (cs == null) cs = beginSession(e);
    
-// if (cs != null) cs.saveSession(catre_control);
+   if (session_store != null && cs != null) {
+      session_store.saveSession(cs);
+    }
    
    return null;
 }
@@ -155,14 +157,16 @@ BowerSession beginSession(HttpExchange e)
    BowerSession cs = new BowerSession(); 
    String sid = cs.getSessionId();
    session_set.put(sid,cs);
-// CatserveServer.setParameter(e,SESSION_PARAMETER,sid);
+   BowerRouter.setParameter(e,BowerServer.getSessionParameter(),sid);
    
    int maxAge = 31536000; // Set the cookie to expire in one year
    String cookie = String.format("%s=%s; Path=%s; Max-Age=%d", 
          BowerServer.getSessionCookie(), sid, "/", maxAge);
    e.getResponseHeaders().add("Set-Cookie", cookie);
    
-// cs.saveSession(catre_control);
+   if (session_store != null) {
+      session_store.saveSession(cs);
+    }
    
    return cs;
 }
@@ -178,8 +182,10 @@ String validateSession(HttpExchange e,String sid)
 
 void endSession(String sid)
 {
-// BowerSession csi = session_set.remove(sid);
-// if (csi != null) csi.removeSession(catre_control);
+   BowerSession csi = session_set.remove(sid);
+   if (csi != null && session_store != null) {
+      session_store.removeSession(sid);
+    }
 }
 
 
@@ -201,7 +207,10 @@ private BowerSession findSession(String sid)
    BowerSession csi = session_set.get(sid);
    if (csi != null) return csi;
    
-// csi = (CatserveSessionImpl) catre_control.getDatabase().loadObject(sid);
+   if (session_store != null) {
+      csi = session_store.loadSession(sid);
+    }
+   
    return csi;
 }
 

@@ -1,0 +1,21 @@
+#
+# BOWER -- web server coding	
+#
+# Copyright 2024 <Steven P. Reiss>, Brown University - All rights reserved.
+#
+
+PACKAGE= bower
+
+
+SFILES= \
+	BowerConstants.java \
+	BowerException.java \
+	BowerRouter.java \
+	BowerServer.java \
+	BowerSession.java \
+	BowerSessionManager.java \
+	BowerUtil.java\
+
+
+LOCALJAVAFLAGS= $(J10FLAGS)
+

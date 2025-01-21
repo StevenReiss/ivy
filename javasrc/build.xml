@@ -18,6 +18,7 @@
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/limbo" />
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/leash" />
       <ant antfile="build.xml" dir="edu/brown/cs/ivy/project" />
+      <ant antfile="build.xml" dir="edu/brown/cs/ivy/bower" />
    </target>
 
    <path id='jdocsrc'>
@@ -41,6 +42,7 @@
 	 <package name='edu.brown.cs.ivy.limbo' />
 	 <package name='edu.brown.cs.ivy.leash' />
 	 <package name='edu.brown.cs.ivy.project' />
+	 <package name='edu.brown.cs.ivy.bower' />
       </javadoc>
    </target>
 

@@ -72,15 +72,16 @@ private ArrayList<Route> route_interceptors;
 private int preroute_index;
 
 
+
 /********************************************************************************/
 /*                                                                              */
 /*      Constructors                                                            */
 /*                                                                              */
 /********************************************************************************/
 
-public BowerRouter()
+public BowerRouter(BowerSessionStore bss)
 {
-   session_manager = new BowerSessionManager();
+   session_manager = new BowerSessionManager(bss);
    route_interceptors = new ArrayList<>();
    preroute_index = 0;
 }
@@ -195,12 +196,20 @@ public String handleSessions(HttpExchange e)
 /*                                                                              */
 /********************************************************************************/
 
-@SuppressWarnings("unchecked")
 public static String getParameter(HttpExchange e,String name)
+{
+   List<String> vals = getParameterList(e,name);
+   if (vals == null || vals.isEmpty()) return null;
+   return vals.get(0);
+}
+
+
+@SuppressWarnings("unchecked")
+public static List<String> getParameterList(HttpExchange e,String name)
 {
    try {
       Map<String, List<String>> map = (Map<String, List<String>>) e.getAttribute("paramMap");
-      return (map).get(name).get(0);
+      return (map).get(name);
     }
    catch (Exception err){
       return null;
@@ -211,6 +220,8 @@ public static String getParameter(HttpExchange e,String name)
 @SuppressWarnings("unchecked")
 public static void setParameter(HttpExchange exchange,String name,String val)
 {
+   if (name == null) return;
+   
    Map<String,List<String>> parameters = (Map<String,List<String>>) exchange.getAttribute("paramMap");
    synchronized (parameters){
       if (val == null) {
@@ -444,7 +455,7 @@ private class Route {
     }
    
    private Route(String method,String url) {
-      if (method == null || method.equals("ALL")) check_method = -1;
+      if (method == null || method.equals("ALL") || method.equals("USE")) check_method = -1;
       else {
          check_method = 0;
          String[] ms = method.split(" ,;");

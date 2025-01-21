@@ -216,6 +216,12 @@ if ( "X$xxx" == X ) then
    setenv CLASSPATH "${CLASSPATH}:$cmmk"
 endif
 
+set xxx = `echo $CLASSPATH | grep -F json`
+if ( "X$xxx" == X ) then
+   set json = $BROWN_IVY_IVY/lib/json.jar	
+   setenv CLASSPATH "${CLASSPATH}:$json"
+endif
+
 set xxx = `echo $CLASSPATH | grep -F org.eclipse.jdt.debug`
 # if ( "X$xxx" == X && $?ECLIPSEROOT == 0 ) then
 if ( "X$xxx" == X ) then

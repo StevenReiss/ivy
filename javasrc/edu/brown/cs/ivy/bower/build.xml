@@ -1,0 +1,28 @@
+<project name='ivy.bower' default='compile'>
+
+   <property file='../../../../../../build.properties' />
+   <property name='PRO' value='/pro' />
+   <property name='IVY' value='/pro/ivy' />
+   <target name='init' >
+      <path id='ivy.classpath'>
+	 <pathelement location='${IVY}/java' />
+	 <pathelement location='${IVY}/lib/json.jar' />
+      </path>
+      <path id='test.classpath'>
+	 <pathelement location='${IVY}/java' />
+	 <pathelement location='${IVY}/lib/json.jar' />
+      </path>
+   </target>
+
+   <target name='compile' depends='init'>
+      <javac srcdir='.' destdir='${IVY}/java' debug='on' deprecation='on'
+		target='10' source='10'
+		includeantruntime='false'>
+	 <classpath refid='ivy.classpath' />
+      </javac>
+   </target>
+
+</project>
+
+
+
