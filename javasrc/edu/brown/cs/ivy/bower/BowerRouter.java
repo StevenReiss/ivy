@@ -36,6 +36,7 @@
 package edu.brown.cs.ivy.bower;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 import edu.brown.cs.ivy.file.IvyLog;
 
-public class BowerRouter implements BowerConstants, HttpHandler
+public class BowerRouter<UserSession extends BowerSession> implements BowerConstants, HttpHandler
 {
 
 
@@ -67,7 +68,7 @@ public class BowerRouter implements BowerConstants, HttpHandler
 /*                                                                              */
 /********************************************************************************/
 
-private BowerSessionManager session_manager;
+private BowerSessionManager<UserSession> session_manager;
 private ArrayList<Route> route_interceptors;
 private int preroute_index;
 
@@ -79,9 +80,9 @@ private int preroute_index;
 /*                                                                              */
 /********************************************************************************/
 
-public BowerRouter(BowerSessionStore bss)
+public BowerRouter(BowerSessionStore<UserSession> bss)
 {
-   session_manager = new BowerSessionManager(bss);
+   session_manager = new BowerSessionManager<UserSession>(bss);
    route_interceptors = new ArrayList<>();
    preroute_index = 0;
 }
@@ -93,7 +94,6 @@ public BowerRouter(BowerSessionStore bss)
 /*      Routing methods                                                         */
 /*                                                                              */
 /********************************************************************************/
-
 
 public void addRoute(String method,String url,IHandler<HttpExchange,String> h)
 {
@@ -108,21 +108,20 @@ public void addRoute(String method,IHandler<HttpExchange,String> h)
 
 
 public void addRoute(String method,String url,
-      BiFunction<HttpExchange,BowerSession,String> h)
+      BiFunction<HttpExchange,UserSession,String> h)
 {
    addHTTPInterceptor(new Route(method,url,h));
 }
 
 
 public void addPreRoute(String method,String url,
-      BiFunction<HttpExchange,BowerSession,String> h)
+      BiFunction<HttpExchange,UserSession,String> h)
 {
    route_interceptors.add(preroute_index++,new Route(method,url,h));
 }
 
 
-public void addRoute(String method,
-      BiFunction<HttpExchange,BowerSession,String> h)
+public void addRoute(String method,BiFunction<HttpExchange,UserSession,String> h)
 {
    addHTTPInterceptor(new Route(method,null,h));
 }
@@ -204,6 +203,18 @@ public static String getParameter(HttpExchange e,String name)
 }
 
 
+public static int getIntParameter(HttpExchange he,String name)
+{
+   String s = getParameter(he,name);
+   if (s == null) return 0;
+   try {
+      return Integer.parseInt(s);
+    }
+   catch (NumberFormatException e) { }
+   return 0;
+}
+
+
 @SuppressWarnings("unchecked")
 public static List<String> getParameterList(HttpExchange e,String name)
 {
@@ -249,6 +260,133 @@ public static JSONObject getJson(HttpExchange exchange,String fld)
    String jsonstr = getParameter(exchange,fld);
    if (jsonstr == null) return null;
    return new JSONObject(jsonstr);
+}
+
+
+
+public static String getAccessToken(HttpExchange exchange)
+{
+   String tok = getParameter(exchange,"access_token");
+   if (tok == null) {
+      String ahdr = exchange.getRequestHeaders().getFirst("Authorization");
+      if (ahdr != null) {
+         if (ahdr.startsWith("Bearer ")) {
+            int idx = ahdr.indexOf(" ");
+            tok = ahdr.substring(idx+1).trim();
+          }
+       }
+    }
+   return tok;
+}
+
+
+/********************************************************************************/
+/*                                                                              */
+/*      Output methods                                                          */
+/*                                                                              */
+/********************************************************************************/
+
+public static String deferredResponse()
+{
+   return BOWER_DEFERRED_RESPONSE; 
+}
+
+
+public static String buildResponse(BowerSession session,String sts,Object... val)
+{
+   JSONObject jo;
+   
+   if (val.length == 1 && val[0] instanceof JSONObject) {
+      jo = (JSONObject) val[0];
+    }
+   else {
+      Map<String,Object> map = new HashMap<>();
+      
+      for (int i = 0; i+1 < val.length; i += 2) {
+         String key = val[i].toString();
+         Object v = val[i+1];
+         if (key != null) map.put(key,v);
+       }
+      
+      jo = new JSONObject(map);
+    }
+   
+   BowerSessionStore<?> bss = session.getSessionStore(); 
+   String stskey = bss.getStatusKey(); 
+   if (sts != null && stskey != null) {
+      if (jo.optString(stskey,null) == null) {
+         jo.put(stskey,sts);
+       }
+    }
+   
+   String spar = bss.getSessionKey();
+   String sid = session.getSessionId();
+   if (spar != null && sid != null) {
+      if (jo.optString(spar,null) == null) {
+         jo.put(spar,sid);
+       }
+    }
+   
+   return jo.toString(2);
+}
+
+
+
+
+public static String errorResponse(HttpExchange e,BowerSession cs,int status,String msg)
+{
+   Headers hdrs = e.getRequestHeaders();
+   BowerSessionStore<?> bss = cs.getSessionStore(); 
+   
+   String acc =  hdrs.getFirst("Accept");
+   String text = status + ": " + msg;
+   
+   if (acc != null && acc.toLowerCase().contains("json")) {
+      text = buildResponse(cs,"ERROR",bss.getReturnCodeKey(),status,
+            bss.getErrorMessageKey(),text);
+    }
+   
+   return text;
+}
+
+
+public static String jsonOKResponse(BowerSession cs,Object... data)
+{
+  return  buildResponse(cs,"OK",data);
+}
+
+
+public static String sendFileResponse(HttpExchange he,File f)
+{
+   BowerServer.sendFileResponse(he,f); 
+   
+   return deferredResponse();
+}
+
+
+public static void finishResponse(HttpExchange he,BowerSession cs,String status,Object... data)
+{
+   finishResponse(he,cs,0,status,data);
+}
+
+
+public static void finishResponse(HttpExchange he,BowerSession cs,int rcode,String status,Object... data)
+{
+   BowerSessionStore<?> bss = cs.getSessionStore(); 
+   
+   String resp = buildResponse(cs,status,data);
+   if (rcode == 0) {
+      if (resp.startsWith("{")){
+         try {
+            JSONObject jo = new JSONObject(resp);
+            rcode = jo.getInt(bss.getReturnCodeKey());
+          }
+         catch (Throwable t) { }
+       }
+      if (rcode == 0) rcode = 200;
+    }
+      
+   BowerServer.sendResponse(he,resp,rcode);
 }
 
 
@@ -416,6 +554,7 @@ private static int getBodySize(Headers hdrs)
    for (Route interceptor : route_interceptors) {
       String resp = interceptor.handle(e);
       if (resp != null) {
+         if (resp.equals(BOWER_DEFERRED_RESPONSE)) return;
          BowerServer.sendResponse(e,resp);
          return;
        }
@@ -441,7 +580,7 @@ private class Route {
    private Pattern check_pattern;
    private List<String> check_names;
    private IHandler<HttpExchange,String> route_handle;
-   private BiFunction<HttpExchange,BowerSession,String> route_function;
+   private BiFunction<HttpExchange,UserSession,String> route_function;
    
    Route(String method,String url,IHandler<HttpExchange,String> handler) {
       this(method,url);
@@ -449,7 +588,7 @@ private class Route {
     }
    
    Route(String method,String url,
-         BiFunction<HttpExchange,BowerSession,String> handler) {
+         BiFunction<HttpExchange,UserSession,String> handler) {
       this(method,url);
       route_function = handler;
     }
@@ -492,19 +631,18 @@ private class Route {
          return null;	
        }
       
-      
       try {
          if (route_handle != null) {
             return route_handle.handle(exchange);
           }
          else if (route_function != null) {
-            BowerSession cs = session_manager.findSession(exchange);
+            UserSession cs = session_manager.findSession(exchange);
             return route_function.apply(exchange,cs);
           }
        }
       catch (Throwable t) {
          IvyLog.logE("BOWER","Problem handling input",t);
-         return BowerServer.errorResponse(exchange,null,500,"Problem handling input: " + t);
+         return errorResponse(exchange,null,500,"Problem handling input: " + t);
        }
       
       return null;

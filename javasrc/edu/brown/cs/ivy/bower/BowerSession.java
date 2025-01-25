@@ -39,7 +39,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BowerSession implements BowerConstants
+import org.json.JSONObject;
+
+public abstract class BowerSession implements BowerConstants
 {
 
 
@@ -52,7 +54,7 @@ public class BowerSession implements BowerConstants
 
 private Date            last_used;
 private long            expires_at;
-private Map<String,String> value_map;
+private Map<String,Object> value_map;
 private long            expire_delta;
 private String          session_uid;
 
@@ -66,7 +68,7 @@ private static final long EXPIRE_DELTA = 1000*60*60*24*4;
 /*                                                                              */
 /********************************************************************************/
 
-BowerSession()
+public BowerSession()
 {
    last_used = new Date();
    expires_at = 0;
@@ -74,17 +76,6 @@ BowerSession()
    expire_delta = EXPIRE_DELTA;
    session_uid = "SESS_" + BowerUtil.randomString(24);  
 }
-
-
-public BowerSession(String sid,Date used)
-{
-   last_used = used;
-   expires_at = 0;
-   value_map = new HashMap<>();
-   expire_delta = EXPIRE_DELTA;
-   session_uid = sid;
-}
-
 
 
 /********************************************************************************/
@@ -133,10 +124,39 @@ public void setValue(String key,String val)
    value_map.put(key,val);
 }
 
-public String getValue(String key)
+
+
+public Object getValue(String key)
 {
    return value_map.get(key);
 }
+
+
+public String getStringValue(String key)
+{
+   Object v = value_map.get(key);
+   if (v == null) return null;
+   return v.toString();
+}
+
+
+public JSONObject getJsonValue(String key)
+{
+   Object v = value_map.get(key);
+   if (v == null) return null;
+   if (v instanceof JSONObject) {
+      return (JSONObject) v;
+    }
+   else if (v instanceof String) {
+      return new JSONObject((String) v);
+    }
+   
+   return null;
+}
+
+
+public abstract BowerSessionStore<?> getSessionStore();
+
 
 
 }       // end of class BowerSession

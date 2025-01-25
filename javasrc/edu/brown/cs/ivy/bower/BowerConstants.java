@@ -46,14 +46,32 @@ public interface BowerConstants
 {
 
 /**
+ *      String to return for deferred response
+ **/
+
+String BOWER_DEFERRED_RESPONSE = "*DEFER*";
+
+
+
+/**
  *      Interface for managine load/store of sessions
  **/
 
-interface BowerSessionStore {
+interface BowerSessionStore<S extends BowerSession> {
    
-   void saveSession(BowerSession  bs);
-   BowerSession loadSession(String id);
+   default String getSessionKey() { return "SESSION"; }
+   String getSessionCookie();
+   default String getStatusKey()        { return "STATUS"; }
+   default String getErrorMessageKey()  { return "MESSAGE"; }
+   default String getReturnCodeKey()    { return "RETURNCODE"; }
+
+   S createNewSession();
+   void saveSession(S  bs);
+   S loadSession(String id);
    void removeSession(String id);
+   default boolean validateSession(HttpExchange e,String sid) {
+      return true;
+    }
    
 }
 
@@ -62,9 +80,10 @@ interface BowerSessionStore {
  *      Functional event handler with Session and input data
  **/
 
-interface BowerSessionHandler extends BiFunction<HttpExchange,BowerSession,String> {
+interface BowerSessionHandler<S extends BowerSession> 
+        extends BiFunction<HttpExchange,S,String> {
    
-   String apply(HttpExchange e,BowerSession bs);
+   String apply(HttpExchange e,S bs);
    
 }       // end of inner class BowerSessionHandler
 

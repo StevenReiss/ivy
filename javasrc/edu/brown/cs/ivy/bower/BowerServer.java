@@ -40,9 +40,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.nio.file.Files;
 import java.security.KeyStore;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -51,8 +50,6 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 
-import org.json.JSONObject;
-
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
@@ -60,11 +57,12 @@ import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
 
+import edu.brown.cs.ivy.file.IvyFile;
 import edu.brown.cs.ivy.file.IvyLog;
 
 import com.sun.net.httpserver.HttpsParameters;
 
-public class BowerServer implements BowerConstants
+public class BowerServer<UserSession extends BowerSession> implements BowerConstants
 {
 
 // TODO: need to add an interface for loading, storing and removing sessions
@@ -84,13 +82,10 @@ private HttpServer      http_server;
 private int             port_number;
 private File            keystore_file;
 private String          keystore_password;
-private BowerRouter     http_router;
+private BowerRouter<UserSession> http_router;
 private HttpContext     router_context;
 private Executor        task_executor;
-private BowerSessionStore session_store;
-
-private static String   session_parameter = "BOWERSESSION";
-private static String   session_cookie = "Bower.Session";
+private BowerSessionStore<UserSession> session_store; 
 
 
 
@@ -100,7 +95,7 @@ private static String   session_cookie = "Bower.Session";
 /*                                                                              */
 /********************************************************************************/
 
-public BowerServer(int port)
+public BowerServer(int port,BowerSessionStore<UserSession> sessstore)
 {
    port_number = port;
    http_server = null;
@@ -109,7 +104,7 @@ public BowerServer(int port)
    http_router = null;
    router_context = null;
    task_executor = null;
-   session_store = null;
+   session_store = sessstore;
 }
 
 
@@ -133,16 +128,16 @@ public void setPort(int port)
 }
 
 
-public BowerRouter getRouter()
+public BowerRouter<UserSession> getRouter()
 {
    if (http_router == null) {
-      setRouter(new BowerRouter(session_store));
+      setRouter(new BowerRouter<>(session_store));
     }
    return http_router;
 }
 
 
-public void setRouter(BowerRouter r)
+public void setRouter(BowerRouter<UserSession> r)
 {
    if (http_router != null) {
       if (http_server != null && router_context != null) {
@@ -168,40 +163,6 @@ public void setExecutor(Executor e)
     }
 }
 
-
-public static void setSessionParameter(String nm)
-{
-   session_parameter = nm;
-   if (session_cookie.equals("Bower.session")) {
-      session_cookie = nm;
-    }
-}
-
-public void setSessionStore(BowerSessionStore bss)
-{
-   session_store = bss;
-}
-
-static String getSessionParameter()
-{
-   return session_parameter;
-}
-
-
-public static void setSessionCookie(String nm)
-{
-   session_cookie = nm;
-   if (session_parameter.equals("BOWERSESSION")) {
-      String s = nm.toUpperCase();
-      s = s.replace(".","");
-      session_parameter = s;
-    }
-}
-
-static String getSessionCookie()
-{
-   return session_cookie;
-}
 
 
 /********************************************************************************/
@@ -282,6 +243,7 @@ private class Configurator extends HttpsConfigurator {
 }       // end of inner class Configurator
 
 
+
 /********************************************************************************/
 /*                                                                              */
 /*      Response handling                                                       */
@@ -290,15 +252,7 @@ private class Configurator extends HttpsConfigurator {
 
 static void sendResponse(HttpExchange exchange,String response)
 {
-   int rcode = 200;
-   if (response.startsWith("{") && response.contains("ERROR")) {
-      try {
-         JSONObject jresp = new JSONObject(response);
-         rcode = jresp.optInt("RETURNCODE",500);
-       }
-      catch (Throwable t) { }
-    }
-   sendResponse(exchange,response,rcode);
+   sendResponse(exchange,response,200);
 }
 
 
@@ -314,91 +268,27 @@ static void sendResponse(HttpExchange exchange, String response,int rcode)
       os.close();
     }
    catch (IOException e){
-      System.err.println("(2) Error sending response to server, message: " + e.getMessage());
+      IvyLog.logE("BOWER","Error sending response to server, message",e);
     }
 }
 
 
-public static String jsonResponse(JSONObject jo)
+static void sendFileResponse(HttpExchange exchange,File file)
 {
-   if (jo.optString("STATUS",null) == null) {
-      jo.put("STATUS","OK");
+   IvyLog.logD("BOWER","Sending file " + file);
+   
+   try {
+      String  mimetype = Files.probeContentType(file.toPath());
+      Headers hdrs = exchange.getResponseHeaders();
+      hdrs.set("Content-type",mimetype);
+      try (OutputStream ots = exchange.getResponseBody()) {
+         IvyFile.copyFile(file,ots);
+       }
     }
-   
-   return jo.toString(2);
-}
-
-
-public static String jsonResponse(BowerSession cs,JSONObject jo)
-{
-   if (jo.optString("STATUS",null) == null) {
-      jo.put("STATUS","OK");
+   catch (IOException e) {
+      IvyLog.logE("BOWER","Problem sending file response",e);
     }
-   if (jo.optString(session_parameter,null) == null) {
-      jo.put(session_parameter,cs.getSessionId());
-    }
-   
-   return jo.toString(2);
 }
-
-
-public static String jsonResponse(BowerSession cs, Object... val)
-{
-   Map<String,Object> map = new HashMap<>();
-   if (cs != null) map.put(session_parameter, cs.getSessionId());
-   
-   for (int i = 0; i+1 < val.length; i += 2) {
-      String key = val[i].toString();
-      Object v = val[i+1];
-      map.put(key,v);
-    }
-   
-   if (map.get("STATUS") == null) map.put("STATUS","OK");
-   
-   JSONObject jo = new JSONObject(map);
-   return jo.toString(2);
-}
-
-
-static String jsonError(BowerSession cs,String msg)
-{
-   IvyLog.logD("BOWER","JSONERROR " + msg);
-   
-   return jsonResponse(cs,"STATUS","FAIL","MESSAGE",msg);
-}
-
-
-static String jsonError(BowerSession cs, int status, String msg)
-{
-   IvyLog.logD("BOWER","JSONERROR " + status + " " + msg);
-   
-   return jsonResponse(cs,"STATUS","ERROR",
-         "RETURNCODE",status,
-         "MESSAGE",errorResponse(status, msg));
-}
-
-
-static String errorResponse(int status,String msg)
-{
-   IvyLog.logD("BOWER","ERROR " + status + " " + msg);
-   
-   return status + ": " + msg;
-}
-
-
-
-static String errorResponse(HttpExchange e,BowerSession cs,int status,String msg)
-{
-   Headers hdrs = e.getRequestHeaders();
-   String acc =  hdrs.getFirst("Accept");
-   if (acc != null && acc.toLowerCase().contains("json")) {
-      return jsonError(cs,status,msg);
-    }
-   return errorResponse(status,msg);
-}
-
-
-
 
 
 }       // end of class BowerServer

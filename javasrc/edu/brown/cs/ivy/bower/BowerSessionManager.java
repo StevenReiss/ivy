@@ -45,7 +45,7 @@ import com.sun.net.httpserver.HttpExchange;
 
 import edu.brown.cs.ivy.file.IvyLog;
 
-class BowerSessionManager implements BowerConstants
+class BowerSessionManager<UserSession extends BowerSession> implements BowerConstants
 {
 
 
@@ -55,8 +55,8 @@ class BowerSessionManager implements BowerConstants
 /*                                                                              */
 /********************************************************************************/
 
-private Map<String,BowerSession> session_set;
-private BowerSessionStore session_store;
+private Map<String,UserSession> session_set;
+private BowerSessionStore<UserSession> session_store;
 
 
 
@@ -66,7 +66,7 @@ private BowerSessionStore session_store;
 /*                                                                              */
 /********************************************************************************/
 
-BowerSessionManager(BowerSessionStore bss)
+BowerSessionManager(BowerSessionStore<UserSession> bss)
 {
    session_set = new HashMap<>();
    session_store = bss;
@@ -86,42 +86,40 @@ String setupSession(HttpExchange e)
    Headers requestHeaders = e.getRequestHeaders();
    List<String> cookieHeaders = requestHeaders.get("Cookie"); 
    
+   String cookiename = session_store.getSessionCookie();
+   String paramname = session_store.getSessionKey();
    //parse for session cookie
    String sessionid = null;
    Map<String,HttpCookie> cookies = parseCookies(cookieHeaders);
-   HttpCookie cookie = cookies.get(BowerServer.getSessionCookie());
+   HttpCookie cookie = cookies.get(cookiename);
    String c = (cookie == null ? null : cookie.toString());
    if (c != null) {
-      if (c.substring(0, c.indexOf('=')).equals(BowerServer.getSessionCookie())) {
+      if (c.substring(0, c.indexOf('=')).equals(cookiename)) {
          sessionid = c.substring(c.indexOf('=') + 1, c.length() - 1);
        }
     }
    if (sessionid == null) {
       Map<String,List<String>> params = (Map<String,List<String>>) e.getAttribute("paramMap");
       if (params != null) {
-         List<String> sparams = params.get(BowerServer.getSessionParameter());
+         List<String> sparams = params.get(paramname);
          if (sparams != null) sessionid = sparams.get(0);
        }
     }
    else {
-      BowerRouter.setParameter(e,BowerServer.getSessionParameter(),sessionid);
+      BowerRouter.setParameter(e,paramname,sessionid);
     }
    
-   BowerSession cs = null;
+   UserSession cs = null;
    if (sessionid != null) cs = findSession(sessionid);
    if (cs != null && !cs.isValid()) cs = null;
    if (cs == null) cs = beginSession(e);
-   
-   if (session_store != null && cs != null) {
-      session_store.saveSession(cs);
-    }
    
    return null;
 }
 
 
 
-private static Map<String, HttpCookie> parseCookies(List<String> cookieHeaders)
+private static Map<String,HttpCookie> parseCookies(List<String> cookieHeaders)
 {
    Map<String, HttpCookie> returnMap = new HashMap<>();
    if (cookieHeaders != null) {
@@ -152,21 +150,19 @@ private static Map<String, HttpCookie> parseCookies(List<String> cookieHeaders)
 /*										*/
 /********************************************************************************/
 
-BowerSession beginSession(HttpExchange e)
+UserSession beginSession(HttpExchange e)
 {
-   BowerSession cs = new BowerSession(); 
+   UserSession cs = session_store.createNewSession(); 
    String sid = cs.getSessionId();
    session_set.put(sid,cs);
-   BowerRouter.setParameter(e,BowerServer.getSessionParameter(),sid);
+   BowerRouter.setParameter(e,session_store.getSessionKey(),sid);
    
    int maxAge = 31536000; // Set the cookie to expire in one year
    String cookie = String.format("%s=%s; Path=%s; Max-Age=%d", 
-         BowerServer.getSessionCookie(), sid, "/", maxAge);
+         session_store.getSessionCookie(), sid, "/", maxAge);
    e.getResponseHeaders().add("Set-Cookie", cookie);
    
-   if (session_store != null) {
-      session_store.saveSession(cs);
-    }
+   session_store.saveSession(cs);
    
    return cs;
 }
@@ -190,9 +186,9 @@ void endSession(String sid)
 
 
 
-BowerSession findSession(HttpExchange e)
+UserSession findSession(HttpExchange e)
 {
-   String sid = BowerRouter.getParameter(e,BowerServer.getSessionParameter());
+   String sid = BowerRouter.getParameter(e,session_store.getSessionKey());
    if (sid == null) return null;
    
    return findSession(sid);
@@ -200,16 +196,14 @@ BowerSession findSession(HttpExchange e)
 
 
 
-private BowerSession findSession(String sid)
+private UserSession findSession(String sid)
 {
    if (sid == null) return null;
    
-   BowerSession csi = session_set.get(sid);
+   UserSession csi = session_set.get(sid);
    if (csi != null) return csi;
    
-   if (session_store != null) {
-      csi = session_store.loadSession(sid);
-    }
+   csi = session_store.loadSession(sid);
    
    return csi;
 }
