@@ -358,7 +358,7 @@ public static String jsonOKResponse(BowerSession cs,Object... data)
 
 public static String sendFileResponse(HttpExchange he,File f)
 {
-   BowerServer.sendFileResponse(he,f); 
+   BowerServer.sendFileResponse(he,f);  
    
    return deferredResponse();
 }
@@ -656,7 +656,7 @@ private class Route {
       for (int i = u.indexOf(":"); i >= 0; i = u.indexOf(":")) {
          int j = u.indexOf("/",i);
          pat += u.substring(0,i);
-         pat += "([A-Za-z_]+)";
+         pat += "([^\\/]+)";
          String nm = null;
          if (j < 0) {
             nm = u.substring(i+1);

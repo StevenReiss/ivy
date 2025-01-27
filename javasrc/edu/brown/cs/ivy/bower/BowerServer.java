@@ -275,9 +275,18 @@ static void sendResponse(HttpExchange exchange, String response,int rcode)
 
 static void sendFileResponse(HttpExchange exchange,File file)
 {
-   IvyLog.logD("BOWER","Sending file " + file);
+   sendFileResponse(exchange,file,200);
+}
+
+
+
+static void sendFileResponse(HttpExchange exchange,File file,int rcode)
+{
+   IvyLog.logD("BOWER","Sending file " + file + " " + rcode);
    
    try {
+      long len = file.length();
+      exchange.sendResponseHeaders(rcode,len);
       String  mimetype = Files.probeContentType(file.toPath());
       Headers hdrs = exchange.getResponseHeaders();
       hdrs.set("Content-type",mimetype);
