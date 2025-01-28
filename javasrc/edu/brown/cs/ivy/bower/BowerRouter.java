@@ -44,7 +44,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -71,6 +70,8 @@ public class BowerRouter<UserSession extends BowerSession> implements BowerConst
 private BowerSessionManager<UserSession> session_manager;
 private ArrayList<Route> route_interceptors;
 private int preroute_index;
+private Route error_handler;
+
 
 
 
@@ -85,6 +86,8 @@ public BowerRouter(BowerSessionStore<UserSession> bss)
    session_manager = new BowerSessionManager<UserSession>(bss);
    route_interceptors = new ArrayList<>();
    preroute_index = 0;
+   
+   error_handler = new Route("ALL","*",BowerRouter::handleError);
 }
 
 
@@ -108,20 +111,20 @@ public void addRoute(String method,IHandler<HttpExchange,String> h)
 
 
 public void addRoute(String method,String url,
-      BiFunction<HttpExchange,UserSession,String> h)
+      ISessionHandler<HttpExchange,UserSession,String> h)
 {
    addHTTPInterceptor(new Route(method,url,h));
 }
 
 
 public void addPreRoute(String method,String url,
-      BiFunction<HttpExchange,UserSession,String> h)
+      ISessionHandler<HttpExchange,UserSession,String> h)
 {
    route_interceptors.add(preroute_index++,new Route(method,url,h));
 }
 
 
-public void addRoute(String method,BiFunction<HttpExchange,UserSession,String> h)
+public void addRoute(String method,ISessionHandler<HttpExchange,UserSession,String> h)
 {
    addHTTPInterceptor(new Route(method,null,h));
 }
@@ -131,6 +134,17 @@ public void addHTTPInterceptor(Route r)
    route_interceptors.add(r);
 }
 
+
+public void addErrorHandler(IHandler<HttpExchange,String> h) 
+{
+   error_handler = new Route("ALL","*",h);
+}
+
+
+public void addErrorHandler(ISessionHandler<HttpExchange,UserSession,String> h) 
+{
+   error_handler = new Route("ALL",null,h);
+}
 
 
 /********************************************************************************/
@@ -182,10 +196,21 @@ public static String handleParameters(HttpExchange e)
 }
 
 
-
 public String handleSessions(HttpExchange e)
 {
    return session_manager.setupSession(e);
+}
+
+
+public static String handleBadUrl(HttpExchange e)
+{
+   return errorResponse(e,null,404,"Bad Url");
+}
+
+
+public static String handleError(HttpExchange e)
+{
+   return errorResponse(e,null,500,"Internal Error");
 }
 
 
@@ -336,12 +361,17 @@ public static String buildResponse(BowerSession session,String sts,Object... val
 public static String errorResponse(HttpExchange e,BowerSession cs,int status,String msg)
 {
    Headers hdrs = e.getRequestHeaders();
-   BowerSessionStore<?> bss = cs.getSessionStore(); 
+   BowerSessionStore<?> bss = null;
+   if (cs != null) {
+      bss = cs.getSessionStore(); 
+    }
    
    String acc =  hdrs.getFirst("Accept");
    String text = status + ": " + msg;
    
-   if (acc != null && acc.toLowerCase().contains("json")) {
+   e.setAttribute(BOWER_RETURN_CODE,status); 
+    
+   if (bss != null && acc != null && acc.toLowerCase().contains("json")) {
       text = buildResponse(cs,"ERROR",bss.getReturnCodeKey(),status,
             bss.getErrorMessageKey(),text);
     }
@@ -549,16 +579,34 @@ private static int getBodySize(Headers hdrs)
 /*                                                                              */
 /********************************************************************************/
 
-@Override public void handle(HttpExchange e) throws IOException 
+@Override public void handle(HttpExchange e) 
 {
-   for (Route interceptor : route_interceptors) {
-      String resp = interceptor.handle(e);
-      if (resp != null) {
-         if (resp.equals(BOWER_DEFERRED_RESPONSE)) return;
-         BowerServer.sendResponse(e,resp);
-         return;
+   try {
+      for (Route interceptor : route_interceptors) {
+         String resp = interceptor.handle(e);
+         if (resp != null) {
+            if (resp.equals(BOWER_DEFERRED_RESPONSE)) return;
+            BowerServer.sendResponse(e,resp);
+            return;
+          }
        }
+      String resp1 = handleBadUrl(e);
+      BowerServer.sendResponse(e,resp1); 
     }
+   catch (Throwable t) {
+      IvyLog.logE("BOWER","Problem handling input",t);
+      e.setAttribute(BOWER_EXCEPTION,t); 
+      String resp = null;
+      try {
+         resp = error_handler.handle(e);
+       }
+      catch (Throwable t1) {
+         IvyLog.logE("Problem with error handler",t1);
+       }
+      if (resp == null) resp = handleError(e);
+      BowerServer.sendResponse(e,resp);
+    }
+   
 }
 
 
@@ -569,8 +617,14 @@ private static int getBodySize(Headers hdrs)
 /*                                                                              */
 /********************************************************************************/
 
+@FunctionalInterface
 public interface IHandler<I,O> {
    O handle(I input);
+}
+
+@FunctionalInterface
+public interface ISessionHandler<I,S,O> {
+   O handle(I input,S session);
 }
 
 private class Route {
@@ -580,7 +634,7 @@ private class Route {
    private Pattern check_pattern;
    private List<String> check_names;
    private IHandler<HttpExchange,String> route_handle;
-   private BiFunction<HttpExchange,UserSession,String> route_function;
+   private ISessionHandler<HttpExchange,UserSession,String> route_function;
    
    Route(String method,String url,IHandler<HttpExchange,String> handler) {
       this(method,url);
@@ -588,7 +642,7 @@ private class Route {
     }
    
    Route(String method,String url,
-         BiFunction<HttpExchange,UserSession,String> handler) {
+         ISessionHandler<HttpExchange,UserSession,String> handler) {
       this(method,url);
       route_function = handler;
     }
@@ -637,11 +691,12 @@ private class Route {
           }
          else if (route_function != null) {
             UserSession cs = session_manager.findSession(exchange);
-            return route_function.apply(exchange,cs);
+            return route_function.handle(exchange,cs);
           }
        }
       catch (Throwable t) {
          IvyLog.logE("BOWER","Problem handling input",t);
+         exchange.setAttribute(BOWER_EXCEPTION,t);
          return errorResponse(exchange,null,500,"Problem handling input: " + t);
        }
       

@@ -252,7 +252,11 @@ private class Configurator extends HttpsConfigurator {
 
 static void sendResponse(HttpExchange exchange,String response)
 {
-   sendResponse(exchange,response,200);
+   int rcode = 200;
+   Object n = exchange.getAttribute(BOWER_RETURN_CODE);
+   if (n != null && n instanceof Number) rcode = ((Number) n).intValue();
+   
+   sendResponse(exchange,response,rcode);
 }
 
 

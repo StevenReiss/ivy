@@ -36,11 +36,10 @@
 
 package edu.brown.cs.ivy.bower;
 
-import java.util.function.BiFunction;
-
 import com.sun.net.httpserver.HttpExchange;
 
 import edu.brown.cs.ivy.bower.BowerRouter.IHandler;
+import edu.brown.cs.ivy.bower.BowerRouter.ISessionHandler;
 
 public interface BowerConstants
 {
@@ -50,6 +49,17 @@ public interface BowerConstants
  **/
 
 String BOWER_DEFERRED_RESPONSE = "*DEFER*";
+
+
+/**
+ *      Attributes for handling errors
+ **/
+String BOWER_RETURN_CODE = "*BOWER_RETURN_CODE*";
+String BOWER_EXCEPTION = "*BOWER_EXCEPTION*";
+
+
+
+
 
 
 
@@ -80,10 +90,11 @@ interface BowerSessionStore<S extends BowerSession> {
  *      Functional event handler with Session and input data
  **/
 
+@FunctionalInterface
 interface BowerSessionHandler<S extends BowerSession> 
-        extends BiFunction<HttpExchange,S,String> {
+        extends ISessionHandler<HttpExchange,S,String> { 
    
-   String apply(HttpExchange e,S bs);
+   String handle(HttpExchange e,S bs);
    
 }       // end of inner class BowerSessionHandler
 
