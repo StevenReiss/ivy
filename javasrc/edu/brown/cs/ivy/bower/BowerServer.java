@@ -87,6 +87,8 @@ private HttpContext     router_context;
 private Executor        task_executor;
 private BowerSessionStore<UserSession> session_store; 
 
+private static Object   response_lock = new Object();
+
 
 
 /********************************************************************************/
@@ -266,10 +268,12 @@ static void sendResponse(HttpExchange exchange, String response,int rcode)
    IvyLog.logD("BOWER","Sending response: " + response);
    
    try {
-      exchange.sendResponseHeaders(rcode, response.getBytes().length);
-      OutputStream os = exchange.getResponseBody();
-      os.write(response.getBytes());
-      os.close();
+      synchronized (response_lock) {
+         exchange.sendResponseHeaders(rcode, response.getBytes().length);
+         OutputStream os = exchange.getResponseBody();
+         os.write(response.getBytes());
+         os.close();
+       }
     }
    catch (IOException e){
       IvyLog.logE("BOWER","Error sending response to server, message",e);
@@ -290,12 +294,14 @@ static void sendFileResponse(HttpExchange exchange,File file,int rcode)
    
    try {
       long len = file.length();
-      exchange.sendResponseHeaders(rcode,len);
       String  mimetype = Files.probeContentType(file.toPath());
       Headers hdrs = exchange.getResponseHeaders();
       hdrs.set("Content-type",mimetype);
-      try (OutputStream ots = exchange.getResponseBody()) {
-         IvyFile.copyFile(file,ots);
+      synchronized (response_lock) {
+         exchange.sendResponseHeaders(rcode,len);
+         try (OutputStream ots = exchange.getResponseBody()) {
+            IvyFile.copyFile(file,ots);
+          }
        }
     }
    catch (IOException e) {

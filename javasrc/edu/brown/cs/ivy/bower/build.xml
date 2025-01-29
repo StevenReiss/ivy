@@ -7,10 +7,12 @@
       <path id='ivy.classpath'>
 	 <pathelement location='${IVY}/java' />
 	 <pathelement location='${IVY}/lib/json.jar' />
+	 <pathelement location='${IVY}/lib/jakarta.mail.jar' />
       </path>
       <path id='test.classpath'>
 	 <pathelement location='${IVY}/java' />
 	 <pathelement location='${IVY}/lib/json.jar' />
+	 <pathelement location='${IVY}/lib/jakarta.mail.jar' />
       </path>
    </target>
 

@@ -35,7 +35,6 @@
 
 package edu.brown.cs.ivy.bower;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +51,7 @@ public abstract class BowerSession implements BowerConstants
 /*                                                                              */
 /********************************************************************************/
 
-private Date            last_used;
+private long            last_used;
 private long            expires_at;
 private Map<String,Object> value_map;
 private long            expire_delta;
@@ -70,7 +69,7 @@ private static final long EXPIRE_DELTA = 1000*60*60*24*4;
 
 public BowerSession()
 {
-   last_used = new Date();
+   last_used = System.currentTimeMillis();
    expires_at = 0;
    value_map = new HashMap<>();
    expire_delta = EXPIRE_DELTA;
@@ -107,8 +106,8 @@ public String getSessionId()
 
 public void setupSession()
 {
-   last_used = new Date();
-   expires_at = last_used.getTime() + expire_delta;
+   last_used = System.currentTimeMillis();
+   expires_at = last_used + expire_delta;
 }
 
 

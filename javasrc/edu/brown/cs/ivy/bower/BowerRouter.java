@@ -240,6 +240,16 @@ public static int getIntParameter(HttpExchange he,String name)
 }
 
 
+public static boolean getBooleanParameter(HttpExchange he,String name,boolean dflt)
+{
+   String s = getParameter(he,name);
+   if (s == null || s.isEmpty()) return dflt;
+   if (s.startsWith("tT1yY")) return true;
+   if (s.startsWith("fF0nN")) return false;
+   return dflt;
+}
+
+
 @SuppressWarnings("unchecked")
 public static List<String> getParameterList(HttpExchange e,String name)
 {
