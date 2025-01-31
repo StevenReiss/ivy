@@ -99,15 +99,34 @@ String setupSession(HttpExchange e)
        }
     }
    if (sessionid == null) {
+      sessionid = BowerRouter.getParameter(e,paramname);
+    }
+   if (sessionid == null) {
+      // get value from JSON paramemters
       Map<String,List<String>> params = (Map<String,List<String>>) e.getAttribute("paramMap");
       if (params != null) {
          List<String> sparams = params.get(paramname);
          if (sparams != null) sessionid = sparams.get(0);
        }
     }
-   else {
-      BowerRouter.setParameter(e,paramname,sessionid);
+   if (sessionid == null) {
+      // get value from URL query
+      String q = e.getRequestURI().getQuery();
+      if (q != null) {
+         String [] pairs = q.split("&");
+         for (String pair : pairs) {
+            String[] keyvalue = pair.split("=");
+            if (keyvalue.length != 2) continue;
+            String key = keyvalue[0];
+            if (key.equals(paramname)) {
+               sessionid = BowerUtil.unescape(keyvalue[1]);
+               break;
+             }
+          }
+       }
     }
+   
+   BowerRouter.setParameter(e,paramname,sessionid);
    
    UserSession cs = null;
    if (sessionid != null) cs = findSession(sessionid);

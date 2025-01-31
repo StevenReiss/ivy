@@ -210,6 +210,12 @@ if ( "X$xxx" == X ) then
    setenv CLASSPATH "${CLASSPATH}:$slf4j"
 endif
 
+set xxx = `echo $CLASSPATH | grep -F jakarta`
+if ( "X$xxx" == X ) then
+   set mailer = $BROWN_IVY_IVY/lib/jakarta.mail.jar:$BROWN_IVY_IVY/lib/jakarta.activation.jar
+   setenv CLASSPATH "${CLASSPATH}:$mailer"
+endif
+
 set xxx = `echo $CLASSPATH | grep -F commonmark`
 if ( "X$xxx" == X ) then
    set cmmk = $BROWN_IVY_IVY/lib/commonmark.jar
@@ -218,7 +224,7 @@ endif
 
 set xxx = `echo $CLASSPATH | grep -F json`
 if ( "X$xxx" == X ) then
-   set json = $BROWN_IVY_IVY/lib/json.jar	
+   set json = $BROWN_IVY_IVY/lib/json.jar
    setenv CLASSPATH "${CLASSPATH}:$json"
 endif
 

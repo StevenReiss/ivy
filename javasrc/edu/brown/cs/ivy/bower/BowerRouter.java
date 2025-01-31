@@ -244,8 +244,8 @@ public static boolean getBooleanParameter(HttpExchange he,String name,boolean df
 {
    String s = getParameter(he,name);
    if (s == null || s.isEmpty()) return dflt;
-   if (s.startsWith("tT1yY")) return true;
-   if (s.startsWith("fF0nN")) return false;
+   if ("tT1yY".indexOf(s.charAt(0)) >= 0) return true;
+   if ("fF0nN".indexOf(s.charAt(0)) >= 0) return false;
    return dflt;
 }
 
