@@ -87,8 +87,6 @@ private HttpContext     router_context;
 private Executor        task_executor;
 private BowerSessionStore<UserSession> session_store; 
 
-private static String          access_origin;
-
 private static Object   response_lock = new Object();
 
 
@@ -109,7 +107,6 @@ public BowerServer(int port,BowerSessionStore<UserSession> sessstore)
    router_context = null;
    task_executor = null;
    session_store = sessstore;
-   access_origin = null;
 }
 
 
@@ -166,12 +163,6 @@ public void setExecutor(Executor e)
    if (http_server != null && e != null) {
       http_server.setExecutor(e);
     }
-}
-
-
-public void setAccessOrigin(String s)
-{
-   access_origin = s;
 }
 
 
@@ -274,12 +265,7 @@ static void sendResponse(HttpExchange exchange,String response)
 
 static void sendResponse(HttpExchange exchange, String response,int rcode)
 {
-   IvyLog.logD("BOWER","Sending response: " + response);
-   
-   if (access_origin != null) {
-      Headers hdrs = exchange.getResponseHeaders();
-      hdrs.set("Access-Control-Allow-Origin",access_origin);
-    }
+   IvyLog.logD("BOWER","Sending response: " + rcode + " " + response);
    
    try {
       synchronized (response_lock) {
@@ -293,6 +279,9 @@ static void sendResponse(HttpExchange exchange, String response,int rcode)
       IvyLog.logE("BOWER","Error sending response to server, message",e);
     }
 }
+
+
+
 
 
 static void sendFileResponse(HttpExchange exchange,File file)
@@ -311,9 +300,6 @@ static void sendFileResponse(HttpExchange exchange,File file,int rcode)
       String  mimetype = Files.probeContentType(file.toPath());
       Headers hdrs = exchange.getResponseHeaders();
       hdrs.set("Content-type",mimetype);
-      if (access_origin != null) {
-         hdrs.set("Access-Control-Allow-Origin",access_origin);
-       }
       synchronized (response_lock) {
          exchange.sendResponseHeaders(rcode,len);
          try (OutputStream ots = exchange.getResponseBody()) {

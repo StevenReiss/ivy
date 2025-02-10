@@ -29,6 +29,8 @@ OLIBBLINKS= libminceopt.a
 PLIBBLINKS= libminceprof.a
 endif
 
+LOCAL_CCPLUS = g++
+
 
 DYNLIB= $(XMLCLIB)
 X64=1
@@ -40,7 +42,7 @@ mincetest.o: mincetest.C
 	$(CCPLUS) $(CPLUSFLAGS) $(THREADFLAGS) -c $<
 
 mincetest: mincetest.o $(BFILES)
-#	$(CCPLUS) $(CPLUSFLAGS) -o mincetest mincetest.o $(BFILES) $(XERCESLIB) $(SOCKETLIB) $(THREADLIB)
+	$(CCPLUS) $(CPLUSFLAGS) -o mincetest mincetest.o $(BFILES) $(XERCESLIB) $(SOCKETLIB) $(THREADLIB)
 
 
 

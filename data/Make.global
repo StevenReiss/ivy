@@ -82,7 +82,7 @@ INCLUDES+= $(JAVAINCLUDE)
 
 XMLINCLUDE= -I$(BROWN_IVY_IVY)/include/xml
 ifeq ($(X64),1)
-XMLCLIB= -L/pro/lib $(LD_SEARCH)/pro/lib $(XERCESLIB64)
+XMLCLIB= $(XERCESLIB64)
 ifdef X11LIBDIR64
 X11LIBDIR= $(X11LIBDIR64)
 endif
@@ -186,7 +186,8 @@ endif
 #	Basic depenencies and make rules
 #
 
-all:	$(PREALL) javadep $(STAMP) $(REMOTEALL) $(ALL) makejavadep
+# all:	  $(PREALL) javadep $(STAMP) $(REMOTEALL) $(ALL) makejavadep
+all:	$(PREALL) javadep $(STAMP) $(REMOTEALL) $(ALL)
 
 $(STAMP): $(BFILES) subdirs		  # javaall
 
