@@ -45,7 +45,8 @@ import com.sun.net.httpserver.HttpExchange;
 
 import edu.brown.cs.ivy.file.IvyLog;
 
-class BowerSessionManager<UserSession extends BowerSession> implements BowerConstants
+class BowerSessionManager<UserSession extends BowerSession> 
+        implements BowerConstants
 {
 
 
@@ -197,9 +198,9 @@ String validateSession(HttpExchange e,String sid)
 
 void endSession(String sid)
 {
-   BowerSession csi = session_set.remove(sid);
+   UserSession csi = session_set.remove(sid);
    if (csi != null && session_store != null) {
-      session_store.removeSession(sid);
+      session_store.removeSession(csi); 
     }
 }
 

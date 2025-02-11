@@ -57,7 +57,8 @@ import com.sun.net.httpserver.HttpHandler;
 
 import edu.brown.cs.ivy.file.IvyLog;
 
-public class BowerRouter<UserSession extends BowerSession> implements BowerConstants, HttpHandler
+public class BowerRouter<UserSession extends BowerSession>
+        implements BowerConstants, HttpHandler
 {
 
 
@@ -214,6 +215,13 @@ public static String handleError(HttpExchange e)
 }
 
 
+public void endSession(String sid)
+{
+   session_manager.endSession(sid);
+}
+
+
+
 /********************************************************************************/
 /*                                                                              */
 /*      Parameter access methods                                                */
@@ -240,7 +248,7 @@ public static int getIntParameter(HttpExchange he,String name)
 }
 
 
-public static boolean getBooleanParameter(HttpExchange he,String name,boolean dflt)
+public static Boolean getBooleanParameter(HttpExchange he,String name,Boolean dflt)
 {
    String s = getParameter(he,name);
    if (s == null || s.isEmpty()) return dflt;
@@ -373,7 +381,7 @@ public static String errorResponse(HttpExchange e,BowerSession cs,int status,Str
    Headers hdrs = e.getRequestHeaders();
    BowerSessionStore<?> bss = null;
    if (cs != null) {
-      bss = cs.getSessionStore(); 
+      bss = cs.getSessionStore();  
     }
    
    String acc =  hdrs.getFirst("Accept");
@@ -382,7 +390,7 @@ public static String errorResponse(HttpExchange e,BowerSession cs,int status,Str
    e.setAttribute(BOWER_RETURN_CODE,status); 
     
    if (bss != null && acc != null && acc.toLowerCase().contains("json")) {
-      text = buildResponse(cs,"ERROR",bss.getReturnCodeKey(),status,
+      text = buildResponse(cs,"ERROR",bss.getReturnCodeKey(),status, 
             bss.getErrorMessageKey(),text);
     }
    

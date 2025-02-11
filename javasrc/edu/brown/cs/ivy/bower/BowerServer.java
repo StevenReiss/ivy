@@ -57,6 +57,7 @@ import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
 
+import edu.brown.cs.ivy.exec.IvyExecQuery;
 import edu.brown.cs.ivy.file.IvyFile;
 import edu.brown.cs.ivy.file.IvyLog;
 
@@ -86,6 +87,7 @@ private BowerRouter<UserSession> http_router;
 private HttpContext     router_context;
 private Executor        task_executor;
 private BowerSessionStore<UserSession> session_store; 
+private String          url_prefix;
 
 private static Object   response_lock = new Object();
 
@@ -107,6 +109,7 @@ public BowerServer(int port,BowerSessionStore<UserSession> sessstore)
    router_context = null;
    task_executor = null;
    session_store = sessstore;
+   url_prefix = null;
 }
 
 
@@ -166,6 +169,12 @@ public void setExecutor(Executor e)
 }
 
 
+public String getUrlPrefix()
+{
+   return url_prefix;
+}
+
+
 
 /********************************************************************************/
 /*                                                                              */
@@ -206,9 +215,11 @@ public boolean setup()
          sslcontext.init(kmf.getKeyManagers(),null,null);
          sserver.setHttpsConfigurator(new Configurator(sslcontext));
          http_server = sserver;
+         url_prefix = "https://" + IvyExecQuery.getHostName() + ":" + port_number;
        }
       else if (keystore_password == null) {
          http_server = HttpServer.create(iad,0);
+         url_prefix = "http://localhost:" + port_number;
        }
     }
    catch (Exception e) {

@@ -61,8 +61,6 @@ String BOWER_EXCEPTION = "*BOWER_EXCEPTION*";
 
 
 
-
-
 /**
  *      Interface for managine load/store of sessions
  **/
@@ -78,7 +76,7 @@ interface BowerSessionStore<S extends BowerSession> {
    S createNewSession();
    void saveSession(S  bs);
    S loadSession(String id);
-   void removeSession(String id);
+   void removeSession(S bs);
    default boolean validateSession(HttpExchange e,String sid) {
       return true;
     }
@@ -91,7 +89,7 @@ interface BowerSessionStore<S extends BowerSession> {
  **/
 
 @FunctionalInterface
-interface BowerSessionHandler<S extends BowerSession> 
+interface BowerSessionHandler<S extends BowerSessionBase> 
         extends ISessionHandler<HttpExchange,S,String> { 
    
    String handle(HttpExchange e,S bs);

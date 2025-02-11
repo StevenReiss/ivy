@@ -2,7 +2,7 @@
 /*                                                                              */
 /*              BowerSession.java                                               */
 /*                                                                              */
-/*      Implementation of a generic session                                     */
+/*      Interface defining a session                                            */
 /*                                                                              */
 /********************************************************************************/
 /*      Copyright 2013 Brown University -- Steven P. Reiss                    */
@@ -35,113 +35,33 @@
 
 package edu.brown.cs.ivy.bower;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONObject;
 
-public abstract class BowerSession implements BowerConstants
+public interface BowerSession extends BowerConstants
 {
 
-
-
-/********************************************************************************/
-/*                                                                              */
-/*      Private storage                                                         */
-/*                                                                              */
-/********************************************************************************/
-
-private long            last_used;
-private long            expires_at;
-private Map<String,Object> value_map;
-private long            expire_delta;
-private String          session_uid;
-
-private static final long EXPIRE_DELTA = 1000*60*60*24*4;
+boolean isValid();
+String getSessionId();
+void setupSession();
+void setValue(String key,Object val);
+Object getValue(String key);
+BowerSessionStore<?> getSessionStore();
 
 
 
-/********************************************************************************/
-/*                                                                              */
-/*      Constructors                                                            */
-/*                                                                              */
-/********************************************************************************/
-
-public BowerSession()
+default String getStringValue(String key) 
 {
-   last_used = System.currentTimeMillis();
-   expires_at = 0;
-   value_map = new HashMap<>();
-   expire_delta = EXPIRE_DELTA;
-   session_uid = "SESS_" + BowerUtil.randomString(24);  
-}
-
-
-/********************************************************************************/
-/*                                                                              */
-/*      Access methods                                                          */
-/*                                                                              */
-/********************************************************************************/
-
-public void setExpireDelta(long d)
-{
-   expire_delta = d;
-}
-
-
-public boolean isValid()
-{
-   if (expires_at == 0) return true;
-   long now = System.currentTimeMillis();
-   if (now > expires_at) return false;
-   return true;
-}
-
-
-public String getSessionId()
-{
-   return session_uid;
-}
-
-
-public void setupSession()
-{
-   last_used = System.currentTimeMillis();
-   expires_at = last_used + expire_delta;
-}
-
-
-
-/********************************************************************************/
-/*										*/
-/*	Value maintenance							*/
-/*										*/
-/********************************************************************************/
-
-public void setValue(String key,String val)
-{
-   value_map.put(key,val);
-}
-
-
-
-public Object getValue(String key)
-{
-   return value_map.get(key);
-}
-
-
-public String getStringValue(String key)
-{
-   Object v = value_map.get(key);
+   Object v = getValue(key);
    if (v == null) return null;
    return v.toString();
 }
-
-
-public JSONObject getJsonValue(String key)
+   
+   
+   
+   
+default JSONObject getJsonValue(String key)
 {
-   Object v = value_map.get(key);
+   Object v = getValue(key);
    if (v == null) return null;
    if (v instanceof JSONObject) {
       return (JSONObject) v;
@@ -152,13 +72,10 @@ public JSONObject getJsonValue(String key)
    
    return null;
 }
-
-
-public abstract BowerSessionStore<?> getSessionStore();
-
-
-
-}       // end of class BowerSession
+   
+   
+   
+}       // end of interface BowerSession
 
 
 
