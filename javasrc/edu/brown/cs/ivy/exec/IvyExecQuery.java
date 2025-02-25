@@ -197,7 +197,9 @@ public static Integer getProcessNumber()
 
 public static String getHostName()
 {
-   String h = IvyFile.expandName("$(HOST)");
+   String h = IvyFile.expandName("$(HOSTNAME)");
+   if (h != null) return h;
+   h = IvyFile.expandName("$(HOST)");
    if (h != null) return h;
 
    try {

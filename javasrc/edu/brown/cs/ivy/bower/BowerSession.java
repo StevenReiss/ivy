@@ -35,6 +35,8 @@
 
 package edu.brown.cs.ivy.bower;
 
+import java.util.Collection;
+
 import org.json.JSONObject;
 
 public interface BowerSession extends BowerConstants
@@ -45,6 +47,8 @@ String getSessionId();
 void setupSession();
 void setValue(String key,Object val);
 Object getValue(String key);
+Collection<String> getValueKeys();
+
 BowerSessionStore<?> getSessionStore();
 
 

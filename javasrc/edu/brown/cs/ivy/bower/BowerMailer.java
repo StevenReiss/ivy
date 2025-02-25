@@ -145,8 +145,7 @@ public void addAttachments(List<File> lf)
 /*                                                                              */
 /********************************************************************************/
 
-
-public void send() 
+public boolean send() 
 {
    // Sender's email ID needs to be mentioned
    
@@ -214,10 +213,14 @@ public void send()
       
       // Send message
       Transport.send(message);
+      
+      return true;
     }
    catch (MessagingException e) {
       IvyLog.logE("IQSIGN","Problem sending mail",e);
     }
+   
+   return false;
 }
 
 

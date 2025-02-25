@@ -190,6 +190,13 @@ public static void setProperties(InputStream ins) throws SQLException
 }
 
 
+public static void setProperties(Properties p) throws SQLException
+{
+   setupProperties(p);
+}
+
+
+
 
 /********************************************************************************/
 /*										*/
@@ -236,12 +243,12 @@ private static void setupProperties(Properties p0) throws SQLException
    else if (typ != null && typ.equalsIgnoreCase("MYSQL")) {
       checkLoad(MYSQL_DRIVERS,DbmsType.MYSQL);
     }
-   else if (typ != null && (typ.equalsIgnoreCase("JAVADB") || 
-         typ.equalsIgnoreCase("DERBY"))) {
+   else if (typ != null && (typ.equalsIgnoreCase("JAVADB") ||
+	 typ.equalsIgnoreCase("DERBY"))) {
       checkLoad(DERBY_DRIVERS,DbmsType.DERBY);
     }
-   else if (typ != null && (typ.equalsIgnoreCase("JAVADBEMBED") || 
-         typ.equalsIgnoreCase("DERBYEMBED"))) {
+   else if (typ != null && (typ.equalsIgnoreCase("JAVADBEMBED") ||
+	 typ.equalsIgnoreCase("DERBYEMBED"))) {
       checkLoad(DERBY_EMBED_DRIVERS,DbmsType.DERBY_EMBED);
     }
    else {
@@ -285,7 +292,7 @@ private static void setupProperties(Properties p0) throws SQLException
 	 File f1 = new File(System.getProperty("user.home"));
 	 File f2 = new File(f1,"derby.log");
 	 System.setProperty("derby.stream.error.field",
-               "edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
+	       "edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
 	 System.setProperty("derby.stream.error.file",f2.getPath());
 	 System.setProperty("derby.system.home",f1.getPath());
 	 dbms_prefix = DERBY_PREFIX;
@@ -297,7 +304,7 @@ private static void setupProperties(Properties p0) throws SQLException
 	 File f3 = new File(System.getProperty("user.home"));
 	 File f4 = new File(f3,"derby.log");
 	 System.setProperty("derby.stream.error.field",
-               "edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
+	       "edu.brown.cs.ivy.file.IvyDatabase.NULL_STREAM");
 	 System.setProperty("derby.stream.error.file",f4.getPath());
 	 System.setProperty("derby.system.home",f4.getPath());
 	 dbms_prefix = DERBY_PREFIX;

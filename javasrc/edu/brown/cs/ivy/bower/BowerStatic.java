@@ -1,8 +1,8 @@
 /********************************************************************************/
 /*                                                                              */
-/*              BowerSession.java                                               */
+/*              BowerStatic.java                                                */
 /*                                                                              */
-/*      Implementation of a generic session                                     */
+/*      Provide access to static files                                          */
 /*                                                                              */
 /********************************************************************************/
 /*      Copyright 2013 Brown University -- Steven P. Reiss                    */
@@ -35,28 +35,25 @@
 
 package edu.brown.cs.ivy.bower;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.net.URI;
 
-public abstract class BowerSessionBase implements BowerConstants, BowerSession
+import com.sun.net.httpserver.HttpExchange;
+
+import edu.brown.cs.ivy.bower.BowerConstants.BowerHandler;
+
+public class BowerStatic implements BowerConstants, BowerHandler
 {
 
 
-
 /********************************************************************************/
 /*                                                                              */
-/*      Private storage                                                         */
+/*      Private Storage                                                         */
 /*                                                                              */
 /********************************************************************************/
 
-private long            last_used;
-private long            expires_at;
-private Map<String,Object> value_map;
-private long            expire_delta;
-private String          session_uid;
-
-private static final long EXPIRE_DELTA = 1000*60*60*24*4;
+private File base_directory;
+private String attr_name;
 
 
 
@@ -66,83 +63,70 @@ private static final long EXPIRE_DELTA = 1000*60*60*24*4;
 /*                                                                              */
 /********************************************************************************/
 
-public BowerSessionBase()
+BowerStatic(String path)
 {
-   last_used = System.currentTimeMillis();
-   expires_at = 0;
-   value_map = new HashMap<>();
-   expire_delta = EXPIRE_DELTA;
-   session_uid = "SESS_" + BowerUtil.randomString(24);  
+   base_directory = new File(path);
+   attr_name = null;
 }
+
+BowerStatic(String path,String attr)
+{
+   base_directory = new File(path);
+   attr_name = attr;
+}
+
 
 
 /********************************************************************************/
 /*                                                                              */
-/*      Access methods                                                          */
+/*      Handler for files                                                       */
 /*                                                                              */
 /********************************************************************************/
 
-public void setExpireDelta(long d)
+@Override public String handle(HttpExchange he)
 {
-   expire_delta = d;
+   String pfx = (String) he.getAttribute("BOWER_MATCH");
+   String filepath = null;
+   if (attr_name == null && pfx != null) {
+      URI uri = he.getRequestURI();
+      String path = uri.getPath();
+      if (path.startsWith(pfx)) {
+         filepath = path.substring(pfx.length());
+       }
+    }
+   else if (attr_name != null) {
+      filepath = BowerRouter.getParameter(he,attr_name);
+    }
+   
+   if (filepath == null) return null;
+   
+   int idx = filepath.indexOf("?");
+   if (idx > 0) filepath = filepath.substring(0,idx);
+   
+   File f1 = base_directory;
+   String [] comps = filepath.split("\\/");
+   if (comps.length == 0) return null;
+   for (int i = 0; i < comps.length; ++i) {
+      String c = comps[i];
+      if (c.equals("..")) c = "XXXXXXXX";
+      f1 = new File(f1,c);
+    }
+   if (!f1.exists()) return null;
+   
+   if (!f1.exists()) {
+      return null;
+    }
+   
+   return BowerRouter.sendFileResponse(he,f1);
 }
 
 
-@Override public boolean isValid()
-{
-   if (expires_at == 0) return true;
-   long now = System.currentTimeMillis();
-   if (now > expires_at) return false;
-   return true;
-}
 
 
-@Override public String getSessionId()
-{
-   return session_uid;
-}
-
-
-@Override public void setupSession()
-{
-   last_used = System.currentTimeMillis();
-   expires_at = last_used + expire_delta;
-}
-
-
-
-/********************************************************************************/
-/*										*/
-/*	Value maintenance							*/
-/*										*/
-/********************************************************************************/
-
-@Override public void setValue(String key,Object val)
-{
-   value_map.put(key,val);
-}
-
-
-
-@Override public Object getValue(String key)
-{
-   return value_map.get(key);
-}
-
-@Override public Collection<String> getValueKeys()
-{
-   return value_map.keySet(); 
-}
-
-
-@Override public abstract BowerSessionStore<?> getSessionStore();
-
-
-
-}       // end of class BowerSession
+}       // end of class BowerStatic
 
 
 
 
-/* end of BowerSession.java */
+/* end of BowerStatic.java */
 

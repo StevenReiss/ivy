@@ -41,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -165,12 +166,13 @@ public static String handleLogging(HttpExchange e)
        }
     }
    
-   IvyLog.logI("BOWER",String.format("REST %s %s %s %s %s %s %s",
+   IvyLog.logI("BOWER",String.format("REST %s %s %s %s %s %s",
          e.getRequestMethod(),
          e.getRequestURI().toString(),
          plist,
-         e.getLocalAddress(),e.getPrincipal(),e.getProtocol(),
-         e.getRemoteAddress().getAddress().getHostAddress()));
+         e.getProtocol(),
+         e.getRemoteAddress().getAddress().getHostAddress(),
+         new Date().toString()));
    
    return null;
 }
@@ -597,33 +599,33 @@ private static int getBodySize(Headers hdrs)
 /*                                                                              */
 /********************************************************************************/
 
-@Override public void handle(HttpExchange e) 
+@Override public void handle(HttpExchange he) 
 {
    
    try {
       for (Route interceptor : route_interceptors) {
-         String resp = interceptor.handle(e);
+         String resp = interceptor.handle(he);
          if (resp != null) {
             if (resp.equals(BOWER_DEFERRED_RESPONSE)) return;
-            BowerServer.sendResponse(e,resp);
+            BowerServer.sendResponse(he,resp);
             return;
           }
        }
-      String resp1 = handleBadUrl(e);
-      BowerServer.sendResponse(e,resp1); 
+      String resp1 = handleBadUrl(he);
+      BowerServer.sendResponse(he,resp1); 
     }
    catch (Throwable t) {
       IvyLog.logE("BOWER","Problem handling input",t);
-      e.setAttribute(BOWER_EXCEPTION,t); 
+      he.setAttribute(BOWER_EXCEPTION,t); 
       String resp = null;
       try {
-         resp = error_handler.handle(e);
+         resp = error_handler.handle(he);
        }
       catch (Throwable t1) {
          IvyLog.logE("Problem with error handler",t1);
        }
-      if (resp == null) resp = handleError(e);
-      BowerServer.sendResponse(e,resp);
+      if (resp == null) resp = handleError(he);
+      BowerServer.sendResponse(he,resp);
     }
    
 }
@@ -705,6 +707,8 @@ private class Route {
        }
       
       try {
+         if (check_url != null) exchange.setAttribute("BOWER_MATCH",check_url);
+         if (check_pattern != null) exchange.setAttribute("BOWER_PATTERN",check_pattern);
          if (route_handle != null) {
             return route_handle.handle(exchange);
           }

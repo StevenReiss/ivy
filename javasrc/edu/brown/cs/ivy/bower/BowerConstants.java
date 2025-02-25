@@ -81,6 +81,8 @@ interface BowerSessionStore<S extends BowerSession> {
       return true;
     }
    
+   default void updateSession(S bs)     { }
+   
 }
 
 
@@ -89,7 +91,7 @@ interface BowerSessionStore<S extends BowerSession> {
  **/
 
 @FunctionalInterface
-interface BowerSessionHandler<S extends BowerSessionBase> 
+interface BowerSessionHandler<S extends BowerSession> 
         extends ISessionHandler<HttpExchange,S,String> { 
    
    String handle(HttpExchange e,S bs);

@@ -939,7 +939,7 @@ private JTextField localAddFileField(String lbl,String val,int md,
    JLabel tag = createLabel(lbl);
    addGBComponent(tag,0,y_count,1,1,0,0);
 
-   JTextField tfld = new SwingTextField(val,2,i18n_map);
+   JTextField tfld = new SwingTextField(val,32,i18n_map);
    Document doc = tfld.getDocument();
    tfld.setActionCommand(lbl);
 
