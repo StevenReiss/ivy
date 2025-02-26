@@ -527,14 +527,13 @@ public static boolean parsePostParameters(HttpExchange exchange,Map<String,List<
 	 if (val instanceof JSONArray) {
 	    JSONArray arr = (JSONArray) val;
 	    for (int i = 0; i < arr.length(); ++i) {
-	       lparam.add(BowerUtil.unescape(arr.getString(i)));
+	       lparam.add(arr.getString(i));
 	     }
 	  }
 	 else if (val instanceof Map<?,?>) {
 	    Map<?,?> data = (Map<?,?>) val;
 	    JSONObject mobj = new JSONObject(data);
 	    String txt = mobj.toString();
-            txt = BowerUtil.unescape(txt);
 	    lparam.add(txt);
 	  }
 	 else if (val instanceof Iterable<?>) {
@@ -543,7 +542,6 @@ public static boolean parsePostParameters(HttpExchange exchange,Map<String,List<
 	       JSONArray arr = new JSONArray(ival);
 	       for (int i = 0; i < arr.length(); ++i) {
                   String v = arr.getString(i);
-                  v = BowerUtil.unescape(v);
 		  lparam.add(v);
 		}
 	     }
@@ -554,7 +552,6 @@ public static boolean parsePostParameters(HttpExchange exchange,Map<String,List<
 	  }
 	 else {
 	    String txt = val.toString();
-            txt = BowerUtil.unescape(txt);
 	    lparam.add(txt);
 	  }
        }
