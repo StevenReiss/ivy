@@ -15,6 +15,7 @@ SFILES= \
 	BowerRouter.java \
 	BowerServer.java \
 	BowerSession.java \
+	BowerSessionBase.java \
 	BowerSessionManager.java \
 	BowerStatic.java \
 	BowerUtil.java \
