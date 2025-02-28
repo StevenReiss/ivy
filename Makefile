@@ -216,7 +216,6 @@ jar:
 	(cd java; jar cf ../lib/ivy.jar `cat ../jar.files` fait.xml words )
 	(cd java; jar cfm ../lib/ivyfull.jar ../setupmanifest.mf `cat ../jar.files` fait.xml words )
 	rm -rf jar.files java/fait.xml
-	-cp lib/ivy.jar /pro/sharpFix/lib
 
 world:
 	$(MAKE) realclean

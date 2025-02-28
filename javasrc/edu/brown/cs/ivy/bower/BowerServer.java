@@ -268,6 +268,8 @@ static void sendResponse(HttpExchange exchange,String response)
    int rcode = 200;
    Object n = exchange.getAttribute(BOWER_RETURN_CODE);
    if (n != null && n instanceof Number) rcode = ((Number) n).intValue();
+   // clear return code for next time
+   exchange.setAttribute(BOWER_RETURN_CODE,null);
    
    sendResponse(exchange,response,rcode);
 }
