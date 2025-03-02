@@ -138,7 +138,7 @@ public static String expandName(String name,Map<String,String> vals)
    StringBuffer buf = new StringBuffer();
 
    if (name == null) return null;
-										
+									
    for (int i = 0; i < name.length(); ++i) {
       char c = name.charAt(i);
       if (c == '$' && i+1 < name.length() && name.charAt(i+1) == '(') {
@@ -397,7 +397,7 @@ public static String loadFile(Reader fr) throws IOException
 public static String loadFile(InputStream ins) throws IOException
 {
    if (ins == null) return null;
-   InputStreamReader isr = new InputStreamReader(ins);
+   InputStreamReader isr = new InputStreamReader(ins,"UTF-8");
    return loadFile(isr);
 }
 
