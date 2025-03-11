@@ -226,6 +226,9 @@ private UserSession findSession(String sid)
    if (csi != null) return csi;
 
    csi = session_store.loadSession(sid);
+   if (csi != null) {
+      session_set.put(sid,csi);
+    }
 
    return csi;
 }

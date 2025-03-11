@@ -96,10 +96,15 @@ public Pair(K element0, V element1)
  **/
 public K getElement0()			{ return element_0; }
 
+
+public K first()                        { return element_0; }
+
 /**
  *      Set the first element of the pair
  **/
 public void setElement0(K e)            { element_0 = e; }
+
+public void setFirst(K e)               { element_0 = e; }
 
 
 /**
@@ -107,10 +112,14 @@ public void setElement0(K e)            { element_0 = e; }
  **/
 public V getElement1()			{ return element_1; }
 
+public V second()                       { return element_1; }
+
 /**
  *      Set the second element of the pair
  **/
 public void setElement1(V e)            { element_1 = e; }
+
+public void setSecond(V e)              { element_1 = e; }
 
 
 

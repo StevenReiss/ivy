@@ -209,6 +209,7 @@ public static String escape(String s)
 
 public static boolean validateEmail(String data)
 {
+   if (data == null) return false;
    Matcher m = EMAIL_PATTERN.matcher(data.toLowerCase());
    return m.matches();  
 }

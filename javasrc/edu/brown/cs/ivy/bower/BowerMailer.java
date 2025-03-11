@@ -149,6 +149,8 @@ public boolean send()
 {
    // Sender's email ID needs to be mentioned
    
+   if (from_name == null) return false;
+   
    // Assuming you are sending email through relay.jangosmtp.net
    
    Properties props = new Properties();
@@ -201,7 +203,7 @@ public boolean send()
                mutlipart.addBodyPart(fpt);
              }
             catch (IOException e) {
-               IvyLog.logE("IQSIGN","Problem attaching file " + f + " to mail message");
+               IvyLog.logE("BOWER","Problem attaching file " + f + " to mail message");
              }
             // bp = new MimeBodyPart();
             // DataSource fds = new FileDataSource(f);
@@ -217,7 +219,7 @@ public boolean send()
       return true;
     }
    catch (MessagingException e) {
-      IvyLog.logE("IQSIGN","Problem sending mail",e);
+      IvyLog.logE("BOWER","Problem sending mail",e);
     }
    
    return false;

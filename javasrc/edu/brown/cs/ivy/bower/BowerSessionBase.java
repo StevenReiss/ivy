@@ -103,6 +103,12 @@ public void setExpireDelta(long d)
 }
 
 
+protected void setSessionId(String id)
+{
+   session_uid = id;
+}
+
+
 @Override public void setupSession()
 {
    last_used = System.currentTimeMillis();

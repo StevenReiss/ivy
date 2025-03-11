@@ -205,15 +205,15 @@ public String handleSessions(HttpExchange e)
 }
 
 
-public static String handleBadUrl(HttpExchange e)
+public static String handleBadUrl(HttpExchange e,BowerSession sm)
 {													
-   return errorResponse(e,null,404,"Bad Url");
+   return errorResponse(e,sm,404,"Bad Url");
 }
 
 
-public static String handleError(HttpExchange e)
+public static String handleError(HttpExchange e,BowerSession sm)
 {
-   return errorResponse(e,null,500,"Internal Error");
+   return errorResponse(e,sm,500,"Internal Error");
 }
 
 
@@ -263,6 +263,27 @@ public static Boolean getBooleanParameter(HttpExchange he,String name,Boolean df
    if ("tT1yY".indexOf(s.charAt(0)) >= 0) return true;
    if ("fF0nN".indexOf(s.charAt(0)) >= 0) return false;
    return dflt;
+}
+
+
+
+@SuppressWarnings("unchecked")
+public static <T extends Enum<T>> T getEnumParameter(HttpExchange he,String param,T dflt)
+{
+   String val = BowerRouter.getParameter(he,param);
+   if (val == null || val.isEmpty()) return dflt;
+   Object [] vals = dflt.getClass().getEnumConstants();
+   if (vals == null) return null;
+   Enum<?> v = dflt;
+   for (int i = 0; i < vals.length; ++i) {
+      Enum<?> e = (Enum<?>) vals[i];
+      if (e.name().equalsIgnoreCase(val)) {
+         v = e;
+         break;
+       }
+    }
+   
+   return (T) v;
 }
 
 
@@ -384,6 +405,7 @@ public static String buildResponse(BowerSession session,String sts,Object... val
 
 
 
+
 public static String errorResponse(HttpExchange e,BowerSession cs,int status,String msg)
 {
    Headers hdrs = e.getRequestHeaders();
@@ -394,11 +416,10 @@ public static String errorResponse(HttpExchange e,BowerSession cs,int status,Str
    
    boolean dojson = false;
    List<String> acc =  hdrs.get("Accept");
-   if (acc == null) acc = hdrs.get("accept");
    if (acc != null) {
       for (String s : acc) {
          if (s.toLowerCase().contains("json")) dojson = true;
-         IvyLog.logD("BOWER","Check error header " + s + " " + dojson);
+         IvyLog.logD("BOWER","Check error header " + s + " " + dojson + " " + bss);
        }
     }
    else {
@@ -619,7 +640,6 @@ private static int getBodySize(Headers hdrs)
 
 @Override public void handle(HttpExchange he)
 {
-
    try {
       for (Route interceptor : route_interceptors) {
 	 String resp = interceptor.handle(he);
@@ -629,7 +649,8 @@ private static int getBodySize(Headers hdrs)
 	    return;
 	  }
        }
-      String resp1 = handleBadUrl(he);
+      UserSession sess = session_manager.findSession(he);
+      String resp1 = handleBadUrl(he,sess);
       BowerServer.sendResponse(he,resp1);
     }
    catch (Throwable t) {
@@ -642,7 +663,7 @@ private static int getBodySize(Headers hdrs)
       catch (Throwable t1) {
 	 IvyLog.logE("Problem with error handler",t1);
        }
-      if (resp == null) resp = handleError(he);
+      if (resp == null) resp = handleError(he,null);
       BowerServer.sendResponse(he,resp);
     }
 
@@ -707,40 +728,41 @@ private class Route {
    public String handle(HttpExchange exchange) {
       int ordinal = getHttpMethodOrdinal(exchange.getRequestMethod());
       int v = 1 << ordinal;
-
+   
       if ((v & check_method) == 0) return null;
-
+   
       if (check_pattern != null) {
-	 Matcher m = check_pattern.matcher(exchange.getRequestURI().toString());
-	 if (!m.matches()) return null;
-
-	 int idx = 1;
-	 for (String s : check_names) {
-	    String p = m.group(idx++);
-	    setParameter(exchange,s,p);
-	  }
+         Matcher m = check_pattern.matcher(exchange.getRequestURI().toString());
+         if (!m.matches()) return null;
+   
+         int idx = 1;
+         for (String s : check_names) {
+            String p = m.group(idx++);
+            setParameter(exchange,s,p);
+          }
        }
       else if (check_url != null && !exchange.getRequestURI().toString().startsWith(check_url)) {
-	 return null;
+         return null;
        }
-
+   
       try {
-	 if (check_url != null) exchange.setAttribute("BOWER_MATCH",check_url);
-	 if (check_pattern != null) exchange.setAttribute("BOWER_PATTERN",check_pattern);
-	 if (route_handle != null) {
-	    return route_handle.handle(exchange);
-	  }
-	 else if (route_function != null) {
-	    UserSession cs = session_manager.findSession(exchange);
-	    return route_function.handle(exchange,cs);
-	  }
+         if (check_url != null) exchange.setAttribute("BOWER_MATCH",check_url);
+         if (check_pattern != null) exchange.setAttribute("BOWER_PATTERN",check_pattern);
+         if (route_handle != null) {
+            return route_handle.handle(exchange);
+          }
+         else if (route_function != null) {
+            UserSession cs = session_manager.findSession(exchange);
+            return route_function.handle(exchange,cs);
+          }
        }
       catch (Throwable t) {
-	 IvyLog.logE("BOWER","Problem handling input",t);
-	 exchange.setAttribute(BOWER_EXCEPTION,t);
-	 return errorResponse(exchange,null,500,"Problem handling input: " + t);
+         IvyLog.logE("BOWER","Problem handling input",t);
+         exchange.setAttribute(BOWER_EXCEPTION,t);
+         UserSession cs = session_manager.findSession(exchange);
+         return errorResponse(exchange,cs,500,"Problem handling input: " + t);
        }
-
+   
       return null;
     }
 
