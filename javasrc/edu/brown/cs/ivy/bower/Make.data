@@ -10,6 +10,7 @@ PACKAGE= bower
 SFILES= \
 	BowerCORS.java \
 	BowerConstants.java \
+	BowerDatabasePool.java \
 	BowerException.java \
 	BowerMailer.java \
 	BowerRouter.java \
