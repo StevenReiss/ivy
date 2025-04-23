@@ -85,7 +85,7 @@ private Color		current_color;
 
 private static final long serialVersionUID = 1;
 
-private Integer []	default_sizes = new Integer [] { 4,6,8,9,10,11,12,13,14,16,18 };
+private Integer []	default_sizes = new Integer [] { 4,6,8,9,10,11,12,13,14,15,16,17,18,20 };
 private String []	default_options = {
    "PLAIN", "BOLD", "ITALIC", "BLD-IT"
 };
