@@ -753,7 +753,7 @@ public static class AbstractCellEditor implements CellEditor {
 
     protected EventListenerList listener_list = new EventListenerList();
 
-    @Override public Object getCellEditorValue()				{ return null; }
+    @Override public Object getCellEditorValue()			{ return null; }
     @Override public boolean isCellEditable(EventObject e)		{ return true; }
     @Override public boolean shouldSelectCell(EventObject anEvent)	{ return false; }
     @Override public boolean stopCellEditing()				{ return true; }
@@ -879,9 +879,6 @@ private static class TreeTableModelAdapter extends AbstractTableModel
       boolean expand = for_tree.isExpanded(row);
       if (row >= 0) rslt.put(row,node);
       
-//    TreePath tp = for_tree.getPathForRow(row);
-//    System.err.println("NODE AT " + row + " = " + node + " " + expand + " " + for_tree.isCollapsed(0) + " " +
-//          for_tree.isVisible(tp));
       ++row;
       if (expand) {
          for (int i = 0; i < tree_table_model.getChildCount(node); ++i) {

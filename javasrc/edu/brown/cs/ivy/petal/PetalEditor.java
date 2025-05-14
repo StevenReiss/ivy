@@ -1695,8 +1695,8 @@ private class CutCopyCommand extends AbstractUndoableEdit {
    @Override public void undo() throws CannotUndoException {
       super.undo();
       if (is_cut) {
-	 Transferable clipset = clip_board.getContents(this);
-	 if (clipset != null) pasteClipboardData(clipset,true);
+         Transferable clipset = clip_board.getContents(this);
+         if (clipset != null) pasteClipboardData(clipset,true);
        }
       clip_board.setContents(old_clipboard,null);
       localUpdate();
@@ -1796,9 +1796,9 @@ private class PasteCommand extends AbstractUndoableEdit {
 
    @Override public void redo() throws CannotRedoException {
       super.redo();
-
+   
       old_clipboard = clip_board.getContents(PetalEditor.this);
-
+   
       Transferable clipset = clip_board.getContents(this);
       if (clipset != null) pasteClipboardData(clipset,true);
       localUpdate();
