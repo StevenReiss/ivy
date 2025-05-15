@@ -194,7 +194,7 @@ public List<JSONObject> sqlQueryN(String query,Object... data)
        }
     }
    catch (SQLException e) {
-      IvyLog.logE("BURL","SQL problem",e);
+      IvyLog.logE("BOWER","SQL problem",e);
     }
    
    return rslt;
