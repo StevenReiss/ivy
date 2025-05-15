@@ -122,13 +122,13 @@ private void initialize(String name) throws SQLException
 
 public int sqlUpdate(String query,Object... data)
 {
-   IvyLog.logD("BURL","SQL: " + query + " " + getDataString(data));
+   IvyLog.logD("BOWER","SQL: " + query + " " + getDataString(data));
    
    try {
       return executeUpdateStatement(query,data);
     }
    catch (SQLException e) {
-      IvyLog.logE("BURL","SQL problem",e);
+      IvyLog.logE("BOWER","SQL problem",e);
     }
    
    return -1;
@@ -137,7 +137,7 @@ public int sqlUpdate(String query,Object... data)
 
 public JSONObject sqlQuery1(String query,Object... data)
 {
-   IvyLog.logD("BURL","SQL: " + query + " " + getDataString(data));
+   IvyLog.logD("BOWER","SQL: " + query + " " + getDataString(data));
    
    JSONObject rslt = null;
    
@@ -148,7 +148,7 @@ public JSONObject sqlQuery1(String query,Object... data)
        }
     }
    catch (SQLException e) {
-      IvyLog.logE("BURL","SQL problem",e);
+      IvyLog.logE("BOWER","SQL problem",e);
     }
    
    return rslt;
@@ -158,7 +158,7 @@ public JSONObject sqlQuery1(String query,Object... data)
 
 public JSONObject sqlQueryOnly1(String query,Object... data)
 {
-   IvyLog.logD("BURL","SQL: " + query + " " + getDataString(data));
+   IvyLog.logD("BOWER","SQL: " + query + " " + getDataString(data));
    
    JSONObject rslt = null;
    
@@ -170,7 +170,7 @@ public JSONObject sqlQueryOnly1(String query,Object... data)
       if (rs.next()) rslt = null;
     }
    catch (SQLException e) {
-      IvyLog.logE("BURL","SQL problem",e);
+      IvyLog.logE("BOWER","SQL problem",e);
     }
    
    return rslt;
@@ -182,7 +182,7 @@ public JSONObject sqlQueryOnly1(String query,Object... data)
 
 public List<JSONObject> sqlQueryN(String query,Object... data)
 {
-   IvyLog.logD("BURL","SQL: " + query + " " + getDataString(data));
+   IvyLog.logD("BOWER","SQL: " + query + " " + getDataString(data));
    
    List<JSONObject> rslt = new ArrayList<>();;
    
@@ -322,7 +322,7 @@ public JSONObject getJsonFromResultSet(ResultSet rs)
        }
     }
    catch (SQLException e) {
-      IvyLog.logE("BURL","Database problem decoding result set ",e);
+      IvyLog.logE("BOWER","Database problem decoding result set ",e);
     }
    
    return rslt;
@@ -390,7 +390,7 @@ private Connection checkDatabaseError(Connection c,SQLException e)
    Throwable ex = e.getCause();
    if (ex instanceof IOException) rem = true;
    if (rem) {
-      IvyLog.logE("BURL","Database lost connection",e);
+      IvyLog.logE("BOWER","Database lost connection",e);
       used_connections.remove(c);
       c = null;
     }
