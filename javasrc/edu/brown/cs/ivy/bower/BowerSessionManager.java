@@ -91,14 +91,7 @@ String setupSession(HttpExchange e)
    String paramname = session_store.getSessionKey();
    //parse for session cookie
    String sessionid = null;
-   Map<String,HttpCookie> cookies = parseCookies(cookieHeaders);
-   HttpCookie cookie = cookies.get(cookiename);
-   String c = (cookie == null ? null : cookie.toString());
-   if (c != null) {
-      if (c.substring(0, c.indexOf('=')).equals(cookiename)) {
-	 sessionid = c.substring(c.indexOf('=') + 1, c.length() - 1);
-       }
-    }
+  
    if (sessionid == null) {
       sessionid = BowerRouter.getParameter(e,paramname);
     }
@@ -126,14 +119,33 @@ String setupSession(HttpExchange e)
 	  }
        }
     }
-
+   if (sessionid == null) {
+      Map<String,HttpCookie> cookies = parseCookies(cookieHeaders);
+      HttpCookie cookie = cookies.get(cookiename);
+      String c = (cookie == null ? null : cookie.toString());
+      if (c != null) {
+         if (c.substring(0, c.indexOf('=')).equals(cookiename)) {
+            sessionid = c.substring(c.indexOf('=') + 1, c.length() - 1);
+            IvyLog.logD("BOWER","Got session from cookie");
+          }
+       }
+    }
+   
    if (sessionid != null && sessionid.isEmpty()) sessionid = null;
 
    BowerRouter.setParameter(e,paramname,sessionid);
 
    UserSession cs = null;
-   if (sessionid != null) cs = findSession(sessionid);
-   if (cs != null && !cs.isValid()) cs = null;
+   if (sessionid != null) {
+      cs = findSession(sessionid);
+      if (cs == null) {
+         IvyLog.logD("BOWER","Session " + sessionid + " not found");
+       }
+    }
+   if (cs != null && !cs.isValid()) {
+      IvyLog.logD("BOWER","Session " + sessionid + " not valid");
+      cs = null;
+    }
    if (cs == null) cs = beginSession(e);
 
    return null;
@@ -177,6 +189,8 @@ UserSession beginSession(HttpExchange e)
    UserSession cs = session_store.createNewSession();
    String sid = cs.getSessionId();
    session_set.put(sid,cs);
+   IvyLog.logD("BOWER","Start new session " + sid);
+
    BowerRouter.setParameter(e,session_store.getSessionKey(),sid);
 
    int maxAge = 31536000; // Set the cookie to expire in one year
