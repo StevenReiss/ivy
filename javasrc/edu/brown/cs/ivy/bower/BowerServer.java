@@ -282,13 +282,19 @@ static void sendResponse(HttpExchange exchange,String response)
 static void sendResponse(HttpExchange exchange, String response,int rcode)
 {
    IvyLog.logD("BOWER","Sending response: " + rcode + " " + response);
+    
+   if (exchange.getRequestMethod().equals("HEAD")) {
+      response = "";
+    }
    
    try {
       synchronized (response_lock) {
          exchange.sendResponseHeaders(rcode, response.getBytes().length);
-         OutputStream os = exchange.getResponseBody();
-         os.write(response.getBytes());
-         os.close();
+         if (response.getBytes().length > 0) {
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+          }
        }
     }
    catch (IOException e){
