@@ -1,4 +1,4 @@
- & fgin/csh -f
+#! /bin/csh -f
 
 if ($?BROWN_IVY_ROOT == 0) then
    set x0 = `zsh -c "whence $0"`
@@ -18,7 +18,7 @@ if ($?MINT_REGISTRY_HOST != 0) then
 endif
 
 $BROWN_IVY_IVY/bin/ivyjava edu.brown.cs.ivy.mint.MintServerMaster < /dev/null >>&! ~/.mintlog &
-Pro
+
 
 
 
