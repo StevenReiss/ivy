@@ -383,19 +383,21 @@ public static String buildResponse(BowerSession session,String sts,Object... val
       jo = new JSONObject(map);
     }
 
-   BowerSessionStore<?> bss = session.getSessionStore();
-   String stskey = bss.getStatusKey();
-   if (sts != null && stskey != null) {
-      if (jo.optString(stskey,null) == null) {
-	 jo.put(stskey,sts);
+   if (session != null) {
+      BowerSessionStore<?> bss = session.getSessionStore();
+      String stskey = bss.getStatusKey();
+      if (sts != null && stskey != null) {
+         if (jo.optString(stskey,null) == null) {
+            jo.put(stskey,sts);
+          }
        }
-    }
-
-   String spar = bss.getSessionKey();
-   String sid = session.getSessionId();
-   if (spar != null && sid != null) {
-      if (jo.optString(spar,null) == null) {
-	 jo.put(spar,sid);
+      
+      String spar = bss.getSessionKey();
+      String sid = session.getSessionId();
+      if (spar != null && sid != null) {
+         if (jo.optString(spar,null) == null) {
+            jo.put(spar,sid);
+          }
        }
     }
 
