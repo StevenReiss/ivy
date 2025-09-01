@@ -115,8 +115,7 @@ public boolean lock()
          return false;
        }
       catch (IOException e) {
-         e.printStackTrace();
-         IvyLog.logE("FILE","File lock failed for " + lock_name + ": " + e);
+         IvyLog.logE("FILE","File lock failed for " + lock_name,e);
        }
     }
    
@@ -134,8 +133,7 @@ public boolean tryLock()
       if (file_lock != null) return true;
     }
    catch (IOException e) {
-      System.err.println("IVY: File lock failed for " + lock_name + ": " + e);
-      e.printStackTrace();
+      IvyLog.logE("FILE","File try lock failed for " + lock_name,e);
     }
    
    return false;
@@ -152,7 +150,7 @@ public void unlock()
       file_lock.release();
     }
    catch (IOException e) {
-      System.err.println("IVY: file unlock failed: " + e);
+      IvyLog.logE("FILE","File unlock failed",e);
     }
    
    file_lock = null;
