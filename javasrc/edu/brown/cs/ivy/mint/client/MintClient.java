@@ -150,7 +150,6 @@ public MintClient(String id,MintSyncMode mode)
    switch (mode) {
       case NONE :
 	 server_reader.start();
-	 break;
       case POLL :
       case POLL_REPLIES :
 	 break;

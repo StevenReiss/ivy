@@ -42,6 +42,7 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -159,8 +160,10 @@ public void defineEclipseProjects(String workspace)
 
 
 
-public void defineEclipseProjects(File workspace)
+public List<IvyProject> defineEclipseProjects(File workspace)
 {
+   List<IvyProject> rslt = new ArrayList<>();
+
    for (String s : getEclipseProjects(workspace)) {
       IvyProject ep = findProject(s);
       if (ep == null) {
@@ -171,8 +174,13 @@ public void defineEclipseProjects(File workspace)
 	    System.err.println("IVYPROJECT: Problem creating eclipse project " + s + ": " + e);
 	  }
        }
-      if (ep != null) ep.saveProject();
+      if (ep != null) {
+	 ep.saveProject();
+	 rslt.add(ep);
+       }
     }
+
+   return rslt;
 }
 
 

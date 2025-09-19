@@ -73,12 +73,13 @@ private static final String REQUESTED_API_VERSION = "2.0.99"; // !final
 public IvySlf4jProvider()
 {
    super();
+   System.err.println("IVY: SLF4J logger started");
 }
 
 
 
 /**
- *      Initialize the logger
+ *	Initialize the logger
  **/
 @Override
 public void initialize()
@@ -96,7 +97,7 @@ public void initialize()
 /********************************************************************************/
 
 /**
- *      Retutrn the logger factory
+ *	Retutrn the logger factory
  **/
 public ILoggerFactory getLoggerFactory()
 {
@@ -104,7 +105,7 @@ public ILoggerFactory getLoggerFactory()
 }
 
 /**
- *      Return the marker factory
+ *	Return the marker factory
  **/
 @Override
 public IMarkerFactory getMarkerFactory()
@@ -114,7 +115,7 @@ public IMarkerFactory getMarkerFactory()
 
 
 /**
- *      Return the MDC adapter
+ *	Return the MDC adapter
  **/
 @Override
 public NOPMDCAdapter getMDCAdapter()
@@ -124,7 +125,7 @@ public NOPMDCAdapter getMDCAdapter()
 
 
 /**
- *      Return the API version
+ *	Return the API version
  **/
 @Override
 public String getRequestedApiVersion()

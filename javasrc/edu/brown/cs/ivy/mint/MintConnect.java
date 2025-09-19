@@ -119,7 +119,6 @@ public static Socket findServer(String id)
 	 dbg = "-Debug ";
     }
 
-
    String args = dbg + id;
 
    String pn = System.getProperty("edu.brown.cs.ivy.mint.server.port");
