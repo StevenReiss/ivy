@@ -52,6 +52,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 
 
@@ -107,8 +108,6 @@ BufferedReader getReader()
 }
 
 
-
-
 PrintWriter getWriter()
 {
    PrintWriter pw = null;
@@ -127,7 +126,10 @@ PrintWriter getWriter()
    return pw;
 }
 
-
+SocketAddress getSocketAddress()
+{
+   return server_socket.getLocalSocketAddress();
+}
 
 
 }	// end of class MintClientServer

@@ -43,6 +43,8 @@ package edu.brown.cs.ivy.mint;
 
 import edu.brown.cs.ivy.mint.client.MintClient;
 
+import java.net.InetSocketAddress;
+
 import org.w3c.dom.Element;
 
 
@@ -227,6 +229,11 @@ public abstract void registerErrorHandler(MintErrorHandler hdlr);
 public abstract String getMintName();
 
 
+/**     
+ *      Return the socket address of the server
+ **/
+
+public abstract InetSocketAddress getSocketAddress();
 
 
 

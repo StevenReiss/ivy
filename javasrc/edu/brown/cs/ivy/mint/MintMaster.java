@@ -84,8 +84,6 @@ private static Socket		master_socket = null;
 
 
 
-
-
 /********************************************************************************/
 /*										*/
 /*	Access methods								*/
@@ -187,7 +185,6 @@ public static Socket findServer(String id,String startargs)
 
    return skt;
 }
-
 
 
 /********************************************************************************/

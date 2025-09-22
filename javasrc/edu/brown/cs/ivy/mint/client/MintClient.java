@@ -59,6 +59,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -90,6 +91,7 @@ private List<Object> message_queue;
 private List<Object> reply_queue;
 private MintSyncMode synch_mode;
 private PrintWriter server_writer;
+private InetSocketAddress socket_address;
 private Map<Integer,ActiveInfo> reply_hash;
 private Map<Integer,PatternInfo> pattern_hash;
 private int reply_counter;
@@ -129,6 +131,7 @@ public MintClient(String id,MintSyncMode mode)
    mint_name = id;
    write_lock = new Object();
    thread_pool = null;
+   socket_address = null;
 
    server_reader = null;
    server_writer = null;
@@ -140,6 +143,7 @@ public MintClient(String id,MintSyncMode mode)
 
    server_writer = mcs.getWriter();
    server_reader = new ReaderThread(mcs.getReader());
+   socket_address = (InetSocketAddress) mcs.getSocketAddress();  
 
    if (server_writer == null) {
       MintLogger.log("Can't establish connection to server");
@@ -208,7 +212,9 @@ public MintClient(String id,MintSyncMode mode)
 /*										*/
 /********************************************************************************/
 
-@Override public String getMintName()		{ return mint_name; }
+@Override public String getMintName()		        { return mint_name; }
+
+@Override public InetSocketAddress getSocketAddress()  { return socket_address; } 
 
 
 

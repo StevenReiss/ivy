@@ -125,7 +125,20 @@ public static Socket findServer(String id)
    if (pn != null) {
       args += " -port " + pn;
     }
-
+   
+   String hn = System.getProperty("edu.brown.cs.ivy.mint.server.host");
+   if (hn != null && pn != null) {
+      int pno = 0;
+      Socket skt = null;
+      try {
+         pno = Integer.parseInt(pn);
+         skt = new Socket(hn,pno);
+       }
+      catch (NumberFormatException e) { }
+      catch (IOException e) { }
+      return skt;
+    }
+   
    return MintMaster.findServer(id,args);
 }
 
