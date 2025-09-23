@@ -1,4 +1,4 @@
-<project name='ivy.file' default='compile'>
+cd oject name='ivy.file' default='compile'>
 
    <property file='../../../../../../build.properties' />
    <property name='PRO' value='/pro' />
@@ -27,6 +27,9 @@
    </target>
 
 </project>
+
+
+
 
 
 
