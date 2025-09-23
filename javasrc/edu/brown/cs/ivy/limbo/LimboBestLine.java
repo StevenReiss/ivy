@@ -196,7 +196,9 @@ private void resetData(LimboFile f,int line)
    if (LINE_IGNORE_SPACE && line_text != null) line_text = line_text.trim();
 
    int pct = (line - CONTEXT_SIZE > 1 ? CONTEXT_SIZE : line-1);
-   if (pre_context == null || pre_context.length != pct) pre_context = new int[pct];
+   if (pre_context == null || pre_context.length != pct && pct >= 0) {
+      pre_context = new int[pct];
+    }
    for (int i = 0; i < pct; ++i) {
       String d = f.getLine(line-pct+i);
       if (d == null) d = "";
