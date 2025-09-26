@@ -243,7 +243,7 @@ Object getProjectKey()
       return;
     }
 
-   IvyLog.logD("RESOLVE PROJECT " + this + " " + doing_resolve + " " + is_resolved);
+   IvyLog.logD("JCOMP","RESOLVE PROJECT " + this + " " + doing_resolve + " " + is_resolved);
 
    doing_resolve = true;
 
@@ -258,7 +258,7 @@ Object getProjectKey()
 
    all_types = new HashSet<JcompType>(resolve_typer.getAllTypes());
 
-   IvyLog.logD("FINISH RESOLVE " + this);
+   IvyLog.logD("JCOMP","FINISH RESOLVE " + this);
 
    setResolved(true,resolve_typer);
 }
@@ -694,7 +694,7 @@ private class FileSorter {
 	 dps.add(frm);
        }
     }
-	
+
 }	// end of inner class FileSorter
 
 
