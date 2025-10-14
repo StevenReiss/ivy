@@ -36,6 +36,7 @@
 package edu.brown.cs.ivy.jcomp;
 
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -55,6 +56,8 @@ import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.LabeledStatement;
+import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Name;
@@ -67,6 +70,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.SuperFieldAccess;
+import org.eclipse.jdt.core.dom.SwitchCase;
 import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
@@ -1325,6 +1329,177 @@ public static boolean isInInterface(ASTNode n)
    return false;
 }
 
+
+/********************************************************************************/
+/*                                                                              */
+/*      Find errors                                                             */
+/*                                                                              */
+/********************************************************************************/
+
+public static List<JcompMessage> getMessages(JcompSource file,ASTNode root)
+{
+   List<JcompMessage> rslt = new ArrayList<>();
+   
+   if (root != null && root instanceof CompilationUnit) {
+      CompilationUnit cu = (CompilationUnit) root;
+      for (IProblem p : cu.getProblems()) {
+	 JcompMessageSeverity sev = JcompMessageSeverity.NOTICE;
+	 if (p.isError()) sev = JcompMessageSeverity.ERROR;
+	 else if (p.isWarning()) sev = JcompMessageSeverity.WARNING;
+	 JcompMessage rm = new JcompMessage(file,sev,
+	       p.getID(),p.getMessage(),
+	       p.getSourceLineNumber(),
+	       p.getSourceStart(),p.getSourceEnd());
+	 rslt.add(rm);
+       }
+    }
+   
+   ErrorVisitor ev = new ErrorVisitor(root,file,rslt);
+   try {
+      if (root != null) root.accept(ev);
+    }
+   catch (Throwable t) {
+    }
+   
+   return rslt;
+}
+
+
+private static class ErrorVisitor extends ASTVisitor {
+   
+   private ASTNode ast_root;
+   private JcompSource source_file;
+   private List<JcompMessage> message_list;
+   private boolean have_error;
+   private Stack<Boolean> error_stack;
+   
+   ErrorVisitor(ASTNode root,JcompSource src,List<JcompMessage> msgs) {
+      ast_root = root;
+      source_file = src;
+      message_list = msgs;
+      have_error = false;
+      error_stack = new Stack<>();
+    }
+   
+   @Override public void preVisit(ASTNode n) {
+      error_stack.push(have_error);
+      have_error = false;
+    }
+   
+   @Override public void postVisit(ASTNode n) {
+      boolean fg = error_stack.pop();
+      have_error |= fg;
+      if (!have_error) {
+         JcompType jt = JcompAst.getExprType(n);
+         if (jt != null && jt.isErrorType()) {
+            if (n instanceof MethodInvocation) {
+               MethodInvocation mi = (MethodInvocation) n;
+               String mnm = "";
+               if (mi.getExpression() != null) {
+                  mnm = JcompAst.getExprType(mi.getExpression()).getName() + ".";
+                }
+               mnm += mi.getName().getIdentifier();
+               addError("Undefined method " + mnm,IProblem.UndefinedMethod,n);
+             }
+            else if (n instanceof Name) {
+               Name nnode = (Name) n;
+               String nnm = nnode.getFullyQualifiedName();
+               addError("Undefined name " + nnm,IProblem.UndefinedName,n);
+             }
+            else {
+               addError("Expression error",IProblem.InvalidOperator,n);
+             }
+            have_error = true;
+          }
+       }
+    }
+   
+   @Override public boolean visit(SimpleName n) {
+      JcompType jt = JcompAst.getExprType(n);
+      if (jt != null && jt.isErrorType()) {
+         addError("Undefined name: " + n.getIdentifier(),IProblem.UndefinedName,n);
+         have_error = true;
+       }
+      return true;
+    }
+   
+   @Override public void endVisit(ReturnStatement n) {
+      checkNextReachable(n);
+      if (have_error) return;
+      ASTNode mthd = null;
+      for (ASTNode n1 = n; n1 != null; n1 = n1.getParent()) {
+         if (n1 instanceof MethodDeclaration) {
+            mthd = n1;
+            break;
+          }
+         else if (n1 instanceof LambdaExpression) {
+            break;
+          }
+       }
+      if (mthd == null) return;
+      JcompSymbol msym = JcompAst.getDefinition(mthd);
+      if (msym == null) return;
+      JcompType mtyp = msym.getType();
+      if (mtyp == null) return;
+      JcompType rtyp = mtyp.getBaseType();
+      
+      Expression ex = n.getExpression();
+      if (ex == null) {
+         if (rtyp != null && !rtyp.isVoidType()) {
+            IvyLog.logD("JCOMP","NOTE RETURN ERROR");
+            addError("Must return value for method",IProblem.ReturnTypeMismatch,n);
+          }
+         return; 
+       }
+      
+      JcompType rt = JcompAst.getExprType(ex);
+      if (rt.isErrorType()) return;
+      if (rtyp == null || rtyp.isVoidType()) {
+         IvyLog.logD("JCOMP","NOTE RETURN ERROR");  
+         addError("Can't return value for void method/constructor",
+               IProblem.ReturnTypeMismatch,n);
+       }
+      // second clause is probably all that is needed
+      else if (!rtyp.isAssignCompatibleWith(rt) && !rt.isAssignCompatibleWith(rtyp)) {
+         IvyLog.logD("JCOMP","NOTE RETURN ERROR");    
+         addError("Return type mismatch",IProblem.ReturnTypeMismatch,n);
+       }
+    }
+   
+   
+   private void checkNextReachable(ASTNode n)
+{
+      ASTNode par = n.getParent();
+      if (par instanceof Block) {
+         Block blk = (Block) par;
+         int idx = blk.statements().indexOf(n);
+         if (idx >= 0 && idx+1 < blk.statements().size()) {
+            ASTNode next = (ASTNode) blk.statements().get(idx+1);
+            if (next instanceof SwitchCase) return;
+            else if (next instanceof LabeledStatement) return;
+            else if (next instanceof Statement) {
+               IvyLog.logD("JCOMP","NOTE REACHABLE ERROR");   
+               addError("Unreachable statement",IProblem.UnreachableCatch,next);
+             }
+          }
+       }
+      return;
+    }
+   
+   private void addError(String msg,int id,ASTNode n) {
+      int start = n.getStartPosition();
+      int end = start + n.getLength();
+      int line = 0;
+      if (ast_root instanceof CompilationUnit) {
+         CompilationUnit cu = (CompilationUnit) ast_root;
+         line = cu.getLineNumber(start);
+       }
+      JcompMessage rm = new JcompMessage(source_file,JcompMessageSeverity.ERROR,
+            id,msg,line,start,end);
+      message_list.add(rm);
+    }
+
+}	// end of inner class ErrorVisitor
 
 
 
