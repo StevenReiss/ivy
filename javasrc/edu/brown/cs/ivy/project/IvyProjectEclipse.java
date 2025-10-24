@@ -725,7 +725,7 @@ private void findExecutables()
 
    File [] lchs = dir.listFiles();
    for (int i = 0; i < lchs.length; ++i) {
-      if (lchs[i].getPath().endsWith(".launch")) {
+      if (lchs[i].getPath().endsWith(".launch") && !lchs[i].getName().startsWith(".")) {
 	 check_files.add(lchs[i]);
 	 Element e = IvyXml.loadXmlFromFile(lchs[i]);
 	 if (e != null) addExecutable(e);
