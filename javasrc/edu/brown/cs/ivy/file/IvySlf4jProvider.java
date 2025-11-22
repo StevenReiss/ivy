@@ -166,6 +166,8 @@ private static final class IvySlf4jAdapter implements Logger {
 
    private IvySlf4jAdapter(String name) {
       if (name == null) name = "IVYSLF4J";
+      int idx = name.lastIndexOf(".");
+      if (idx > 0) name = name.substring(idx+1);
       logger_name = name;
     }
 
@@ -386,7 +388,7 @@ private static final class IvySlf4jAdapter implements Logger {
     }
    private void doLog(LogLevel lvl,String ftm,Throwable t,Object... args) {
       if (!IvyLog.isDoLogging(lvl)) return;
-      String msg = String.format(ftm,args);
+      String msg = format(ftm,args);
       IvyLog.outsideLog(lvl,logger_name,0,msg,null);
     }
    private void doLog(LogLevel lvl,Marker mrk,String msg,Throwable t) {
@@ -401,13 +403,21 @@ private static final class IvySlf4jAdapter implements Logger {
    private void doLog(LogLevel lvl,Marker mrk,String fmt,Throwable t,Object... args) {
       if (!IvyLog.isDoLogging(lvl)) return;
       String msg = null;
-      msg = String.format(fmt,args);
+      msg = format(fmt,args);
       if (mrk == null) doLog(lvl,msg,t);
       else {
 	 if (msg == null) msg = mrk.toString();
 	 else msg += mrk.toString();
        }
       IvyLog.outsideLog(lvl,logger_name,0,msg,t);
+    }
+
+   private String format(String fmt,Object [] args) {
+      String rslt = fmt;
+      for (Object o : args) {
+	 rslt = rslt.replaceFirst("\\{\\}",String.valueOf(o));
+       }
+      return rslt;
     }
 
 }	// end of inner class Slf4jAdapter

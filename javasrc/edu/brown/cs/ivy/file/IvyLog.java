@@ -149,7 +149,7 @@ public static boolean isDebug()
 
 public static boolean isDoLogging(LogLevel lvl)
 {
-   return lvl.ordinal() > log_level.ordinal();
+   return lvl.ordinal() <= log_level.ordinal();
 }
 
 public static void setTracing(boolean fg)	{ trace_execution = fg; }
