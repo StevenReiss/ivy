@@ -185,7 +185,10 @@ public String getUrlPrefix()
 public boolean start()
 {
    if (http_server == null) {
-      if (!setup()) return false;
+      if (!setup()) {
+         IvyLog.logD("BOWER","HTTP server setup failed");
+         return false;
+       }
     }
    http_server.start();
    
@@ -223,6 +226,7 @@ public boolean setup()
        }
     }
    catch (Exception e) {
+      IvyLog.logE("BOWER","Problem with keystore",e); 
       http_server = null;
     }
    
