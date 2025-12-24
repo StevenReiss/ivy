@@ -58,7 +58,7 @@ import edu.brown.cs.ivy.file.IvyLog;
 import org.eclipse.jdt.core.dom.AST;
 
 
-public class JcompAstPattern implements JcompConstants
+public final class JcompAstPattern implements JcompConstants
 {
 
 
@@ -86,7 +86,7 @@ public static final char ESCAPE_PATTERN = 'X';
 /*                                                                              */
 /********************************************************************************/
 
-public final static class PatternMap extends HashMap<String,Object> {
+public static final class PatternMap extends HashMap<String,Object> {
 
    private static final long serialVersionUID = 1;
    
