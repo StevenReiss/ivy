@@ -13,6 +13,7 @@ PACKAGE= jcomp
 SFILES= \
 	JcompAst.java \
 	JcompAstCleaner.java \
+	JcompAstPattern.java \
 	JcompConstants.java \
 	JcompContext.java \
 	JcompContextAsm.java \
