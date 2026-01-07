@@ -867,8 +867,9 @@ private class AsmMethod {
 private void computeBasePath(String javahome)
 {
    List<File> base = IvyExecQuery.computeBasePath(javahome);
-
+   
    for (File f : base) {
+      IvyLog.logD("JCOMP","Java base path " + f);
       try {
 	 addClassPathEntry(f);
        }
@@ -898,7 +899,10 @@ public synchronized InputStream getInputStream(String name)
 {
    for (ClassPathEntry cpe : base_files) {
       InputStream ins = cpe.getInputStream(name);
-      if (ins != null) return ins;
+      if (ins != null) {
+         IvyLog.logD("JCOMP","Load " + name + " from " + cpe);
+         return ins;
+       }
     }
 
    return null;
@@ -978,6 +982,10 @@ private static class JarClassPathEntry extends ClassPathEntry {
        }
       return null;
     }
+   
+   @Override public String toString() {
+      return jar_file.getName();
+    }
 
 }	// end of inner class JarClassPathEntry
 
@@ -1014,6 +1022,11 @@ private static class JmodClassPathEntry extends ClassPathEntry {
        }
       return null;
     }
+   
+   @Override public String toString() {
+      return "Module " + jmod_file.getName();
+    }
+
 
 }	// end of inner class JarClassPathEntry
 
@@ -1054,6 +1067,10 @@ private static class DirClassPathEntry extends ClassPathEntry {
        }
       if (rslt.exists()) return rslt;
       return null;
+    }
+   
+   @Override public String toString() {
+      return root_dir.getPath();
     }
 
 }	// end of inner class DirClassPathEntry

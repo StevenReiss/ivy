@@ -267,7 +267,9 @@ public static List<File> computeBasePath(String javahome)
    List<File> rslt = new ArrayList<File>();
 
    if (javahome == null) javahome = System.getProperty("java.home");
-
+   
+   IvyLog.logD("IVYEXEC","Java home " + javahome);
+   
    File f1 = new File(javahome);
    File f2 = new File(f1,"lib");
    File f3 = new File(f1,"jmods");
