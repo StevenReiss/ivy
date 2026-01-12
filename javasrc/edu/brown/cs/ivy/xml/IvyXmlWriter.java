@@ -383,7 +383,13 @@ public synchronized void field(String elt,File f)
 
 public synchronized void field(String elt,Object o)
 {
-   if (o != null) field(elt,o.toString());
+   if (o != null) {
+      if (o instanceof File) field(elt,(File) o);
+      else if (o instanceof Color) field(elt,(Color) o);
+      else if (o instanceof Date) field(elt,(Date) o);
+      else if (o instanceof char []) field(elt,(char []) o);
+      else field(elt,o.toString());
+    }
 }
 
 
@@ -585,4 +591,38 @@ public Writer getBaseWriter()			{ return base_writer; }
 
 
 /* end of IvyXmlWriter.java */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
