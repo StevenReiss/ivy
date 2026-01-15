@@ -795,7 +795,9 @@ public final JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps
 protected JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,
       JcompType basetype,ASTNode n)
 {
-   if (assoc_scope != null) return assoc_scope.lookupMethod(typer,id,atyps,this,n);
+   if (assoc_scope != null) {
+      return assoc_scope.lookupMethod(typer,id,atyps,this,n);
+    }
 
    return null;
 }
@@ -1818,32 +1820,32 @@ private abstract static class ClassInterfaceType extends JcompType {
       if (jt == this) return true;
       if (jt.isTypeVariable()) return true;
       if (jt.isUnionType()) {
-	 for (JcompType uty : jt.getComponents()) {
-	    if (isCompatibleWith(uty)) return true;
-	  }
-	 return false;
+         for (JcompType uty : jt.getComponents()) {
+            if (isCompatibleWith(uty)) return true;
+          }
+         return false;
        }
       if (jt.isIntersectionType()) {
-	 for (JcompType uty : jt.getComponents()) {
-	    if (!isCompatibleWith(uty)) return false;
-	  }
-	 return true;
+         for (JcompType uty : jt.getComponents()) {
+            if (!isCompatibleWith(uty)) return false;
+          }
+         return true;
        }
       if (jt.isInterfaceType() && interface_types != null) {
-	 for (JcompType ity : getInterfaces()) {
-	    if (ity.isCompatibleWith(jt)) return true;
-	  }
+         for (JcompType ity : getInterfaces()) {
+            if (ity.isCompatibleWith(jt)) return true;
+          }
        }
       if (jt.getName().equals(getName()))
-	 return true;
+         return true;
       if (super_type != null) {
-	 if (super_type.isCompatibleWith(jt)) return true;
+         if (super_type.isCompatibleWith(jt)) return true;
        }
       if (jt.isPrimitiveType()) {
-	 JcompType at = getAssociatedType();
-	 if (at != null) return at.isCompatibleWith(jt);
+         JcompType at = getAssociatedType();
+         if (at != null) return at.isCompatibleWith(jt);
        }
-
+   
       return false;
     }
 
@@ -2434,7 +2436,7 @@ private static class CompiledAnnotationType extends CompiledClassInterfaceType {
    @Override public boolean isAnnotationType()	{ return true; }
 
    @Override public JcompSymbol lookupMethod(JcompTyper typer,String id,JcompType atyps,
-	 JcompType basetype,ASTNode n) {
+         JcompType basetype,ASTNode n) {
       JcompSymbol js = super.lookupMethod(typer,id,atyps,basetype,n);
       if (js != null) return js;
       return js;
@@ -3298,7 +3300,7 @@ private static class IntersectionType extends JcompType {
     }
 
    @Override protected JcompSymbol lookupMethod(JcompTyper typer,
-	 String id,JcompType atyps,JcompType basetype,ASTNode n) {
+         String id,JcompType atyps,JcompType basetype,ASTNode n) {
       JcompType jt = findCommonParent(typer,base_types);
       return jt.lookupMethod(typer,id,atyps,basetype,n);
     }
