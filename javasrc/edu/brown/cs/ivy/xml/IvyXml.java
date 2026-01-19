@@ -995,6 +995,40 @@ public static <T extends Enum<T>> EnumSet<T> getAttrEnumSet(Node frm,String id,
 }
 
 
+@SafeVarargs
+public static <T extends Enum<T>> EnumSet<T> getAttrEnumSet(Node frm,String id,
+      Class<T> clazz,T... dflts)
+{
+   EnumSet<T> rslt = EnumSet.noneOf(clazz);
+   if (frm == null || !getAttrPresent(frm,id)) {
+      for (T en : dflts) {
+         rslt.add(en);
+       }
+    }
+   else {
+      T [] vals = clazz.getEnumConstants();
+      String s = getAttrString(frm,id);
+      StringTokenizer tok = new StringTokenizer(s,",;: ");
+      while (tok.hasMoreTokens()) {
+	 String t = tok.nextToken();
+	 boolean fnd = false;
+	 for (int i = 0; i < vals.length; ++i) {
+	    if (vals[i].name().equalsIgnoreCase(t)) {
+	       rslt.add(vals[i]);
+	       fnd = true;
+	       break;
+	     }
+	  }
+	 if (!fnd) {
+	    System.err.println("IVY: XML: Enumeration element " + t + " not found");
+	  }
+       }
+    }
+   
+   return rslt;
+}
+
+
 
 /********************************************************************************/
 /*										*/
