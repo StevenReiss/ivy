@@ -49,6 +49,7 @@ SFILES= \
 	SwingToolBar.java \
 	SwingTree.java \
 	SwingTreeTable.java \
+	SwingWrappingEditorPane.java \
 
 
 LOCALJAVAFLAGS= $(J10FLAGS)
