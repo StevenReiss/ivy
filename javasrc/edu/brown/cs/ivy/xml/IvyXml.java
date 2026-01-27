@@ -340,7 +340,7 @@ public static void outputXmlString(String s,boolean field,boolean html,Writer pw
 public static String decodeXmlString(String pcdata)
 {
    if (pcdata == null) return null;
-  
+
    char c;
    char c1;
    char c2;
@@ -349,7 +349,7 @@ public static String decodeXmlString(String pcdata)
    char c5;
    char c6;
    char c7;
-   
+
    StringBuffer n = new StringBuffer(pcdata.length());
 
    for (int i = 0; i < pcdata.length(); i++) {
@@ -472,11 +472,11 @@ public static String cdataExpand(String s)
       StringBuffer buf = new StringBuffer();
       int idx = -1;
       while (idx+1 < s.length()) {
-         int i = s.indexOf("&#x",idx+1);
-         if (i < 0) {
-            buf.append(s.substring(idx+1));
-            break;
-          }
+	 int i = s.indexOf("&#x",idx+1);
+	 if (i < 0) {
+	    buf.append(s.substring(idx+1));
+	    break;
+	  }
 	 buf.append(s.substring(idx+1,i));
 	 int val = 0;
 	 int k = -1;
@@ -505,8 +505,8 @@ public static String cdataExpand(String s)
 	    idx = k;
 	  }
        }
-      IvyLog.logD("CDATA EXPAND " + s + " " + buf);
-      
+//    IvyLog.logD("IVYXML","CDATA EXPAND " + s + " " + buf);
+
       s = buf.toString();
     }
 
@@ -1002,7 +1002,7 @@ public static <T extends Enum<T>> EnumSet<T> getAttrEnumSet(Node frm,String id,
    EnumSet<T> rslt = EnumSet.noneOf(clazz);
    if (frm == null || !getAttrPresent(frm,id)) {
       for (T en : dflts) {
-         rslt.add(en);
+	 rslt.add(en);
        }
     }
    else {
@@ -1024,7 +1024,7 @@ public static <T extends Enum<T>> EnumSet<T> getAttrEnumSet(Node frm,String id,
 	  }
        }
     }
-   
+
    return rslt;
 }
 
