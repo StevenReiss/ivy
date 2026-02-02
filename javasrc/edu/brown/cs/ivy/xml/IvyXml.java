@@ -1267,6 +1267,7 @@ public static String getText(Node xml,boolean trim)
    else if (xml.getNodeType() == Node.CDATA_SECTION_NODE) {
       String r = xml.getNodeValue();
       r = cdataExpand(r);
+      if (trim && r != null) r = r.trim();
       return r;
     }
    else if (xml.getNodeType() == Node.ELEMENT_NODE) {
@@ -1290,7 +1291,10 @@ public static String getText(Node xml,boolean trim)
 
       if (buf.length() == 0) return null;
 
-      return buf.toString();
+      String rslt = buf.toString();
+      if (trim) rslt = rslt.trim();
+      
+      return rslt;
     }
 
    return null;
