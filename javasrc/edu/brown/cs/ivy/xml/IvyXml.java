@@ -1292,7 +1292,7 @@ public static String getText(Node xml,boolean trim)
       if (buf.length() == 0) return null;
 
       String rslt = buf.toString();
-      if (trim) rslt = rslt.trim();
+      // DON'T TRIM SINCE CHILD COULD BE CDATA if (trim) rslt = rslt.trim();
 
       return rslt;
     }
