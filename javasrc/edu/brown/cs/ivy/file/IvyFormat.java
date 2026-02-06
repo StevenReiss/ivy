@@ -40,8 +40,13 @@
 
 package edu.brown.cs.ivy.file;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.util.Formatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 
@@ -62,6 +67,8 @@ private static final DecimalFormat PERCENT_FORMAT = new DecimalFormat("0.0");
 private static final DecimalFormat TIME_FORMAT;
 private static final DecimalFormat INTERVAL_FORMAT = new DecimalFormat("0.0000");
 private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("0.00");
+
+private static final Pattern BREAK_PATTERN = Pattern.compile("((\\*\\s+)|(\\d+.\\s+))");
 
 
 static {
@@ -637,7 +644,7 @@ public static String formatTypeName(String javatype,boolean internal)
 public static String formatText(String text)
 {
    String ntext = text;
-   if (ntext == null) ntext = "<No Response>";
+   if (ntext == null) ntext = "*No Response*";
    ntext = ntext.replace("<","&lt;");
    ntext = ntext.replace(">","&gt;");
    
@@ -646,24 +653,15 @@ public static String formatText(String text)
       ntext = formatUserText(text);
     }
    else {
-      int idx1 = ntext.indexOf("\n",idx0);
+      int idx1 = idx0+3;
+      if (ntext.charAt(idx1) == '\n') idx1++;
       int idx2 = ntext.indexOf("```",idx1);
-      int idx3 = ntext.length();
-      if (idx2 < 0) {
-         idx2 = ntext.length();
-       }
-      else {
-         idx3 = ntext.indexOf("\n",idx2);
-         if (idx3 < 0) {
-            ntext += "\n";
-            idx3 = ntext.length();
-          }
-       }
-      
+      int idx3 = idx2+3;
+      if (idx3 >= ntext.length()) ntext += "\n";
       String quote = ntext.substring(idx1,idx2);
       String pre = formatUserText(ntext.substring(0,idx0));
       String post = ntext.substring(idx3);
-      ntext = pre + "<pre><code>\n" + quote + "\n</code></pre>" + formatText(post);
+      ntext = pre + "\n<pre><code>\n" + quote + "\n</code></pre>\n" + formatText(post);
     }
    
    return ntext;
@@ -672,7 +670,37 @@ public static String formatText(String text)
 
 private static String formatUserText(String text)
 {
-   String t1 = text.replace("\n\n","\n<br>\n");
+   if (text == null || text.isEmpty()) return "";
+   
+   if (text.contains("<br>") || text.contains("<p>")) return text;
+   
+   StringBuffer buf = new StringBuffer();
+   try (BufferedReader br = new BufferedReader(new StringReader(text))) {
+      String last = "";
+      for ( ; ; ) {
+         String line = br.readLine();
+         if (line == null) break;
+         if (line.isEmpty()) {
+            if (!last.isEmpty()) {
+               buf.append("<br>\n");
+             }
+          }
+         else {
+            Matcher m = BREAK_PATTERN.matcher(line);
+            if (m.find()) {
+               if (m.start() == 0) {
+                  buf.append("<p>");
+                }
+             }
+            buf.append(line);
+            buf.append("\n");
+          }
+         last = line;
+       }
+    }
+   catch (IOException e) { }
+   
+   String t1 = buf.toString();
    
    return t1;
 }
