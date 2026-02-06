@@ -626,7 +626,57 @@ public static String formatTypeName(String javatype,boolean internal)
    return idx+1;
 }
 
+ 
+ 
+/********************************************************************************/
+/*                                                                              */
+/*      Format text for HTML                                                    */
+/*                                                                              */
+/********************************************************************************/
 
+public static String formatText(String text)
+{
+   String ntext = text;
+   if (ntext == null) ntext = "<No Response>";
+   ntext = ntext.replace("<","&lt;");
+   ntext = ntext.replace(">","&gt;");
+   
+   int idx0 = ntext.indexOf("```");
+   if (idx0 < 0) {
+      ntext = formatUserText(text);
+    }
+   else {
+      int idx1 = ntext.indexOf("\n",idx0);
+      int idx2 = ntext.indexOf("```",idx1);
+      int idx3 = ntext.length();
+      if (idx2 < 0) {
+         idx2 = ntext.length();
+       }
+      else {
+         idx3 = ntext.indexOf("\n",idx2);
+         if (idx3 < 0) {
+            ntext += "\n";
+            idx3 = ntext.length();
+          }
+       }
+      
+      String quote = ntext.substring(idx1,idx2);
+      String pre = formatUserText(ntext.substring(0,idx0));
+      String post = ntext.substring(idx3);
+      ntext = pre + "<pre><code>\n" + quote + "\n</code></pre>" + formatText(post);
+    }
+   
+   return ntext;
+}
+
+
+private static String formatUserText(String text)
+{
+   String t1 = text.replace("\n\n","\n<br>\n");
+   
+   return t1;
+}
+ 
 
 }	// end of class IvyFormat
 
