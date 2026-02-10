@@ -142,12 +142,11 @@ static JcompType createBinaryEnumType(String nm,String sgn)
    return new BinaryEnumType(nm,sgn);
 }
 
+
 static JcompType createEnumType(String nm)
 {
    return new EnumType(nm);
 }
-
-
 
 
 
@@ -265,8 +264,6 @@ private boolean is_final;
 private boolean inner_nonstatic;
 private String type_signature;
 private Map<JcompType,JcompType> parent_map;
-
-
 
 
 
@@ -1868,7 +1865,6 @@ private abstract static class ClassInterfaceType extends JcompType {
       return rslt;
     }
 
-
    @Override List<JcompSymbol> isConformableTo(JcompTyper typer,JcompType typ) {
       List<JcompType> prms = new ArrayList<JcompType>();
       JcompType atyp = typer.createMethodType(typ,prms,false,null);
@@ -2013,18 +2009,18 @@ private abstract static class ClassInterfaceType extends JcompType {
       Map<String,JcompType> rslt = super.getFields();
       Map<String,JcompType> toadd = new HashMap<String,JcompType>();
       if (super_type != null) {
-	 Map<String,JcompType> nf = super_type.getFields();
-	 if (nf != null) toadd.putAll(nf);
+         Map<String,JcompType> nf = super_type.getFields();
+         if (nf != null) toadd.putAll(nf);
        }
       if (interface_types != null) {
-	 for (JcompType jt : interface_types) {
-	    Map<String,JcompType> ntypes = jt.getFields();
-	    if (ntypes != null) toadd.putAll(ntypes);
-	  }
+         for (JcompType jt : interface_types) {
+            Map<String,JcompType> ntypes = jt.getFields();
+            if (ntypes != null) toadd.putAll(ntypes);
+          }
        }
       for (Map.Entry<String,JcompType> ent : toadd.entrySet()) {
-	 String fnm = ent.getKey();
-	 if (!rslt.containsKey(fnm)) rslt.put(fnm,ent.getValue());
+         String fnm = ent.getKey();
+         if (!rslt.containsKey(fnm)) rslt.put(fnm,ent.getValue());
        }
       return rslt;
     }
@@ -2158,7 +2154,6 @@ private abstract static class ClassInterfaceType extends JcompType {
                 }
              }
           }
-         
        }
       return score;
    }
@@ -2284,7 +2279,7 @@ private abstract static class BinaryClassInterfaceType extends ClassInterfaceTyp
       typer.defineAll(getName(),getScope());
     }
 
-}	// end of innerclass KnownClassInterfaceType
+}	// end of innerclass BinaryClassInterfaceType
 
 
 
@@ -3352,6 +3347,11 @@ private static class FunctionRefType extends JcompType {
    @Override public boolean isCompatibleWith(JcompType jt) {
       JcompType mt = jt.getFunctionalType();
       if (mt == null) {
+         switch (jt.getName()) {
+            case "java.io.Serializable" :
+            case "java.util.Comparator" :
+               return true;
+          }
          return false;
        }
       if (method_type.isCompatibleWith(mt)) {

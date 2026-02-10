@@ -110,7 +110,7 @@ JcompScopeFixed()
 
 @Override public synchronized Collection<JcompSymbol> getDefinedFields()
 {
-   Collection<JcompSymbol> rslt = new ArrayList<JcompSymbol>();
+   Collection<JcompSymbol> rslt = new ArrayList<>();
 
    for (JcompSymbol js : var_names.values()) {
       if (js.isFieldSymbol()) rslt.add(js);
