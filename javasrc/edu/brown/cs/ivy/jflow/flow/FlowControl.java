@@ -175,6 +175,7 @@ FlowControl(FlowMaster cm)
    class_setup.add(BT_Class.forName("java.lang.AbstractStringBuilder"));
    class_setup.add(BT_Class.forName("sun.nio.cs.StreamEncoder"));
    class_setup.add(BT_Class.forName("sun.security.provider.PolicyFile"));
+   class_setup.add(BT_Class.forName("sun.security.provider.NativePRNG"));
    class_setup.add(BT_Class.forName("sun.awt.X11GraphicsEnvironment"));
    class_setup.add(BT_Class.forName("sun.java2d.SunGraphicsEnvironment"));
 
