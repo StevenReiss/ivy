@@ -68,7 +68,7 @@ private static final DecimalFormat TIME_FORMAT;
 private static final DecimalFormat INTERVAL_FORMAT = new DecimalFormat("0.0000");
 private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("0.00");
 
-private static final Pattern BREAK_PATTERN = Pattern.compile("((\\*\\s+)|(\\d+.\\s+))");
+private static final Pattern BREAK_PATTERN = Pattern.compile("((\\s*\\*\\s+)|(\\s*\\d+.\\s+))");
 
 
 static {
