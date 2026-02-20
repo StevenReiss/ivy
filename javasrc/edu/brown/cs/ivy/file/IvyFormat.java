@@ -654,14 +654,38 @@ public static String formatText(String text)
     }
    else {
       int idx1 = idx0+3;
-      if (ntext.charAt(idx1) == '\n') idx1++;
+      String lang = null;
+      if (ntext.charAt(idx1) == '\n') {
+         idx1++;
+       }
+      else {
+         int idx4 = ntext.indexOf("\n",idx1);
+         if (idx4 > 0) {
+            String spec = ntext.substring(idx1,idx4);
+            if (!spec.contains("```")) {
+               switch (spec) {
+                  case "java" :
+                     lang = spec;
+                     idx1 = idx4+1;
+                     break;
+                }
+             }
+          }
+       }
       int idx2 = ntext.indexOf("```",idx1);
       int idx3 = idx2+3;
       if (idx3 >= ntext.length()) ntext += "\n";
       String quote = ntext.substring(idx1,idx2);
       String pre = formatUserText(ntext.substring(0,idx0));
       String post = ntext.substring(idx3);
-      ntext = pre + "\n<pre><code>\n" + quote + "\n</code></pre>\n" + formatText(post);
+      String fmt0 = "";
+      String fmt1 = "";
+      if (lang != null) {
+         fmt0 = "<strong>";
+         fmt1 = "</strong>";
+       }
+      ntext = pre + "\n<pre><code>" + fmt0 + "\n" + quote + "\n" + fmt1 + 
+         "</code></pre>\n" + formatText(post);
     }
    
    return ntext;
