@@ -655,6 +655,9 @@ public static String formatText(String text)
    else {
       int idx1 = idx0+3;
       String lang = null;
+      if (idx1 >= ntext.length()) {
+         ntext = ntext + "\n";
+       }
       if (ntext.charAt(idx1) == '\n') {
          idx1++;
        }
