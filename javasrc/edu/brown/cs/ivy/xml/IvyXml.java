@@ -1308,6 +1308,10 @@ public static String getTextElement(Node xml,String elt)
 
    String r = getAttrString(xml,elt);
 
+   if (r == null && IvyXml.isElement(xml,elt)) {
+      r = IvyXml.getText(xml);
+    }
+   
    if (r == null) {
       Element e = getChild(xml,elt);
       if (e != null) r = getText(e);
