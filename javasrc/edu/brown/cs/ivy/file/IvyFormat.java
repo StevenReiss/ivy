@@ -647,6 +647,7 @@ public static String formatText(String text)
    if (ntext == null) ntext = "*No Response*";
    ntext = ntext.replace("<","&lt;");
    ntext = ntext.replace(">","&gt;");
+   if (ntext.contains("\n") && !ntext.endsWith("\n")) ntext = ntext + "\n";
    
    int idx0 = ntext.indexOf("```");
    if (idx0 < 0) {
