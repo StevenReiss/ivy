@@ -64,7 +64,7 @@ private int		element_depth;
 private int		string_char;
 private IOException	last_error;
 
-private final int	MAX_LENGTH = 128*1024*1024;
+private static final int	MAX_LENGTH = 128*1024*1024;
 
 
 

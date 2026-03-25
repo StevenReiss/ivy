@@ -708,11 +708,11 @@ private MatchComboModel getMatchModel(String selected) {
    return model;
 }
 
-private final transient Object MATCH_NONE = new Object() {
+private static final transient Object MATCH_NONE = new Object() {
    @Override public String toString() { return "NONE"; }
 };
 
-private final transient Object MATCH_NEW = new Object() {
+private static final transient Object MATCH_NEW = new Object() {
    @Override public String toString() { return "NEW"; }
 };
 

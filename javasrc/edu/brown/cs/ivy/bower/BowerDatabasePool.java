@@ -68,8 +68,8 @@ private String database_name;
 private List<Connection> connection_pool;
 private List<Connection> used_connections;
 
-private static int INITIAL_POOL_SIZE = 10;
-private static int MAX_POOL_SIZE = 15;
+private static final int INITIAL_POOL_SIZE = 10;
+private static final int MAX_POOL_SIZE = 15;
 
 
 /********************************************************************************/

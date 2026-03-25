@@ -63,7 +63,7 @@ private int		cur_state;
 private int		element_depth;
 private IOException	last_error;
 
-private final int	MAX_LENGTH = 128*1024*1024;
+private static final int	MAX_LENGTH = 128*1024*1024;
 
 
 

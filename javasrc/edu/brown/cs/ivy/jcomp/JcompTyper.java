@@ -107,6 +107,7 @@ public final class JcompTyper implements JcompConstants {
 /*										*/
 /********************************************************************************/
 
+// CHECKSTYLE:OFF
 public JcompType	BOOLEAN_TYPE;
 public JcompType	BYTE_TYPE;
 public JcompType	CHAR_TYPE;
@@ -124,6 +125,7 @@ public JcompType	OBJECT_TYPE;
 public JcompType	ENUM_TYPE;
 public JcompType	CLASS_TYPE;
 public JcompType	STRING_TYPE;
+// CHECKSTYLE:ON
 
 
 
@@ -140,11 +142,11 @@ private JcompContext	 type_context;
 
 private static Map<String,JcompType> system_types = new HashMap<>();
 
-private final String [] BASE_TYPES = { "byte", "short", "char", "int", "long", "float",
+private static final String [] BASE_TYPES = { "byte", "short", "char", "int", "long", "float",
 					  "double", "boolean", "void" };
 
 private static Set<String> known_prefix;
-private static String METHOD_PARAMETER = ".$M$.";
+private static final String METHOD_PARAMETER = ".$M$.";
 
 
 static {

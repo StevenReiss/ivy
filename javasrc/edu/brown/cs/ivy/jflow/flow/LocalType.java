@@ -95,7 +95,7 @@ private String type_description;
 private BT_Class base_type;
 
 private static Map<String,List<LocalOp>> operator_set = new HashMap<>();
-private static LocalType	ANY_TYPE = new LocalType();
+private static final LocalType	ANY_TYPE = new LocalType();
 
 
 

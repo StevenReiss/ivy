@@ -294,7 +294,7 @@ private static final short[][] OPCODE_STACK_HEIGHT = {
 /*										*/
 /********************************************************************************/
 
-private static String [] OPCODE_NAMES = new String [] {
+private static final String [] OPCODE_NAMES = new String [] {
    "NOP",
    "ACONST_NULL",
    "ICONST_M1",

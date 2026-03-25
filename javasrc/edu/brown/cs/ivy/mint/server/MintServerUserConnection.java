@@ -81,7 +81,7 @@ private LinkedList<ClientData> message_queue;
 private Map<Integer,MintSelector> active_patterns;
 private boolean is_valid;
 
-private int	MAX_QUEUE_SIZE = 1024;
+private static final int	MAX_QUEUE_SIZE = 1024;
 
 
 private boolean debug_output;

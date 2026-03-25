@@ -89,7 +89,7 @@ private JannotInstrumenter       our_instrumenter;
 
 private static JannotInstrumenter the_control = null;
 private static boolean do_debug = true;
-private static int ASM_API = JcodeConstants.ASM_API;
+private static final int ASM_API = JcodeConstants.ASM_API;
 
 
 
