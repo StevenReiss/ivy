@@ -112,7 +112,7 @@ public SwingLineScrollPane(JTextComponent tc,int line,int wd)
 /*                                                                              */
 /********************************************************************************/
 
-void setLineColors(Color bkg,Color fg,Color sel)
+public void setLineColors(Color bkg,Color fg,Color sel)
 {
    if (line_view == null) return;
    
@@ -120,7 +120,7 @@ void setLineColors(Color bkg,Color fg,Color sel)
 }
 
 
-void setMarginWidth(int w)
+public void setMarginWidth(int w)
 {
    if (line_view == null || w <= 0) return;
    
