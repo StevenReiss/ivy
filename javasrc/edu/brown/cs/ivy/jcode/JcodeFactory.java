@@ -765,7 +765,18 @@ private synchronized void loadClasses()
 	 lt.run();
        }
     }
-   else if (work_list.isEmpty()) return;
+   else if (work_list.isEmpty()) {
+      if (work_holder != null) {
+         synchronized (work_holder) {
+            while (!work_holder.isDone()) {
+               try {
+                  work_holder.wait(10000);
+                }
+               catch (InterruptedException e) { }
+             }
+          }
+       }
+    }
    else {
       if (work_holder == null) {
 	 work_holder = new LoadExecutor(num_threads);
