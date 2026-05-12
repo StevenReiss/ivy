@@ -99,14 +99,20 @@ public IvyXmlWriter(Writer w)
    super(w);
 
    base_writer = w;
-
-   element_stack = new Vector<String>();
-   indent_string = "  ";
-   open_state = STATE_DONE;
+   
    single_line = false;
    name_space = null;
    namespace_ref = null;
    namespace_field = false;
+   
+   initialize();
+}
+
+private void initialize()
+{
+   element_stack = new Vector<String>();
+   indent_string = "  ";
+   open_state = STATE_DONE;
 }
 
 
@@ -138,8 +144,6 @@ public IvyXmlWriter()
 }
 
 
-
-
 /********************************************************************************/
 /*										*/
 /*	Control methods 							*/
@@ -169,6 +173,7 @@ public void clear()
       StringBuffer sbuf = sw.getBuffer();
       sbuf.delete(0,sbuf.length());
     }
+   initialize();
 }
 
 
@@ -190,7 +195,6 @@ public int getLength()
 
    return -1;
 }
-
 
 
 
