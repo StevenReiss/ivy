@@ -408,6 +408,9 @@ private boolean addClassPathEntry(String cpe)
 		      }
 		   }
 		  JcodeFileInfo fi = new JcodeFileInfo(f,cn,buf);
+                  if (en.contains(".._")) {
+                     System.err.println("CHECK HERE");
+                   }
 		  class_map.put(en,fi);
 		}
 	     }
@@ -454,6 +457,9 @@ private void addClassPathModule(String cpe)
 		}
 	     }
 	    JcodeFileInfo fi = new JcodeFileInfo(f,cn,buf);
+            if (en.contains(".._")) {
+               System.err.println("CHECK HERE");
+             }
 	    class_map.put(en,fi);
 	  }
        }
@@ -490,6 +496,9 @@ private void addSystemClass(ModuleReference mr,ModuleReader mrdr,String id)
 	 byte [] buf = new byte[len];
 	 bb.get(buf);
 	 JcodeFileInfo fi = new JcodeFileInfo(null,id,buf);
+         if (en.contains(".._")) {
+            System.err.println("CHECK HERE");
+          }
 	 class_map.put(en,fi);
        }
     }
@@ -512,6 +521,7 @@ private void addClassFiles(File dir,String pfx)
 	 if (pfx != null) sfx = pfx + "." + sfx;
 	 addClassFiles(f,sfx);
        }
+      else if (f.getName().startsWith("._")) continue;
       else if (f.getName().endsWith(".class")) {
 	 String sfx = f.getName();
 	 int idx = sfx.lastIndexOf(".");
@@ -519,6 +529,9 @@ private void addClassFiles(File dir,String pfx)
 	 if (pfx != null) sfx = pfx + "." + sfx;
 	 if (!class_map.containsKey(sfx)) {
 	    JcodeFileInfo fi = new JcodeFileInfo(f);
+            if (sfx.contains(".._")) {
+               System.err.println("CHECK HERE");
+             }
 	    class_map.put(sfx,fi);
 	  }
        }
@@ -876,7 +889,7 @@ private class LoadTask implements Runnable {
        }
    
       if (fi == null) {
-         // System.err.println("JCODE: Can't find class " + load_class);
+         IvyLog.logD("JCODE","Can't find class " + load_class);
          return;
        }
       try {
@@ -902,7 +915,7 @@ private class LoadTask implements Runnable {
             // System.err.println("JCODE: Load class " + load_class);
             InputStream ins = fi.getInputStream();
             if (ins == null) {
-               System.err.println("JCODE: Can't open file for class " + load_class);
+               IvyLog.logE("JCODE","Can't open file for class " + load_class);
              }
             else {
                ClassReader cr = new ClassReader(ins);
