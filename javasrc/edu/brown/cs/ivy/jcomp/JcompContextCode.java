@@ -91,6 +91,8 @@ JcompContextCode(JcodeFactory jf)
 @Override JcompSymbol defineKnownMethod(JcompTyper typer,String cls,String id,
       JcompType argtype,JcompType ctyp)
 {
+   if (argtype == null) return null;
+   
    String desc = "(";
    for (JcompType jt : argtype.getComponents()) {
       desc += jt.getJavaTypeName();
