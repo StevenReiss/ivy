@@ -697,7 +697,7 @@ public static String getAttrString(Node frm,String id)
 
 public static String getAttrString(Node frm,String id,String dflt)
 {
-   if (frm == null) return dflt;
+   if (frm == null || id == null) return dflt;
 
    NamedNodeMap map = frm.getAttributes();
    Node n = map.getNamedItem(id);
@@ -714,7 +714,7 @@ public static String getAttrString(Node frm,String id,String dflt)
 
 public static boolean getAttrPresent(Node frm,String id)
 {
-   if (frm == null) return false;
+   if (frm == null || id == null) return false;
 
    NamedNodeMap map = frm.getAttributes();
    Node n = map.getNamedItem(id);
@@ -729,7 +729,7 @@ public static boolean getAttrPresent(Node frm,String id)
 
 public static Integer getAttrInteger(Node frm,String id)
 {
-   if (frm == null) return null;
+   if (frm == null || id == null) return null;
 
    NamedNodeMap map = frm.getAttributes();
    Node n = map.getNamedItem(id);
@@ -753,7 +753,7 @@ public static boolean getAttrBool(Node frm,String id)	{ return getAttrBool(frm,i
 
 public static boolean getAttrBool(Node frm,String id,boolean dv)
 {
-   if (frm == null) return dv;
+   if (frm == null || id == null) return dv;
 
    NamedNodeMap map = frm.getAttributes();
    Node n = map.getNamedItem(id);
@@ -777,7 +777,7 @@ public static boolean getAttrBool(Node frm,String id,boolean dv)
 public static int getAttrInt(Node frm,String id)	{ return getAttrInt(frm,id,-1); }
 public static int getAttrInt(Node frm,String id,int v)
 {
-   if (frm == null) return v;
+   if (frm == null || id == null) return v;
 
    NamedNodeMap map = frm.getAttributes();
    Node n = map.getNamedItem(id);
@@ -817,7 +817,7 @@ public static int getAttrInt(Node frm,String id,int v)
 public static long getAttrLong(Node frm,String id)	{ return getAttrLong(frm,id,-1); }
 public static long getAttrLong(Node frm,String id,long v)
 {
-   if (frm == null) return v;
+   if (frm == null || id == null) return v;
 
    NamedNodeMap map = frm.getAttributes();
    Node n = map.getNamedItem(id);
@@ -839,7 +839,7 @@ public static long getAttrLong(Node frm,String id,long v)
 
 public static Float getAttrFloat(Node frm,String id)
 {
-   if (frm == null) return null;
+   if (frm == null || id == null) return null;
 
    NamedNodeMap map = frm.getAttributes();
    Node n = map.getNamedItem(id);
@@ -871,7 +871,7 @@ public static float getAttrFloat(Node frm,String id,float dflt)
 
 public static Double getAttrDouble(Node frm,String id)
 {
-   if (frm == null) return null;
+   if (frm == null || id == null) return null;
 
    NamedNodeMap map = frm.getAttributes();
    Node n = map.getNamedItem(id);
@@ -945,7 +945,7 @@ public static Date getAttrDate(Node frm,String id)
 @SuppressWarnings("unchecked")
 public static <T extends Enum<T>> T getAttrEnum(Node frm,String id,T dflt)
 {
-   if (frm == null) return dflt;
+   if (frm == null || id == null) return dflt;
 
    Enum<?> v = dflt;
    String s = getAttrString(frm,id);
@@ -968,7 +968,7 @@ public static <T extends Enum<T>> EnumSet<T> getAttrEnumSet(Node frm,String id,
       Class<T> clazz,boolean dfltall)
 {
    EnumSet<T> rslt = EnumSet.noneOf(clazz);
-   if (frm == null || !getAttrPresent(frm,id)) {
+   if (frm == null || id == null || !getAttrPresent(frm,id)) {
       if (dfltall) rslt = EnumSet.allOf(clazz);
     }
    else {
@@ -1000,7 +1000,7 @@ public static <T extends Enum<T>> EnumSet<T> getAttrEnumSet(Node frm,String id,
       Class<T> clazz,T... dflts)
 {
    EnumSet<T> rslt = EnumSet.noneOf(clazz);
-   if (frm == null || !getAttrPresent(frm,id)) {
+   if (frm == null || id == null || !getAttrPresent(frm,id)) {
       for (T en : dflts) {
 	 rslt.add(en);
        }
