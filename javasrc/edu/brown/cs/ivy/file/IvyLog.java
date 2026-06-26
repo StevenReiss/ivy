@@ -117,8 +117,13 @@ public static void setLogFile(String f)
 }
 
 
-
 public static void setLogFile(File f)
+{
+   setLogFile(f,false);
+}
+ 
+
+public static void setLogFile(File f,boolean append)
 {
    if (log_writer != null) {
       log_writer.close();
@@ -127,7 +132,7 @@ public static void setLogFile(File f)
 
    f = f.getAbsoluteFile();
    try {
-      log_writer = new PrintWriter(new FileWriter(f));
+      log_writer = new PrintWriter(new FileWriter(f,append));
     }
    catch (IOException e) {
       IvyLog.logE("Can't open log file " + f);
@@ -155,6 +160,8 @@ public static boolean isDoLogging(LogLevel lvl)
 public static void setTracing(boolean fg)	{ trace_execution = fg; }
 
 public static LogLevel getLogLevel()		{ return log_level; }
+
+public static boolean useStdErr()               { return use_stderr; }
 
 
 
@@ -231,6 +238,12 @@ public static void logT(Object msg)
     }
 }
 
+
+public static void flush()
+{
+   if (log_writer != null) log_writer.flush();
+   if (use_stderr) System.err.flush();
+}
 
 
 /********************************************************************************/
