@@ -319,6 +319,21 @@ public static void logT(String pkg,String msg)
     }
 }
 
+public static void logT1(String msg)
+{
+   if (trace_execution) {
+      log(LogLevel.DEBUG,default_package,1,msg,null);
+    }
+}
+
+
+public static void logT1(String pkg,String msg)
+{
+   if (trace_execution) {
+      log(LogLevel.DEBUG,pkg,1,msg,null);
+    }
+}
+
 
 public static void outsideLog(LogLevel lvl,String pkg,int indent,String msg,Throwable t)
 {
