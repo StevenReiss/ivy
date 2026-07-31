@@ -45,6 +45,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import edu.brown.cs.ivy.file.IvyLog;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -347,7 +349,17 @@ public int exitValue()
  **/
 public void destroy()
 {
-   if (isRunning()) exec_process.destroy();
+   destroy(false);
+}
+
+public void destroy(boolean force)
+{
+   IvyLog.logD("EXEC","Destroy process " + exec_process.pid() + " " + force);
+
+   if (isRunning()) {
+      if (force) exec_process.destroyForcibly();
+      else exec_process.destroy();
+    }
 
    handleExit();
 
