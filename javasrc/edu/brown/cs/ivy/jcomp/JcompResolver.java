@@ -648,7 +648,6 @@ private class RefPass extends ASTVisitor {
    @Override public boolean visit(IntersectionType n)			{ return true; }
 
 
-
    @Override public void preVisit(ASTNode n) {
       JcompScope s = JcompAst.getJavaScope(n);
       if (s != null) cur_scope = s;
@@ -1281,7 +1280,6 @@ private class RefPass extends ASTVisitor {
     }
 
 
-
    @Override public void endVisit(UnionType t) {
       JcompType jt = JcompAst.getJavaType(t);
       JcompAst.setExprType(t,jt);
@@ -1316,9 +1314,6 @@ private class RefPass extends ASTVisitor {
 
       return true;
    }
-
-
-
 
    @Override public void endVisit(LambdaExpression e) {
       List<JcompType> argtypes = new ArrayList<JcompType>();
