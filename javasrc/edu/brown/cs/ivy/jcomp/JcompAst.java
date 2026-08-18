@@ -1291,15 +1291,15 @@ private static class FindLineVisitor extends ASTVisitor {
       if (soff > end_offset) return false;
       if (eoff > end_offset || soff < start_offset) return true;
       if (best_match == null) {
-	 switch (n.getNodeType()) {
-	    case ASTNode.JAVADOC :
-	    case ASTNode.BLOCK_COMMENT :
-	    case ASTNode.LINE_COMMENT :
-	       break;
-	    default :
-	       best_match = n;
-	       break;
-	  }
+         switch (n.getNodeType()) {
+            case ASTNode.JAVADOC :
+            case ASTNode.BLOCK_COMMENT :
+            case ASTNode.LINE_COMMENT :
+               break;
+            default :
+               best_match = n;
+               break;
+          }
        }
       return true;
     }
