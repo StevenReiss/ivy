@@ -67,10 +67,10 @@ public interface LoggerThread {
 /*										*/
 /********************************************************************************/
 
-private static LogLevel log_level;
+private static LogLevel        log_level;
 private static boolean	use_stderr;
-private static PrintWriter log_writer;
-private static String	default_package;
+private static PrintWriter     log_writer;
+private static String	        default_package;
 private static boolean	trace_execution;
 private static boolean	trace_thread;
 
