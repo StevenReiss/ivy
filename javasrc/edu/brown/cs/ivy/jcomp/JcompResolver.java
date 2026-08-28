@@ -402,33 +402,33 @@ private class DefPass extends ASTVisitor {
    @Override public boolean visit(ImportDeclaration n) {
       Name nm = n.getName();
       if (nm.isQualifiedName()) {
-	 QualifiedName qn = (QualifiedName) nm;
-	 JcompType jt1 = JcompAst.getJavaType(qn);
-	 JcompType jt = JcompAst.getJavaType(qn.getQualifier());
-	 String inm = qn.getName().getIdentifier();
-	 if (jt != null && jt1 == null) {
-	    jt.defineAll(type_data);
-	    List<JcompSymbol> defs = jt.lookupStatics(type_data,inm);
-	    if (defs != null) {
-	       for (JcompSymbol js : defs) {
-		  if (js.isMethodSymbol()) cur_scope.defineMethod(js);
-		  else cur_scope.defineVar(js);
-		}
-	     }
-	  }
-	 else if (n.isOnDemand() && n.isStatic() && jt1 != null) {
-	    jt1.defineAll(type_data);
-	    List<JcompSymbol> defs = jt1.lookupStatics(type_data,null);
-	    if (defs != null) {
-	       for (JcompSymbol js : defs) {
-		  if (js.isMethodSymbol()) {
-		     if (js.isConstructorSymbol()) continue;
-		     cur_scope.defineMethod(js);
-		   }
-		  else cur_scope.defineVar(js);
-		}
-	     }
-	  }
+         QualifiedName qn = (QualifiedName) nm;
+         JcompType jt1 = JcompAst.getJavaType(qn);
+         JcompType jt = JcompAst.getJavaType(qn.getQualifier());
+         String inm = qn.getName().getIdentifier();
+         if (jt != null && jt1 == null) {
+            jt.defineAll(type_data);
+            List<JcompSymbol> defs = jt.lookupStatics(type_data,inm);
+            if (defs != null) {
+               for (JcompSymbol js : defs) {
+                  if (js.isMethodSymbol()) cur_scope.defineMethod(js);
+                  else cur_scope.defineVar(js);
+                }
+             }
+          }
+         else if (n.isOnDemand() && n.isStatic() && jt1 != null) {
+            jt1.defineAll(type_data);
+            List<JcompSymbol> defs = jt1.lookupStatics(type_data,null);
+            if (defs != null) {
+               for (JcompSymbol js : defs) {
+        	  if (js.isMethodSymbol()) {
+        	     if (js.isConstructorSymbol()) continue;
+        	     cur_scope.defineMethod(js);
+        	   }
+        	  else cur_scope.defineVar(js);
+        	}
+             }
+          }
        }
       return false;
     }
@@ -604,36 +604,41 @@ private class RefPass extends ASTVisitor {
    @Override public boolean visit(ImportDeclaration n) {
       Name nm = n.getName();
       if (nm.isQualifiedName()) {
-	 QualifiedName qn = (QualifiedName) nm;
-	 JcompType jt1 = JcompAst.getJavaType(qn);
-	 CompilationUnit cu = (CompilationUnit) n.getParent();
-	 boolean internal = false;
-	 JcompScope outer = null;
-	 for (Object o : cu.types()) {
-	    AbstractTypeDeclaration atd = (AbstractTypeDeclaration) o;
-	    JcompType t0 = JcompAst.getJavaType(atd);
-	    if (t0 == null) continue;
-	    if (jt1 != null && jt1.getName().startsWith(t0.getName())) {
-	       JcompScope scp = JcompAst.getJavaScope(atd);
-	       if (scp != null) outer = scp.getParent();
-	       internal = true;
-	     }
-	  }
-	 if (internal && n.isOnDemand() && n.isStatic() && jt1 != null && outer != null) {
-	    jt1.defineAll(type_data);
-	    List<JcompSymbol> defs = jt1.lookupStatics(type_data,null);
-	    if (defs != null) {
-	       for (JcompSymbol js : defs) {
-		  JcompType jt2 = js.getClassType();
-		  if (jt2 != jt1) continue;
-		  if (js.isMethodSymbol()) {
-		     if (js.isConstructorSymbol()) continue;
-		     outer.defineMethod(js);
-		   }
-		  else outer.defineVar(js);
-		}
-	     }
-	  }
+         QualifiedName qn = (QualifiedName) nm;
+         JcompType jt1 = JcompAst.getJavaType(qn);
+         CompilationUnit cu = (CompilationUnit) n.getParent();
+         boolean internal = false;
+         JcompScope outer = null;
+         for (Object o : cu.types()) {
+            AbstractTypeDeclaration atd = (AbstractTypeDeclaration) o;
+            JcompType t0 = JcompAst.getJavaType(atd);
+            if (t0 == null) continue;
+            if (jt1 != null && jt1.getName().startsWith(t0.getName())) {
+               JcompScope scp = JcompAst.getJavaScope(atd);
+               if (scp != null) outer = scp.getParent();
+               internal = true;
+             }
+          }
+         if (internal && n.isOnDemand() && n.isStatic() && jt1 != null && outer != null) {
+            jt1.defineAll(type_data);
+            List<JcompSymbol> defs = jt1.lookupStatics(type_data,null);
+            if (defs != null) {
+               for (JcompSymbol js : defs) {
+                  JcompType jt2 = js.getClassType();
+                  if (jt2 != jt1) continue;
+                  if (js.isMethodSymbol()) {
+                     if (js.isConstructorSymbol()) continue;
+                     outer.defineMethod(js);
+                   }
+                  else outer.defineVar(js);
+                }
+             }
+          }
+         else {
+            IvyLog.logD("JCOMP","CHECK HERE " + n + " " + internal + " " +
+                  jt1 + " " + outer);
+            // handle internal, static, not on demand and jt1 set and outer set
+          }
        }
       return false;
    }
@@ -780,40 +785,40 @@ private class RefPass extends ASTVisitor {
    @Override public void endVisit(SimpleName n) {
       JcompSymbol js = JcompAst.getReference(n);
       if (js != null) {
-	 JcompAst.setExprType(n,js.getType());
-	 return;
+         JcompAst.setExprType(n,js.getType());
+         return;
        }
       js = JcompAst.getDefinition(n);
       if (js != null) {
-	 JcompAst.setExprType(n,js.getType());
-	 JcompAst.setReference(n,js);
-	 return;
+         JcompAst.setExprType(n,js.getType());
+         JcompAst.setReference(n,js);
+         return;
        }
-
+   
       JcompType jt = JcompAst.getJavaType(n);
       if (cur_scope != null) {
-	 String name = n.getIdentifier();
-	 JcompSymbol d = cur_scope.lookupVariable(name);
-	 if (d == null && cur_type != null) {
-	    d = cur_type.lookupField(type_data,name);
-	  }
-	 if (d == null) {
-	    if (jt == null) {
-	       JcompAst.setExprType(n,findType(TYPE_ERROR));
-	     }
-	    else {
-	       JcompAst.setExprType(n,jt);
-	       if (js == null && jt.getDefinition() != null) {
-		  JcompAst.setReference(n,jt.getDefinition());
-		}
-	     }
-	  }
-	 else {
-	    JcompAst.setReference(n,d);
-	    JcompType t = d.getType();
-	    JcompAst.setExprType(n,t);
-	    if (jt != null && jt != t) JcompAst.setJavaType(n,null);
-	  }
+         String name = n.getIdentifier();
+         JcompSymbol d = cur_scope.lookupVariable(name);
+         if (d == null && cur_type != null) {
+            d = cur_type.lookupField(type_data,name);
+          }
+         if (d == null) {
+            if (jt == null) {
+               JcompAst.setExprType(n,findType(TYPE_ERROR));
+             }
+            else {
+               JcompAst.setExprType(n,jt);
+               if (js == null && jt.getDefinition() != null) {
+        	  JcompAst.setReference(n,jt.getDefinition());
+        	}
+             }
+          }
+         else {
+            JcompAst.setReference(n,d);
+            JcompType t = d.getType();
+            JcompAst.setExprType(n,t);
+            if (jt != null && jt != t) JcompAst.setJavaType(n,null);
+          }
        }
     }
 
