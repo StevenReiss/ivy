@@ -949,7 +949,7 @@ public static <T extends Enum<T>> T getAttrEnum(Node frm,String id,T dflt)
 
    Enum<?> v = dflt;
    String s = getAttrString(frm,id);
-   if (s == null || s.length() == 0) return dflt;
+   if (s == null || s.isBlank()) return dflt;
    Object [] vals = dflt.getClass().getEnumConstants();
    if (vals == null) return null;
    for (int i = 0; i < vals.length; ++i) {
