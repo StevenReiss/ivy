@@ -41,6 +41,7 @@
 package edu.brown.cs.ivy.mint.client;
 
 
+import edu.brown.cs.ivy.file.IvyLog;
 import edu.brown.cs.ivy.mint.MintArguments;
 import edu.brown.cs.ivy.mint.MintConnect;
 import edu.brown.cs.ivy.mint.MintControl;
@@ -66,7 +67,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -98,7 +100,7 @@ private int reply_counter;
 private int pat_counter;
 private MintErrorHandler error_handler;
 private String mint_name;
-private ExecutorService thread_pool;
+private ThreadPoolExecutor thread_pool;
 
 private static int process_counter;
 private static AtomicInteger thread_counter = new AtomicInteger(0);
@@ -545,12 +547,22 @@ private void asynchProcessMessage(Object o)
 {
    synchronized (this) {
       if (thread_pool == null) {
-	 thread_pool = new ThreadPoolExecutor(2,1000,10,TimeUnit.SECONDS,
-	       new SynchronousQueue<Runnable>(),new RunThreadFactory());
-      }
+         BlockingQueue<Runnable> q1 = new SynchronousQueue<>();
+//       q1 = new LinkedBlockingQueue<>();
+	 thread_pool = new ThreadPoolExecutor(2,1000,
+               5,TimeUnit.SECONDS,
+               q1,new RunThreadFactory());
+       }
    }
 
-   thread_pool.execute(new AsynchMessager(o));
+   try {
+      thread_pool.execute(new AsynchMessager(o));
+    }
+   catch (RejectedExecutionException e) {
+      IvyLog.logE("MINT","Message processing rejected " + o + " " +
+            thread_pool.isShutdown() + " " + thread_pool.getActiveCount() + " " +
+            thread_pool.getLargestPoolSize() + " " + thread_pool.getQueue().size());
+    }
    // Thread t = new RunThread(o);
    // t.start();
 }

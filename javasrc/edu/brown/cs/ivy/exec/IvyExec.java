@@ -671,7 +671,7 @@ private static class ReaderThread extends Thread {
 
 public static List<String> tokenize(String cmd)
 {
-   List<String> argv = new ArrayList<String>();
+   List<String> argv = new ArrayList<>();
 
    if (cmd == null) return argv;
 
