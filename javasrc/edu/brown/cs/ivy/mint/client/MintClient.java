@@ -786,6 +786,10 @@ private static class MessageInfo {
    int getMessageId()			{ return message_id; }
    int getReplyId()			{ return reply_id; }
    Element getMessage() 		{ return message_body; }
+   
+   @Override public String toString() {
+      return message_id + ":" + IvyXml.convertXmlToString(message_body);
+    }
 
 }	// end of subclass MessageInfo
 
