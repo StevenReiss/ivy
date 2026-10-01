@@ -366,7 +366,7 @@ public final void addSeparator()
 
 public final void addExpander()
 {
-   addGBComponent(new JSeparator(),0,y_count++,0,1,10,10);
+   addGBComponent(new JLabel(),0,y_count++,0,1,10,10);
 }
 
 
