@@ -174,7 +174,6 @@ public static JcompType convertType(JcompTyper typer,JcodeDataType cty)
 
 
 
-
 /********************************************************************************/
 /*										*/
 /*	Project management methods						*/

@@ -22,6 +22,7 @@ SFILES= \
 	IdentityHashSet.java \
 	IvyFileLocker.java \
 	IvyImplBuilder.java \
+	IvyIncludeReader.java \
 	IvyMakeDeps.java \
 	IvyPathPattern.java \
 	IvyStringDiff.java \
