@@ -1464,7 +1464,7 @@ public static String decodeCharacters(String val,int len)
 {
    try {
       char[] buf = new char[len];
-      StringTokenizer tok = new StringTokenizer(val," ,;");
+      StringTokenizer tok = new StringTokenizer(val," ,;.");
       int i = 0;
       while (tok.hasMoreTokens()) {
 	 String v = tok.nextToken();

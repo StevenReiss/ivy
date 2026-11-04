@@ -72,9 +72,6 @@ import java.util.TreeMap;
 public abstract class JcompType implements JcompConstants {
 
 
-
-
-
 /********************************************************************************/
 /*										*/
 /*	Factory methods 							*/
