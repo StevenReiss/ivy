@@ -68,7 +68,15 @@ private static final DecimalFormat TIME_FORMAT;
 private static final DecimalFormat INTERVAL_FORMAT = new DecimalFormat("0.0000");
 private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("0.00");
 
-private static final Pattern BREAK_PATTERN = Pattern.compile("((\\s*\\*\\s+)|(\\s*\\d+.\\s+))");
+private static final Pattern BREAK_PATTERN;
+
+static {
+   String p1 = "(\\s*\\*+\\s+)";
+   String p2 = "(\\s*\\d+.\\s+)";
+   String p3 = "#+\\s";
+   String p4 = "\\s*-\\s";
+   BREAK_PATTERN = Pattern.compile("(" + p1 + "|" + p2 + "|" + p3 + "|" + p4 + ")");
+}
 
 
 static {
@@ -644,7 +652,7 @@ public static String formatTypeName(String javatype,boolean internal)
 public static String formatText(String text)
 {
    String ntext = text;
-   if (ntext == null) ntext = "*No Response*";
+   if (ntext == null || ntext.isBlank()) ntext = "*No Response*";
    ntext = ntext.replace("<","&lt;");
    ntext = ntext.replace(">","&gt;");
    if (ntext.contains("\n") && !ntext.endsWith("\n")) ntext = ntext + "\n";

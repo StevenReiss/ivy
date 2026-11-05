@@ -120,7 +120,7 @@ public static File expandFile(String name)
 
 
 
-public static File expandFile(String name,Map<String,String> vals)
+public static File expandFile(String name,Map<String,?> vals)
 {
    return new File(expandName(name,vals));
 }
@@ -133,7 +133,7 @@ public static String expandName(String name)
 
 
 
-public static String expandName(String name,Map<String,String> vals)
+public static String expandName(String name,Map<String,?> vals)
 {
    StringBuffer buf = new StringBuffer();
 
@@ -150,7 +150,7 @@ public static String expandName(String name,Map<String,String> vals)
 	 String erslt = null;
 	 String what = tok.toString();
 	 if (vals != null && vals.containsKey(what)) {
-	    erslt = vals.get(what);
+	    erslt = vals.get(what).toString();
 	  }
 	 else {
 	    if (what.equals("PRO")) what = "ROOT";
@@ -193,13 +193,13 @@ public static String expandName(String name,Map<String,String> vals)
 
 
 
-public static String expandText(String name,Map<String,String> vals)
+public static String expandText(String name,Map<String,?> vals)
 {
    return expandText(name,vals,true);
 }
 
 
-public static String expandText(String name,Map<String,String> vals,boolean sys)
+public static String expandText(String name,Map<String,?> vals,boolean sys)
 {
    StringBuffer buf = new StringBuffer();
 
@@ -223,7 +223,7 @@ public static String expandText(String name,Map<String,String> vals,boolean sys)
 	    dflt = fixTimeValue(dflt);
 	  }
 	 if (vals != null && vals.containsKey(what)) {
-	    erslt = vals.get(what);
+	    erslt = vals.get(what).toString();
 	  }
 	 else if (sys) {
 	    if (what.equals("USER")) what = "user.name";
