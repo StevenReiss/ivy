@@ -663,7 +663,7 @@ public static String formatText(String text)
     }
    else {
       int idx1 = idx0+3;
-      String lang = null;
+      String lang = "*";
       if (idx1 >= ntext.length()) {
          ntext = ntext + "\n";
        }
@@ -675,17 +675,17 @@ public static String formatText(String text)
          if (idx4 > 0) {
             String spec = ntext.substring(idx1,idx4);
             if (!spec.contains("```")) {
-               switch (spec) {
-                  case "java" :
-                     lang = spec;
-                     idx1 = idx4+1;
-                     break;
-                }
+               lang = spec;
+               idx1 = idx4+1;
              }
           }
        }
       int idx2 = ntext.indexOf("```",idx1);
       int idx3 = idx2+3;
+      if (idx2 < 0) {
+         idx3 = ntext.length();
+         idx2 = ntext.length();
+       }
       if (idx3 >= ntext.length()) ntext += "\n";
       String quote = ntext.substring(idx1,idx2);
       String pre = formatUserText(ntext.substring(0,idx0));
